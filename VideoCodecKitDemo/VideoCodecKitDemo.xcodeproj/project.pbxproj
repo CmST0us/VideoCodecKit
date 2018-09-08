@@ -16,6 +16,15 @@
 		4F9279A421442E1700F17F9A /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799D21442E1700F17F9A /* libavformat.a */; };
 		4F9279A521442E1700F17F9A /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799E21442E1700F17F9A /* libswresample.a */; };
 		4F9279A621442E1700F17F9A /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799F21442E1700F17F9A /* libavutil.a */; };
+		4F9279AB2144312200F17F9A /* VCBaseDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279AA2144312200F17F9A /* VCBaseDecoder.m */; };
+		4F9279AE2144350D00F17F9A /* VCBaseDecoderConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279AD2144350D00F17F9A /* VCBaseDecoderConfig.m */; };
+		4F9279B32144450300F17F9A /* VCH264FFmpegDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279B22144450300F17F9A /* VCH264FFmpegDecoder.m */; };
+		4F9279B6214446A700F17F9A /* VCH264FFMpegDecoderConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279B5214446A700F17F9A /* VCH264FFMpegDecoderConfig.m */; };
+		4F9279B92144482C00F17F9A /* VCDecoderProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279B82144482C00F17F9A /* VCDecoderProgress.m */; };
+		4F9279BD2144487A00F17F9A /* VCVideoFPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279BC2144487A00F17F9A /* VCVideoFPS.m */; };
+		4F9279C0214449BA00F17F9A /* VCBaseFrameParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279BF214449BA00F17F9A /* VCBaseFrameParser.m */; };
+		4F9279C3214449FA00F17F9A /* VCH264FrameParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279C2214449FA00F17F9A /* VCH264FrameParser.m */; };
+		4F9279C721444A4300F17F9A /* VCH264FFMpegFrameParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279C621444A4300F17F9A /* VCH264FFMpegFrameParser.m */; };
 		4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF021E2144284A00CA0EC8 /* AppDelegate.m */; };
 		4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF02212144284A00CA0EC8 /* ViewController.m */; };
 		4FBF02252144284A00CA0EC8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02232144284A00CA0EC8 /* Main.storyboard */; };
@@ -48,6 +57,26 @@
 		4F92799D21442E1700F17F9A /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavformat.a; sourceTree = "<group>"; };
 		4F92799E21442E1700F17F9A /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libswresample.a; sourceTree = "<group>"; };
 		4F92799F21442E1700F17F9A /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavutil.a; sourceTree = "<group>"; };
+		4F9279A92144312200F17F9A /* VCBaseDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseDecoder.h; sourceTree = "<group>"; };
+		4F9279AA2144312200F17F9A /* VCBaseDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCBaseDecoder.m; sourceTree = "<group>"; };
+		4F9279AC2144350D00F17F9A /* VCBaseDecoderConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseDecoderConfig.h; sourceTree = "<group>"; };
+		4F9279AD2144350D00F17F9A /* VCBaseDecoderConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCBaseDecoderConfig.m; sourceTree = "<group>"; };
+		4F9279AF2144390500F17F9A /* VCMarco.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCMarco.h; sourceTree = "<group>"; };
+		4F9279B02144399400F17F9A /* VideoCodecKit.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCodecKit.pch; sourceTree = "<group>"; };
+		4F9279B12144450300F17F9A /* VCH264FFmpegDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264FFmpegDecoder.h; sourceTree = "<group>"; };
+		4F9279B22144450300F17F9A /* VCH264FFmpegDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264FFmpegDecoder.m; sourceTree = "<group>"; };
+		4F9279B4214446A700F17F9A /* VCH264FFMpegDecoderConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264FFMpegDecoderConfig.h; sourceTree = "<group>"; };
+		4F9279B5214446A700F17F9A /* VCH264FFMpegDecoderConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264FFMpegDecoderConfig.m; sourceTree = "<group>"; };
+		4F9279B72144482C00F17F9A /* VCDecoderProgress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDecoderProgress.h; sourceTree = "<group>"; };
+		4F9279B82144482C00F17F9A /* VCDecoderProgress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDecoderProgress.m; sourceTree = "<group>"; };
+		4F9279BB2144487A00F17F9A /* VCVideoFPS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCVideoFPS.h; sourceTree = "<group>"; };
+		4F9279BC2144487A00F17F9A /* VCVideoFPS.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCVideoFPS.m; sourceTree = "<group>"; };
+		4F9279BE214449BA00F17F9A /* VCBaseFrameParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseFrameParser.h; sourceTree = "<group>"; };
+		4F9279BF214449BA00F17F9A /* VCBaseFrameParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCBaseFrameParser.m; sourceTree = "<group>"; };
+		4F9279C1214449FA00F17F9A /* VCH264FrameParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264FrameParser.h; sourceTree = "<group>"; };
+		4F9279C2214449FA00F17F9A /* VCH264FrameParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264FrameParser.m; sourceTree = "<group>"; };
+		4F9279C521444A4300F17F9A /* VCH264FFMpegFrameParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264FFMpegFrameParser.h; sourceTree = "<group>"; };
+		4F9279C621444A4300F17F9A /* VCH264FFMpegFrameParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264FFMpegFrameParser.m; sourceTree = "<group>"; };
 		4FBF021A2144284A00CA0EC8 /* VideoCodecKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoCodecKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FBF021D2144284A00CA0EC8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4FBF021E2144284A00CA0EC8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -115,6 +144,37 @@
 			path = Classses;
 			sourceTree = "<group>";
 		};
+		4F9279BA2144483500F17F9A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4F9279B72144482C00F17F9A /* VCDecoderProgress.h */,
+				4F9279B82144482C00F17F9A /* VCDecoderProgress.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4F9279C421444A0D00F17F9A /* H264 */ = {
+			isa = PBXGroup;
+			children = (
+				4F9279C1214449FA00F17F9A /* VCH264FrameParser.h */,
+				4F9279C2214449FA00F17F9A /* VCH264FrameParser.m */,
+				4F9279C521444A4300F17F9A /* VCH264FFMpegFrameParser.h */,
+				4F9279C621444A4300F17F9A /* VCH264FFMpegFrameParser.m */,
+			);
+			path = H264;
+			sourceTree = "<group>";
+		};
+		4F9279C821444B1A00F17F9A /* H264 */ = {
+			isa = PBXGroup;
+			children = (
+				4F9279B12144450300F17F9A /* VCH264FFmpegDecoder.h */,
+				4F9279B22144450300F17F9A /* VCH264FFmpegDecoder.m */,
+				4F9279B4214446A700F17F9A /* VCH264FFMpegDecoderConfig.h */,
+				4F9279B5214446A700F17F9A /* VCH264FFMpegDecoderConfig.m */,
+			);
+			path = H264;
+			sourceTree = "<group>";
+		};
 		4FBF02112144284A00CA0EC8 = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +222,8 @@
 				4FBF023A214429B000CA0EC8 /* Render */,
 				4FBF02362144290300CA0EC8 /* Decoder */,
 				4FBF0235214428F800CA0EC8 /* Encoder */,
+				4F9279AF2144390500F17F9A /* VCMarco.h */,
+				4F9279B02144399400F17F9A /* VideoCodecKit.pch */,
 			);
 			path = VideoCodecKit;
 			sourceTree = "<group>";
@@ -176,9 +238,16 @@
 		4FBF02362144290300CA0EC8 /* Decoder */ = {
 			isa = PBXGroup;
 			children = (
+				4FBF02392144294900CA0EC8 /* FrameParser */,
+				4F9279BA2144483500F17F9A /* Model */,
 				4FBF023C214429F200CA0EC8 /* Hardware */,
 				4FBF023B214429E500CA0EC8 /* Software */,
-				4FBF02392144294900CA0EC8 /* FrameParser */,
+				4F9279A92144312200F17F9A /* VCBaseDecoder.h */,
+				4F9279AA2144312200F17F9A /* VCBaseDecoder.m */,
+				4F9279AC2144350D00F17F9A /* VCBaseDecoderConfig.h */,
+				4F9279AD2144350D00F17F9A /* VCBaseDecoderConfig.m */,
+				4F9279BE214449BA00F17F9A /* VCBaseFrameParser.h */,
+				4F9279BF214449BA00F17F9A /* VCBaseFrameParser.m */,
 			);
 			path = Decoder;
 			sourceTree = "<group>";
@@ -186,6 +255,8 @@
 		4FBF02372144291600CA0EC8 /* BaseModel */ = {
 			isa = PBXGroup;
 			children = (
+				4F9279BB2144487A00F17F9A /* VCVideoFPS.h */,
+				4F9279BC2144487A00F17F9A /* VCVideoFPS.m */,
 			);
 			path = BaseModel;
 			sourceTree = "<group>";
@@ -200,6 +271,7 @@
 		4FBF02392144294900CA0EC8 /* FrameParser */ = {
 			isa = PBXGroup;
 			children = (
+				4F9279C421444A0D00F17F9A /* H264 */,
 			);
 			path = FrameParser;
 			sourceTree = "<group>";
@@ -214,6 +286,7 @@
 		4FBF023B214429E500CA0EC8 /* Software */ = {
 			isa = PBXGroup;
 			children = (
+				4F9279C821444B1A00F17F9A /* H264 */,
 			);
 			path = Software;
 			sourceTree = "<group>";
@@ -306,9 +379,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F9279C0214449BA00F17F9A /* VCBaseFrameParser.m in Sources */,
+				4F9279AB2144312200F17F9A /* VCBaseDecoder.m in Sources */,
 				4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */,
+				4F9279B92144482C00F17F9A /* VCDecoderProgress.m in Sources */,
+				4F9279C3214449FA00F17F9A /* VCH264FrameParser.m in Sources */,
+				4F9279BD2144487A00F17F9A /* VCVideoFPS.m in Sources */,
+				4F9279C721444A4300F17F9A /* VCH264FFMpegFrameParser.m in Sources */,
 				4FBF022D2144284B00CA0EC8 /* main.m in Sources */,
+				4F9279B6214446A700F17F9A /* VCH264FFMpegDecoderConfig.m in Sources */,
 				4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */,
+				4F9279B32144450300F17F9A /* VCH264FFmpegDecoder.m in Sources */,
+				4F9279AE2144350D00F17F9A /* VCBaseDecoderConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,7 +453,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/framework";
+				FRAMEWORK_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKitDemo/VideoCodecKit/Vendor/framework";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -386,9 +468,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/binary/ffmpeg/include";
+				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/include";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
-				LIBRARY_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/ffmpeg/lib";
+				LIBRARY_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKitDemo/VideoCodecKit/Vendor/ffmpeg/lib";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -432,7 +514,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/framework";
+				FRAMEWORK_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKitDemo/VideoCodecKit/Vendor/framework";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -441,9 +523,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/binary/ffmpeg/include";
+				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/include";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
-				LIBRARY_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/ffmpeg/lib";
+				LIBRARY_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKitDemo/VideoCodecKit/Vendor/ffmpeg/lib";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -460,7 +542,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/framework",
 				);
-				INFOPLIST_FILE = VideoCodecKitDemo/Info.plist;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "${PROJECT_DIR}/VideoCodecKitDemo/VIdeoCodecKit/VideoCodecKit.pch";
+				INFOPLIST_FILE = VideoCodecKitDemo/DemoApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -487,7 +571,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/framework",
 				);
-				INFOPLIST_FILE = VideoCodecKitDemo/Info.plist;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "${PROJECT_DIR}/VideoCodecKitDemo/VIdeoCodecKit/VideoCodecKit.pch";
+				INFOPLIST_FILE = VideoCodecKitDemo/DemoApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
