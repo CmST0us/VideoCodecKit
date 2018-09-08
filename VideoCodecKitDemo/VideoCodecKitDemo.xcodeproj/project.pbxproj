@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F92799521442DF100F17F9A /* KVSig.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799421442DF100F17F9A /* KVSig.framework */; };
+		4F92799621442DF100F17F9A /* KVSig.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799421442DF100F17F9A /* KVSig.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4F9279A021442E1700F17F9A /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799921442E1700F17F9A /* libavdevice.a */; };
+		4F9279A121442E1700F17F9A /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799A21442E1700F17F9A /* libswscale.a */; };
+		4F9279A221442E1700F17F9A /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799B21442E1700F17F9A /* libavfilter.a */; };
+		4F9279A321442E1700F17F9A /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799C21442E1700F17F9A /* libavcodec.a */; };
+		4F9279A421442E1700F17F9A /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799D21442E1700F17F9A /* libavformat.a */; };
+		4F9279A521442E1700F17F9A /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799E21442E1700F17F9A /* libswresample.a */; };
+		4F9279A621442E1700F17F9A /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799F21442E1700F17F9A /* libavutil.a */; };
 		4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF021E2144284A00CA0EC8 /* AppDelegate.m */; };
 		4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF02212144284A00CA0EC8 /* ViewController.m */; };
 		4FBF02252144284A00CA0EC8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02232144284A00CA0EC8 /* Main.storyboard */; };
@@ -16,7 +25,29 @@
 		4FBF02C621442B6700CA0EC8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02C521442B6700CA0EC8 /* README.md */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4F92799721442DF100F17F9A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4F92799621442DF100F17F9A /* KVSig.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		4F92799421442DF100F17F9A /* KVSig.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KVSig.framework; path = VideoCodecKitDemo/VideoCodecKit/Vendor/framework/KVSig.framework; sourceTree = "<group>"; };
+		4F92799921442E1700F17F9A /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavdevice.a; sourceTree = "<group>"; };
+		4F92799A21442E1700F17F9A /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libswscale.a; sourceTree = "<group>"; };
+		4F92799B21442E1700F17F9A /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavfilter.a; sourceTree = "<group>"; };
+		4F92799C21442E1700F17F9A /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavcodec.a; sourceTree = "<group>"; };
+		4F92799D21442E1700F17F9A /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavformat.a; sourceTree = "<group>"; };
+		4F92799E21442E1700F17F9A /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libswresample.a; sourceTree = "<group>"; };
+		4F92799F21442E1700F17F9A /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavutil.a; sourceTree = "<group>"; };
 		4FBF021A2144284A00CA0EC8 /* VideoCodecKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoCodecKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FBF021D2144284A00CA0EC8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4FBF021E2144284A00CA0EC8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -35,17 +66,62 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F9279A021442E1700F17F9A /* libavdevice.a in Frameworks */,
+				4F9279A121442E1700F17F9A /* libswscale.a in Frameworks */,
+				4F9279A221442E1700F17F9A /* libavfilter.a in Frameworks */,
+				4F9279A321442E1700F17F9A /* libavcodec.a in Frameworks */,
+				4F9279A421442E1700F17F9A /* libavformat.a in Frameworks */,
+				4F9279A521442E1700F17F9A /* libswresample.a in Frameworks */,
+				4F9279A621442E1700F17F9A /* libavutil.a in Frameworks */,
+				4F92799521442DF100F17F9A /* KVSig.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F92799821442E1700F17F9A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4F92799C21442E1700F17F9A /* libavcodec.a */,
+				4F92799921442E1700F17F9A /* libavdevice.a */,
+				4F92799B21442E1700F17F9A /* libavfilter.a */,
+				4F92799D21442E1700F17F9A /* libavformat.a */,
+				4F92799F21442E1700F17F9A /* libavutil.a */,
+				4F92799E21442E1700F17F9A /* libswresample.a */,
+				4F92799A21442E1700F17F9A /* libswscale.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4F9279A721442EDC00F17F9A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4FBF02262144284B00CA0EC8 /* Assets.xcassets */,
+				4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4F9279A821442F0800F17F9A /* Classses */ = {
+			isa = PBXGroup;
+			children = (
+				4FBF021D2144284A00CA0EC8 /* AppDelegate.h */,
+				4FBF021E2144284A00CA0EC8 /* AppDelegate.m */,
+				4FBF02202144284A00CA0EC8 /* ViewController.h */,
+				4FBF02212144284A00CA0EC8 /* ViewController.m */,
+				4FBF02232144284A00CA0EC8 /* Main.storyboard */,
+			);
+			path = Classses;
+			sourceTree = "<group>";
+		};
 		4FBF02112144284A00CA0EC8 = {
 			isa = PBXGroup;
 			children = (
+				4F92799421442DF100F17F9A /* KVSig.framework */,
 				4FBF021C2144284A00CA0EC8 /* VideoCodecKitDemo */,
 				4FBF021B2144284A00CA0EC8 /* Products */,
+				4F92799821442E1700F17F9A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,15 +138,6 @@
 			children = (
 				4FBF0234214428EB00CA0EC8 /* VideoCodecKit */,
 				4FBF0233214428D000CA0EC8 /* DemoAPP */,
-				4FBF021D2144284A00CA0EC8 /* AppDelegate.h */,
-				4FBF021E2144284A00CA0EC8 /* AppDelegate.m */,
-				4FBF02202144284A00CA0EC8 /* ViewController.h */,
-				4FBF02212144284A00CA0EC8 /* ViewController.m */,
-				4FBF02232144284A00CA0EC8 /* Main.storyboard */,
-				4FBF02262144284B00CA0EC8 /* Assets.xcassets */,
-				4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */,
-				4FBF022B2144284B00CA0EC8 /* Info.plist */,
-				4FBF022C2144284B00CA0EC8 /* main.m */,
 			);
 			path = VideoCodecKitDemo;
 			sourceTree = "<group>";
@@ -78,6 +145,10 @@
 		4FBF0233214428D000CA0EC8 /* DemoAPP */ = {
 			isa = PBXGroup;
 			children = (
+				4F9279A821442F0800F17F9A /* Classses */,
+				4F9279A721442EDC00F17F9A /* Resources */,
+				4FBF022C2144284B00CA0EC8 /* main.m */,
+				4FBF022B2144284B00CA0EC8 /* Info.plist */,
 			);
 			path = DemoAPP;
 			sourceTree = "<group>";
@@ -172,6 +243,7 @@
 				4FBF02162144284A00CA0EC8 /* Sources */,
 				4FBF02172144284A00CA0EC8 /* Frameworks */,
 				4FBF02182144284A00CA0EC8 /* Resources */,
+				4F92799721442DF100F17F9A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -299,6 +371,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/framework";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -313,7 +386,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/binary/ffmpeg/include";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LIBRARY_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/ffmpeg/lib";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -357,6 +432,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/framework";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -365,7 +441,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/binary/ffmpeg/include";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LIBRARY_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/ffmpeg/lib";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -378,8 +456,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2VQ94C2355;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/framework",
+				);
 				INFOPLIST_FILE = VideoCodecKitDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -387,6 +469,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/ffmpeg/lib",
+					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.eric3u.VideoCodecKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -400,8 +483,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2VQ94C2355;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/framework",
+				);
 				INFOPLIST_FILE = VideoCodecKitDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -409,6 +496,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/ffmpeg/lib",
+					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.eric3u.VideoCodecKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
