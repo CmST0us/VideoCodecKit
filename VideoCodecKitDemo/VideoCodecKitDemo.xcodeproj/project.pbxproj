@@ -13,6 +13,7 @@
 		4FBF02272144284B00CA0EC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02262144284B00CA0EC8 /* Assets.xcassets */; };
 		4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */; };
 		4FBF022D2144284B00CA0EC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF022C2144284B00CA0EC8 /* main.m */; };
+		4FBF02C621442B6700CA0EC8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02C521442B6700CA0EC8 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		4FBF02292144284B00CA0EC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4FBF022B2144284B00CA0EC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FBF022C2144284B00CA0EC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4FBF02C521442B6700CA0EC8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,8 @@
 		4FBF021C2144284A00CA0EC8 /* VideoCodecKitDemo */ = {
 			isa = PBXGroup;
 			children = (
+				4FBF0234214428EB00CA0EC8 /* VideoCodecKit */,
+				4FBF0233214428D000CA0EC8 /* DemoAPP */,
 				4FBF021D2144284A00CA0EC8 /* AppDelegate.h */,
 				4FBF021E2144284A00CA0EC8 /* AppDelegate.m */,
 				4FBF02202144284A00CA0EC8 /* ViewController.h */,
@@ -69,6 +73,93 @@
 				4FBF022C2144284B00CA0EC8 /* main.m */,
 			);
 			path = VideoCodecKitDemo;
+			sourceTree = "<group>";
+		};
+		4FBF0233214428D000CA0EC8 /* DemoAPP */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = DemoAPP;
+			sourceTree = "<group>";
+		};
+		4FBF0234214428EB00CA0EC8 /* VideoCodecKit */ = {
+			isa = PBXGroup;
+			children = (
+				4FBF023E21442A6600CA0EC8 /* Vendor */,
+				4FBF02382144292A00CA0EC8 /* Services */,
+				4FBF02372144291600CA0EC8 /* BaseModel */,
+				4FBF023A214429B000CA0EC8 /* Render */,
+				4FBF02362144290300CA0EC8 /* Decoder */,
+				4FBF0235214428F800CA0EC8 /* Encoder */,
+			);
+			path = VideoCodecKit;
+			sourceTree = "<group>";
+		};
+		4FBF0235214428F800CA0EC8 /* Encoder */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Encoder;
+			sourceTree = "<group>";
+		};
+		4FBF02362144290300CA0EC8 /* Decoder */ = {
+			isa = PBXGroup;
+			children = (
+				4FBF023C214429F200CA0EC8 /* Hardware */,
+				4FBF023B214429E500CA0EC8 /* Software */,
+				4FBF02392144294900CA0EC8 /* FrameParser */,
+			);
+			path = Decoder;
+			sourceTree = "<group>";
+		};
+		4FBF02372144291600CA0EC8 /* BaseModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = BaseModel;
+			sourceTree = "<group>";
+		};
+		4FBF02382144292A00CA0EC8 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		4FBF02392144294900CA0EC8 /* FrameParser */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = FrameParser;
+			sourceTree = "<group>";
+		};
+		4FBF023A214429B000CA0EC8 /* Render */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Render;
+			sourceTree = "<group>";
+		};
+		4FBF023B214429E500CA0EC8 /* Software */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Software;
+			sourceTree = "<group>";
+		};
+		4FBF023C214429F200CA0EC8 /* Hardware */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Hardware;
+			sourceTree = "<group>";
+		};
+		4FBF023E21442A6600CA0EC8 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				4FBF02C521442B6700CA0EC8 /* README.md */,
+			);
+			path = Vendor;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -97,6 +188,7 @@
 		4FBF02122144284A00CA0EC8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = VC;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = eric3u;
 				TargetAttributes = {
@@ -130,6 +222,7 @@
 			files = (
 				4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */,
 				4FBF02272144284B00CA0EC8 /* Assets.xcassets in Resources */,
+				4FBF02C621442B6700CA0EC8 /* README.md in Resources */,
 				4FBF02252144284A00CA0EC8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,6 +384,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/ffmpeg/lib",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.eric3u.VideoCodecKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -308,6 +405,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/ffmpeg/lib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.eric3u.VideoCodecKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
