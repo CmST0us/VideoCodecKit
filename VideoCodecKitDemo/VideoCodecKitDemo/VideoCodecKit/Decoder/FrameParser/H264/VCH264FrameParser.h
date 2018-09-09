@@ -10,4 +10,6 @@
 
 @interface VCH264FrameParser : VCBaseFrameParser
 
+@property (nonatomic, readonly) VCH264Frame *currentParseFrame;
+
 @end

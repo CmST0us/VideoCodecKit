@@ -26,6 +26,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<VCFrameParserDataSource> dataSource;
 @property (nonatomic, weak) id<VCFrameParserDelegate> delegate;
 
+@property (nonatomic, assign) NSUInteger pasrseCount;
+
+- (NSInteger)parseData:(void *)buffer
+                length:(NSUInteger)length;
+
+- (void)reset;
+
 @end
 
 NS_ASSUME_NONNULL_END

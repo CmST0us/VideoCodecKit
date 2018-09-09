@@ -9,7 +9,7 @@
 #import "VCH264FrameParser.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class VCH264Frame;
 @interface VCH264FFMpegFrameParser : VCH264FrameParser
 
 @end

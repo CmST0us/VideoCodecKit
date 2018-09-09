@@ -9,5 +9,11 @@
 #import "VCBaseFrameParser.h"
 
 @implementation VCBaseFrameParser
-
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _pasrseCount = 0;
+    }
+    return self;
+}
 @end
