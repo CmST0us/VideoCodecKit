@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, VCDecoderState) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol VCBaseDecoderProtocol
+@protocol VCBaseDecoderProtocol<NSObject>
 @required
 /**
  启动解码器：状态从Ready变为Running

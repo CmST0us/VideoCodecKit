@@ -6,8 +6,13 @@
 //  Copyright © 2018年 eric3u. All rights reserved.
 //
 
-#import "VCH264FFMpegDecoder.h"
+#import "VCH264FrameParser.h"
 
-@interface VCH264FFMpegFrameParser : VCH264FFMpegDecoder
+NS_ASSUME_NONNULL_BEGIN
+
+@interface VCH264FFMpegFrameParser : VCH264FrameParser
 
 @end
+
+NS_ASSUME_NONNULL_END
+

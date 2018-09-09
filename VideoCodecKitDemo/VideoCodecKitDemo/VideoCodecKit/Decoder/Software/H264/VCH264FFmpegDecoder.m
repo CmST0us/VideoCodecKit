@@ -9,11 +9,10 @@
 #import <libavcodec/avcodec.h>
 #import <libavutil/avutil.h>
 
-#import "VCH264FFMpegDecoder.h"
+#import "VCH264FFmpegDecoder.h"
+
 @interface VCH264FFMpegDecoder () {
     AVFrame *_frame;
-    AVCodecContext *_context;
-    AVCodec *_codec;
 }
 
 @end
