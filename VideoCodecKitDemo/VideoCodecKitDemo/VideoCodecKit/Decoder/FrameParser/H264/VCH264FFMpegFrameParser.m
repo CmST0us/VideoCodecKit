@@ -92,7 +92,7 @@
     
     while (bufferLength > 0) {
         
-        int parserLen = av_parser_parse2(_parserContext, _codecContext, &_packet->data, &_packet->size, buf.data, (int)bufferLength, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0);
+        int parserLen = av_parser_parse2(_parserContext, _codecContext, &_packet->data, &_packet->size, buf.data, (int)buf.length, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0);
         
         buf = [buf advancedBy:parserLen];
         bufferLength -= parserLen;
