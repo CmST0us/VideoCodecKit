@@ -9,5 +9,4 @@
 #import "VCH264FrameParser.h"
 
 @implementation VCH264FrameParser
-
 @end

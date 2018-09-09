@@ -29,6 +29,7 @@
     self = [super init];
     if (self) {
         _parserLock = [[NSLock alloc] init];
+        avcodec_register_all();
         [self commonInit];
     }
     return self;
@@ -76,7 +77,8 @@
 }
 
 - (NSInteger)parseData:(void *)buffer
-                length:(NSUInteger)length {
+                length:(NSUInteger)length
+              copyData:(BOOL)shouldCopy {
     if (_codecContext == nil && _parserContext == nil) {
         return -1;
     }
@@ -86,24 +88,24 @@
     NSUInteger bufferLength = length;
     NSUInteger usedLength = 0;
     
-    VCH264FFmpegFrameParserBuffer *buf = [[VCH264FFmpegFrameParserBuffer alloc] initWithBuffer:buffer length:length copyData:YES];
+    VCH264FFmpegFrameParserBuffer *buf = [[VCH264FFmpegFrameParserBuffer alloc] initWithBuffer:buffer length:length copyData:shouldCopy];
     
     while (bufferLength > 0) {
         
         int parserLen = av_parser_parse2(_parserContext, _codecContext, &_packet->data, &_packet->size, buf.data, (int)bufferLength, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0);
         
-        bufferLength -= parserLen;
         buf = [buf advancedBy:parserLen];
+        bufferLength -= parserLen;
         
         usedLength += parserLen;
         
         if (_packet->size > 0) {
             
-            _currentParseFrame = [VCH264Frame h264FrameWithAVPacket:_packet parserContext:_parserContext];
+            self.currentParseFrame = [VCH264Frame h264FrameWithAVPacket:_packet parserContext:_parserContext];
             
             self.pasrseCount += 1;
             if ([self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
-                [self.delegate frameParserDidParseFrame:_currentParseFrame];
+                [self.delegate frameParserDidParseFrame:self.currentParseFrame];
             }
             
         }

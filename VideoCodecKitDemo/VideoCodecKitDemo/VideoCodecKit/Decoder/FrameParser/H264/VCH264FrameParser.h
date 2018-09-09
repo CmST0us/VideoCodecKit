@@ -8,8 +8,9 @@
 
 #import "VCBaseFrameParser.h"
 
+@class VCH264Frame;
 @interface VCH264FrameParser : VCBaseFrameParser
 
-@property (nonatomic, readonly) VCH264Frame *currentParseFrame;
+@property (nonatomic, strong) VCH264Frame *currentParseFrame;
 
 @end

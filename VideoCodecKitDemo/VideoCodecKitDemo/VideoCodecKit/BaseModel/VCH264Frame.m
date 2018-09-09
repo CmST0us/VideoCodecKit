@@ -19,14 +19,18 @@
         _height = 0;
         _frameData = nil;
         _frameSize = 0;
-        _parserData = nil;
-        _pasrserSize = 0;
+        _parseData = nil;
+        _parseSize = 0;
         _frameIndex = 0;
     }
     return self;
 }
 
 - (NSString *)frameClassString {
-    return NSStringFromClass(self);
+    return NSStringFromClass([self class]);
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"width x height: %ld x %ld;\nframeSize: %ld;\nparseSize: %ld;\n", self.width, self.height, self.frameSize, self.parseSize];
 }
 @end

@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4F92799521442DF100F17F9A /* KVSig.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799421442DF100F17F9A /* KVSig.framework */; };
-		4F92799621442DF100F17F9A /* KVSig.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799421442DF100F17F9A /* KVSig.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F9279A021442E1700F17F9A /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799921442E1700F17F9A /* libavdevice.a */; };
 		4F9279A121442E1700F17F9A /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799A21442E1700F17F9A /* libswscale.a */; };
 		4F9279A221442E1700F17F9A /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799B21442E1700F17F9A /* libavfilter.a */; };
@@ -28,6 +26,14 @@
 		4F9279CB2144FAB700F17F9A /* VCH264FFmpegFrameParserBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279CA2144FAB700F17F9A /* VCH264FFmpegFrameParserBuffer.m */; };
 		4F9279CE214503D300F17F9A /* VCH264Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279CD214503D300F17F9A /* VCH264Frame.m */; };
 		4F9279D12145042F00F17F9A /* VCH264Frame+FFmpeg.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279D02145042F00F17F9A /* VCH264Frame+FFmpeg.m */; };
+		4F9279D52145118600F17F9A /* VCDecodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279D42145118600F17F9A /* VCDecodeController.m */; };
+		4F9279D72145180800F17F9A /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9279D62145180700F17F9A /* libiconv.tbd */; };
+		4F9279EA21451A7600F17F9A /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9279E921451A7500F17F9A /* VideoToolbox.framework */; };
+		4F9279EC21451A8100F17F9A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9279EB21451A8100F17F9A /* CoreMedia.framework */; };
+		4F9279EE21451A9000F17F9A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9279ED21451A9000F17F9A /* AudioToolbox.framework */; };
+		4F9279F021451A9C00F17F9A /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9279EF21451A9C00F17F9A /* libz.tbd */; };
+		4F9279F221451E7300F17F9A /* KVSig.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9279F121451E7300F17F9A /* KVSig.framework */; };
+		4F9279F321451E7300F17F9A /* KVSig.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9279F121451E7300F17F9A /* KVSig.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF021E2144284A00CA0EC8 /* AppDelegate.m */; };
 		4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF02212144284A00CA0EC8 /* ViewController.m */; };
 		4FBF02252144284A00CA0EC8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02232144284A00CA0EC8 /* Main.storyboard */; };
@@ -38,13 +44,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		4F92799721442DF100F17F9A /* Embed Frameworks */ = {
+		4F9279E82145187300F17F9A /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4F92799621442DF100F17F9A /* KVSig.framework in Embed Frameworks */,
+				4F9279F321451E7300F17F9A /* KVSig.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -52,7 +58,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4F92799421442DF100F17F9A /* KVSig.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KVSig.framework; path = VideoCodecKitDemo/VideoCodecKit/Vendor/framework/KVSig.framework; sourceTree = "<group>"; };
 		4F92799921442E1700F17F9A /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavdevice.a; sourceTree = "<group>"; };
 		4F92799A21442E1700F17F9A /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libswscale.a; sourceTree = "<group>"; };
 		4F92799B21442E1700F17F9A /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavfilter.a; sourceTree = "<group>"; };
@@ -87,6 +92,14 @@
 		4F9279CF2145042F00F17F9A /* VCH264Frame+FFmpeg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VCH264Frame+FFmpeg.h"; sourceTree = "<group>"; };
 		4F9279D02145042F00F17F9A /* VCH264Frame+FFmpeg.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "VCH264Frame+FFmpeg.m"; sourceTree = "<group>"; };
 		4F9279D221450B9200F17F9A /* VCFrameTypeProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCFrameTypeProtocol.h; sourceTree = "<group>"; };
+		4F9279D32145118600F17F9A /* VCDecodeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDecodeController.h; sourceTree = "<group>"; };
+		4F9279D42145118600F17F9A /* VCDecodeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDecodeController.m; sourceTree = "<group>"; };
+		4F9279D62145180700F17F9A /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		4F9279E921451A7500F17F9A /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		4F9279EB21451A8100F17F9A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		4F9279ED21451A9000F17F9A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		4F9279EF21451A9C00F17F9A /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		4F9279F121451E7300F17F9A /* KVSig.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KVSig.framework; path = VideoCodecKitDemo/VideoCodecKit/Vendor/framework/KVSig.framework; sourceTree = "<group>"; };
 		4FBF021A2144284A00CA0EC8 /* VideoCodecKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoCodecKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FBF021D2144284A00CA0EC8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4FBF021E2144284A00CA0EC8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -105,14 +118,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F9279F021451A9C00F17F9A /* libz.tbd in Frameworks */,
+				4F9279EE21451A9000F17F9A /* AudioToolbox.framework in Frameworks */,
+				4F9279EC21451A8100F17F9A /* CoreMedia.framework in Frameworks */,
+				4F9279EA21451A7600F17F9A /* VideoToolbox.framework in Frameworks */,
+				4F9279D72145180800F17F9A /* libiconv.tbd in Frameworks */,
 				4F9279A021442E1700F17F9A /* libavdevice.a in Frameworks */,
+				4F9279F221451E7300F17F9A /* KVSig.framework in Frameworks */,
 				4F9279A121442E1700F17F9A /* libswscale.a in Frameworks */,
 				4F9279A221442E1700F17F9A /* libavfilter.a in Frameworks */,
 				4F9279A321442E1700F17F9A /* libavcodec.a in Frameworks */,
 				4F9279A421442E1700F17F9A /* libavformat.a in Frameworks */,
 				4F9279A521442E1700F17F9A /* libswresample.a in Frameworks */,
 				4F9279A621442E1700F17F9A /* libavutil.a in Frameworks */,
-				4F92799521442DF100F17F9A /* KVSig.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,6 +140,11 @@
 		4F92799821442E1700F17F9A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4F9279EF21451A9C00F17F9A /* libz.tbd */,
+				4F9279ED21451A9000F17F9A /* AudioToolbox.framework */,
+				4F9279EB21451A8100F17F9A /* CoreMedia.framework */,
+				4F9279E921451A7500F17F9A /* VideoToolbox.framework */,
+				4F9279D62145180700F17F9A /* libiconv.tbd */,
 				4F92799C21442E1700F17F9A /* libavcodec.a */,
 				4F92799921442E1700F17F9A /* libavdevice.a */,
 				4F92799B21442E1700F17F9A /* libavfilter.a */,
@@ -150,6 +173,8 @@
 				4FBF02202144284A00CA0EC8 /* ViewController.h */,
 				4FBF02212144284A00CA0EC8 /* ViewController.m */,
 				4FBF02232144284A00CA0EC8 /* Main.storyboard */,
+				4F9279D32145118600F17F9A /* VCDecodeController.h */,
+				4F9279D42145118600F17F9A /* VCDecodeController.m */,
 			);
 			path = Classses;
 			sourceTree = "<group>";
@@ -192,7 +217,7 @@
 		4FBF02112144284A00CA0EC8 = {
 			isa = PBXGroup;
 			children = (
-				4F92799421442DF100F17F9A /* KVSig.framework */,
+				4F9279F121451E7300F17F9A /* KVSig.framework */,
 				4FBF021C2144284A00CA0EC8 /* VideoCodecKitDemo */,
 				4FBF021B2144284A00CA0EC8 /* Products */,
 				4F92799821442E1700F17F9A /* Frameworks */,
@@ -333,7 +358,7 @@
 				4FBF02162144284A00CA0EC8 /* Sources */,
 				4FBF02172144284A00CA0EC8 /* Frameworks */,
 				4FBF02182144284A00CA0EC8 /* Resources */,
-				4F92799721442DF100F17F9A /* Embed Frameworks */,
+				4F9279E82145187300F17F9A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -396,6 +421,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F9279D52145118600F17F9A /* VCDecodeController.m in Sources */,
 				4F9279C0214449BA00F17F9A /* VCBaseFrameParser.m in Sources */,
 				4F9279AB2144312200F17F9A /* VCBaseDecoder.m in Sources */,
 				4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */,

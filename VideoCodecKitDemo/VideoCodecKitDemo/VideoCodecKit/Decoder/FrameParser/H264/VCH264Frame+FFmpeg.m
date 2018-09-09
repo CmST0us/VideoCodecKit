@@ -11,8 +11,8 @@
 @implementation VCH264Frame (FFmpeg)
 + (instancetype)h264FrameWithAVPacket:(AVPacket *)aPacket parserContext:(AVCodecParserContext *)parserContext {
     VCH264Frame *frame = [[VCH264Frame alloc] init];
-    frame.parserData = aPacket->data;
-    frame.pasrserSize = aPacket->size;
+    frame.parseData = aPacket->data;
+    frame.parseSize = aPacket->size;
     frame.width = parserContext->width;
     frame.height = parserContext->height;
     frame.frameIndex = parserContext->output_picture_number;
