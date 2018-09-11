@@ -77,7 +77,7 @@
 }
 
 - (NSInteger)parseData:(void *)buffer
-                length:(NSUInteger)length
+                length:(NSInteger)length
               copyData:(BOOL)shouldCopy {
     if (_codecContext == nil && _parserContext == nil) {
         return -1;
@@ -85,7 +85,7 @@
     
     [self.parserLock lock];
     
-    NSUInteger bufferLength = length;
+    NSInteger bufferLength = length;
     NSUInteger usedLength = 0;
     
     VCH264FFmpegFrameParserBuffer *buf = [[VCH264FFmpegFrameParserBuffer alloc] initWithBuffer:buffer length:length copyData:shouldCopy];

@@ -31,6 +31,12 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"width x height: %ld x %ld;\nframeSize: %ld;\nparseSize: %ld;\n", self.width, self.height, self.frameSize, self.parseSize];
+    uint8_t *parseDataPtr = (uint8_t *)self.parseData;
+    NSMutableString *parseDataString = [[NSMutableString alloc] init];
+    for (int i = 0; i < self.parseSize; ++i) {
+        [parseDataString appendFormat:@"%.2X ", *(parseDataPtr + i)];
+    }
+    
+    return [NSString stringWithFormat:@"frame:\nwidth x height: %ld x %ld;\nframeSize: %ld;\nparseSize: %ld;\nparseData: %@\n", self.width, self.height, self.frameSize, self.parseSize, parseDataString];
 }
 @end

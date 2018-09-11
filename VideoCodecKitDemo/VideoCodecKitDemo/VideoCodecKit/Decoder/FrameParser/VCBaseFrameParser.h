@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSUInteger pasrseCount;
 
 - (NSInteger)parseData:(void *)buffer
-                length:(NSUInteger)length
+                length:(NSInteger)length
               copyData:(BOOL)shouldCopy;
 
 - (void)reset;
