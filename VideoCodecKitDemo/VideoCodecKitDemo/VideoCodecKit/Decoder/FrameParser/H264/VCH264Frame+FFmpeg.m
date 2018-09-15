@@ -10,7 +10,7 @@
 
 @implementation VCH264Frame (FFmpeg)
 + (instancetype)h264FrameWithAVPacket:(AVPacket *)aPacket parserContext:(AVCodecParserContext *)parserContext {
-    VCH264Frame *frame = [[VCH264Frame alloc] initWithWidth:parserContext->width height:parserContext->height bytesPerRow:parserContext->width * 8];
+    VCH264Frame *frame = [[VCH264Frame alloc] initWithWidth:parserContext->width height:parserContext->height];
     [frame createParseDaraWithSize:aPacket->size];
     memcpy(frame.parseData, aPacket->data, frame.parseSize);
     

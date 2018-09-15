@@ -94,7 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 
 - (void)decodeFrame:(id<VCFrameTypeProtocol>)frame
-         completion:(void (^)(id<VCFrameTypeProtocol>))block;
+         completion:(void (^)(id<VCFrameTypeProtocol> frame))block;
 
 /**
  delegate 方式回调

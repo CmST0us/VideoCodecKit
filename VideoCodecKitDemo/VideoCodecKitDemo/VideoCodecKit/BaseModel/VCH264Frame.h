@@ -16,15 +16,23 @@ typedef NS_ENUM(NSUInteger, VCH264FrameType) {
     VCH264FrameTypeSPS,
     VCH264FrameTypePPS,
     VCH264FrameTypeIDR,
-    
-    VCH264FrameTypeSliceI,
-    VCH264FrameTypeSliceP,
-    VCH264FrameTypeSliceB,
+};
+
+typedef NS_ENUM(NSUInteger, VCH264SliceType) {
+    VCH264SliceTypeNone = 0, ///< Undefined
+    VCH264SliceTypeI,     ///< Intra
+    VCH264SliceTypeP,     ///< Predicted
+    VCH264SliceTypeB,     ///< Bi-dir predicted
+    VCH264SliceTypeS,     ///< S(GMC)-VOP MPEG-4
+    VCH264SliceTypeSI,    ///< Switching Intra
+    VCH264SliceTypeSP,    ///< Switching Predicted
+    VCH264SliceTypeBI,    ///< BI type
 };
 
 @interface VCH264Frame : NSObject<VCFrameTypeProtocol>
 
 @property (nonatomic, assign) VCH264FrameType frameType;
+@property (nonatomic, assign) VCH264SliceType sliceType;
 @property (nonatomic, assign) NSUInteger frameIndex;
 
 @property (nonatomic, assign) NSUInteger width;

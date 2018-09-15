@@ -10,9 +10,7 @@
 
 @implementation VCBaseDecoder
 
-
-
-- (instancetype)initWithConfig:(VCBaseDecoderConfig *)config {
+- (instancetype)init {
     self = [super init];
     if (self) {
         // 状态机配置
@@ -24,6 +22,13 @@
                                 @"resume": @[@(VCBaseDecoderStatePause), @(VCBaseDecoderStateRunning)],
                                 };
         self.currentState = @(VCBaseDecoderStateInit);
+    }
+    return self;
+}
+
+- (instancetype)initWithConfig:(VCBaseDecoderConfig *)config {
+    self = [self init];
+    if (self) {
         _config = config;
     }
     return self;
@@ -55,6 +60,7 @@
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) {
         return nil;
     }
+    return nil;
 }
 
 

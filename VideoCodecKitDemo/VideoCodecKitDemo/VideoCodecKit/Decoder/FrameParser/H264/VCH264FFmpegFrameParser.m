@@ -188,7 +188,7 @@
 - (NSInteger)parseData:(void *)buffer
                 length:(NSInteger)length
               copyData:(BOOL)shouldCopy
-            completion:(void (^)(id<VCFrameTypeProtocol> _Nonnull))block {
+            completion:(void (^)(id<VCFrameTypeProtocol> _Nonnull frame))block {
     
     if (_codecContext == nil && _parserContext == nil) {
         return -1;

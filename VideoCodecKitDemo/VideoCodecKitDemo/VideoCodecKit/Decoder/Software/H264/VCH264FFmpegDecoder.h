@@ -10,5 +10,5 @@
 #import "VCBaseDecoder.h"
 
 @interface VCH264FFmpegDecoder : VCBaseDecoder
-
+@property (nonatomic, strong) VCH264FFmpegFrameParser *parser;
 @end

@@ -70,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSInteger)parseData:(void *)buffer
                 length:(NSInteger)length
               copyData:(BOOL)shouldCopy
-            completion:(void (^)(id<VCFrameTypeProtocol>))block;
+            completion:(void (^)(id<VCFrameTypeProtocol> frame))block;
 
 - (void)reset;
 

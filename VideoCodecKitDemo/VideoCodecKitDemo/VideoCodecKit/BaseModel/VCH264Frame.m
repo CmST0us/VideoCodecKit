@@ -13,6 +13,7 @@
     self = [super init];
     if (self) {
         _frameType = VCH264FrameTypeUnknown;
+        _sliceType = VCH264SliceTypeNone;
         _width = 0;
         _height = 0;
         _parseData = nil;
@@ -24,8 +25,7 @@
 }
 
 - (instancetype)initWithWidth:(NSUInteger)width
-                       height:(NSUInteger)height
-                  bytesPerRow:(NSUInteger)bytesPerRow{
+                       height:(NSUInteger)height {
     self = [self init];
     _width = width;
     _height = height;

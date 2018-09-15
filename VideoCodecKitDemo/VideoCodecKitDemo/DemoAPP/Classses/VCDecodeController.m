@@ -7,6 +7,7 @@
 //
 
 #import "VCDecodeController.h"
+#import <KVSig/KVSig.h>
 
 #define kVCDefaultBufferSize 4096
 
@@ -20,17 +21,18 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _parser = [[VCH264FFmpegFrameParser alloc] init];
-        _parser.delegate = self;
-        _parser.useDelegate = NO;
+        _decoder = [[VCH264FFmpegDecoder alloc] init];
+        [_decoder FSM(setup)];
     }
     return self;
 }
 
 - (void)workingThread {
-    @autoreleasepool {
-        void *fileBuffer = malloc(kVCDefaultBufferSize);
+    weakSelf(target);
+    @autoreleasepool{
+        [self.decoder FSM(run)];
         
+        void *fileBuffer = malloc(kVCDefaultBufferSize);
         
         NSInputStream *stream = [[NSInputStream alloc] initWithFileAtPath:self.parseFilePath];
         [stream open];
@@ -41,7 +43,11 @@
                 // eof or error
                 break;
             } else {
-                [self.parser parseData:fileBuffer length:readLen copyData:YES];
+                [self.decoder.parser parseData:fileBuffer length:readLen copyData:YES completion:^(id<VCFrameTypeProtocol> _Nonnull frame) {
+                    [target.decoder decodeFrame:frame completion:^(id<VCFrameTypeProtocol>  _Nonnull frame) {
+                        target.frame = frame;
+                    }];
+                }];
             }
             memset(fileBuffer, 0, kVCDefaultBufferSize);
         }
