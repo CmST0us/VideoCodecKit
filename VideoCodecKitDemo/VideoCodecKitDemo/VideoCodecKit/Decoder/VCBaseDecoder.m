@@ -50,4 +50,25 @@
     [self commitStateTransition];
 }
 
+
+- (id<VCFrameTypeProtocol>)decode:(id<VCFrameTypeProtocol>)frame {
+    if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) {
+        return nil;
+    }
+}
+
+
+- (void)decodeFrame:(id<VCFrameTypeProtocol>)frame
+         completion:(void (^)(id<VCFrameTypeProtocol>))block {
+    if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) {
+        return;
+    }
+}
+
+- (void)decodeWithFrame:(id<VCFrameTypeProtocol>)frame {
+    if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) {
+        return;
+    }
+}
+
 @end

@@ -36,8 +36,7 @@ typedef NS_ENUM(NSUInteger, VCH264FrameType) {
 @property (nonatomic, strong) VCYUV422Image *image;
 
 - (instancetype)initWithWidth:(NSUInteger)width
-                       height:(NSUInteger)height
-                  bytesPerRow:(NSUInteger)bytesPerRow;
+                       height:(NSUInteger)height;
     
 - (void)createParseDaraWithSize:(NSUInteger)size;
 @end

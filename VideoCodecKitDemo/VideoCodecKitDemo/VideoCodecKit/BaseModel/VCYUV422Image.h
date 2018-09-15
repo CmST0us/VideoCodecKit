@@ -22,7 +22,6 @@
 @property (nonatomic, assign) NSUInteger chromaRSize;
 
 - (instancetype)initWithWidth:(NSUInteger)width
-                       height:(NSUInteger)height
-                  bytesPerRow:(NSUInteger)bytesPerRow;
+                       height:(NSUInteger)height;
 
 @end

@@ -10,14 +10,29 @@
 
 @implementation VCYUV422Image
 - (instancetype)initWithWidth:(NSUInteger)width
-                       height:(NSUInteger)height
-                  bytesPerRow:(NSUInteger)bytesPerRow {
+                       height:(NSUInteger)height {
+
     self = [super self];
     if (self) {
         _width = width;
         _height = height;
     }
     return self;
+}
+
+- (void)createLumaDataWithSize:(NSUInteger)size {
+    _lumaSize = size;
+    _luma = (uint8_t *)malloc(_lumaSize);
+}
+
+- (void)createChromaBDataWithSize:(NSUInteger)size {
+    _chromaBSize = size;
+    _chromaB = (uint8_t *)malloc(_chromaBSize);
+}
+
+- (void)createChromaRDataWithSize:(NSUInteger)size {
+    _chromaRSize = size;
+    _chromaR = (uint8_t *)malloc(_chromaRSize);
 }
 
 - (void)dealloc {

@@ -35,6 +35,7 @@
 		4F927A11214D63B100F17F9A /* EKFSMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F927A0F214D63B100F17F9A /* EKFSMObject.m */; };
 		4F927A14214D729D00F17F9A /* VCYUV422Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F927A13214D729D00F17F9A /* VCYUV422Image.m */; };
 		4F927A17214D7B9600F17F9A /* VCH264FFmpegFrameParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F927A15214D7B9600F17F9A /* VCH264FFmpegFrameParser.m */; };
+		4F927A1A214D863400F17F9A /* VCYUV422Image+FFmpeg.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F927A19214D863400F17F9A /* VCYUV422Image+FFmpeg.m */; };
 		4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF021E2144284A00CA0EC8 /* AppDelegate.m */; };
 		4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF02212144284A00CA0EC8 /* ViewController.m */; };
 		4FBF02252144284A00CA0EC8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02232144284A00CA0EC8 /* Main.storyboard */; };
@@ -103,6 +104,8 @@
 		4F927A13214D729D00F17F9A /* VCYUV422Image.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCYUV422Image.m; sourceTree = "<group>"; };
 		4F927A15214D7B9600F17F9A /* VCH264FFmpegFrameParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VCH264FFmpegFrameParser.m; sourceTree = "<group>"; };
 		4F927A16214D7B9600F17F9A /* VCH264FFmpegFrameParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VCH264FFmpegFrameParser.h; sourceTree = "<group>"; };
+		4F927A18214D863400F17F9A /* VCYUV422Image+FFmpeg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VCYUV422Image+FFmpeg.h"; sourceTree = "<group>"; };
+		4F927A19214D863400F17F9A /* VCYUV422Image+FFmpeg.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "VCYUV422Image+FFmpeg.m"; sourceTree = "<group>"; };
 		4FBF021A2144284A00CA0EC8 /* VideoCodecKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoCodecKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FBF021D2144284A00CA0EC8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4FBF021E2144284A00CA0EC8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -211,6 +214,8 @@
 			children = (
 				4F9279B12144450300F17F9A /* VCH264FFmpegDecoder.h */,
 				4F9279B22144450300F17F9A /* VCH264FFmpegDecoder.m */,
+				4F927A18214D863400F17F9A /* VCYUV422Image+FFmpeg.h */,
+				4F927A19214D863400F17F9A /* VCYUV422Image+FFmpeg.m */,
 			);
 			path = H264;
 			sourceTree = "<group>";
@@ -443,6 +448,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F9279D52145118600F17F9A /* VCDecodeController.m in Sources */,
+				4F927A1A214D863400F17F9A /* VCYUV422Image+FFmpeg.m in Sources */,
 				4F9279C0214449BA00F17F9A /* VCBaseFrameParser.m in Sources */,
 				4F9279AB2144312200F17F9A /* VCBaseDecoder.m in Sources */,
 				4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */,
