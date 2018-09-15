@@ -1,5 +1,5 @@
 //
-//  VCH264FFMpegDecoder.h
+//  VCH264FFmpegDecoder.h
 //  VideoCodecKitDemo
 //
 //  Created by CmST0us on 2018/9/9.
@@ -9,6 +9,6 @@
 
 #import "VCBaseDecoder.h"
 
-@interface VCH264FFMpegDecoder : VCBaseDecoder
+@interface VCH264FFmpegDecoder : VCBaseDecoder
 
 @end

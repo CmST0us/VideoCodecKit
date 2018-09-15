@@ -12,18 +12,30 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _isSPS = NO;
-        _isIDR = NO;
-        _isPPS = NO;
+        _frameType = VCH264FrameTypeUnknown;
         _width = 0;
         _height = 0;
-        _frameData = nil;
-        _frameSize = 0;
         _parseData = nil;
         _parseSize = 0;
         _frameIndex = 0;
+        _image = nil;
     }
     return self;
+}
+
+- (instancetype)initWithWidth:(NSUInteger)width
+                       height:(NSUInteger)height
+                  bytesPerRow:(NSUInteger)bytesPerRow{
+    self = [self init];
+    _width = width;
+    _height = height;
+    _image = [[VCYUV422Image alloc] initWithWidth:width height:height bytesPerRow:bytesPerRow];
+    return self;
+}
+
+- (void)createParseDaraWithSize:(NSUInteger)size {
+    self.parseSize = size
+    self.parseData = (uint8_t *)malloc(size);
 }
 
 - (NSString *)frameClassString {
@@ -37,18 +49,14 @@
         [parseDataString appendFormat:@"%.2X ", *(parseDataPtr + i)];
     }
     
-    return [NSString stringWithFormat:@"frame:\nwidth x height: %ld x %ld;\nframeSize: %ld;\nparseSize: %ld;\nparseData: %@\n", self.width, self.height, self.frameSize, self.parseSize, parseDataString];
+    return [NSString stringWithFormat:@"frame:\nwidth x height: %ld x %ld;\nparseSize: %ld;\nparseData: %@\n", self.width, self.height, self.parseSize, parseDataString];
 }
 
 - (void)dealloc {
-    if (self.frameData != nil) {
-        free(self.frameData);
-        self.frameData = nil;
-    }
-    
     if (self.parseData != nil) {
         free(self.parseData);
-        self.frameData = nil;
+        self.parseData = nil;
+        self.parseSize = 0;
     }
 }
 @end

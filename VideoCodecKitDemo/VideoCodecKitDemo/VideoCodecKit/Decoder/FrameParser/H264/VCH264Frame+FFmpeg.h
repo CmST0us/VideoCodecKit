@@ -11,6 +11,7 @@
 #import "VCH264Frame.h"
 
 @interface VCH264Frame (FFmpeg)
+
 + (instancetype)h264FrameWithAVPacket:(AVPacket *)aPacket
                         parserContext:(AVCodecParserContext *)parserContext;
 

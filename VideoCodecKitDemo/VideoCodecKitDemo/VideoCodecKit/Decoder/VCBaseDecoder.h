@@ -10,51 +10,98 @@
 #import <Foundation/Foundation.h>
 
 #import "VCBaseDecoderConfig.h"
+#import "VCFrameTypeProtocol.h"
+#import "EKFSMObject.h"
+
+// 解码器状态机
+/**
+                                    setup
+                    +----------------------------------------+
+                    |                                        |
+                    |                                        |
+                    |                                        |
+         setup     \/      run               invalidate      |
+ init  --------->  ready --------> running --------------> stop
+                                    ^ |
+                              resumu| |pause
+                                    | |
+                                    |\/
+                                    pause
+ 
+ P.S. setup之后的状态都能转到stop
+ */
 
 /**
  解码器状态
 
- - VCDecoderStateInit: 正在初始化
- - VCDecoderStateReady: 初始化完成可以启动
- - VCDecoderStateRunning: 正在运行
- - VCDecoderStateWait: 运行暂停，等待重新调度
- - VCDecoderStateError: 出现错误
+ - VCBaseDecoderStateInit: 正在初始化
+ - VCBaseDecoderStateReady: 初始化完成可以启动
+ - VCBaseDecoderStateRunning: 正在运行
+ - VCBaseDecoderStatePause: 运行暂停，等待重新调度
+ - VCBaseDecoderStateStop: 解码器被invalidate运行停止
  */
-typedef NS_ENUM(NSUInteger, VCDecoderState) {
-    VCDecoderStateInit,
-    VCDecoderStateReady,
-    VCDecoderStateRunning,
-    VCDecoderStateWait,
-    VCDecoderStateError,
+typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
+    VCBaseDecoderStateInit,
+    VCBaseDecoderStateReady,
+    VCBaseDecoderStateRunning,
+    VCBaseDecoderStatePause,
+    VCBaseDecoderStateStop,
 };
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol VCBaseDecoderProtocol<NSObject>
-@required
-/**
- 启动解码器：状态从Ready变为Running
- */
-- (BOOL)start;
 
 /**
- 暂停解码器：状态从Running变为Wait
+ 配置解码器
  */
-- (BOOL)pause;
+- (void)setup;
 
 /**
- 继续解码器：状态从Wait变为Running
+ 开始解码
  */
-- (BOOL)resume;
-/**
- 停止解码器：状态从(Running||Wait)变为Ready
- */
-- (BOOL)stop;
+- (void)run;
 
 /**
- 重置解码器：只有在状态为Ready才能重置
+ 释放解码器
  */
-- (BOOL)reset;
+- (void)invalidate;
+
+/**
+ 暂停解码
+ */
+- (void)pause;
+
+/**
+ 继续解码
+ */
+- (void)resume;
+
+
+/**
+ 一进一出，填充frame
+
+ @param frame 原始帧
+ @return 解码帧
+ */
+- (id<VCFrameTypeProtocol>)decode:(id<VCFrameTypeProtocol>)frame;
+
+/**
+ 回调block
+
+ @param frame 原始帧
+ @param block 回调block
+ */
+
+- (void)decodeFrame:(id<VCFrameTypeProtocol>)frame
+         completion:(void (^)(id<VCFrameTypeProtocol>))block;
+
+/**
+ delegate 方式回调
+
+ @param frame 原始帧
+ */
+- (void)decodeWithFrame:(id<VCFrameTypeProtocol>)frame;
 
 @end
 
@@ -62,10 +109,9 @@ NS_ASSUME_NONNULL_BEGIN
  解码器父类，维护了解码器状态机。
  继承的子类都应该实现 VCBaseDecoderProtocol jie kou
  */
-@interface VCBaseDecoder : NSObject<VCBaseDecoderProtocol>
+@interface VCBaseDecoder : EKFSMObject<VCBaseDecoderProtocol>
 
 // 解码器当前状态
-@property (nonatomic, readonly) VCDecoderState currentState;
 @property (nonatomic, readonly) VCBaseDecoderConfig *config;
 
 /**
@@ -76,16 +122,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithConfig:(VCBaseDecoderConfig *)config;
 
-- (BOOL)startWithConfig:(VCBaseDecoderConfig *)aConfig;
-- (BOOL)resetUsingConfig:(VCBaseDecoderConfig *)aConfig;
-/**
- 使用新的参数配置解码器
- 调用前应保证解码器状态处于Ready状态
- 
- @param aConfig 配置
- @return 是否配置成功
- */
-- (BOOL)setConfig:(VCBaseDecoderConfig *)aConfig;
 
 @end
 NS_ASSUME_NONNULL_END

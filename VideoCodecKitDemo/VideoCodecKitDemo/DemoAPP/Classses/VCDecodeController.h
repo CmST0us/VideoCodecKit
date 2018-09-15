@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "VCH264FFMpegFrameParser.h"
+#import "VCH264FFmpegFrameParser.h"
 #import "VCH264Frame.h"
 
 @interface VCDecodeController : NSObject<VCFrameParserDelegate>
 
-@property (nonatomic, strong) VCH264FFMpegFrameParser *parser;
+@property (nonatomic, strong) VCH264FFmpegFrameParser *parser;
 
 @property (nonatomic, copy) NSString *parseFilePath;
 

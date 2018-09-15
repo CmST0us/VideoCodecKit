@@ -1,5 +1,5 @@
 //
-//  VCH264FFMpegFrameParser.m
+//  VCH264FFmpegFrameParser.m
 //  VideoCodecKitDemo
 //
 //  Created by CmST0us on 2018/9/9.
@@ -9,11 +9,11 @@
 #import <libavcodec/avcodec.h>
 #import <libavutil/avutil.h>
 
-#import "VCH264FFMpegFrameParser.h"
+#import "VCH264FFmpegFrameParser.h"
 #import "VCH264FFmpegFrameParserBuffer.h"
 #import "VCH264Frame+FFmpeg.h"
 
-@interface VCH264FFMpegFrameParser () {
+@interface VCH264FFmpegFrameParser () {
     AVCodecContext *_codecContext;
     AVCodecParserContext *_parserContext;
     AVCodec *_codec;
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation VCH264FFMpegFrameParser
+@implementation VCH264FFmpegFrameParser
 
 - (instancetype)init {
     self = [super init];

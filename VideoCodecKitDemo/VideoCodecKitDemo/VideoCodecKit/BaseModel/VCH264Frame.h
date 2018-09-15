@@ -7,14 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import "VCFrameTypeProtocol.h"
+#import "VCYUV422Image.h"
+
+typedef NS_ENUM(NSUInteger, VCH264FrameType) {
+    VCH264FrameTypeUnknown,
+    VCH264FrameTypeSPS,
+    VCH264FrameTypePPS,
+    VCH264FrameTypeIDR,
+    
+    VCH264FrameTypeSliceI,
+    VCH264FrameTypeSliceP,
+    VCH264FrameTypeSliceB,
+};
 
 @interface VCH264Frame : NSObject<VCFrameTypeProtocol>
 
-@property (nonatomic, assign) BOOL isSPS;
-@property (nonatomic, assign) BOOL isPPS;
-@property (nonatomic, assign) BOOL isIDR;
-
+@property (nonatomic, assign) VCH264FrameType frameType;
 @property (nonatomic, assign) NSUInteger frameIndex;
 
 @property (nonatomic, assign) NSUInteger width;
@@ -23,7 +33,11 @@
 @property (nonatomic, assign) uint8_t *parseData;
 @property (nonatomic, assign) NSUInteger parseSize;
 
-@property (nonatomic, assign) uint8_t *frameData;
-@property (nonatomic, assign) NSUInteger frameSize;
+@property (nonatomic, strong) VCYUV422Image *image;
 
+- (instancetype)initWithWidth:(NSUInteger)width
+                       height:(NSUInteger)height
+                  bytesPerRow:(NSUInteger)bytesPerRow;
+    
+- (void)createParseDaraWithSize:(NSUInteger)size;
 @end

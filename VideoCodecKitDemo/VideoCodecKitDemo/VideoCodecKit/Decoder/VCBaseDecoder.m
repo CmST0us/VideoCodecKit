@@ -10,79 +10,44 @@
 
 @implementation VCBaseDecoder
 
+
+
 - (instancetype)initWithConfig:(VCBaseDecoderConfig *)config {
     self = [super init];
     if (self) {
-        _currentState = VCDecoderStateInit;
+        // 状态机配置
+        self.actionStateMap = @{
+                                @"setup": @[@(VCBaseDecoderStateReady), @(VCBaseDecoderStateInit), @(VCBaseDecoderStateStop)],
+                                @"run": @[@(VCBaseDecoderStateRunning), @(VCBaseDecoderStateReady), @(VCBaseDecoderStatePause)],
+                                @"invalidate": @[@(VCBaseDecoderStateStop), @(VCBaseDecoderStateReady), @(VCBaseDecoderStateRunning), @(VCBaseDecoderStatePause)],
+                                @"pause": @[@(VCBaseDecoderStatePause), @(VCBaseDecoderStateRunning)],
+                                @"resume": @[@(VCBaseDecoderStatePause), @(VCBaseDecoderStateRunning)],
+                                };
+        self.currentState = @(VCBaseDecoderStateInit);
         _config = config;
-        _currentState = VCDecoderStateReady;
     }
     return self;
 }
 
-- (instancetype)init {
-    return [self initWithConfig:[VCBaseDecoderConfig defaultConfig]];
+#pragma mark - Public Method
+- (void)setup {
+    [self commitStateTransition];
 }
 
-- (BOOL)setConfig:(VCBaseDecoderConfig *)aConfig {
-    if (self.currentState != VCDecoderStateReady) {
-        return NO;
-    }
-    _config = aConfig;
-    return YES;
+- (void)run {
+    [self commitStateTransition];
 }
 
-- (BOOL)start {
-    if (self.currentState != VCDecoderStateReady) {
-        return NO;
-    }
-    _currentState = VCDecoderStateRunning;
-    return YES;
+- (void)invalidate {
+    [self commitStateTransition];
 }
 
-- (BOOL)startWithConfig:(VCBaseDecoderConfig *)aConfig {
-    if ([self setConfig:aConfig]) {
-        return [self start];
-    }
-    return NO;
+- (void)pause {
+    [self commitStateTransition];
 }
 
-- (BOOL)pause {
-    if (self.currentState != VCDecoderStateRunning) {
-        return NO;
-    }
-    _currentState = VCDecoderStateWait;
-    return YES;
-}
-
-- (BOOL)resume {
-    if (self.currentState != VCDecoderStateWait) {
-        return NO;
-    }
-    _currentState = VCDecoderStateRunning;
-    return YES;
-}
-
-- (BOOL)stop {
-    if (self.currentState == VCDecoderStateWait || self.currentState == VCDecoderStateRunning) {
-        _currentState = VCDecoderStateReady;
-        return YES;
-    }
-    return NO;
-}
-
-- (BOOL)reset {
-    if (self.currentState != VCDecoderStateReady) {
-        return NO;
-    }
-    return YES;
-}
-
-- (BOOL)resetUsingConfig:(VCBaseDecoderConfig *)aConfig {
-    if ([self setConfig:aConfig]) {
-        return [self reset];
-    }
-    return NO;
+- (void)resume {
+    [self commitStateTransition];
 }
 
 @end

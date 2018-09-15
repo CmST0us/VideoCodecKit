@@ -20,7 +20,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _parser = [[VCH264FFMpegFrameParser alloc] init];
+        _parser = [[VCH264FFmpegFrameParser alloc] init];
         _parser.delegate = self;
         _parser.useDelegate = NO;
     }

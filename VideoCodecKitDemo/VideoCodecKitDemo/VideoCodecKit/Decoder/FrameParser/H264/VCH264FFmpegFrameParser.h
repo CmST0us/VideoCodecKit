@@ -1,5 +1,5 @@
 //
-//  VCH264FFMpegFrameParser.h
+//  VCH264FFmpegFrameParser.h
 //  VideoCodecKitDemo
 //
 //  Created by CmST0us on 2018/9/9.
@@ -9,7 +9,7 @@
 #import "VCH264FrameParser.h"
 
 NS_ASSUME_NONNULL_BEGIN
-@interface VCH264FFMpegFrameParser : VCH264FrameParser
+@interface VCH264FFmpegFrameParser : VCH264FrameParser
 
 @end
 

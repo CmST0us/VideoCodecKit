@@ -10,16 +10,15 @@
 
 @implementation VCH264Frame (FFmpeg)
 + (instancetype)h264FrameWithAVPacket:(AVPacket *)aPacket parserContext:(AVCodecParserContext *)parserContext {
-    VCH264Frame *frame = [[VCH264Frame alloc] init];
-    frame.parseSize = aPacket->size;
-    
-    frame.parseData = (uint8_t *)malloc(frame.parseSize);
+    VCH264Frame *frame = [[VCH264Frame alloc] initWithWidth:parserContext->width height:parserContext->height bytesPerRow:parserContext->width * 8];
+    [frame createParseDaraWithSize:aPacket->size];
     memcpy(frame.parseData, aPacket->data, frame.parseSize);
     
-    frame.width = parserContext->width;
-    frame.height = parserContext->height;
     frame.frameIndex = parserContext->output_picture_number;
-    frame.isIDR = parserContext->key_frame == 1;
+    if (parserContext->key_frame) {
+        frame.frameType = VCH264FrameTypeIDR;
+    }
+    
     return frame;
 }
 @end

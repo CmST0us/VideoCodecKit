@@ -1,5 +1,5 @@
 //
-//  VCH264FFMpegDecoder.m
+//  VCH264FFmpegDecoder.m
 //  VideoCodecKitDemo
 //
 //  Created by CmST0us on 2018/9/9.
@@ -10,52 +10,51 @@
 #import <libavutil/avutil.h>
 
 #import "VCH264FFmpegDecoder.h"
+#import "VCH264Frame.h"
 
-@interface VCH264FFMpegDecoder () {
+@interface VCH264FFmpegDecoder () {
     AVFrame *_frame;
 }
 
 @end
 
-@implementation VCH264FFMpegDecoder
-- (BOOL)start {
-    if (![super start]) {
-        return NO;
-    }
+@implementation VCH264FFmpegDecoder
+
+- (void)setup {
     
-    return YES;
 }
 
-- (BOOL)stop {
-    if (![super stop]) {
-        return NO;
-    }
+- (void)run {
     
-    return YES;
 }
 
-- (BOOL)pause {
-    if (![super pause]) {
-        return NO;
-    }
+- (void)pause {
     
-    return YES;
 }
 
-- (BOOL)resume {
-    if (![super resume]) {
-        return NO;
-    }
+- (void)resume {
     
-    return YES;
 }
 
-- (BOOL)reset {
-    if (![super reset]) {
-        return NO;
-    }
+- (void)invalidate {
     
-    return YES;
 }
 
+- (void)decodeFrame:(id<VCFrameTypeProtocol>)frame
+         completion:(void (^)(id<VCFrameTypeProtocol> _Nonnull))block {
+    // read frame parse
+    if (![self isH264Frame:frame]) {
+        
+        return;
+    }
+    
+    
+}
+
+- (BOOL)isH264Frame:(id<VCFrameTypeProtocol>)frame {
+    if ([frame.frameClassString isEqualToString:NSStringFromClass([VCH264Frame class])]) {
+        return YES;
+    }
+    return NO;
+}
 @end
