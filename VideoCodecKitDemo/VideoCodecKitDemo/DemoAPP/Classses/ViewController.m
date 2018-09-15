@@ -28,7 +28,8 @@
 - (void)bindData {
     weakSelf(target);
     [self.decoderController addKVSigObserver:self forKeyPath:KVSKeyPath([self decoderController].parser.currentParseFrame) handle:^(NSObject *oldValue, NSObject *newValue) {
-        NSLog(@"%@", newValue);
+        VCH264Frame *frame = (VCH264Frame *)newValue;
+        NSLog(@"parse length: %lu", frame.parseSize);
     }];
 }
 

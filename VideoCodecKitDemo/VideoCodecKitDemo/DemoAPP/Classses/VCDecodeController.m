@@ -30,28 +30,20 @@
 - (void)workingThread {
     @autoreleasepool {
         void *fileBuffer = malloc(kVCDefaultBufferSize);
-        memset(fileBuffer, 0, kVCDefaultBufferSize);
         
-        uint8_t *readBuffer = (uint8_t *)fileBuffer;
-        NSInteger stickLength = 0;
+        
         NSInputStream *stream = [[NSInputStream alloc] initWithFileAtPath:self.parseFilePath];
         [stream open];
         while (![[NSThread currentThread] isCancelled]) {
             // file reader
-            NSInteger readLen = [stream read:fileBuffer + stickLength maxLength:kVCDefaultBufferSize];
-            NSInteger usedLength = 0;
+            NSInteger readLen = [stream read:fileBuffer maxLength:kVCDefaultBufferSize];
             if (readLen <= 0) {
                 // eof or error
                 break;
             } else {
-                usedLength = [self.parser parseData:fileBuffer length:readLen copyData:YES];
-                // 粘包多余数据
-                //bufferReadLength - parseBufLen 为粘包大小
-                //bufferReadLength = kVCDefaultBufferSize - 粘包大小
-                stickLength = kVCDefaultBufferSize - usedLength;
-                memmove(fileBuffer, fileBuffer + usedLength, usedLength);
-                fileBuffer = reallocf(fileBuffer, kVCDefaultBufferSize + stickLength);
+                [self.parser parseData:fileBuffer length:readLen copyData:YES];
             }
+            memset(fileBuffer, 0, kVCDefaultBufferSize);
         }
         free(fileBuffer);
     }

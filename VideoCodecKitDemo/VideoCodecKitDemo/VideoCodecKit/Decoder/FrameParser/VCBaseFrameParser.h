@@ -32,15 +32,41 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) BOOL useDelegate;
 
+/**
+ 解码得到一帧就返回
+
+ @param buffer 缓冲区
+ @param length 缓冲区大小
+ @param usedLength 使用的缓冲区大小(inout)
+ @param shouldCopy 是否拷贝内存
+ @return 一帧
+ */
 - (id<VCFrameTypeProtocol>)parseData:(uint8_t *)buffer
                               length:(NSInteger)length
                           usedLength:(NSInteger *)usedLength
                             copyData:(BOOL)shouldCopy;
 
+/**
+ 解码一帧向delegate通知一次。
+
+ @param buffer 缓冲区
+ @param length 缓冲区大小
+ @param shouldCopy 是否拷贝内存
+ @return 使用的缓冲区大小 -1为错误
+ */
 - (NSInteger)parseData:(void *)buffer
                 length:(NSInteger)length
               copyData:(BOOL)shouldCopy;
 
+/**
+ 解码一帧向block回调一次。不会通知delegate
+ 
+ @param buffer 缓冲区
+ @param length 缓冲区大小
+ @param shouldCopy 是否拷贝内存
+ @param block 回调block
+ @return 使用的缓冲区大小 -1为错误
+ */
 - (NSInteger)parseData:(void *)buffer
                 length:(NSInteger)length
               copyData:(BOOL)shouldCopy

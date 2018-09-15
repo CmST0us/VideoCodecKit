@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "VCH264FFMpegFrameParser.h"
+#import "VCH264Frame.h"
 
 @interface VCDecodeController : NSObject<VCFrameParserDelegate>
 

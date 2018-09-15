@@ -103,6 +103,10 @@
                                         AV_NOPTS_VALUE,
                                         0);
         
+        if (parserLength > bufferLength) {
+            // 解码失败的 break
+            break;
+        }
         parserBuffer = [parserBuffer advancedBy:parserLength];
         bufferLength -= parserLength;
         
@@ -209,6 +213,10 @@
                                          AV_NOPTS_VALUE,
                                          AV_NOPTS_VALUE,
                                          0);
+        if (parserLen > bufferLength) {
+            // 解码失败的 break
+            break;
+        }
         
         buf = [buf advancedBy:parserLen];
         bufferLength -= parserLen;
