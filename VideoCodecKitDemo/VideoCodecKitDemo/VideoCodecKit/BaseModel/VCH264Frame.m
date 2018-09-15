@@ -39,4 +39,16 @@
     
     return [NSString stringWithFormat:@"frame:\nwidth x height: %ld x %ld;\nframeSize: %ld;\nparseSize: %ld;\nparseData: %@\n", self.width, self.height, self.frameSize, self.parseSize, parseDataString];
 }
+
+- (void)dealloc {
+    if (self.frameData != nil) {
+        free(self.frameData);
+        self.frameData = nil;
+    }
+    
+    if (self.parseData != nil) {
+        free(self.parseData);
+        self.frameData = nil;
+    }
+}
 @end

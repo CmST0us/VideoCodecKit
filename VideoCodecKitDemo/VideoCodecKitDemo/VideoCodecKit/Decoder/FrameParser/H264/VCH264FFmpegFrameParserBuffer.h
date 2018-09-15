@@ -11,7 +11,7 @@
 
 @interface VCH264FFmpegFrameParserBuffer : NSObject
 
-@property (nonatomic, assign) void *data;
+@property (nonatomic, assign) uint8_t *data;
 @property (nonatomic, assign) NSUInteger length;
 @property (nonatomic, readonly) BOOL isCopyData;
 

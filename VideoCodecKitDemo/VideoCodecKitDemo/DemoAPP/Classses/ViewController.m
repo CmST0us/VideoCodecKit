@@ -27,10 +27,6 @@
 
 - (void)bindData {
     weakSelf(target);
-    [self.decoderController addKVSigObserver:self forKeyPath:KVSKeyPath([self decoderController].parser.pasrseCount) handle:^(NSObject *oldValue, NSObject *newValue) {
-        NSLog(@"%@", target.decoderController.parser.currentParseFrame);
-    }];
-    
     [self.decoderController addKVSigObserver:self forKeyPath:KVSKeyPath([self decoderController].parser.currentParseFrame) handle:^(NSObject *oldValue, NSObject *newValue) {
         NSLog(@"%@", newValue);
     }];

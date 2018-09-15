@@ -27,10 +27,24 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<VCFrameParserDelegate> delegate;
 
 @property (nonatomic, assign) NSUInteger pasrseCount;
+/**
+ should use delegate callback. Default is YES
+ */
+@property (nonatomic, assign) BOOL useDelegate;
+
+- (id<VCFrameTypeProtocol>)parseData:(uint8_t *)buffer
+                              length:(NSInteger)length
+                          usedLength:(NSInteger *)usedLength
+                            copyData:(BOOL)shouldCopy;
 
 - (NSInteger)parseData:(void *)buffer
                 length:(NSInteger)length
               copyData:(BOOL)shouldCopy;
+
+- (NSInteger)parseData:(void *)buffer
+                length:(NSInteger)length
+              copyData:(BOOL)shouldCopy
+            completion:(void (^)(id<VCFrameTypeProtocol>))block;
 
 - (void)reset;
 

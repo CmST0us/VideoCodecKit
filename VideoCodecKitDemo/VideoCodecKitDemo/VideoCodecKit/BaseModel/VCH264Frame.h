@@ -20,10 +20,10 @@
 @property (nonatomic, assign) NSUInteger width;
 @property (nonatomic, assign) NSUInteger height;
 
-@property (nonatomic, assign) void *parseData;
+@property (nonatomic, assign) uint8_t *parseData;
 @property (nonatomic, assign) NSUInteger parseSize;
 
-@property (nonatomic, assign) void *frameData;
+@property (nonatomic, assign) uint8_t *frameData;
 @property (nonatomic, assign) NSUInteger frameSize;
 
 @end

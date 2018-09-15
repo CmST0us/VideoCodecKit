@@ -33,7 +33,7 @@
             memset(((char *)_data) + data.length, 0, FF_INPUT_BUFFER_PADDING_SIZE);
             memcpy(_data, data.bytes, data.length);
         } else {
-            _length = FF_INPUT_BUFFER_PADDING_SIZE + data.length;
+            _length = data.length;
             _data = (void *)data.bytes;
         }
     }
@@ -51,7 +51,7 @@
             memset(((char *)_data) + length, 0, FF_INPUT_BUFFER_PADDING_SIZE);
             memcpy(_data, buffer, length);
         } else {
-            _length = FF_INPUT_BUFFER_PADDING_SIZE + length;
+            _length = length;
             _data = buffer;
         }
     }
@@ -60,7 +60,7 @@
 
 - (instancetype)advancedBy:(NSInteger)step {
     VCH264FFmpegFrameParserBuffer *buf = [[VCH264FFmpegFrameParserBuffer alloc] init];
-    buf.data = (void *)(((uint8_t *)self.data) + step);
+    buf.data = self.data + step;
     buf.length = self.length - step;
     return buf;
 }

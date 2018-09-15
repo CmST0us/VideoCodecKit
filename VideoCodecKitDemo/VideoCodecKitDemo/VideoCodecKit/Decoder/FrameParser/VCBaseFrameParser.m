@@ -13,6 +13,7 @@
     self = [super init];
     if (self) {
         _pasrseCount = 0;
+        _useDelegate = YES;
     }
     return self;
 }
