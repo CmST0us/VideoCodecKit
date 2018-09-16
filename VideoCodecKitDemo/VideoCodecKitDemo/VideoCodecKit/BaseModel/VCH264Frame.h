@@ -12,10 +12,12 @@
 #import "VCYUV422Image.h"
 
 typedef NS_ENUM(NSUInteger, VCH264FrameType) {
-    VCH264FrameTypeUnknown,
-    VCH264FrameTypeSPS,
-    VCH264FrameTypePPS,
-    VCH264FrameTypeIDR,
+    VCH264FrameTypeUnknown = 0,
+    VCH264FrameTypeSlice = 1,
+    VCH264FrameTypeIDR = 5,
+    VCH264FrameTypeSEI = 6,
+    VCH264FrameTypeSPS = 7,
+    VCH264FrameTypePPS = 8,
 };
 
 typedef NS_ENUM(NSUInteger, VCH264SliceType) {
@@ -45,6 +47,6 @@ typedef NS_ENUM(NSUInteger, VCH264SliceType) {
 
 - (instancetype)initWithWidth:(NSUInteger)width
                        height:(NSUInteger)height;
-    
+
 - (void)createParseDaraWithSize:(NSUInteger)size;
 @end

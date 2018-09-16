@@ -34,7 +34,13 @@
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [self.decoderController startParse];
+    if ([self.decoderController.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateRunning)]) {
+        [self.decoderController stopParse];
+    } else if ([self.decoderController.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateStop)]) {
+        [self.decoderController startParse];
+    } else if ([self.decoderController.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateInit)]) {
+        [self.decoderController startParse];
+    }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //        [self.decoderController stopParse];
 //        [NSThread sleepForTimeInterval:1];

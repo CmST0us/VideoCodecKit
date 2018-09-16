@@ -50,8 +50,8 @@
     av_frame_free(&_frame);
     av_packet_free(&_packet);
     _frame = nil;
+    _packet = nil;
     [_parser reset];
-    
     [self commitStateTransition];
 }
 

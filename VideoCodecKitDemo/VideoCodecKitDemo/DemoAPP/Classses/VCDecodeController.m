@@ -13,6 +13,7 @@
 
 @interface VCDecodeController ()
 @property (nonatomic, strong) NSThread *workThread;
+@property (nonatomic, strong) dispatch_semaphore_t workThreadSem;
 @end
 
 
@@ -22,7 +23,7 @@
     self = [super init];
     if (self) {
         _decoder = [[VCH264FFmpegDecoder alloc] init];
-        [_decoder FSM(setup)];
+        _workThreadSem = dispatch_semaphore_create(0);
     }
     return self;
 }
@@ -30,8 +31,6 @@
 - (void)workingThread {
     weakSelf(target);
     @autoreleasepool{
-        [self.decoder FSM(run)];
-        
         void *fileBuffer = malloc(kVCDefaultBufferSize);
         
         NSInputStream *stream = [[NSInputStream alloc] initWithFileAtPath:self.parseFilePath];
@@ -52,10 +51,13 @@
             memset(fileBuffer, 0, kVCDefaultBufferSize);
         }
         free(fileBuffer);
+        dispatch_semaphore_signal(self.workThreadSem);
     }
 }
 
 - (void)startParse {
+    [self.decoder FSM(setup)];
+    [self.decoder FSM(run)];
     self.workThread = [[NSThread alloc] initWithTarget:self selector:@selector(workingThread) object:nil];
     [self.workThread start];
 }
@@ -63,5 +65,7 @@
 - (void)stopParse {
     [self.workThread cancel];
     self.workThread = nil;
+    dispatch_semaphore_wait(self.workThreadSem, DISPATCH_TIME_FOREVER);
+    [self.decoder FSM(invalidate)];
 }
 @end
