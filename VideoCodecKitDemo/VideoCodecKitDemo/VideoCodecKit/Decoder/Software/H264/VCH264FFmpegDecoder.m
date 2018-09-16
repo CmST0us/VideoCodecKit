@@ -13,11 +13,10 @@
 #import "VCH264FFMpegFrameParser.h"
 #import "VCH264FFmpegDecoder.h"
 #import "VCH264Frame.h"
-#import "VCYUV422Image+FFmpeg.h"
+#import "VCYUV420PImage+FFmpeg.h"
 
 @interface VCH264FFmpegDecoder () {
     AVFrame *_frame;
-    AVPacket *_packet;
     pthread_mutex_t _decodeLock;
 }
 
@@ -39,7 +38,6 @@
 
 - (void)setup {
     _frame = av_frame_alloc();;
-    _packet = av_packet_alloc();
     _parser = [[VCH264FFmpegFrameParser alloc] init];;
     
     [self commitStateTransition];
@@ -48,9 +46,7 @@
 
 - (void)invalidate {
     av_frame_free(&_frame);
-    av_packet_free(&_packet);
     _frame = nil;
-    _packet = nil;
     [_parser reset];
     [self commitStateTransition];
 }
@@ -64,16 +60,17 @@
         return;
     }
     
-    VCH264Frame *h264Frame = (VCH264Frame *)frame;
     pthread_mutex_lock(&_decodeLock);
+    VCH264Frame *h264Frame = (VCH264Frame *)frame;
+    AVPacket *packet = av_packet_alloc();
     
-    _packet->data = h264Frame.parseData;
-    _packet->size = (int)h264Frame.parseSize;
+    packet->data = h264Frame.parseData;
+    packet->size = (int)h264Frame.parseSize;
     
-    avcodec_send_packet(self.parser.codecContext, _packet);
+    avcodec_send_packet(self.parser.codecContext, packet);
     int got_picture = avcodec_receive_frame(self.parser.codecContext, _frame);
     if (got_picture == 0) {
-        VCYUV422Image *image = [VCYUV422Image imageWithAVFrame:_frame];
+        VCYUV420PImage *image = [VCYUV420PImage imageWithAVFrame:_frame];
         h264Frame.sliceType = (VCH264SliceType)_frame->pict_type;
         h264Frame.image = image;
         if (block) {
@@ -81,6 +78,7 @@
         }
     }
     
+    av_packet_free(&packet);
     pthread_mutex_unlock(&_decodeLock);
 }
 

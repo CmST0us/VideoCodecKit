@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "VCFrameTypeProtocol.h"
-#import "VCYUV422Image.h"
+#import "VCYUV420PImage.h"
 
 typedef NS_ENUM(NSUInteger, VCH264FrameType) {
     VCH264FrameTypeUnknown = 0,
@@ -43,7 +43,7 @@ typedef NS_ENUM(NSUInteger, VCH264SliceType) {
 @property (nonatomic, assign) uint8_t *parseData;
 @property (nonatomic, assign) NSUInteger parseSize;
 
-@property (nonatomic, strong) VCYUV422Image *image;
+@property (nonatomic, strong) VCYUV420PImage *image;
 
 - (instancetype)initWithWidth:(NSUInteger)width
                        height:(NSUInteger)height;

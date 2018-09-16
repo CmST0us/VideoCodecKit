@@ -16,7 +16,6 @@
 @interface VCH264FFmpegFrameParser () {
     AVCodecParserContext *_parserContext;
     AVCodec *_codec;
-    AVPacket *_packet;
 }
 @property (nonatomic, strong) NSLock *parserLock;
 
@@ -38,7 +37,6 @@
 - (void)commonInit {
     [self.parserLock lock];
     
-    _packet = av_packet_alloc();
     _codec = avcodec_find_decoder(AV_CODEC_ID_H264);
     NSAssert(_codec != nil, @"Can not find ffmpeg h264 decoder");
     
@@ -63,10 +61,6 @@
     if (_parserContext != nil) {
         av_parser_close(_parserContext);
         av_freep(&_codecContext);
-    }
-    
-    if (_packet != nil) {
-        av_packet_free(&_packet);
     }
     
     [self.parserLock unlock];
@@ -95,11 +89,12 @@
     VCH264FFmpegFrameParserBuffer *parserBuffer = [[VCH264FFmpegFrameParserBuffer alloc] initWithBuffer:buffer length:length copyData:shouldCopy];
     
     while (bufferLength > 0) {
+        AVPacket *packet = av_packet_alloc();
         
         parserLength = av_parser_parse2(_parserContext,
                                         _codecContext,
-                                        &_packet->data,
-                                        &_packet->size,
+                                        &packet->data,
+                                        &packet->size,
                                         parserBuffer.data,
                                         (int)parserBuffer.length,
                                         AV_NOPTS_VALUE,
@@ -117,9 +112,9 @@
             *usedLength += parserLength;
         }
         
-        if (_packet->size > 0) {
+        if (packet->size > 0) {
             
-            outputFrame = [VCH264Frame h264FrameWithAVPacket:_packet parserContext:_parserContext];
+            outputFrame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext];
             outputFrame.frameType = [self getFrameType:outputFrame];
             if (outputFrame != nil) {
                 if (self.useDelegate && self.delegate != nil && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
@@ -127,9 +122,14 @@
                 }
                 self.currentParseFrame = outputFrame;
                 self.pasrseCount += 1;
+                
+                av_packet_free(&packet);
                 break;
             }
-            
+        }
+        
+        if (packet != NULL) {
+            av_packet_free(&packet);
         }
     }
     
@@ -153,11 +153,11 @@
     VCH264FFmpegFrameParserBuffer *buf = [[VCH264FFmpegFrameParserBuffer alloc] initWithBuffer:buffer length:length copyData:shouldCopy];
     
     while (bufferLength > 0) {
-        
+        AVPacket *packet = av_packet_alloc();
         int parserLen = av_parser_parse2(_parserContext,
                                          _codecContext,
-                                         &_packet->data,
-                                         &_packet->size,
+                                         &packet->data,
+                                         &packet->size,
                                          buf.data,
                                          (int)buf.length,
                                          AV_NOPTS_VALUE,
@@ -165,6 +165,9 @@
                                          0);
         if (parserLen > bufferLength) {
             // 解码失败的 break
+            if (packet != NULL) {
+                av_packet_free(&packet);
+            }
             break;
         }
         
@@ -173,15 +176,18 @@
         
         usedLength += parserLen;
         
-        if (_packet->size > 0) {
+        if (packet->size > 0) {
             
-            self.currentParseFrame = [VCH264Frame h264FrameWithAVPacket:_packet parserContext:_parserContext];
+            self.currentParseFrame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext];
             self.currentParseFrame.frameType = [self getFrameType:self.currentParseFrame];
             self.pasrseCount += 1;
             if (self.useDelegate && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
                 [self.delegate frameParserDidParseFrame:self.currentParseFrame];
             }
             
+        }
+        if (packet != NULL) {
+            av_packet_free(&packet);
         }
     }
     
@@ -207,11 +213,12 @@
     VCH264FFmpegFrameParserBuffer *buf = [[VCH264FFmpegFrameParserBuffer alloc] initWithBuffer:buffer length:length copyData:shouldCopy];
     
     while (bufferLength > 0) {
+        AVPacket *packet = av_packet_alloc();
         
         int parserLen = av_parser_parse2(_parserContext,
                                          _codecContext,
-                                         &_packet->data,
-                                         &_packet->size,
+                                         &packet->data,
+                                         &packet->size,
                                          buf.data,
                                          (int)buf.length,
                                          AV_NOPTS_VALUE,
@@ -219,6 +226,9 @@
                                          0);
         if (parserLen > bufferLength) {
             // 解码失败的 break
+            if (packet != NULL) {
+                av_packet_free(&packet);
+            }
             break;
         }
         
@@ -227,9 +237,9 @@
         
         usedLength += parserLen;
         
-        if (_packet->size > 0) {
+        if (packet->size > 0) {
             
-            VCH264Frame *frame = [VCH264Frame h264FrameWithAVPacket:_packet parserContext:_parserContext];
+            VCH264Frame *frame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext];
             frame.frameType = [self getFrameType:frame];
             
             self.currentParseFrame = frame;
@@ -237,6 +247,10 @@
             if (block) {
                 block(frame);
             }
+        }
+        
+        if (packet != NULL) {
+            av_packet_free(&packet);
         }
     }
     
@@ -251,8 +265,8 @@
         return VCH264FrameTypeUnknown;
     }
     
-    uint8_t startCodeType1[] = {0x00, 0x00, 0x00, 0x01};
-    uint8_t startCodeType2[] = {0x00, 0x00, 0x01};
+    static uint8_t startCodeType1[] = {0x00, 0x00, 0x00, 0x01};
+    static uint8_t startCodeType2[] = {0x00, 0x00, 0x01};
     
     if (memcmp(startCodeType1, frame.parseData, sizeof(startCodeType1))) {
         // start code type 00 00 00 01

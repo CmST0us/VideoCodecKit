@@ -28,13 +28,14 @@
     self = [self init];
     _width = width;
     _height = height;
-    _image = [[VCYUV422Image alloc] initWithWidth:width height:height];
+    _image = [[VCYUV420PImage alloc] initWithWidth:width height:height];
     return self;
 }
 
 - (void)createParseDaraWithSize:(NSUInteger)size {
     self.parseSize = size;
     self.parseData = (uint8_t *)malloc(size);
+    memset(self.parseData, 0, size);
 }
 
 - (NSString *)frameClassString {

@@ -10,9 +10,11 @@
 
 #import "ViewController.h"
 #import "VCDecodeController.h"
+#import "LYOpenGLView.h"
 
 @interface ViewController ()
 @property (nonatomic, strong) VCDecodeController *decoderController;
+@property (nonatomic, strong) LYOpenGLView *glView;
 @end
 
 @implementation ViewController
@@ -21,6 +23,11 @@
     [super viewDidLoad];
     self.decoderController = [[VCDecodeController alloc] init];
     self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/swift.h264";
+    
+    self.glView = [[LYOpenGLView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:self.glView];
+    [self.glView setupGL];
+    
     [self bindData];
 }
 
@@ -29,7 +36,7 @@
     weakSelf(target);
     [self.decoderController addKVSigObserver:self forKeyPath:KVSKeyPath([self decoderController].frame) handle:^(NSObject *oldValue, NSObject *newValue) {
         VCH264Frame *frame = (VCH264Frame *)newValue;
-        NSLog(@"%@", frame);
+        [target.glView displayPixelBuffer:frame.image.pixelBuffer];
     }];
 }
 
