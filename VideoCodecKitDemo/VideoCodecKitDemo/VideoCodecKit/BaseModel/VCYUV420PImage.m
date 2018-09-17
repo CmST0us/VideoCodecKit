@@ -8,26 +8,7 @@
 
 #import "VCYUV420PImage.h"
 
-#define _CP_YUV_FRAME_(dst, src, linesize, width, height) \
-do{ \
-if(dst == NULL || src == NULL || linesize < width || width <= 0)\
-break;\
-uint8_t * dd = (uint8_t* ) dst; \
-uint8_t * ss = (uint8_t* ) src; \
-int ll = linesize; \
-int ww = width; \
-int hh = height; \
-for(int i = 0 ; i < hh ; ++i) \
-{ \
-memcpy(dd, ss, width); \
-dd += ww; \
-ss += ll; \
-} \
-}while(0)
-
-@interface VCYUV420PImage () {
-    CVPixelBufferPoolRef _pixelBufferPool;
-}
+@interface VCYUV420PImage ()
 
 @end
 
@@ -104,24 +85,22 @@ ss += ll; \
 }
 
 - (CVPixelBufferRef)pixelBuffer {
-    if (_pixelBufferPool == NULL) {
-        NSDictionary *attr = @{
-                               (id)kCVPixelBufferOpenGLCompatibilityKey: @(YES),
-                               (id)kCVPixelBufferBytesPerRowAlignmentKey: @(self.lumaLineSize),
-                               (id)kCVPixelBufferWidthKey: @(self.width),
-                               (id)kCVPixelBufferHeightKey: @(self.height),
-                               (id)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)
-                               };
-        CVPixelBufferPoolCreate(kCFAllocatorDefault, NULL, (__bridge CFDictionaryRef)attr, &_pixelBufferPool);
-    }
     
-    CVPixelBufferRef pixelBuf = NULL;
-    CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _pixelBufferPool, &pixelBuf);
+    CVPixelBufferRef pixelBuffer = NULL;
     
-    CVPixelBufferLockBaseAddress(pixelBuf, 0);
+    NSDictionary *attr = @{
+                           (id)kCVPixelBufferOpenGLCompatibilityKey: @(YES),
+                           };
     
-    uint8_t *yData = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuf, 0);
-    uint8_t *uvData = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuf, 1);
+    CVPixelBufferCreate(kCFAllocatorDefault,
+                        self.width,
+                        self.height,
+                        kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)attr, &pixelBuffer);
+    
+    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+    
+    uint8_t *yData = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
+    uint8_t *uvData = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
     
     memcpy(yData, self.luma, self.lumaLineSize * self.height);
     
@@ -135,9 +114,9 @@ ss += ll; \
         }
     }
     
-    CVPixelBufferUnlockBaseAddress(pixelBuf, 0);
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     
-    return pixelBuf;
+    return pixelBuffer;
 }
 
 - (void)dealloc {
@@ -159,9 +138,5 @@ ss += ll; \
         self.chromaRSize = 0;
     }
     
-    if (_pixelBufferPool != nil) {
-        CVPixelBufferPoolRelease(_pixelBufferPool);
-        _pixelBufferPool = nil;
-    }
 }
 @end

@@ -15,6 +15,7 @@
 @interface ViewController ()
 @property (nonatomic, strong) VCDecodeController *decoderController;
 @property (nonatomic, strong) LYOpenGLView *glView;
+@property (nonatomic, assign) NSInteger decodeFrameCount;
 @end
 
 @implementation ViewController
@@ -27,7 +28,6 @@
     self.glView = [[LYOpenGLView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:self.glView];
     [self.glView setupGL];
-    
     [self bindData];
 }
 
@@ -36,17 +36,18 @@
     weakSelf(target);
     [self.decoderController addKVSigObserver:self forKeyPath:KVSKeyPath([self decoderController].frame) handle:^(NSObject *oldValue, NSObject *newValue) {
         VCH264Frame *frame = (VCH264Frame *)newValue;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            CVPixelBufferRef pixelBuffer = [frame.image pixelBuffer];
-            [target.glView displayPixelBuffer:pixelBuffer];
-            CVPixelBufferRelease(pixelBuffer);
+            @autoreleasepool {
+                CVPixelBufferRef pixelBuffer = [frame.image pixelBuffer];
+                [target.glView displayPixelBuffer:pixelBuffer];
+                CVPixelBufferRelease(pixelBuffer);
+            }
 //            NSString *filePath = [[NSString alloc] initWithFormat:@"/Users/eric.wu/Desktop/dump/%lu.yuv", (unsigned long)frame.frameIndex];
 //            [[frame.image nv12PlaneData] writeToFile:filePath atomically:YES];
-        });
     }];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    
     if ([self.decoderController.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateRunning)]) {
         [self.decoderController stopParse];
     } else if ([self.decoderController.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateStop)]) {
