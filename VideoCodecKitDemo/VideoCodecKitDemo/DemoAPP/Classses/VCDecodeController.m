@@ -58,15 +58,13 @@
 - (void)workingThread1 {
     weakSelf(target);
     @autoreleasepool{
-        while (![[NSThread currentThread] isCancelled]) {
-            NSData *data = [[NSData alloc] initWithContentsOfFile:self.parseFilePath];
-            [self.decoder.parser parseData:data.bytes length:data.length copyData:NO completion:^(id<VCFrameTypeProtocol> _Nonnull frame) {
-                [target.decoder decodeFrame:frame completion:^(id<VCFrameTypeProtocol>  _Nonnull frame) {
-                    target.frame = frame;
-                }];
+        NSData *data = [[NSData alloc] initWithContentsOfFile:self.parseFilePath];
+        [self.decoder.parser parseData:data.bytes length:data.length copyData:NO completion:^(id<VCFrameTypeProtocol> _Nonnull frame) {
+            [target.decoder decodeFrame:frame completion:^(id<VCFrameTypeProtocol>  _Nonnull frame) {
+                target.frame = frame;
             }];
-            
-        }
+        }];
+        
         dispatch_semaphore_signal(self.workThreadSem);
     }
 }

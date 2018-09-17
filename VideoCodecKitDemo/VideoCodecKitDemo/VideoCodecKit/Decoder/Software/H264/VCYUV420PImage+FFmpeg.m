@@ -9,28 +9,11 @@
 
 #import "VCYUV420PImage+FFmpeg.h"
 
-#define _CP_YUV_FRAME_(dst, src, linesize, width, height) \
-do{ \
-if(dst == NULL || src == NULL || linesize < width || width <= 0)\
-break;\
-uint8_t * dd = (uint8_t* ) dst; \
-uint8_t * ss = (uint8_t* ) src; \
-int ll = linesize; \
-int ww = width; \
-int hh = height; \
-for(int i = 0 ; i < hh ; ++i) \
-{ \
-memcpy(dd, ss, width); \
-dd += ww; \
-ss += ll; \
-} \
-}while(0)
-
 @implementation VCYUV420PImage (FFmpeg)
 
 + (instancetype)imageWithAVFrame:(AVFrame *)aFrame {
     // 检查色彩空间
-    if (aFrame->format != AV_PIX_FMT_YUV420P) {
+    if (aFrame->format != AV_PIX_FMT_YUV420P && aFrame->format != AV_PIX_FMT_YUVJ420P) {
         return nil;
     }
     

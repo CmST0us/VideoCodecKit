@@ -22,7 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.decoderController = [[VCDecodeController alloc] init];
-    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/swift.h264";
+    self.decoderController.parseFilePath = @"/Users/eric.wu/Desktop/test.h264";
     
     self.glView = [[LYOpenGLView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:self.glView];
@@ -36,7 +36,13 @@
     weakSelf(target);
     [self.decoderController addKVSigObserver:self forKeyPath:KVSKeyPath([self decoderController].frame) handle:^(NSObject *oldValue, NSObject *newValue) {
         VCH264Frame *frame = (VCH264Frame *)newValue;
-        [target.glView displayPixelBuffer:frame.image.pixelBuffer];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CVPixelBufferRef pixelBuffer = [frame.image pixelBuffer];
+            [target.glView displayPixelBuffer:pixelBuffer];
+            CVPixelBufferRelease(pixelBuffer);
+//            NSString *filePath = [[NSString alloc] initWithFormat:@"/Users/eric.wu/Desktop/dump/%lu.yuv", (unsigned long)frame.frameIndex];
+//            [[frame.image nv12PlaneData] writeToFile:filePath atomically:YES];
+        });
     }];
 }
 

@@ -26,7 +26,7 @@ ss += ll; \
 }while(0)
 
 @interface VCYUV420PImage () {
-    CVPixelBufferRef _pixelBuffer;
+    CVPixelBufferPoolRef _pixelBufferPool;
 }
 
 @end
@@ -39,7 +39,6 @@ ss += ll; \
     if (self) {
         _width = width;
         _height = height;
-        
     }
     return self;
 }
@@ -71,66 +70,74 @@ ss += ll; \
 - (NSData *)yuv420pPlaneData {
     uint8_t *planeData = (uint8_t *)malloc(self.lumaSize + self.chromaBSize + self.chromaRSize);
     
-    NSInteger yLineSize = self.lumaSize / self.height;
-    NSInteger uLineSize = self.chromaRSize / self.height;
-    NSInteger vLineSize = self.chromaBSize / self.height;
-    
     memcpy(planeData, self.luma, self.lumaSize);
     memcpy(planeData + self.lumaSize, self.chromaB, self.chromaBSize);
     memcpy(planeData + self.lumaSize + self.chromaBSize, self.chromaR, self.chromaRSize);
-//    for (int i = 0; i < self.height; ++i) {
-//        memcpy(planeData + i * yLineSize, self.luma + i * yLineSize, yLineSize);
-//    }
-//    for (int i = 0; i < self.height / 2; ++i) {
-//        memcpy(planeData + i * uLineSize, self.chromaB + i * uLineSize, uLineSize);
-//    }
-//    for (int i = 0; i < self.height / 2; ++i) {
-//        memcpy(planeData + i * vLineSize, self.chromaR + i *vLineSize, vLineSize);
-//    }
-    
     NSData *data = [[NSData alloc] initWithBytes:planeData length:self.lumaSize + self.chromaBSize + self.chromaRSize];
-    
+
     free(planeData);
     return data;
 }
 
-- (CVPixelBufferRef)pixelBuffer {
-    if (_pixelBuffer != NULL) {
-        return _pixelBuffer;
-    }
-    NSDictionary *attr = @{
-                           (id)kCVPixelBufferOpenGLCompatibilityKey: @(YES)
-                           };
+- (NSData *)nv12PlaneData {
+    NSInteger planeSize = self.width * self.height * 3 / 2;
+    uint8_t *planeData = (uint8_t *)malloc(planeSize);
     
-    CVPixelBufferCreate(kCFAllocatorDefault, self.width, self.height, kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange, (__bridge CFDictionaryRef _Nullable)(attr), &_pixelBuffer);
-    
-    CVPixelBufferLockBaseAddress(_pixelBuffer, 0);
-    
-    uint8_t *yData = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(_pixelBuffer, 0);
-    uint8_t *uvData = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(_pixelBuffer, 1);
+    uint8_t *yData = planeData;
+    uint8_t *uvData = planeData + self.width * self.height;
     
     memcpy(yData, self.luma, self.lumaLineSize * self.height);
     
     // UV 交叉储存！！！！
     for (int i = 0; i < self.height / 2; ++i) {
-        int k = 0;
-        for (int j = 0; j < self.chromaBLineSize; j = j + 1) {
-            uvData[i * self.chromaBLineSize + k] = self.chromaB[i * self.chromaBLineSize + j];
-            k += 2;
+        for (int j = 0; j < self.width; j = j + 1) {
+            // u
+            uvData[i * self.width + j * 2] = self.chromaB[i * self.chromaBLineSize + j];
+            // v
+            uvData[i * self.width + j * 2 + 1] = self.chromaR[i * self.chromaRLineSize + j];
         }
     }
     
+    NSData *data = [[NSData alloc] initWithBytes:planeData length:planeSize];
+    free(planeData);
+    return data;
+}
+
+- (CVPixelBufferRef)pixelBuffer {
+    if (_pixelBufferPool == NULL) {
+        NSDictionary *attr = @{
+                               (id)kCVPixelBufferOpenGLCompatibilityKey: @(YES),
+                               (id)kCVPixelBufferBytesPerRowAlignmentKey: @(self.lumaLineSize),
+                               (id)kCVPixelBufferWidthKey: @(self.width),
+                               (id)kCVPixelBufferHeightKey: @(self.height),
+                               (id)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)
+                               };
+        CVPixelBufferPoolCreate(kCFAllocatorDefault, NULL, (__bridge CFDictionaryRef)attr, &_pixelBufferPool);
+    }
+    
+    CVPixelBufferRef pixelBuf = NULL;
+    CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _pixelBufferPool, &pixelBuf);
+    
+    CVPixelBufferLockBaseAddress(pixelBuf, 0);
+    
+    uint8_t *yData = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuf, 0);
+    uint8_t *uvData = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuf, 1);
+    
+    memcpy(yData, self.luma, self.lumaLineSize * self.height);
+    
+    // UV 交叉储存！！！！
     for (int i = 0; i < self.height / 2; ++i) {
-        int k = 1;
-        for (int j = 0; j < self.chromaRLineSize; j = j + 1) {
-            uvData[i * self.chromaRLineSize + k] = self.chromaR[i * self.chromaRLineSize + j];
-            k += 2;
+        for (int j = 0; j < self.width; j = j + 1) {
+            // u
+            uvData[i * self.width + j * 2] = self.chromaB[i * self.chromaBLineSize + j];
+            // v
+            uvData[i * self.width + j * 2 + 1] = self.chromaR[i * self.chromaRLineSize + j];
         }
     }
     
-    CVPixelBufferUnlockBaseAddress(_pixelBuffer, 0);
+    CVPixelBufferUnlockBaseAddress(pixelBuf, 0);
     
-    return _pixelBuffer;
+    return pixelBuf;
 }
 
 - (void)dealloc {
@@ -152,9 +159,9 @@ ss += ll; \
         self.chromaRSize = 0;
     }
     
-    if (_pixelBuffer != NULL) {
-        CVPixelBufferRelease(_pixelBuffer);
-        _pixelBuffer = NULL;
+    if (_pixelBufferPool != nil) {
+        CVPixelBufferPoolRelease(_pixelBufferPool);
+        _pixelBufferPool = nil;
     }
 }
 @end

@@ -13,7 +13,6 @@
 
 @property (nonatomic, assign) NSUInteger width;
 @property (nonatomic, assign) NSUInteger height;
-@property (nonatomic, assign) NSUInteger bytesPerRow;
 
 @property (nonatomic, assign) uint8_t *luma; //Y
 @property (nonatomic, assign) NSUInteger lumaSize;
@@ -40,6 +39,7 @@
                       AndLineSize:(NSUInteger)lineSize;
 
 - (NSData *)yuv420pPlaneData;
+- (NSData *)nv12PlaneData;
 
 - (CVPixelBufferRef)pixelBuffer;
 
