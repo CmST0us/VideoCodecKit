@@ -11,4 +11,7 @@
 
 @interface VCH264FFmpegDecoder : VCBaseDecoder
 @property (nonatomic, strong) VCH264FFmpegFrameParser *parser;
+
++ (BOOL)isH264Frame:(id<VCFrameTypeProtocol>)frame;
+    
 @end

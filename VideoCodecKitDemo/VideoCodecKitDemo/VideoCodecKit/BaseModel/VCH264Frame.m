@@ -7,18 +7,18 @@
 //
 
 #import "VCH264Frame.h"
+#import "VCVideoFPS.h"
 
 @implementation VCH264Frame
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _sliceType = VCH264SliceTypeNone;
         _width = 0;
         _height = 0;
         _parseData = nil;
         _parseSize = 0;
         _frameIndex = 0;
-        _image = nil;
+        _fps = [[VCVideoFPS alloc] init];
     }
     return self;
 }
@@ -28,11 +28,10 @@
     self = [self init];
     _width = width;
     _height = height;
-    _image = [[VCYUV420PImage alloc] initWithWidth:width height:height];
     return self;
 }
 
-- (void)createParseDaraWithSize:(NSUInteger)size {
+- (void)createParseDataWithSize:(NSUInteger)size {
     self.parseSize = size;
     self.parseData = (uint8_t *)malloc(size);
     memset(self.parseData, 0, size);
@@ -43,7 +42,6 @@
 }
 
 - (NSString *)description {
-    
     
     uint8_t *parseDataPtr = (uint8_t *)self.parseData;
     NSMutableString *parseDataString = [[NSMutableString alloc] init];
@@ -74,8 +72,7 @@
     return [NSString stringWithFormat:@"\nframe:\n\
             width x height: %ld x %ld;\n\
             frameType: %@\n\
-            sliceType: %@\n\
-            parseSize: %ld;\n", self.width, self.height, frameTypeDescdict[@(self.frameType)], sliceTypeDescDict[@(self.sliceType)], self.parseSize];
+            parseSize: %ld;\n", self.width, self.height, frameTypeDescdict[@(self.frameType)], self.parseSize];
 }
 
 - (void)dealloc {

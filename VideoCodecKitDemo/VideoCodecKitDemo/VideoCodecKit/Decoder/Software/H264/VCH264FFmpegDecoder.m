@@ -13,7 +13,7 @@
 #import "VCH264FFMpegFrameParser.h"
 #import "VCH264FFmpegDecoder.h"
 #import "VCH264Frame.h"
-#import "VCYUV420PImage+FFmpeg.h"
+#import "VCH264Image+FFmpeg.h"
 
 @interface VCH264FFmpegDecoder () {
     AVFrame *_frame;
@@ -52,16 +52,24 @@
 }
 
 - (void)decodeFrame:(id<VCFrameTypeProtocol>)frame
-         completion:(void (^)(id<VCFrameTypeProtocol> _Nonnull frame))block {
-    if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return;
+         completion:(void (^)(id<VCImageTypeProtocol> image))block {
+    id<VCImageTypeProtocol> decodeImage = [self decode:frame];
+    if (block) {
+        block(decodeImage);
+    }
+}
+
+- (id<VCImageTypeProtocol>)decode:(id<VCFrameTypeProtocol>)frame {
+    if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return nil;
 
     // read frame parse
-    if (![self isH264Frame:frame]) {
-        return;
+    if (![VCH264FFmpegDecoder isH264Frame:frame]) {
+        return nil;
     }
     
     pthread_mutex_lock(&_decodeLock);
     VCH264Frame *h264Frame = (VCH264Frame *)frame;
+    VCH264Image *image = nil;
     AVPacket *packet = av_packet_alloc();
     
     packet->data = h264Frame.parseData;
@@ -70,22 +78,27 @@
     avcodec_send_packet(self.parser.codecContext, packet);
     int got_picture = avcodec_receive_frame(self.parser.codecContext, _frame);
     if (got_picture == 0) {
-        VCYUV420PImage *image = [VCYUV420PImage imageWithAVFrame:_frame];
-        h264Frame.sliceType = (VCH264SliceType)_frame->pict_type;
-        h264Frame.image = image;
-        if (block) {
-            block(h264Frame);
-        }
+        image = [VCH264Image imageWithAVFrame:_frame];
     }
     
     av_packet_free(&packet);
     pthread_mutex_unlock(&_decodeLock);
+    return image;
 }
 
-- (BOOL)isH264Frame:(id<VCFrameTypeProtocol>)frame {
+- (void)decodeWithFrame:(id<VCFrameTypeProtocol>)frame {
+    id<VCImageTypeProtocol> decodeImage = [self decode:frame];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(decoder:didProcessFrame:)]) {
+        [self.delegate decoder:self didProcessFrame:decodeImage];
+    }
+}
+
+
++ (BOOL)isH264Frame:(id<VCFrameTypeProtocol>)frame {
     if ([frame.frameClassString isEqualToString:NSStringFromClass([VCH264Frame class])]) {
         return YES;
     }
     return NO;
 }
+
 @end

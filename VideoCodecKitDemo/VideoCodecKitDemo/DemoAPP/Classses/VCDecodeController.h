@@ -14,7 +14,7 @@
 @interface VCDecodeController : NSObject<VCFrameParserDelegate>
 
 @property (nonatomic, strong) VCH264FFmpegDecoder *decoder;
-@property (nonatomic, strong) VCH264Frame *frame;
+@property (nonatomic, strong) VCH264Image *frame;
 @property (nonatomic, copy) NSString *parseFilePath;
 
 - (void)startParse;

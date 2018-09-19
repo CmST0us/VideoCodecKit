@@ -11,6 +11,7 @@
 
 #import "VCBaseDecoderConfig.h"
 #import "VCFrameTypeProtocol.h"
+#import "VCImageTypeProtocol.h"
 #import "EKFSMObject.h"
 
 // 解码器状态机
@@ -48,8 +49,6 @@ typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
     VCBaseDecoderStateStop,
 };
 
-NS_ASSUME_NONNULL_BEGIN
-
 @protocol VCBaseDecoderProtocol<NSObject>
 
 /**
@@ -82,9 +81,9 @@ NS_ASSUME_NONNULL_BEGIN
  一进一出，填充frame
 
  @param frame 原始帧
- @return 解码帧
+ @return 解码图片
  */
-- (id<VCFrameTypeProtocol>)decode:(id<VCFrameTypeProtocol>)frame;
+- (id<VCImageTypeProtocol>)decode:(id<VCFrameTypeProtocol>)image;
 
 /**
  回调block
@@ -94,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 
 - (void)decodeFrame:(id<VCFrameTypeProtocol>)frame
-         completion:(void (^)(id<VCFrameTypeProtocol> frame))block;
+         completion:(void (^)(id<VCImageTypeProtocol> image))block;
 
 /**
  delegate 方式回调
@@ -102,6 +101,13 @@ NS_ASSUME_NONNULL_BEGIN
  @param frame 原始帧
  */
 - (void)decodeWithFrame:(id<VCFrameTypeProtocol>)frame;
+
+@end
+
+@class VCBaseDecoder;
+@protocol VCBaseDecoderDelegate<NSObject>
+
+- (void)decoder:(VCBaseDecoder *)decoder didProcessFrame:(id<VCImageTypeProtocol>)image;
 
 @end
 
@@ -114,6 +120,7 @@ NS_ASSUME_NONNULL_BEGIN
 // 解码器当前状态
 @property (nonatomic, readonly) VCBaseDecoderConfig *config;
 
+@property (nonatomic, weak) id<VCBaseDecoderDelegate> delegate;
 /**
  使用配置创建解码器
 
@@ -124,4 +131,3 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @end
-NS_ASSUME_NONNULL_END

@@ -115,7 +115,7 @@
         if (packet->size > 0) {
             
             outputFrame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext];
-            outputFrame.frameType = [self getFrameType:outputFrame];
+            outputFrame.frameType = [VCH264FrameParser getFrameType:outputFrame];
             if (outputFrame != nil) {
                 if (self.useDelegate && self.delegate != nil && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
                     [self.delegate frameParserDidParseFrame:outputFrame];
@@ -179,7 +179,7 @@
         if (packet->size > 0) {
             
             self.currentParseFrame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext];
-            self.currentParseFrame.frameType = [self getFrameType:self.currentParseFrame];
+            self.currentParseFrame.frameType = [VCH264FrameParser getFrameType:self.currentParseFrame];
             self.pasrseCount += 1;
             if (self.useDelegate && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
                 [self.delegate frameParserDidParseFrame:self.currentParseFrame];
@@ -240,8 +240,8 @@
         if (packet->size > 0) {
             
             VCH264Frame *frame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext];
-            frame.frameType = [self getFrameType:frame];
-            
+            frame.frameType = [VCH264FrameParser getFrameType:frame];
+
             self.currentParseFrame = frame;
             self.pasrseCount += 1;
             if (block) {
@@ -259,29 +259,6 @@
     return usedLength;
 }
 
-
-- (VCH264FrameType)getFrameType:(VCH264Frame *)frame {
-    if (frame.parseData == nil || frame.parseSize < 4) {
-        return VCH264FrameTypeUnknown;
-    }
-    
-    static uint8_t startCodeType1[] = {0x00, 0x00, 0x00, 0x01};
-    static uint8_t startCodeType2[] = {0x00, 0x00, 0x01};
-    
-    if (memcmp(startCodeType1, frame.parseData, sizeof(startCodeType1))) {
-        // start code type 00 00 00 01
-        uint8_t naul_type = frame.parseData[4] & 0x1F;
-        return (VCH264FrameType)naul_type;
-    }
-    
-    if (memcmp(startCodeType2, frame.parseData, sizeof(startCodeType2))) {
-        // start code type 00 00 00 01
-        uint8_t naul_type = frame.parseData[3] & 0x1F;
-        return (VCH264FrameType)naul_type;
-    }
-    
-    return VCH264FrameTypeUnknown;
-}
 
 - (void)dealloc{
     [self free];

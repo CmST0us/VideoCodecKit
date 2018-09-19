@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "VCFrameTypeProtocol.h"
-#import "VCYUV420PImage.h"
+#import "VCH264Image.h"
 
 typedef NS_ENUM(NSUInteger, VCH264FrameType) {
     VCH264FrameTypeUnknown = 0,
@@ -20,33 +20,25 @@ typedef NS_ENUM(NSUInteger, VCH264FrameType) {
     VCH264FrameTypePPS = 8,
 };
 
-typedef NS_ENUM(NSUInteger, VCH264SliceType) {
-    VCH264SliceTypeNone = 0, ///< Undefined
-    VCH264SliceTypeI,     ///< Intra
-    VCH264SliceTypeP,     ///< Predicted
-    VCH264SliceTypeB,     ///< Bi-dir predicted
-    VCH264SliceTypeS,     ///< S(GMC)-VOP MPEG-4
-    VCH264SliceTypeSI,    ///< Switching Intra
-    VCH264SliceTypeSP,    ///< Switching Predicted
-    VCH264SliceTypeBI,    ///< BI type
-};
-
+@class VCVideoFPS;
 @interface VCH264Frame : NSObject<VCFrameTypeProtocol>
 
 @property (nonatomic, assign) VCH264FrameType frameType;
-@property (nonatomic, assign) VCH264SliceType sliceType;
 @property (nonatomic, assign) NSUInteger frameIndex;
+@property (nonatomic, assign) BOOL isKeyFrame;
 
 @property (nonatomic, assign) NSUInteger width;
 @property (nonatomic, assign) NSUInteger height;
+@property (nonatomic, strong) VCVideoFPS *fps;
+
+@property (nonatomic, assign) NSInteger pts;
+@property (nonatomic, assign) NSInteger dts;
 
 @property (nonatomic, assign) uint8_t *parseData;
 @property (nonatomic, assign) NSUInteger parseSize;
 
-@property (nonatomic, strong) VCYUV420PImage *image;
-
 - (instancetype)initWithWidth:(NSUInteger)width
                        height:(NSUInteger)height;
 
-- (void)createParseDaraWithSize:(NSUInteger)size;
+- (void)createParseDataWithSize:(NSUInteger)size;
 @end

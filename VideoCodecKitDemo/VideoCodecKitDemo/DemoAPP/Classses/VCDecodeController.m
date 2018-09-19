@@ -43,7 +43,7 @@
                 break;
             } else {
                 [self.decoder.parser parseData:fileBuffer length:readLen copyData:YES completion:^(id<VCFrameTypeProtocol> _Nonnull frame) {
-                    [target.decoder decodeFrame:frame completion:^(id<VCFrameTypeProtocol>  _Nonnull frame) {
+                    [target.decoder decodeFrame:frame completion:^(id<VCImageTypeProtocol>  _Nonnull frame) {
                         target.frame = frame;
                     }];
                 }];
@@ -60,9 +60,7 @@
     @autoreleasepool{
         NSData *data = [[NSData alloc] initWithContentsOfFile:self.parseFilePath];
         [self.decoder.parser parseData:data.bytes length:data.length copyData:NO completion:^(id<VCFrameTypeProtocol> _Nonnull frame) {
-            [target.decoder decodeFrame:frame completion:^(id<VCFrameTypeProtocol>  _Nonnull frame) {
-                target.frame = frame;
-            }];
+            [target.decoder decodeWithFrame:frame];
         }];
         
         dispatch_semaphore_signal(self.workThreadSem);

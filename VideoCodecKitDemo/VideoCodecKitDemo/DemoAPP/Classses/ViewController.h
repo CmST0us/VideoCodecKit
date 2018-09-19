@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "VCBaseDecoder.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController<VCBaseDecoderDelegate>
 
 
 @end

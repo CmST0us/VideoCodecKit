@@ -1,5 +1,5 @@
 //
-//  VCYUV420PImage+FFmpeg.m
+//  VCH264Image+FFmpeg.m
 //  VideoCodecKitDemo
 //
 //  Created by CmST0us on 2018/9/16.
@@ -7,9 +7,10 @@
 //
 #import <libavcodec/avcodec.h>
 
-#import "VCYUV420PImage+FFmpeg.h"
+#import "VCH264Image+FFmpeg.h"
+#import "VCYUV420PImage.h"
 
-@implementation VCYUV420PImage (FFmpeg)
+@implementation VCH264Image (FFmpeg)
 
 + (instancetype)imageWithAVFrame:(AVFrame *)aFrame {
     // 检查色彩空间
@@ -18,7 +19,7 @@
     }
     
     VCYUV420PImage *image = [[VCYUV420PImage alloc] initWithWidth:aFrame->width height:aFrame->height];
-    
+    image.sliceType = (VCH264SliceType)aFrame->pict_type;
     [image createLumaDataWithSize:image.height * aFrame->linesize[0] AndLineSize:aFrame->linesize[0]];
     [image createChromaBDataWithSize:image.height * aFrame->linesize[1] / 2 AndLineSize:aFrame->linesize[1]];
     [image createChromaRDataWithSize:image.height * aFrame->linesize[2] / 2 AndLineSize:aFrame->linesize[2]];
