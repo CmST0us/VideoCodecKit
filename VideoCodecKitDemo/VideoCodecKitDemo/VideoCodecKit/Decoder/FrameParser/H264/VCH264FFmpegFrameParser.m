@@ -75,8 +75,7 @@
 
 - (id<VCFrameTypeProtocol>)parseData:(uint8_t *)buffer
                               length:(NSInteger)length
-                          usedLength:(NSInteger *)usedLength
-                            copyData:(BOOL)shouldCopy {
+                          usedLength:(NSInteger *)usedLength {
     if (_codecContext == nil && _parserContext == nil) {
         return nil;
     }
@@ -86,7 +85,7 @@
     NSInteger bufferLength = length;
     NSInteger parserLength = 0;
     VCH264Frame *outputFrame = nil;
-    VCH264FFmpegFrameParserBuffer *parserBuffer = [[VCH264FFmpegFrameParserBuffer alloc] initWithBuffer:buffer length:length copyData:shouldCopy];
+    VCH264FFmpegFrameParserBuffer *parserBuffer = [[VCH264FFmpegFrameParserBuffer alloc] initWithBuffer:buffer length:length copyData:NO];
     
     while (bufferLength > 0) {
         AVPacket *packet = av_packet_alloc();
@@ -138,8 +137,7 @@
 }
 
 - (NSInteger)parseData:(void *)buffer
-                length:(NSInteger)length
-              copyData:(BOOL)shouldCopy {
+                length:(NSInteger)length {
     
     if (_codecContext == nil && _parserContext == nil) {
         return -1;
@@ -150,7 +148,7 @@
     NSInteger bufferLength = length;
     NSUInteger usedLength = 0;
     
-    VCH264FFmpegFrameParserBuffer *buf = [[VCH264FFmpegFrameParserBuffer alloc] initWithBuffer:buffer length:length copyData:shouldCopy];
+    VCH264FFmpegFrameParserBuffer *buf = [[VCH264FFmpegFrameParserBuffer alloc] initWithBuffer:buffer length:length copyData:NO];
     
     while (bufferLength > 0) {
         AVPacket *packet = av_packet_alloc();
@@ -198,7 +196,6 @@
 
 - (NSInteger)parseData:(void *)buffer
                 length:(NSInteger)length
-              copyData:(BOOL)shouldCopy
             completion:(void (^)(id<VCFrameTypeProtocol> _Nonnull frame))block {
     
     if (_codecContext == nil && _parserContext == nil) {
@@ -210,7 +207,7 @@
     NSInteger bufferLength = length;
     NSUInteger usedLength = 0;
     
-    VCH264FFmpegFrameParserBuffer *buf = [[VCH264FFmpegFrameParserBuffer alloc] initWithBuffer:buffer length:length copyData:shouldCopy];
+    VCH264FFmpegFrameParserBuffer *buf = [[VCH264FFmpegFrameParserBuffer alloc] initWithBuffer:buffer length:length copyData:NO];
     
     while (bufferLength > 0) {
         AVPacket *packet = av_packet_alloc();

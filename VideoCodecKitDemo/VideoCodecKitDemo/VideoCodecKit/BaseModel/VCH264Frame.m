@@ -70,7 +70,7 @@
                                         };
     
     return [NSString stringWithFormat:@"\nframe:\n\
-            width x height: %ld x %ld;\n\
+            width x height: %lu x %lu;\n\
             frameType: %@\n\
             parseSize: %ld;\n", self.width, self.height, frameTypeDescdict[@(self.frameType)], self.parseSize];
 }

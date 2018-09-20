@@ -22,15 +22,14 @@
     return self;
 }
 
-- (instancetype)initWithData:(NSData *)data copyData:(BOOL *)isCopy {
+- (instancetype)initWithData:(NSData *)data copyData:(BOOL)isCopy {
     self = [super init];
     if (self) {
         _isCopyData = isCopy;
-        
         if (_isCopyData) {
-            _length = FF_INPUT_BUFFER_PADDING_SIZE + data.length;
-            _data = malloc(_length);
-            memset(((char *)_data) + data.length, 0, FF_INPUT_BUFFER_PADDING_SIZE);
+            _length = data.length;
+            _data = malloc(_length + FF_INPUT_BUFFER_PADDING_SIZE);
+            memset(_data + data.length, 0, FF_INPUT_BUFFER_PADDING_SIZE);
             memcpy(_data, data.bytes, data.length);
         } else {
             _length = data.length;
@@ -46,9 +45,9 @@
         _isCopyData = isCopy;
         
         if (_isCopyData) {
-            _length = FF_INPUT_BUFFER_PADDING_SIZE + length;
-            _data = malloc(_length);
-            memset(((char *)_data) + length, 0, FF_INPUT_BUFFER_PADDING_SIZE);
+            _length = length;
+            _data = malloc(_length + AV_INPUT_BUFFER_PADDING_SIZE);
+            memset(_data + length, 0, AV_INPUT_BUFFER_PADDING_SIZE);
             memcpy(_data, buffer, length);
         } else {
             _length = length;

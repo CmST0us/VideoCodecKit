@@ -9,7 +9,7 @@
 #import "VCDecodeController.h"
 #import <KVSig/KVSig.h>
 
-#define kVCDefaultBufferSize 10240
+#define kVCDefaultBufferSize 1500
 
 @interface VCDecodeController ()
 @property (nonatomic, strong) NSThread *workThread;
@@ -42,10 +42,8 @@
                 // eof or error
                 break;
             } else {
-                [self.decoder.parser parseData:fileBuffer length:readLen copyData:YES completion:^(id<VCFrameTypeProtocol> _Nonnull frame) {
-                    [target.decoder decodeFrame:frame completion:^(id<VCImageTypeProtocol>  _Nonnull frame) {
-                        target.frame = frame;
-                    }];
+                [self.decoder.parser parseData:fileBuffer length:readLen completion:^(id<VCFrameTypeProtocol> _Nonnull frame) {
+                    [target.decoder decodeWithFrame:frame];
                 }];
             }
             memset(fileBuffer, 0, kVCDefaultBufferSize);
@@ -59,7 +57,7 @@
     weakSelf(target);
     @autoreleasepool{
         NSData *data = [[NSData alloc] initWithContentsOfFile:self.parseFilePath];
-        [self.decoder.parser parseData:data.bytes length:data.length copyData:NO completion:^(id<VCFrameTypeProtocol> _Nonnull frame) {
+        [self.decoder.parser parseData:data.bytes length:data.length completion:^(id<VCFrameTypeProtocol> _Nonnull frame) {
             [target.decoder decodeWithFrame:frame];
         }];
         
@@ -70,7 +68,7 @@
 - (void)startParse {
     [self.decoder FSM(setup)];
     [self.decoder FSM(run)];
-    self.workThread = [[NSThread alloc] initWithTarget:self selector:@selector(workingThread1) object:nil];
+    self.workThread = [[NSThread alloc] initWithTarget:self selector:@selector(workingThread) object:nil];
     [self.workThread start];
 }
 

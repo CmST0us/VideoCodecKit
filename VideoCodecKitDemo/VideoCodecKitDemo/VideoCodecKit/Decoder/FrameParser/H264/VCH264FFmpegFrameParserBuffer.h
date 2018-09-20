@@ -20,7 +20,7 @@
                       copyData:(BOOL)isCopy;
 
 - (instancetype)initWithData:(NSData *)data
-                    copyData:(BOOL *)isCopy;
+                    copyData:(BOOL)isCopy;
 
 
 - (instancetype)advancedBy:(NSInteger)step;
