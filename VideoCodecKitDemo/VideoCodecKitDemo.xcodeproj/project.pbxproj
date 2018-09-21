@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4F54ABD72152BFD0002E64F3 /* VCYUV420PImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABD62152BFD0002E64F3 /* VCYUV420PImage.m */; };
-		4F54ABDC2154165B002E64F3 /* VCBaseRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABDB2154165B002E64F3 /* VCBaseRender.m */; };
 		4F54ABDF2154167C002E64F3 /* VCSampleBufferRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABDE2154167C002E64F3 /* VCSampleBufferRender.m */; };
 		4F9279A021442E1700F17F9A /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799921442E1700F17F9A /* libavdevice.a */; };
 		4F9279A121442E1700F17F9A /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799A21442E1700F17F9A /* libswscale.a */; };
@@ -70,8 +69,7 @@
 		4F54ABD42152BF31002E64F3 /* VCImageTypeProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCImageTypeProtocol.h; sourceTree = "<group>"; };
 		4F54ABD52152BFD0002E64F3 /* VCYUV420PImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCYUV420PImage.h; sourceTree = "<group>"; };
 		4F54ABD62152BFD0002E64F3 /* VCYUV420PImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCYUV420PImage.m; sourceTree = "<group>"; };
-		4F54ABDA2154165B002E64F3 /* VCBaseRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseRender.h; sourceTree = "<group>"; };
-		4F54ABDB2154165B002E64F3 /* VCBaseRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCBaseRender.m; sourceTree = "<group>"; };
+		4F54ABDA2154165B002E64F3 /* VCBaseRenderProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseRenderProtocol.h; sourceTree = "<group>"; };
 		4F54ABDD2154167C002E64F3 /* VCSampleBufferRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCSampleBufferRender.h; sourceTree = "<group>"; };
 		4F54ABDE2154167C002E64F3 /* VCSampleBufferRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCSampleBufferRender.m; sourceTree = "<group>"; };
 		4F92799921442E1700F17F9A /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavdevice.a; sourceTree = "<group>"; };
@@ -400,8 +398,7 @@
 				4F54ABD921541636002E64F3 /* Metal */,
 				4F54ABD821541619002E64F3 /* AVFoundation */,
 				4F927A1B214E377F00F17F9A /* OpenGL */,
-				4F54ABDA2154165B002E64F3 /* VCBaseRender.h */,
-				4F54ABDB2154165B002E64F3 /* VCBaseRender.m */,
+				4F54ABDA2154165B002E64F3 /* VCBaseRenderProtocol.h */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -511,7 +508,6 @@
 				4F9279AB2144312200F17F9A /* VCBaseDecoder.m in Sources */,
 				4F927A1E214E37CB00F17F9A /* LYOpenGLView.m in Sources */,
 				4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */,
-				4F54ABDC2154165B002E64F3 /* VCBaseRender.m in Sources */,
 				4F9279B92144482C00F17F9A /* VCDecoderProgress.m in Sources */,
 				4F927A11214D63B100F17F9A /* EKFSMObject.m in Sources */,
 				4F9279C3214449FA00F17F9A /* VCH264FrameParser.m in Sources */,

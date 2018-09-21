@@ -7,15 +7,20 @@
 //
 
 #import <AVFoundation/AVFoundation.h>
-#import "VCBaseRender.h"
+#import "VCBaseRenderProtocol.h"
 
-@interface VCSampleBufferRender : VCBaseRender
-@property (nonatomic, strong) AVSampleBufferDisplayLayer *renderLayer;
+@protocol VCSampleBufferRenderDelegate<NSObject>
+- (void)sampleBufferRenderWillEnqueue:(CMSampleBufferRef)sampleBuffer;
+- (void)sampleBufferRenderDidEnqueue:(CMSampleBufferRef)sampleBuffer;
+@end
+
+@interface VCSampleBufferRender : NSObject<VCBaseRenderProtocol>
+@property (nonatomic, readonly) AVSampleBufferDisplayLayer *renderLayer;
+@property (nonatomic, weak) CALayer *superLayer;
+@property (nonatomic, weak) id<VCSampleBufferRenderDelegate> delegate;
 
 - (instancetype)initWithSuperLayer:(CALayer *)layer;
 - (void)attachToSuperLayer;
-
-- (void)displaySampleBuffer:(CMSampleBufferRef)sampleBuffer;
 
 + (CMSampleBufferRef)sampleBufferWithPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 @end

@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreVideo/CoreVideo.h>
 
 @protocol VCImageTypeProtocol <NSObject>
 @required
 - (NSString *)classStringForImageType;
+- (CVPixelBufferRef)pixelBuffer;
 @end
