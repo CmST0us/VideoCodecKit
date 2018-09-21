@@ -9,8 +9,13 @@
 #import "VCH264Frame+FFmpeg.h"
 
 @implementation VCH264Frame (FFmpeg)
-+ (instancetype)h264FrameWithAVPacket:(AVPacket *)aPacket parserContext:(AVCodecParserContext *)parserContext {
++ (instancetype)h264FrameWithAVPacket:(AVPacket *)aPacket
+                        parserContext:(AVCodecParserContext *)parserContext
+                         codecContext:(AVCodecContext *)codecContext {
+    
     VCH264Frame *frame = [[VCH264Frame alloc] initWithWidth:parserContext->width height:parserContext->height];
+    
+    frame.context = codecContext;
     [frame createParseDataWithSize:aPacket->size];
     memcpy(frame.parseData, aPacket->data, frame.parseSize);
     

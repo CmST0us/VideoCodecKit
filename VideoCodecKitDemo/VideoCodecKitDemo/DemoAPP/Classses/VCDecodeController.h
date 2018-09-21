@@ -10,12 +10,12 @@
 #import "VCH264FFmpegFrameParser.h"
 #import "VCH264Frame.h"
 #import "VCH264FFmpegDecoder.h"
+#import "VCPreviewer.h"
 
-@interface VCDecodeController : NSObject<VCFrameParserDelegate>
+@interface VCDecodeController : NSObject<VCPreviewerDelegate>
 
-@property (nonatomic, strong) VCH264FFmpegDecoder *decoder;
-@property (nonatomic, strong) VCH264Image *frame;
 @property (nonatomic, copy) NSString *parseFilePath;
+@property (nonatomic, strong) VCPreviewer *previewer;
 
 - (void)startParse;
 - (void)stopParse;

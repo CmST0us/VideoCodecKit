@@ -14,6 +14,7 @@
 @protocol VCFrameTypeProtocol<NSObject>
 @required
 - (NSString *)frameClassString;
+- (void *)context;
 @end
 
 #endif /* VCFrameTypeProtocol_h */

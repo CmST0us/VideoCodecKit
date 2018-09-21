@@ -13,6 +13,7 @@
 @interface VCH264Frame (FFmpeg)
 
 + (instancetype)h264FrameWithAVPacket:(AVPacket *)aPacket
-                        parserContext:(AVCodecParserContext *)parserContext;
+                        parserContext:(AVCodecParserContext *)parserContext
+                         codecContext:(AVCodecContext *)codecContext;
 
 @end

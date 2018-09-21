@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
 #import "VCImageTypeProtocol.h"
 
-@protocol VCBaseRenderProtocol
+@protocol VCBaseRenderProtocol<NSObject>
 @required
+- (void)attachToLayer:(CALayer *)layer;
+
 - (void)renderImage:(id<VCImageTypeProtocol>)image;
 - (NSArray<NSString *> *)supportRenderImageClassName;
 @end

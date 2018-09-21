@@ -17,14 +17,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSData *)feedDataForFrameParser:(VCBaseFrameParser *)frameParser;
 @end
 
-@protocol VCFrameParserDelegate<NSObject>
+@protocol VCBaseFrameParserDelegate<NSObject>
 - (void)frameParserDidParseFrame:(id<VCFrameTypeProtocol>)aFrame;
 @end
 
 @interface VCBaseFrameParser : NSObject
 
 @property (nonatomic, weak) id<VCFrameParserDataSource> dataSource;
-@property (nonatomic, weak) id<VCFrameParserDelegate> delegate;
+@property (nonatomic, weak) id<VCBaseFrameParserDelegate> delegate;
 
 @property (nonatomic, assign) NSUInteger pasrseCount;
 /**
@@ -52,8 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
  @return 使用的缓冲区大小 -1为错误
  */
 - (NSInteger)parseData:(void *)buffer
-                length:(NSInteger)length
-              copyData:(BOOL)shouldCopy;
+                length:(NSInteger)length;
 
 /**
  解码一帧向block回调一次。不会通知delegate

@@ -113,7 +113,7 @@
         
         if (packet->size > 0) {
             
-            outputFrame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext];
+            outputFrame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext codecContext:_codecContext];
             outputFrame.frameType = [VCH264FrameParser getFrameType:outputFrame];
             if (outputFrame != nil) {
                 if (self.useDelegate && self.delegate != nil && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
@@ -176,7 +176,7 @@
         
         if (packet->size > 0) {
             
-            self.currentParseFrame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext];
+            self.currentParseFrame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext codecContext:_codecContext];
             self.currentParseFrame.frameType = [VCH264FrameParser getFrameType:self.currentParseFrame];
             self.pasrseCount += 1;
             if (self.useDelegate && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
@@ -235,8 +235,7 @@
         usedLength += parserLen;
         
         if (packet->size > 0) {
-            
-            VCH264Frame *frame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext];
+            VCH264Frame *frame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext codecContext:_codecContext];
             frame.frameType = [VCH264FrameParser getFrameType:frame];
 
             self.currentParseFrame = frame;

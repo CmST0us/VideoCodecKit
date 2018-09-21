@@ -38,8 +38,6 @@
 
 - (void)setup {
     _frame = av_frame_alloc();;
-    _parser = [[VCH264FFmpegFrameParser alloc] init];;
-    
     [self commitStateTransition];
 }
 
@@ -47,7 +45,6 @@
 - (void)invalidate {
     av_frame_free(&_frame);
     _frame = nil;
-    [_parser reset];
     [self commitStateTransition];
 }
 
@@ -75,8 +72,8 @@
     packet->data = h264Frame.parseData;
     packet->size = (int)h264Frame.parseSize;
     
-    avcodec_send_packet(self.parser.codecContext, packet);
-    int got_picture = avcodec_receive_frame(self.parser.codecContext, _frame);
+    avcodec_send_packet(frame.context, packet);
+    int got_picture = avcodec_receive_frame(frame.context, _frame);
     if (got_picture == 0) {
         image = [VCH264Image imageWithAVFrame:_frame];
     }
@@ -89,7 +86,9 @@
 - (void)decodeWithFrame:(id<VCFrameTypeProtocol>)frame {
     id<VCImageTypeProtocol> decodeImage = [self decode:frame];
     if (self.delegate && [self.delegate respondsToSelector:@selector(decoder:didProcessFrame:)]) {
-        [self.delegate decoder:self didProcessFrame:decodeImage];
+        if (decodeImage != nil) {
+            [self.delegate decoder:self didProcessFrame:decodeImage];
+        }
     }
 }
 

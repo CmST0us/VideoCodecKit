@@ -14,56 +14,40 @@
 #import "VCDecodeController.h"
 #import "VCYUV420PImage.h"
 #import "VCSampleBufferRender.h"
+#import "VCPreviewer.h"
 
 @interface ViewController ()
 @property (nonatomic, strong) VCDecodeController *decoderController;
 @property (nonatomic, assign) NSInteger decodeFrameCount;
-@property (nonatomic, strong) VCSampleBufferRender *render;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setupDisplayLayer];
-    
     self.decoderController = [[VCDecodeController alloc] init];
     self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/swift.h264";
-    self.decoderController.decoder.delegate = self;
-    
+    self.decoderController.previewer.fps = 30;
+    [self setupDisplayLayer];
     [self bindData];
 }
 
 - (void)setupDisplayLayer {
-    self.render = [[VCSampleBufferRender alloc] initWithSuperLayer:self.view.layer];
-    [self.render attachToSuperLayer];
-    self.render.renderLayer.frame = self.view.layer.bounds;
+    [self.decoderController.previewer.render attachToLayer:self.view.layer];
 }
 
 - (void)bindData {
     weakSelf(target);
 
-    [self.render addKVSigObserver:self forKeyPath:KVSKeyPath([self render].renderLayer.status) handle:^(NSObject *oldValue, NSObject *newValue) {
-        NSNumber *status = (NSNumber *)newValue;
-        if ([status isEqualToNumber:@(AVQueuedSampleBufferRenderingStatusUnknown)]) {
-            NSLog(@"faild");
-        }
-        if ([status isEqualToNumber:@(AVQueuedSampleBufferRenderingStatusFailed)]) {
-            NSLog(@"unknow");
-        }
-        if ([status isEqualToNumber:@(AVQueuedSampleBufferRenderingStatusRendering)]) {
-            NSLog(@"render");
-        }
-    }];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     
-    if ([self.decoderController.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateRunning)]) {
+    if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateRunning)]) {
         [self.decoderController stopParse];
-    } else if ([self.decoderController.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateStop)]) {
+    } else if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateStop)]) {
         [self.decoderController startParse];
-    } else if ([self.decoderController.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateInit)]) {
+    } else if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateInit)]) {
         [self.decoderController startParse];
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -76,10 +60,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)decoder:(VCBaseDecoder *)decoder didProcessFrame:(id<VCImageTypeProtocol>)image {
-    [self.render renderImage:image];
 }
 
 @end

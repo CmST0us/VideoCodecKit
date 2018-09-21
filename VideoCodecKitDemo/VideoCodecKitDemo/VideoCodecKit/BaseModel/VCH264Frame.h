@@ -36,7 +36,7 @@ typedef NS_ENUM(NSUInteger, VCH264FrameType) {
 
 @property (nonatomic, assign) uint8_t *parseData;
 @property (nonatomic, assign) NSUInteger parseSize;
-
+@property (nonatomic, assign) void *context;
 - (instancetype)initWithWidth:(NSUInteger)width
                        height:(NSUInteger)height;
 

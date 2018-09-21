@@ -9,9 +9,9 @@
 #import <libavcodec/avcodec.h>
 
 #import "VCH264FrameParser.h"
-NS_ASSUME_NONNULL_BEGIN
-@interface VCH264FFmpegFrameParser : VCH264FrameParser
-@property (nonatomic, readonly)AVCodecContext *codecContext;
-@end
-NS_ASSUME_NONNULL_END
 
+@interface VCH264FFmpegFrameParser : VCH264FrameParser
+
+@property (nonatomic, readonly)AVCodecContext *codecContext;
+
+@end

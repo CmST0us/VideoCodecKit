@@ -48,10 +48,20 @@
     return self;
 }
 
-- (void)attachToSuperLayer {
-    if (_superLayer != nil) {
-        [_superLayer addSublayer:[self renderLayer]];
+- (void)attachToLayer:(CALayer *)layer {
+    if (layer != nil) {
+        self.renderLayer.frame = layer.bounds;
+        [layer addSublayer:self.renderLayer];
     }
+}
+
+- (void)detachLayer {
+    if ([self superLayer]) {
+        [self.renderLayer removeFromSuperlayer];
+    }
+}
+- (void)attachToSuperLayer {
+    [self attachToLayer:_superLayer];
 }
 
 - (void)renderImage:(id<VCImageTypeProtocol>)image {

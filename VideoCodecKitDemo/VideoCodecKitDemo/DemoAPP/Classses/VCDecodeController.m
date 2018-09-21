@@ -22,7 +22,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _decoder = [[VCH264FFmpegDecoder alloc] init];
+        _previewer = [[VCPreviewer alloc] initWithType:VCPreviewerTypeFFmpegRawH264];
         _workThreadSem = dispatch_semaphore_create(0);
     }
     return self;
@@ -31,24 +31,24 @@
 - (void)workingThread {
     weakSelf(target);
     @autoreleasepool{
-        void *fileBuffer = malloc(kVCDefaultBufferSize);
-        
+        // do not release
         NSInputStream *stream = [[NSInputStream alloc] initWithFileAtPath:self.parseFilePath];
         [stream open];
         while (![[NSThread currentThread] isCancelled]) {
             // file reader
+            void *fileBuffer = malloc(kVCDefaultBufferSize);
             NSInteger readLen = [stream read:fileBuffer maxLength:kVCDefaultBufferSize];
             if (readLen <= 0) {
                 // eof or error
                 break;
             } else {
-                [self.decoder.parser parseData:fileBuffer length:readLen completion:^(id<VCFrameTypeProtocol> _Nonnull frame) {
-                    [target.decoder decodeWithFrame:frame];
-                }];
+                // 自旋锁
+                while (![self.previewer pushData:fileBuffer length:readLen]) {
+                    // 1Hz 重试
+                    sleep(1);
+                };
             }
-            memset(fileBuffer, 0, kVCDefaultBufferSize);
         }
-        free(fileBuffer);
         dispatch_semaphore_signal(self.workThreadSem);
     }
 }
@@ -57,18 +57,15 @@
     weakSelf(target);
     @autoreleasepool{
         NSData *data = [[NSData alloc] initWithContentsOfFile:self.parseFilePath];
-        [self.decoder.parser parseData:data.bytes length:data.length completion:^(id<VCFrameTypeProtocol> _Nonnull frame) {
-            [target.decoder decodeWithFrame:frame];
-        }];
-        
+        [self.previewer pushData:data.bytes length:data.length];
         dispatch_semaphore_signal(self.workThreadSem);
     }
 }
 
 - (void)startParse {
-    [self.decoder FSM(setup)];
-    [self.decoder FSM(run)];
+    [self.previewer run];
     self.workThread = [[NSThread alloc] initWithTarget:self selector:@selector(workingThread) object:nil];
+    self.workThread.name = @"workThread";
     [self.workThread start];
 }
 
@@ -76,6 +73,11 @@
     [self.workThread cancel];
     self.workThread = nil;
     dispatch_semaphore_wait(self.workThreadSem, DISPATCH_TIME_FOREVER);
-    [self.decoder FSM(invalidate)];
+    [self.previewer stop];
 }
+
+-(void)previewer:(VCPreviewer *)aPreviewer didProcessImage:(id<VCImageTypeProtocol>)aImage {
+    
+}
+
 @end
