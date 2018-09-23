@@ -16,6 +16,13 @@
 
 @implementation VCYUV420PImage
 
+- (void)dealloc {
+    if (_pixelBuffer != NULL) {
+        CVPixelBufferRelease(_pixelBuffer);
+        _pixelBuffer = NULL;
+    }
+}
+
 - (NSData *)yuv420pPlaneData {
     uint8_t *planeData = (uint8_t *)malloc(self.lumaSize + self.chromaBSize + self.chromaRSize);
     

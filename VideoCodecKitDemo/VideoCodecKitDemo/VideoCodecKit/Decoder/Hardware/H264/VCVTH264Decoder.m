@@ -7,6 +7,7 @@
 //
 
 #import <VideoToolbox/VideoToolbox.h>
+#import <pthread.h>
 #import "VCVTH264Decoder.h"
 #import "VCH264Frame.h"
 #import "VCYUV420PImage.h"
@@ -25,6 +26,8 @@
     
     BOOL _isVideoFormatDescriptionUpdate;
     BOOL _hasSEI;
+    
+    pthread_mutex_t _decoderLock;
 }
 
 @end
@@ -51,6 +54,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         _ppsSize = 0;
         _seiSize = 0;
         
+        pthread_mutex_init(&_decoderLock, NULL);
         _hasSEI = NO;
         _isVideoFormatDescriptionUpdate = NO;
     }
@@ -64,6 +68,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     
     [self freeVideoFormatDescription];
     [self freeDecodeSession];
+    pthread_mutex_destroy(&_decoderLock);
 }
 
 - (void)freeDecodeSession {
@@ -106,17 +111,17 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
 }
 
 - (void)setup {
-    
     [self commitStateTransition];
 }
 
 - (void)invalidate {
+    [self commitStateTransition];
+    
     [self freeDecodeSession];
     [self freeVideoFormatDescription];
     [self freeSPS];
     [self freePPS];
     [self freeSEI];
-    [self commitStateTransition];
 }
 
 - (BOOL)setupVideoFormatDescription {
@@ -217,41 +222,35 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     VCH264Frame *decodeFrame = (VCH264Frame *)frame;
     
     if (decodeFrame.startCodeSize < 0) return nil;
+    
+    pthread_mutex_lock(&_decoderLock);
+    
     _startCodeSize = decodeFrame.startCodeSize;
+    if (_startCodeSize == 3) {
+        decodeFrame.parseData -= 1;
+        decodeFrame.parseSize += 1;
+        decodeFrame.startCodeSize = 4;
+        _startCodeSize = 4;
+    }
     
     uint32_t nalSize = (uint32_t)(decodeFrame.parseSize - _startCodeSize);
     uint32_t *pNalSize = (uint32_t *)decodeFrame.parseData;
-    if (_startCodeSize == 4) {
-        *pNalSize = CFSwapInt32HostToBig(nalSize);
-    } else {
-        // 暂不支持 start code 为 00 00 01的slice帧
-        // rbsp拷贝
-        uint8_t *copyRbsp = malloc(nalSize + 4);
-        static uint8_t startCode[] = {0x00, 0x00, 0x00, 0x01};
-        memcpy(copyRbsp + 4, decodeFrame.parseData + _startCodeSize, nalSize);
-        memcpy(copyRbsp, startCode, 4);
-        free(decodeFrame.parseData);
-        decodeFrame.parseData = copyRbsp;
-        decodeFrame.parseSize = nalSize + 4;
-        decodeFrame.startCodeSize = 4;
-        _startCodeSize = decodeFrame.startCodeSize;
-        
-        uint32_t nalSize = (uint32_t)(decodeFrame.parseSize - _startCodeSize);
-        uint32_t *pNalSize = (uint32_t *)decodeFrame.parseData;
-        *pNalSize = CFSwapInt32HostToBig(nalSize);
-    }
+    *pNalSize = CFSwapInt32HostToBig(nalSize);
     
     if (decodeFrame.frameType == VCH264FrameTypeSPS) {
         // copy sps
         [self tryUseSPS:decodeFrame.parseData + _startCodeSize length:nalSize];
+        pthread_mutex_unlock(&_decoderLock);
         return nil;
     } else if (decodeFrame.frameType == VCH264FrameTypePPS) {
         // copy pps
         [self tryUsePPS:decodeFrame.parseData + _startCodeSize length:nalSize];
+        pthread_mutex_unlock(&_decoderLock);
         return nil;
     } else if (decodeFrame.frameType == VCH264FrameTypeSEI) {
         // copy sei
         [self tryUseSEI:decodeFrame.parseData + _startCodeSize length:nalSize];
+        pthread_mutex_unlock(&_decoderLock);
         return nil;
     }
     
@@ -267,7 +266,11 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         }
     }
     
-    if (_videoFormatDescription == NULL) return nil;
+    if (_videoFormatDescription == NULL) {
+        pthread_mutex_unlock(&_decoderLock);
+        return nil;
+    }
+    
     // decode process
     CMBlockBufferRef blockBuffer = NULL;
     CVPixelBufferRef outputPixelBuffer = NULL;
@@ -302,7 +305,6 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
                                                                       &outputPixelBuffer,
                                                                       &flagOut);
             if (decodeStatus == kVTInvalidSessionErr) {
-                [self freeDecodeSession];
                 [self setupDecompressionSession];
             }
             CFRelease(sampleBuffer);
@@ -313,6 +315,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     }
     
     if (outputPixelBuffer == NULL) {
+        pthread_mutex_unlock(&_decoderLock);
         return nil;
     }
     
@@ -320,6 +323,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     [image setPixelBuffer:outputPixelBuffer];
     
     CVPixelBufferRelease(outputPixelBuffer);
+    pthread_mutex_unlock(&_decoderLock);
     return image;
 }
 

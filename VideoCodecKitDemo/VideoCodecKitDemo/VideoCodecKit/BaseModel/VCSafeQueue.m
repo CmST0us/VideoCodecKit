@@ -49,7 +49,12 @@ typedef struct{
     }
     return self;
 }
-
+- (void)dealloc {
+    if (_node) {
+        free(_node);
+        _node = NULL;
+    }
+}
 - (void)clear{
     pthread_mutex_lock(&_mutex);
     int idx = 0;
