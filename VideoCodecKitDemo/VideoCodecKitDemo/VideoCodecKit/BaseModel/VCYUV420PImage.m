@@ -75,6 +75,7 @@
                         self.height,
                         kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)attr, &pixelBuffer);
     
+    [self setPixelBuffer:pixelBuffer];
     CVPixelBufferLockBaseAddress(pixelBuffer, 0);
     
     uint8_t *yData = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
@@ -94,7 +95,7 @@
     }
     
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-    
+    CVPixelBufferRelease(pixelBuffer);
     return pixelBuffer;
 }
 
