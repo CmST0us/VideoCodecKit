@@ -12,6 +12,4 @@
 
 @interface VCH264FFmpegFrameParser : VCH264FrameParser
 
-@property (nonatomic, readonly)AVCodecContext *codecContext;
-
 @end

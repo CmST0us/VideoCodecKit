@@ -38,9 +38,9 @@
                                                  NSStringFromClass([VCSampleBufferRender class])],
                
                // VCPreviewerTypeVTRawH264 使用的组件
-//               @(VCPreviewerTypeVTRawH264):@[NSStringFromClass(),
-//                                             NSStringFromClass(),
-//                                             NSStringFromClass(),]
+               @(VCPreviewerTypeVTRawH264):@[NSStringFromClass([VCH264FFmpegFrameParser class]),
+                                             NSStringFromClass([VCVTH264Decoder class]),
+                                             NSStringFromClass([VCSampleBufferRender class])],
                };
 }
 
@@ -84,7 +84,7 @@
     if (self.previewType == previewType) {
         return;
     }
-    self.previewType = previewType;
+    _previewType = previewType;
     [self free];
     [self reset];
 }
@@ -233,7 +233,7 @@
 }
 
 #pragma mark - Decoder Delegate Method
-- (void)decoder:(VCBaseDecoder *)decoder didProcessFrame:(id<VCImageTypeProtocol>)image {
+- (void)decoder:(VCBaseDecoder *)decoder didProcessImage:(id<VCImageTypeProtocol>)image {
     if (self.imageQueue) {
         while (![self.imageQueue push:image]) {
             sleep(1);

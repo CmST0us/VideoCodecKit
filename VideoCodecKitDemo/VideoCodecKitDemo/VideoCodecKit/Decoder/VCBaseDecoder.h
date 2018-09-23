@@ -83,7 +83,7 @@ typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
  @param frame 原始帧
  @return 解码图片
  */
-- (id<VCImageTypeProtocol>)decode:(id<VCFrameTypeProtocol>)image;
+- (id<VCImageTypeProtocol>)decode:(id<VCFrameTypeProtocol>)frame;
 
 /**
  回调block
@@ -107,7 +107,7 @@ typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
 @class VCBaseDecoder;
 @protocol VCBaseDecoderDelegate<NSObject>
 
-- (void)decoder:(VCBaseDecoder *)decoder didProcessFrame:(id<VCImageTypeProtocol>)image;
+- (void)decoder:(VCBaseDecoder *)decoder didProcessImage:(id<VCImageTypeProtocol>)image;
 
 @end
 

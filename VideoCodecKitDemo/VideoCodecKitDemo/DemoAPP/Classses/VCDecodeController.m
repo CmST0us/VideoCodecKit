@@ -22,7 +22,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _previewer = [[VCPreviewer alloc] initWithType:VCPreviewerTypeFFmpegRawH264];
+        _previewer = [[VCPreviewer alloc] initWithType:VCPreviewerTypeVTRawH264];
         _workThreadSem = dispatch_semaphore_create(0);
     }
     return self;

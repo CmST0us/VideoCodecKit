@@ -18,6 +18,7 @@
 #import "VCH264FFmpegDecoder.h"
 #import "VCH264FFmpegFrameParser.h"
 #import "VCSampleBufferRender.h"
+#import "VCVTH264Decoder.h"
 
 @class VCPreviewer;
 @protocol VCPreviewerDelegate<NSObject>
@@ -26,7 +27,7 @@
 
 typedef NS_ENUM(NSUInteger, VCPreviewerType) {
     VCPreviewerTypeFFmpegRawH264, // 使用ffmpeg和AVSampleBufferDisplayLayer
-//    VCPreviewerTypeVTRawH264, // 使用VideoToolBox和AVSampleBufferDisplayLayer
+    VCPreviewerTypeVTRawH264, // 使用VideoToolBox和AVSampleBufferDisplayLayer
 };
 
 @interface VCPreviewer : EKFSMObject<VCBaseFrameParserDelegate, VCBaseDecoderDelegate>

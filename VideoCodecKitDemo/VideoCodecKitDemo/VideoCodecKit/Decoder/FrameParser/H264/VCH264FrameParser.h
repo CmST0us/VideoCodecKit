@@ -12,8 +12,6 @@
 @class VCH264Frame;
 @interface VCH264FrameParser : VCBaseFrameParser
 
-@property (nonatomic, strong) VCH264Frame *currentParseFrame;
-
 + (VCH264FrameType)getFrameType:(VCH264Frame *)frame;
 
 @end

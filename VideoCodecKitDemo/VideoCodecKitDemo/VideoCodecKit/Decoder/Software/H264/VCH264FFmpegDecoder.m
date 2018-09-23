@@ -85,9 +85,9 @@
 
 - (void)decodeWithFrame:(id<VCFrameTypeProtocol>)frame {
     id<VCImageTypeProtocol> decodeImage = [self decode:frame];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(decoder:didProcessFrame:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(decoder:didProcessImage:)]) {
         if (decodeImage != nil) {
-            [self.delegate decoder:self didProcessFrame:decodeImage];
+            [self.delegate decoder:self didProcessImage:decodeImage];
         }
     }
 }

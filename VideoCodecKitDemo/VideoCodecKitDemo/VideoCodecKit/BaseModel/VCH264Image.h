@@ -21,7 +21,10 @@ typedef NS_ENUM(NSUInteger, VCH264SliceType) {
     VCH264SliceTypeBI,    ///< BI type
 };
 
-@interface VCH264Image : NSObject<VCImageTypeProtocol>
+@interface VCH264Image : NSObject<VCImageTypeProtocol> {
+@protected
+    CVPixelBufferRef _pixelBuffer;
+}
 
 @property (nonatomic, assign) VCH264SliceType sliceType;
 
@@ -56,5 +59,5 @@ typedef NS_ENUM(NSUInteger, VCH264SliceType) {
 - (NSData *)nv12PlaneData;
 
 - (CVPixelBufferRef)pixelBuffer;
-
+- (void)setPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 @end

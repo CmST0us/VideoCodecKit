@@ -9,10 +9,7 @@
 
 #import "VCBaseDecoder.h"
 
-@class VCH264FFmpegFrameParser;
 @interface VCH264FFmpegDecoder : VCBaseDecoder
-@property (nonatomic, readonly) VCH264FFmpegFrameParser *parser;
-
 + (BOOL)isH264Frame:(id<VCFrameTypeProtocol>)frame;
     
 @end

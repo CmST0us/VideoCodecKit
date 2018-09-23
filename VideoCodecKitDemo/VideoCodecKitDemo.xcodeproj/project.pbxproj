@@ -12,6 +12,7 @@
 		4F54ABE32155424A002E64F3 /* VCSafeQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABE22155424A002E64F3 /* VCSafeQueue.m */; };
 		4F54ABE6215545DE002E64F3 /* VCPreviewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABE5215545DE002E64F3 /* VCPreviewer.m */; };
 		4F54ABE921555B99002E64F3 /* VCSafeObjectQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABE821555B99002E64F3 /* VCSafeObjectQueue.m */; };
+		4F54ABEC21569AB6002E64F3 /* VCVTH264Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABEB21569AB6002E64F3 /* VCVTH264Decoder.m */; };
 		4F9279A021442E1700F17F9A /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799921442E1700F17F9A /* libavdevice.a */; };
 		4F9279A121442E1700F17F9A /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799A21442E1700F17F9A /* libswscale.a */; };
 		4F9279A221442E1700F17F9A /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799B21442E1700F17F9A /* libavfilter.a */; };
@@ -81,6 +82,8 @@
 		4F54ABE5215545DE002E64F3 /* VCPreviewer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCPreviewer.m; sourceTree = "<group>"; };
 		4F54ABE721555B99002E64F3 /* VCSafeObjectQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCSafeObjectQueue.h; sourceTree = "<group>"; };
 		4F54ABE821555B99002E64F3 /* VCSafeObjectQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCSafeObjectQueue.m; sourceTree = "<group>"; };
+		4F54ABEA21569AB6002E64F3 /* VCVTH264Decoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCVTH264Decoder.h; sourceTree = "<group>"; };
+		4F54ABEB21569AB6002E64F3 /* VCVTH264Decoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCVTH264Decoder.m; sourceTree = "<group>"; };
 		4F92799921442E1700F17F9A /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavdevice.a; sourceTree = "<group>"; };
 		4F92799A21442E1700F17F9A /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libswscale.a; sourceTree = "<group>"; };
 		4F92799B21442E1700F17F9A /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavfilter.a; sourceTree = "<group>"; };
@@ -268,17 +271,11 @@
 			path = H264;
 			sourceTree = "<group>";
 		};
-		4F927A0B214D614B00F17F9A /* VT */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = VT;
-			sourceTree = "<group>";
-		};
 		4F927A0C214D615600F17F9A /* H264 */ = {
 			isa = PBXGroup;
 			children = (
-				4F927A0B214D614B00F17F9A /* VT */,
+				4F54ABEA21569AB6002E64F3 /* VCVTH264Decoder.h */,
+				4F54ABEB21569AB6002E64F3 /* VCVTH264Decoder.m */,
 			);
 			path = H264;
 			sourceTree = "<group>";
@@ -521,6 +518,7 @@
 				4F927A1A214D863400F17F9A /* VCH264Image+FFmpeg.m in Sources */,
 				4F9279C0214449BA00F17F9A /* VCBaseFrameParser.m in Sources */,
 				4F54ABE6215545DE002E64F3 /* VCPreviewer.m in Sources */,
+				4F54ABEC21569AB6002E64F3 /* VCVTH264Decoder.m in Sources */,
 				4F9279AB2144312200F17F9A /* VCBaseDecoder.m in Sources */,
 				4F927A1E214E37CB00F17F9A /* LYOpenGLView.m in Sources */,
 				4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */,

@@ -8,6 +8,12 @@
 
 #import "VCYUV420PImage.h"
 
+@interface VCYUV420PImage () {
+    CVPixelBufferRef _pixelBuffer;
+}
+
+@end
+
 @implementation VCYUV420PImage
 
 - (NSData *)yuv420pPlaneData {
@@ -47,6 +53,8 @@
 }
 
 - (CVPixelBufferRef)pixelBuffer {
+    if (_pixelBuffer != NULL) return _pixelBuffer;
+    
     if (self.luma == nil || self.chromaB == nil || self.chromaR == nil) return nil;
     CVPixelBufferRef pixelBuffer = NULL;
     
@@ -81,6 +89,15 @@
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     
     return pixelBuffer;
+}
+
+- (void)setPixelBuffer:(CVPixelBufferRef)pixelBuffer {
+    if (_pixelBuffer != NULL) {
+        CVPixelBufferRelease(_pixelBuffer);
+        _pixelBuffer = NULL;
+    }
+    
+    _pixelBuffer = CVPixelBufferRetain(pixelBuffer);
 }
 
 - (NSString *)classStringForImageType {

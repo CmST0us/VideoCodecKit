@@ -9,5 +9,5 @@
 #import "VCH264Image.h"
 
 @interface VCYUV420PImage : VCH264Image
-
+@property (nonatomic, assign) CVPixelBufferRef pixelBuffer;
 @end

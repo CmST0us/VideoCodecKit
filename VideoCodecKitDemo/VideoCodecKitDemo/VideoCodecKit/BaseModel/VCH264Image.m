@@ -21,9 +21,11 @@
         _width = width;
         _height = height;
         _sliceType = VCH264SliceTypeNone;
+        _pixelBuffer = NULL;
     }
     return self;
 }
+
 
 - (void)createLumaDataWithSize:(NSUInteger)size
                    AndLineSize:(NSUInteger)lineSize {
@@ -61,6 +63,10 @@
     return nil;
 }
 
+- (void)setPixelBuffer:(CVPixelBufferRef)pixelBuffer {
+    
+}
+
 - (void)dealloc {
     if (self.luma != nil) {
         free(self.luma);
@@ -80,6 +86,10 @@
         self.chromaRSize = 0;
     }
     
+    if (_pixelBuffer != NULL) {
+        CFRelease(_pixelBuffer);
+        _pixelBuffer = NULL;
+    }
 }
 
 @end

@@ -13,4 +13,5 @@
 @required
 - (NSString *)classStringForImageType;
 - (CVPixelBufferRef)pixelBuffer;
+- (void)setPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 @end
