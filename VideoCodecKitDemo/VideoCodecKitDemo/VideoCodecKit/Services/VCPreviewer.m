@@ -14,6 +14,8 @@
 #define kVCPreviewSafeQueueSize 100
 
 @interface VCPreviewer () {
+    NSInteger _lastPOC;
+    
     sem_t *_parserThreadSem;
     sem_t *_decoderThreadSem;
 }
@@ -52,6 +54,7 @@
         _render = nil;
         _parserQueue = nil;
         _imageQueue = nil;
+        _lastPOC = 0;
         
         _parserThreadSem = sem_open("_parserThreadSem", 0);
         _decoderThreadSem = sem_open("_decoderThreadSem", 0);
@@ -186,6 +189,7 @@
     }
     return ![self.dataQueue isFull];
 }
+
 - (void)parserWorkThread {
     while (![[NSThread currentThread] isCancelled]) {
         @autoreleasepool {

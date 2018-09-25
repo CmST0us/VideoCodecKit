@@ -287,12 +287,17 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         // decode success
         CMSampleBufferRef sampleBuffer = NULL;
         const size_t sampleSizeArray[] = {decodeFrame.parseSize};
+        CMSampleTimingInfo timming;
+        timming.decodeTimeStamp = CMTimeMake(1, 60000);
+        timming.presentationTimeStamp = CMTimeMake(1, 60000);
+        timming.duration = CMTimeMake(1, 60000);
+        
         ret = CMSampleBufferCreateReady(kCFAllocatorDefault,
                                         blockBuffer,
                                         _videoFormatDescription,
                                         1,
-                                        0,
-                                        NULL,
+                                        1,
+                                        &timming,
                                         1,
                                         sampleSizeArray,
                                         &sampleBuffer);
