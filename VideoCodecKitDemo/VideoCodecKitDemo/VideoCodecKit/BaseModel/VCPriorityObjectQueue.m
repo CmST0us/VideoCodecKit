@@ -173,7 +173,7 @@ static const char *kVCPriorityObjectRuntimeLastKey = "kVCPriorityObjectRuntimeLa
         }
         
     }
-    // pod head
+    // pop head
     NSObject *node = _head;
     
     if (node) {

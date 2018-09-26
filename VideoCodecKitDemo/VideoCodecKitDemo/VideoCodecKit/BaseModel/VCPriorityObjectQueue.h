@@ -10,6 +10,10 @@
 
 #define kVCPriorityIDR (-1)
 
+static const char *kVCPriorityObjectRuntimePriorityKey;
+static const char *kVCPriorityObjectRuntimeNextKey;
+static const char *kVCPriorityObjectRuntimeLastKey;
+
 @interface VCPriorityObjectQueue : NSObject
 
 /**
@@ -22,7 +26,8 @@
 
 - (void)clear;
 
-- (BOOL)push:(NSObject *)object;
+- (BOOL)push:(NSObject *)object
+    priority:(NSInteger)priority;
 
 - (NSObject *)pull;
 

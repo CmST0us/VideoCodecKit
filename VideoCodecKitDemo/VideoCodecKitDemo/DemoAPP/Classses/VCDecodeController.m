@@ -9,7 +9,7 @@
 #import "VCDecodeController.h"
 #import <KVSig/KVSig.h>
 
-#define kVCDefaultBufferSize 10240
+#define kVCDefaultBufferSize 1500
 
 @interface VCDecodeController ()
 @property (nonatomic, strong) NSThread *workThread;
@@ -45,7 +45,10 @@
                 // 自旋锁
                 while (![self.previewer pushData:fileBuffer length:readLen]) {
                     // 1Hz 重试
-                    sleep(1);
+                    if ([[NSThread currentThread] isCancelled]) {
+                        break;
+                    }
+                    [NSThread sleepForTimeInterval:0.01];
                 };
             }
         }

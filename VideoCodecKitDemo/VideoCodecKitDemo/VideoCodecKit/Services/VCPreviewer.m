@@ -146,12 +146,14 @@
     
     _dataQueue = [[VCSafeQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
     _parserQueue = [[VCSafeObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
-    _imageQueue = [[VCSafeObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
+    _imageQueue = [[VCPriorityObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize isThreadSafe:YES];
     
     _parserThread = [[NSThread alloc] initWithTarget:self selector:@selector(parserWorkThread) object:nil];
     _parserThread.name = @"VCPreviewer.parserThread";
+    _parserThread.qualityOfService = NSQualityOfServiceUtility;
     _decoderThread = [[NSThread alloc] initWithTarget:self selector:@selector(decoderWorkThread) object:nil];
     _decoderThread.name = @"VCPreviewer.decoderThread";
+    _decoderThread.qualityOfService = NSQualityOfServiceDefault;
     _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkLoop)];
     
 }
@@ -239,7 +241,7 @@
 #pragma mark - Decoder Delegate Method
 - (void)decoder:(VCBaseDecoder *)decoder didProcessImage:(id<VCImageTypeProtocol>)image {
     if (self.imageQueue) {
-        while (![self.imageQueue push:image]) {
+        while (![self.imageQueue push:image priority:image.priority]) {
             [NSThread sleepForTimeInterval:0.01];
         }
     }

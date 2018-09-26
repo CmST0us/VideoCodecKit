@@ -13,6 +13,7 @@
 @end
 
 @implementation VCH264Image
+@synthesize priority = _priority;
 - (instancetype)initWithWidth:(NSUInteger)width
                        height:(NSUInteger)height {
 

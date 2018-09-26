@@ -18,7 +18,7 @@
     frame.context = codecContext;
     [frame createParseDataWithSize:aPacket->size];
     memcpy(frame.parseData, aPacket->data, frame.parseSize);
-    
+
     frame.frameIndex = parserContext->output_picture_number;
     frame.pts = parserContext->pts;
     frame.dts = parserContext->dts;

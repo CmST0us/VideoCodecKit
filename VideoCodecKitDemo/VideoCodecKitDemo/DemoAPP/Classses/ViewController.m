@@ -26,8 +26,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.decoderController = [[VCDecodeController alloc] init];
-    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/swift.h264";
-    self.decoderController.previewer.fps = 60;
+    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/test.h264";
+    self.decoderController.previewer.fps = 30;
     [self setupDisplayLayer];
     [self bindData];
 }

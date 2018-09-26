@@ -11,6 +11,7 @@
 #import "VCVTH264Decoder.h"
 #import "VCH264Frame.h"
 #import "VCYUV420PImage.h"
+#import "VCPriorityObjectQueue.h"
 
 @interface VCVTH264Decoder () {
     CMVideoFormatDescriptionRef _videoFormatDescription;
@@ -146,11 +147,31 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     if (_videoFormatDescription == NULL) return NO;
     [self freeDecodeSession];
     
-    CFDictionaryRef attr = NULL;
-    const void *keys[] = {kCVPixelBufferPixelFormatTypeKey};
-    uint32_t v = kCVPixelFormatType_420YpCbCr8BiPlanarFullRange;
-    const void *values[] = {CFNumberCreate(NULL, kCFNumberSInt32Type, &v)};
-    attr = CFDictionaryCreate(NULL, keys, values, 1, NULL, NULL);
+    //get width and height of video
+    CMVideoDimensions dimension = CMVideoFormatDescriptionGetDimensions (_videoFormatDescription);
+    
+    // Set the pixel attributes for the destination buffer
+    CFMutableDictionaryRef destinationPixelBufferAttributes = CFDictionaryCreateMutable(
+                                                                                        kCFAllocatorDefault,
+                                                                                        0,
+                                                                                        &kCFTypeDictionaryKeyCallBacks,
+                                                                                        &kCFTypeDictionaryValueCallBacks);
+    
+    SInt32 destinationPixelType = kCVPixelFormatType_420YpCbCr8BiPlanarFullRange;
+    
+    CFNumberRef pixelType = CFNumberCreate(NULL, kCFNumberSInt32Type, &destinationPixelType);
+    CFDictionarySetValue(destinationPixelBufferAttributes,kCVPixelBufferPixelFormatTypeKey, pixelType);
+    CFRelease(pixelType);
+    
+    CFNumberRef width = CFNumberCreate(NULL, kCFNumberSInt32Type, &dimension.width);
+    CFDictionarySetValue(destinationPixelBufferAttributes,kCVPixelBufferWidthKey, width);
+    CFRelease(width);
+    
+    CFNumberRef height = CFNumberCreate(NULL, kCFNumberSInt32Type, &dimension.height);
+    CFDictionarySetValue(destinationPixelBufferAttributes, kCVPixelBufferHeightKey, height);
+    CFRelease(height);
+    
+//    CFDictionarySetValue(destinationPixelBufferAttributes, kCVPixelBufferOpenGLCompatibilityKey, kCFBooleanTrue);
     
     VTDecompressionOutputCallbackRecord callbackRecord;
     callbackRecord.decompressionOutputCallback = decompressionOutputCallback;
@@ -159,10 +180,10 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     OSStatus ret = VTDecompressionSessionCreate(kCFAllocatorDefault,
                                  _videoFormatDescription,
                                  NULL,
-                                 attr,
+                                 destinationPixelBufferAttributes,
                                  &callbackRecord,
                                  &_decodeSession);
-    CFRelease(attr);
+    CFRelease(destinationPixelBufferAttributes);
     
     if (ret == 0) {
         return YES;
@@ -287,20 +308,17 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         // decode success
         CMSampleBufferRef sampleBuffer = NULL;
         const size_t sampleSizeArray[] = {decodeFrame.parseSize};
-        CMSampleTimingInfo timming;
-        timming.decodeTimeStamp = CMTimeMake(1, 60000);
-        timming.presentationTimeStamp = CMTimeMake(1, 60000);
-        timming.duration = CMTimeMake(1, 60000);
         
         ret = CMSampleBufferCreateReady(kCFAllocatorDefault,
                                         blockBuffer,
                                         _videoFormatDescription,
                                         1,
-                                        1,
-                                        &timming,
+                                        0,
+                                        NULL,
                                         1,
                                         sampleSizeArray,
                                         &sampleBuffer);
+        
         if (ret == kCMBlockBufferNoErr && sampleBuffer) {
             VTDecodeFrameFlags flags = 0;
             VTDecodeInfoFlags flagOut = 0;
@@ -325,6 +343,11 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     }
     
     VCYUV420PImage *image = [[VCYUV420PImage alloc] initWithWidth:decodeFrame.width height:decodeFrame.height];
+    image.priority = decodeFrame.frameIndex;
+    if (decodeFrame.frameType == VCH264FrameTypeIDR) {
+        image.priority = kVCPriorityIDR;
+    }
+    
     [image setPixelBuffer:outputPixelBuffer];
     
     CVPixelBufferRelease(outputPixelBuffer);
