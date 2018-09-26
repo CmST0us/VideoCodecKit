@@ -17,4 +17,21 @@
  */
 @property (nonatomic, assign) BOOL isThreadSafe;
 
+- (instancetype)initWithSize:(int)size
+                isThreadSafe:(BOOL)isThreadSafe;
+
+- (void)clear;
+
+- (BOOL)push:(NSObject *)object;
+
+- (NSObject *)pull;
+
+- (void)wakeupReader;
+
+- (int)count;
+
+- (int)size;
+
+- (BOOL)isFull;
+
 @end

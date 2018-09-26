@@ -8,6 +8,7 @@
 
 #import <pthread.h>
 #import <objc/runtime.h>
+#import <sys/time.h>
 #import "VCPriorityObjectQueue.h"
 
 #define kVCPerformIfNeedThreadSafe(__code__) if (_isThreadSafe) { __code__;}
@@ -149,6 +150,44 @@ static const char *kVCPriorityObjectRuntimeLastKey = "kVCPriorityObjectRuntimeLa
     kVCPerformIfNeedThreadSafe(pthread_cond_signal(&_cond));
     kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
     return YES;
+}
+
+- (NSObject *)pull {
+    kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
+    if (_count == 0) {
+        if (_isThreadSafe == NO) {
+            return nil;
+        }
+        
+        struct timeval tv;
+        gettimeofday(&tv, NULL);
+        
+        struct timespec ts;
+        ts.tv_sec = tv.tv_sec + 2;
+        ts.tv_nsec = tv.tv_usec*1000;
+        pthread_cond_timedwait(&_cond, &_mutex, &ts);
+        if(_count == 0)
+        {
+            pthread_mutex_unlock(&_mutex);
+            return NULL;
+        }
+        
+    }
+    // pod head
+    NSObject *node = _head;
+    
+    if (node) {
+        _head = [self nextObjectOfObject:node];
+        if (_head) {
+            [self setLastObjext:[NSNull null] toObject:_head];
+        } else {
+            _tail = nil;
+        }
+    }
+    _count--;
+    
+    kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+    return node;
 }
 
 - (void)wakeupReader {
