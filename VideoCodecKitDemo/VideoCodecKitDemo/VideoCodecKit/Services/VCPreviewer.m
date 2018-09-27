@@ -158,7 +158,7 @@
     
     _dataQueue = [[VCSafeQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
     _parserQueue = [[VCSafeObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
-    _imageQueue = [[VCHeapPriorityObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize isThreadSafe:YES];
+    _imageQueue = [[VCPriorityObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize isThreadSafe:YES];
     _imageQueue.watermark = _watermark;
     
     _parserThread = [[NSThread alloc] initWithTarget:self selector:@selector(parserWorkThread) object:nil];

@@ -153,7 +153,7 @@ static const char *kVCPriorityObjectRuntimeLastKey = "kVCPriorityObjectRuntimeLa
 
 - (NSObject *)pull {
     kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
-    if (_count == 0) {
+    if (_count <= _watermark) {
         if (_isThreadSafe == NO) {
             return nil;
         }
@@ -165,7 +165,7 @@ static const char *kVCPriorityObjectRuntimeLastKey = "kVCPriorityObjectRuntimeLa
         ts.tv_sec = tv.tv_sec + 2;
         ts.tv_nsec = tv.tv_usec*1000;
         pthread_cond_timedwait(&_cond, &_mutex, &ts);
-        if(_count == 0)
+        if(_count <= _watermark)
         {
             pthread_mutex_unlock(&_mutex);
             return NULL;
@@ -184,7 +184,7 @@ static const char *kVCPriorityObjectRuntimeLastKey = "kVCPriorityObjectRuntimeLa
         }
     }
     _count--;
-    
+    NSInteger p = [self priorityOfObject:node];
     kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
     return node;
 }
