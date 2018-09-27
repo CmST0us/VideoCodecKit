@@ -18,6 +18,8 @@
 #import "VCH264FFmpegDecoder.h"
 #import "VCH264FFmpegFrameParser.h"
 #import "VCSampleBufferRender.h"
+#import "VCVTH264Decoder.h"
+#import "VCPriorityObjectQueue.h"
 
 @class VCPreviewer;
 @protocol VCPreviewerDelegate<NSObject>
@@ -26,7 +28,7 @@
 
 typedef NS_ENUM(NSUInteger, VCPreviewerType) {
     VCPreviewerTypeFFmpegRawH264, // 使用ffmpeg和AVSampleBufferDisplayLayer
-//    VCPreviewerTypeVTRawH264, // 使用VideoToolBox和AVSampleBufferDisplayLayer
+    VCPreviewerTypeVTRawH264, // 使用VideoToolBox和AVSampleBufferDisplayLayer
 };
 
 @interface VCPreviewer : EKFSMObject<VCBaseFrameParserDelegate, VCBaseDecoderDelegate>
@@ -35,7 +37,8 @@ typedef NS_ENUM(NSUInteger, VCPreviewerType) {
 @property (nonatomic, strong) id<VCBaseRenderProtocol> render;
 
 @property (nonatomic, strong) VCSafeObjectQueue *parserQueue;
-@property (nonatomic, strong) VCSafeObjectQueue *imageQueue;
+@property (nonatomic, strong) VCPriorityObjectQueue *imageQueue;
+@property (nonatomic, assign) NSInteger watermark;
 
 @property (nonatomic, assign) VCPreviewerType previewType;
 
@@ -47,6 +50,7 @@ typedef NS_ENUM(NSUInteger, VCPreviewerType) {
 
 - (BOOL)pushData:(uint8_t *)data length:(int)length;
 - (BOOL)canPushData;
+- (void)endPushData;
 
 - (void)run;
 - (void)stop;

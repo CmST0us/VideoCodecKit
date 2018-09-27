@@ -9,6 +9,8 @@
 #import "VCSafeQueue.h"
 #import <sys/time.h>
 
+#define kVCPerformIfNeedThreadSafe(__code__) if (_isThreadSafe) { __code__;}
+
 typedef struct{
     uint8_t *ptr;
     int size;
@@ -32,11 +34,13 @@ typedef struct{
 
 @implementation VCSafeQueue
 
-- (VCSafeQueue *)initWithSize:(int)size{
+- (instancetype)initWithSize:(int)size
+                  threadSafe:(BOOL)isThreadSafe {
     self = [super init];
     if (self) {
-        pthread_mutex_init(&_mutex, NULL);
-        pthread_cond_init(&_cond, NULL);
+        _isThreadSafe = isThreadSafe;
+        kVCPerformIfNeedThreadSafe(pthread_mutex_init(&_mutex, NULL));
+        kVCPerformIfNeedThreadSafe(pthread_cond_init(&_cond, NULL));
         
         _head = 0;
         _tail = 0;
@@ -50,8 +54,18 @@ typedef struct{
     return self;
 }
 
+- (instancetype)initWithSize:(int)size{
+    return [self initWithSize:size threadSafe:YES];
+}
+
+- (void)dealloc {
+    if (_node) {
+        free(_node);
+        _node = NULL;
+    }
+}
 - (void)clear{
-    pthread_mutex_lock(&_mutex);
+    kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
     int idx = 0;
     for(int i = 0; i<_count; i++){
         if(i + _head >= _size){
@@ -68,13 +82,13 @@ typedef struct{
     _head = 0;
     _tail = 0;
     _count = 0;
-    pthread_mutex_unlock(&_mutex);
+    kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
 }
 
 - (BOOL)push:(uint8_t *)buf length:(int)len{
-    pthread_mutex_lock(&_mutex);
+    kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
     if(len == 0 || buf == NULL || [self isFull]){
-        pthread_mutex_unlock(&_mutex);
+        kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
         return NO;
     }
     _node[_tail].ptr = buf;
@@ -82,26 +96,26 @@ typedef struct{
     _tail++;
     if(_tail >= _size) _tail = 0;
     _count++;
-    pthread_cond_signal(&_cond);
-    pthread_mutex_unlock(&_mutex);
+    kVCPerformIfNeedThreadSafe(pthread_cond_signal(&_cond));
+    kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
     return YES;
 }
 
 - (uint8_t *)pull:(int *)len{
-    pthread_mutex_lock(&_mutex);
+    kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
     if(_count == 0)
     {
         struct timeval tv;
         gettimeofday(&tv, NULL);
         
         struct timespec ts;
-        ts.tv_sec = tv.tv_sec + 2;
-        ts.tv_nsec = tv.tv_usec*1000;
-        pthread_cond_timedwait(&_cond, &_mutex, &ts);
+        ts.tv_sec = tv.tv_sec + 1;
+        ts.tv_nsec = tv.tv_usec * 1000;
+        kVCPerformIfNeedThreadSafe(pthread_cond_timedwait(&_cond, &_mutex, &ts));
         if(_count == 0)
         {
             *len = 0;
-            pthread_mutex_unlock(&_mutex);
+            kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
             return NULL;
         }
     }
@@ -111,14 +125,14 @@ typedef struct{
     _head++;
     if(_head>=_size)_head = 0;
     _count--;
-    pthread_mutex_unlock(&_mutex);
+    kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
     return tmp;
 }
 
 - (void)wakeupReader{
-    pthread_mutex_lock(&_mutex);
-    pthread_cond_signal(&_cond);
-    pthread_mutex_unlock(&_mutex);
+    kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
+    kVCPerformIfNeedThreadSafe(pthread_cond_signal(&_cond));
+    kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
 }
 
 - (int)count{

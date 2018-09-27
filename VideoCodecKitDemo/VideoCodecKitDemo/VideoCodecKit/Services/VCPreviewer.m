@@ -14,6 +14,8 @@
 #define kVCPreviewSafeQueueSize 100
 
 @interface VCPreviewer () {
+    NSInteger _lastPOC;
+    
     sem_t *_parserThreadSem;
     sem_t *_decoderThreadSem;
 }
@@ -25,6 +27,7 @@
 @end
 
 @implementation VCPreviewer
+@synthesize watermark = _watermark;
 
 - (NSDictionary *)supportPreviewerComponent {
     /*
@@ -38,9 +41,9 @@
                                                  NSStringFromClass([VCSampleBufferRender class])],
                
                // VCPreviewerTypeVTRawH264 使用的组件
-//               @(VCPreviewerTypeVTRawH264):@[NSStringFromClass(),
-//                                             NSStringFromClass(),
-//                                             NSStringFromClass(),]
+               @(VCPreviewerTypeVTRawH264):@[NSStringFromClass([VCH264FFmpegFrameParser class]),
+                                             NSStringFromClass([VCVTH264Decoder class]),
+                                             NSStringFromClass([VCSampleBufferRender class])],
                };
 }
 
@@ -52,7 +55,8 @@
         _render = nil;
         _parserQueue = nil;
         _imageQueue = nil;
-        
+        _lastPOC = 0;
+        _watermark = 0;
         _parserThreadSem = sem_open("_parserThreadSem", 0);
         _decoderThreadSem = sem_open("_decoderThreadSem", 0);
     }
@@ -80,11 +84,22 @@
     sem_close(_decoderThreadSem);
 }
 
+- (void)setWatermark:(NSInteger)watermark {
+    if (_imageQueue != nil) {
+        _watermark = watermark;
+        _imageQueue.watermark = watermark;
+    }
+}
+
+- (NSInteger)watermark {
+    return _watermark;
+}
+
 - (void)setPreviewType:(VCPreviewerType)previewType {
     if (self.previewType == previewType) {
         return;
     }
-    self.previewType = previewType;
+    _previewType = previewType;
     [self free];
     [self reset];
 }
@@ -143,12 +158,15 @@
     
     _dataQueue = [[VCSafeQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
     _parserQueue = [[VCSafeObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
-    _imageQueue = [[VCSafeObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
+    _imageQueue = [[VCPriorityObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize isThreadSafe:YES];
+    _imageQueue.watermark = _watermark;
     
     _parserThread = [[NSThread alloc] initWithTarget:self selector:@selector(parserWorkThread) object:nil];
     _parserThread.name = @"VCPreviewer.parserThread";
+    _parserThread.qualityOfService = NSQualityOfServiceUtility;
     _decoderThread = [[NSThread alloc] initWithTarget:self selector:@selector(decoderWorkThread) object:nil];
     _decoderThread.name = @"VCPreviewer.decoderThread";
+    _decoderThread.qualityOfService = NSQualityOfServiceDefault;
     _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkLoop)];
     
 }
@@ -165,10 +183,10 @@
 }
 
 - (void)stop {
-    [_decoder FSM(invalidate)];
     [_parserThread cancel];
     [_decoderThread cancel];
     [_displayLink invalidate];
+    [_decoder FSM(invalidate)];
     [self free];
     [self reset];
 }
@@ -186,9 +204,15 @@
     }
     return ![self.dataQueue isFull];
 }
+
+- (void)endPushData {
+    if (self.dataQueue != nil && self.imageQueue != nil) {
+        self.imageQueue.watermark = 0;
+    }
+}
 - (void)parserWorkThread {
-    @autoreleasepool {
-        while (![[NSThread currentThread] isCancelled]) {
+    while (![[NSThread currentThread] isCancelled]) {
+        @autoreleasepool {
             uint8_t *data = NULL;
             int dataLength = 0;
             data = [self.dataQueue pull:&dataLength];
@@ -198,20 +222,20 @@
                 data = NULL;
             }
         }
-        sem_post(_parserThreadSem);
     }
+    sem_post(_parserThreadSem);
 }
 
 - (void)decoderWorkThread {
-    @autoreleasepool {
-        while (![[NSThread currentThread] isCancelled]) {
+    while (![[NSThread currentThread] isCancelled]) {
+        @autoreleasepool {
             NSObject *frame = [self.parserQueue pull];
             if (frame != nil && [frame conformsToProtocol:@protocol(VCFrameTypeProtocol)]) {
                 [self.decoder decodeWithFrame:(id<VCFrameTypeProtocol>)frame];
             }
         }
-        sem_post(_decoderThreadSem);
     }
+    sem_post(_decoderThreadSem);
 }
 
 - (void)displayLinkLoop {
@@ -227,16 +251,16 @@
 - (void)frameParserDidParseFrame:(id<VCFrameTypeProtocol>)aFrame {
     if (self.parserQueue) {
         while (![self.parserQueue push:aFrame]) {
-            sleep(1);
+            [NSThread sleepForTimeInterval:0.01];
         }
     }
 }
 
 #pragma mark - Decoder Delegate Method
-- (void)decoder:(VCBaseDecoder *)decoder didProcessFrame:(id<VCImageTypeProtocol>)image {
+- (void)decoder:(VCBaseDecoder *)decoder didProcessImage:(id<VCImageTypeProtocol>)image {
     if (self.imageQueue) {
-        while (![self.imageQueue push:image]) {
-            sleep(1);
+        while (![self.imageQueue push:image priority:image.priority]) {
+            [NSThread sleepForTimeInterval:0.01];
         }
     }
 }

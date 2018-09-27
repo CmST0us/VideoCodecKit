@@ -10,6 +10,20 @@
 #import <pthread.h>
 
 @interface VCSafeObjectQueue : NSObject
+
+/**
+ 是否开启线程安全
+ */
+@property (nonatomic, assign) BOOL isThreadSafe;
+/**
+ 创建一个队列
+ 
+ @param size 队列大小
+ @param isThreadSafe 是否线程安全
+ @return 队列实例
+ */
+- (instancetype)initWithSize:(int)size
+                  threadSafe:(BOOL)isThreadSafe;
 /**
  创建一个线程安全队列
  

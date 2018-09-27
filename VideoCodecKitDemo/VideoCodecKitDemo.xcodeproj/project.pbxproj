@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F0DDDF2215D25C400CFD59F /* VCHeapPriorityObjectQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0DDDF1215D25C400CFD59F /* VCHeapPriorityObjectQueue.m */; };
 		4F54ABD72152BFD0002E64F3 /* VCYUV420PImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABD62152BFD0002E64F3 /* VCYUV420PImage.m */; };
 		4F54ABDF2154167C002E64F3 /* VCSampleBufferRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABDE2154167C002E64F3 /* VCSampleBufferRender.m */; };
 		4F54ABE32155424A002E64F3 /* VCSafeQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABE22155424A002E64F3 /* VCSafeQueue.m */; };
 		4F54ABE6215545DE002E64F3 /* VCPreviewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABE5215545DE002E64F3 /* VCPreviewer.m */; };
 		4F54ABE921555B99002E64F3 /* VCSafeObjectQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABE821555B99002E64F3 /* VCSafeObjectQueue.m */; };
+		4F54ABEC21569AB6002E64F3 /* VCVTH264Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABEB21569AB6002E64F3 /* VCVTH264Decoder.m */; };
 		4F9279A021442E1700F17F9A /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799921442E1700F17F9A /* libavdevice.a */; };
 		4F9279A121442E1700F17F9A /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799A21442E1700F17F9A /* libswscale.a */; };
 		4F9279A221442E1700F17F9A /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F92799B21442E1700F17F9A /* libavfilter.a */; };
@@ -52,6 +54,8 @@
 		4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */; };
 		4FBF022D2144284B00CA0EC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF022C2144284B00CA0EC8 /* main.m */; };
 		4FBF02C621442B6700CA0EC8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02C521442B6700CA0EC8 /* README.md */; };
+		4FEF6EF7215A94C5001C7446 /* VCPriorityObjectQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF6EF6215A94C5001C7446 /* VCPriorityObjectQueue.m */; };
+		DF27DDD9215A687500658D98 /* 1.h264 in Resources */ = {isa = PBXBuildFile; fileRef = DF27DDD8215A687500658D98 /* 1.h264 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -69,6 +73,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4F0DDDF0215D25C400CFD59F /* VCHeapPriorityObjectQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCHeapPriorityObjectQueue.h; sourceTree = "<group>"; };
+		4F0DDDF1215D25C400CFD59F /* VCHeapPriorityObjectQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCHeapPriorityObjectQueue.m; sourceTree = "<group>"; };
 		4F54ABD42152BF31002E64F3 /* VCImageTypeProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCImageTypeProtocol.h; sourceTree = "<group>"; };
 		4F54ABD52152BFD0002E64F3 /* VCYUV420PImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCYUV420PImage.h; sourceTree = "<group>"; };
 		4F54ABD62152BFD0002E64F3 /* VCYUV420PImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCYUV420PImage.m; sourceTree = "<group>"; };
@@ -81,6 +87,8 @@
 		4F54ABE5215545DE002E64F3 /* VCPreviewer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCPreviewer.m; sourceTree = "<group>"; };
 		4F54ABE721555B99002E64F3 /* VCSafeObjectQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCSafeObjectQueue.h; sourceTree = "<group>"; };
 		4F54ABE821555B99002E64F3 /* VCSafeObjectQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCSafeObjectQueue.m; sourceTree = "<group>"; };
+		4F54ABEA21569AB6002E64F3 /* VCVTH264Decoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCVTH264Decoder.h; sourceTree = "<group>"; };
+		4F54ABEB21569AB6002E64F3 /* VCVTH264Decoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCVTH264Decoder.m; sourceTree = "<group>"; };
 		4F92799921442E1700F17F9A /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavdevice.a; sourceTree = "<group>"; };
 		4F92799A21442E1700F17F9A /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libswscale.a; sourceTree = "<group>"; };
 		4F92799B21442E1700F17F9A /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavfilter.a; sourceTree = "<group>"; };
@@ -143,6 +151,9 @@
 		4FBF022B2144284B00CA0EC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FBF022C2144284B00CA0EC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4FBF02C521442B6700CA0EC8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		4FEF6EF5215A94C5001C7446 /* VCPriorityObjectQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCPriorityObjectQueue.h; sourceTree = "<group>"; };
+		4FEF6EF6215A94C5001C7446 /* VCPriorityObjectQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCPriorityObjectQueue.m; sourceTree = "<group>"; };
+		DF27DDD8215A687500658D98 /* 1.h264 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1.h264; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +224,7 @@
 				4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */,
 				4F927A1F214E381000F17F9A /* Shader.fsh */,
 				4F927A21214E382D00F17F9A /* Shader.vsh */,
+				DF27DDD8215A687500658D98 /* 1.h264 */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -268,17 +280,11 @@
 			path = H264;
 			sourceTree = "<group>";
 		};
-		4F927A0B214D614B00F17F9A /* VT */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = VT;
-			sourceTree = "<group>";
-		};
 		4F927A0C214D615600F17F9A /* H264 */ = {
 			isa = PBXGroup;
 			children = (
-				4F927A0B214D614B00F17F9A /* VT */,
+				4F54ABEA21569AB6002E64F3 /* VCVTH264Decoder.h */,
+				4F54ABEB21569AB6002E64F3 /* VCVTH264Decoder.m */,
 			);
 			path = H264;
 			sourceTree = "<group>";
@@ -384,6 +390,10 @@
 				4F54ABE22155424A002E64F3 /* VCSafeQueue.m */,
 				4F54ABE721555B99002E64F3 /* VCSafeObjectQueue.h */,
 				4F54ABE821555B99002E64F3 /* VCSafeObjectQueue.m */,
+				4FEF6EF5215A94C5001C7446 /* VCPriorityObjectQueue.h */,
+				4FEF6EF6215A94C5001C7446 /* VCPriorityObjectQueue.m */,
+				4F0DDDF0215D25C400CFD59F /* VCHeapPriorityObjectQueue.h */,
+				4F0DDDF1215D25C400CFD59F /* VCHeapPriorityObjectQueue.m */,
 			);
 			path = BaseModel;
 			sourceTree = "<group>";
@@ -501,6 +511,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF27DDD9215A687500658D98 /* 1.h264 in Resources */,
 				4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */,
 				4FBF02272144284B00CA0EC8 /* Assets.xcassets in Resources */,
 				4F927A22214E382D00F17F9A /* Shader.vsh in Resources */,
@@ -521,17 +532,20 @@
 				4F927A1A214D863400F17F9A /* VCH264Image+FFmpeg.m in Sources */,
 				4F9279C0214449BA00F17F9A /* VCBaseFrameParser.m in Sources */,
 				4F54ABE6215545DE002E64F3 /* VCPreviewer.m in Sources */,
+				4F54ABEC21569AB6002E64F3 /* VCVTH264Decoder.m in Sources */,
 				4F9279AB2144312200F17F9A /* VCBaseDecoder.m in Sources */,
 				4F927A1E214E37CB00F17F9A /* LYOpenGLView.m in Sources */,
 				4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */,
 				4F9279B92144482C00F17F9A /* VCDecoderProgress.m in Sources */,
 				4F927A11214D63B100F17F9A /* EKFSMObject.m in Sources */,
 				4F9279C3214449FA00F17F9A /* VCH264FrameParser.m in Sources */,
+				4FEF6EF7215A94C5001C7446 /* VCPriorityObjectQueue.m in Sources */,
 				4F54ABD72152BFD0002E64F3 /* VCYUV420PImage.m in Sources */,
 				4F9279BD2144487A00F17F9A /* VCVideoFPS.m in Sources */,
 				4F54ABDF2154167C002E64F3 /* VCSampleBufferRender.m in Sources */,
 				4F9279D12145042F00F17F9A /* VCH264Frame+FFmpeg.m in Sources */,
 				4F927A17214D7B9600F17F9A /* VCH264FFmpegFrameParser.m in Sources */,
+				4F0DDDF2215D25C400CFD59F /* VCHeapPriorityObjectQueue.m in Sources */,
 				4F9279CE214503D300F17F9A /* VCH264Frame.m in Sources */,
 				4F54ABE32155424A002E64F3 /* VCSafeQueue.m in Sources */,
 				4F9279CB2144FAB700F17F9A /* VCH264FFmpegFrameParserBuffer.m in Sources */,
@@ -687,7 +701,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2VQ94C2355;
+				DEVELOPMENT_TEAM = CL968BX8XK;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/framework",
@@ -717,7 +731,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2VQ94C2355;
+				DEVELOPMENT_TEAM = CL968BX8XK;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/framework",

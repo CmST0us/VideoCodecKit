@@ -49,8 +49,9 @@
 }
 
 - (void)attachToLayer:(CALayer *)layer {
-    if (layer != nil) {
+    if (layer != nil && _superLayer != layer) {
         self.renderLayer.frame = layer.bounds;
+        _superLayer = layer;
         [layer addSublayer:self.renderLayer];
     }
 }
@@ -101,11 +102,6 @@
         CFRelease(sampleBuffer);
         sampleBuffer = NULL;
     }
-    
-    if (pixelBuffer != NULL) {
-        CFRelease(pixelBuffer);
-        pixelBuffer = NULL;
-    }
 }
 
 + (CMSampleBufferRef)sampleBufferWithPixelBuffer:(CVPixelBufferRef)pixelBuffer {
@@ -121,13 +117,13 @@
     
     ret = CMSampleBufferCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, true, NULL, NULL, videoInfo, &timing, &sampleBuffer);
     if (ret != 0) {
-        
+        return NULL;
     }
 
     CFArrayRef attachments = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, YES);
     CFMutableDictionaryRef dict = (CFMutableDictionaryRef)CFArrayGetValueAtIndex(attachments, 0);
     CFDictionarySetValue(dict, kCMSampleAttachmentKey_DisplayImmediately, kCFBooleanTrue);
-    
+    CFRelease(videoInfo);
     return sampleBuffer;
 }
 

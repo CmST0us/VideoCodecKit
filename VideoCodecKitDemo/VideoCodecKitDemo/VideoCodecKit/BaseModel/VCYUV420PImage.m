@@ -8,7 +8,20 @@
 
 #import "VCYUV420PImage.h"
 
+@interface VCYUV420PImage () {
+    CVPixelBufferRef _pixelBuffer;
+}
+
+@end
+
 @implementation VCYUV420PImage
+
+- (void)dealloc {
+    if (_pixelBuffer != NULL) {
+        CVPixelBufferRelease(_pixelBuffer);
+        _pixelBuffer = NULL;
+    }
+}
 
 - (NSData *)yuv420pPlaneData {
     uint8_t *planeData = (uint8_t *)malloc(self.lumaSize + self.chromaBSize + self.chromaRSize);
@@ -47,6 +60,8 @@
 }
 
 - (CVPixelBufferRef)pixelBuffer {
+    if (_pixelBuffer != NULL) return _pixelBuffer;
+    
     if (self.luma == nil || self.chromaB == nil || self.chromaR == nil) return nil;
     CVPixelBufferRef pixelBuffer = NULL;
     
@@ -60,6 +75,7 @@
                         self.height,
                         kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)attr, &pixelBuffer);
     
+    [self setPixelBuffer:pixelBuffer];
     CVPixelBufferLockBaseAddress(pixelBuffer, 0);
     
     uint8_t *yData = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
@@ -79,8 +95,17 @@
     }
     
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-    
+    CVPixelBufferRelease(pixelBuffer);
     return pixelBuffer;
+}
+
+- (void)setPixelBuffer:(CVPixelBufferRef)pixelBuffer {
+    if (_pixelBuffer != NULL) {
+        CVPixelBufferRelease(_pixelBuffer);
+        _pixelBuffer = NULL;
+    }
+    
+    _pixelBuffer = CVPixelBufferRetain(pixelBuffer);
 }
 
 - (NSString *)classStringForImageType {

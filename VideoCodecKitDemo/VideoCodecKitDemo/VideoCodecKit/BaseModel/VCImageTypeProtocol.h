@@ -11,6 +11,9 @@
 
 @protocol VCImageTypeProtocol <NSObject>
 @required
+// 显示优先级
+@property (nonatomic, assign) NSInteger priority;
 - (NSString *)classStringForImageType;
 - (CVPixelBufferRef)pixelBuffer;
+- (void)setPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 @end

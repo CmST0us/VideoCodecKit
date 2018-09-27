@@ -13,4 +13,6 @@
 #define kVC1080P (1920 * 1080)
 #define kVC480P (720 * 480)
 
+#define kVCPriorityIDR (0)
+
 #endif /* VCMarco_h */
