@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-#define kVCPriorityIDR (-1)
+#import "VCMarco.h"
 
 static const char *kVCPriorityObjectRuntimePriorityKey;
 static const char *kVCPriorityObjectRuntimeNextKey;
@@ -20,6 +19,7 @@ static const char *kVCPriorityObjectRuntimeLastKey;
  是否需要线程安全
  */
 @property (nonatomic, assign) BOOL isThreadSafe;
+@property (nonatomic, assign) NSInteger watermark;
 
 - (instancetype)initWithSize:(int)size
                 isThreadSafe:(BOOL)isThreadSafe;

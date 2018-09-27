@@ -12,5 +12,28 @@
  堆排序优先级队列
  */
 @interface VCHeapPriorityObjectQueue : NSObject
+/**
+ 是否需要线程安全
+ */
+@property (nonatomic, assign) BOOL isThreadSafe;
+@property (nonatomic, assign) NSInteger watermark;
+
+- (instancetype)initWithSize:(int)size
+                isThreadSafe:(BOOL)isThreadSafe;
+
+- (void)clear;
+
+- (BOOL)push:(NSObject *)object
+    priority:(NSInteger)priority;
+
+- (NSObject *)pull;
+
+- (void)wakeupReader;
+
+- (int)count;
+
+- (int)size;
+
+- (BOOL)isFull;
 
 @end

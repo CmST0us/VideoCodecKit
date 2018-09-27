@@ -40,6 +40,7 @@
             NSInteger readLen = [stream read:fileBuffer maxLength:kVCDefaultBufferSize];
             if (readLen <= 0) {
                 // eof or error
+                [self.previewer endPushData];
                 break;
             } else {
                 // 自旋锁

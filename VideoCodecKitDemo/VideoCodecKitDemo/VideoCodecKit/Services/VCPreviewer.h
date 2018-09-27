@@ -38,6 +38,7 @@ typedef NS_ENUM(NSUInteger, VCPreviewerType) {
 
 @property (nonatomic, strong) VCSafeObjectQueue *parserQueue;
 @property (nonatomic, strong) VCPriorityObjectQueue *imageQueue;
+@property (nonatomic, assign) NSInteger watermark;
 
 @property (nonatomic, assign) VCPreviewerType previewType;
 
@@ -49,6 +50,7 @@ typedef NS_ENUM(NSUInteger, VCPreviewerType) {
 
 - (BOOL)pushData:(uint8_t *)data length:(int)length;
 - (BOOL)canPushData;
+- (void)endPushData;
 
 - (void)run;
 - (void)stop;
