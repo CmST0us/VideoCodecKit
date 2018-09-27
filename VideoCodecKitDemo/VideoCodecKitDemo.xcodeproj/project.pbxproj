@@ -53,6 +53,7 @@
 		4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */; };
 		4FBF022D2144284B00CA0EC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF022C2144284B00CA0EC8 /* main.m */; };
 		4FBF02C621442B6700CA0EC8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02C521442B6700CA0EC8 /* README.md */; };
+		DF27DDD9215A687500658D98 /* 1.h264 in Resources */ = {isa = PBXBuildFile; fileRef = DF27DDD8215A687500658D98 /* 1.h264 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -146,6 +147,7 @@
 		4FBF022B2144284B00CA0EC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FBF022C2144284B00CA0EC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4FBF02C521442B6700CA0EC8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		DF27DDD8215A687500658D98 /* 1.h264 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1.h264; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +218,7 @@
 				4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */,
 				4F927A1F214E381000F17F9A /* Shader.fsh */,
 				4F927A21214E382D00F17F9A /* Shader.vsh */,
+				DF27DDD8215A687500658D98 /* 1.h264 */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -498,6 +501,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF27DDD9215A687500658D98 /* 1.h264 in Resources */,
 				4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */,
 				4FBF02272144284B00CA0EC8 /* Assets.xcassets in Resources */,
 				4F927A22214E382D00F17F9A /* Shader.vsh in Resources */,
@@ -685,7 +689,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2VQ94C2355;
+				DEVELOPMENT_TEAM = CL968BX8XK;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/framework",
@@ -715,7 +719,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2VQ94C2355;
+				DEVELOPMENT_TEAM = CL968BX8XK;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/VideoCodecKitDemo/VideoCodecKit/Vendor/framework",
