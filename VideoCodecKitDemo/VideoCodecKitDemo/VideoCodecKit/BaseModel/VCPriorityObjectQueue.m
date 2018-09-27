@@ -21,15 +21,13 @@ static const char *kVCPriorityObjectRuntimeLastKey = "kVCPriorityObjectRuntimeLa
     int _size;
     int _count;
     
-    NSObject *_head;
-    NSObject *_tail;
-    
     // 队列锁
     pthread_mutex_t _mutex;
     // 互斥锁
     pthread_cond_t _cond;
 }
-
+@property (nonatomic, strong) NSObject *head;
+@property (nonatomic, strong) NSObject *tail;
 @end
 
 @implementation VCPriorityObjectQueue
@@ -108,7 +106,7 @@ static const char *kVCPriorityObjectRuntimeLastKey = "kVCPriorityObjectRuntimeLa
         _tail = object;
     } else if ([self priorityOfObject:object] == kVCPriorityIDR) {
         [self setNextObjext:object toObject:_tail];
-        [self setLastObjext:object toObject:_tail];
+        [self setLastObjext:_tail toObject:object];
         _tail = object;
     } else {
         // insert by priority
