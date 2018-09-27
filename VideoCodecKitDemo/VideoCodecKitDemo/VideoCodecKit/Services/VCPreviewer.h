@@ -19,6 +19,7 @@
 #import "VCH264FFmpegFrameParser.h"
 #import "VCSampleBufferRender.h"
 #import "VCVTH264Decoder.h"
+#import "VCPriorityObjectQueue.h"
 
 @class VCPreviewer;
 @protocol VCPreviewerDelegate<NSObject>
@@ -36,7 +37,7 @@ typedef NS_ENUM(NSUInteger, VCPreviewerType) {
 @property (nonatomic, strong) id<VCBaseRenderProtocol> render;
 
 @property (nonatomic, strong) VCSafeObjectQueue *parserQueue;
-@property (nonatomic, strong) VCSafeObjectQueue *imageQueue;
+@property (nonatomic, strong) VCPriorityObjectQueue *imageQueue;
 
 @property (nonatomic, assign) VCPreviewerType previewType;
 

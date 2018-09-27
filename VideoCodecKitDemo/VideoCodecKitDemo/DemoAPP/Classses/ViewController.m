@@ -43,7 +43,7 @@
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    
+
     if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateRunning)]) {
         [self.decoderController stopParse];
     } else if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateStop)]) {

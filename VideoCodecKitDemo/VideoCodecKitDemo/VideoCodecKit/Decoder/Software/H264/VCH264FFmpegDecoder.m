@@ -14,7 +14,7 @@
 #import "VCH264FFmpegDecoder.h"
 #import "VCH264Frame.h"
 #import "VCH264Image+FFmpeg.h"
-
+#import "VCPriorityObjectQueue.h"
 @interface VCH264FFmpegDecoder () {
     AVFrame *_frame;
     pthread_mutex_t _decodeLock;
@@ -76,6 +76,8 @@
     int got_picture = avcodec_receive_frame(frame.context, _frame);
     if (got_picture == 0) {
         image = [VCH264Image imageWithAVFrame:_frame];
+        // ffmpeg 内部处理了
+        image.priority = 0;
     }
     
     av_packet_free(&packet);
