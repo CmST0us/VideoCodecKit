@@ -36,7 +36,7 @@ static const char *kVCPriorityObjectRuntimePriorityKey = "kVCPriorityObjectRunti
     if ([priorityObj isKindOfClass:[NSNumber class]]) {
         return [priorityObj integerValue];
     }
-    return -1;
+    return 0;
 }
 
 - (void)setPriority:(NSInteger)priority
@@ -55,6 +55,7 @@ static const char *kVCPriorityObjectRuntimePriorityKey = "kVCPriorityObjectRunti
         kVCPerformIfNeedThreadSafe(pthread_cond_init(&_cond, NULL));
         
         _count = 0;
+        _watermark = 0;
         _size = size;
         _queue = [[NSMutableArray alloc] initWithCapacity:_size];
     }
@@ -96,7 +97,7 @@ static const char *kVCPriorityObjectRuntimePriorityKey = "kVCPriorityObjectRunti
 
 - (NSObject *)pull {
     kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
-    if (_count == 0) {
+    if (_count <= _watermark) {
         if (_isThreadSafe == NO) {
             return NULL;
         }
@@ -108,7 +109,7 @@ static const char *kVCPriorityObjectRuntimePriorityKey = "kVCPriorityObjectRunti
         ts.tv_sec = tv.tv_sec + 2;
         ts.tv_nsec = tv.tv_usec*1000;
         pthread_cond_timedwait(&_cond, &_mutex, &ts);
-        if(_count == 0)
+        if(_count <= _watermark)
         {
             pthread_mutex_unlock(&_mutex);
             return NULL;
@@ -118,6 +119,7 @@ static const char *kVCPriorityObjectRuntimePriorityKey = "kVCPriorityObjectRunti
     // pop head
     NSObject *obj = _queue[0];
     _queue[0] = _queue[_count - 1];
+    _queue[_count - 1] = [NSNull null];
     _count -= 1;
     
     NSInteger objPriority = [self priorityOfObject:obj];
@@ -136,7 +138,7 @@ static const char *kVCPriorityObjectRuntimePriorityKey = "kVCPriorityObjectRunti
         NSInteger parentIndex = objectIndex / 2;
         NSInteger objectPriority = [self priorityOfObject:_queue[objectIndex]];
         NSInteger parentPriority = [self priorityOfObject:_queue[parentIndex]];
-        if (objectPriority <= parentPriority) {
+        if (objectPriority >= parentPriority) {
             break;
         }
         SWAP_OBJECT(_queue[objectIndex], _queue[parentIndex]);
@@ -150,12 +152,16 @@ static const char *kVCPriorityObjectRuntimePriorityKey = "kVCPriorityObjectRunti
     NSInteger objectIndex = index;
     while (2 * objectIndex <= _count - 1) {
         NSInteger childIndex = 2 * objectIndex;
-        NSInteger childLPriority = [self priorityOfObject:_queue[childIndex]];
-        NSInteger childRPriority = [self priorityOfObject:_queue[childIndex + 1]];
-        if (childIndex < _count - 1 && childLPriority < childRPriority) {
+        NSObject *childLObject = _queue[childIndex];
+        NSObject *childRObject = _queue[childIndex + 1];
+        if (childRObject == [NSNull null]) break;
+        
+        NSInteger childLPriority = [self priorityOfObject:childLObject];
+        NSInteger childRPriority = [self priorityOfObject:childRObject];
+        if (childIndex < _count - 1 && childLPriority > childRPriority) {
             childIndex += 1;
         }
-        if (childLPriority >= childRPriority) {
+        if (childLPriority <= childRPriority) {
             break;
         }
         SWAP_OBJECT(_queue[objectIndex], _queue[childIndex]);

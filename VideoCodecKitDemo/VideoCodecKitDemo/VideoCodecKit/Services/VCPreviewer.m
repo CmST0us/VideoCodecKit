@@ -27,6 +27,7 @@
 @end
 
 @implementation VCPreviewer
+@synthesize watermark = _watermark;
 
 - (NSDictionary *)supportPreviewerComponent {
     /*
@@ -55,7 +56,7 @@
         _parserQueue = nil;
         _imageQueue = nil;
         _lastPOC = 0;
-        
+        _watermark = 0;
         _parserThreadSem = sem_open("_parserThreadSem", 0);
         _decoderThreadSem = sem_open("_decoderThreadSem", 0);
     }
@@ -81,6 +82,17 @@
     
     sem_close(_parserThreadSem);
     sem_close(_decoderThreadSem);
+}
+
+- (void)setWatermark:(NSInteger)watermark {
+    if (_imageQueue != nil) {
+        _watermark = watermark;
+        _imageQueue.watermark = watermark;
+    }
+}
+
+- (NSInteger)watermark {
+    return _watermark;
 }
 
 - (void)setPreviewType:(VCPreviewerType)previewType {
@@ -146,7 +158,8 @@
     
     _dataQueue = [[VCSafeQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
     _parserQueue = [[VCSafeObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
-    _imageQueue = [[VCPriorityObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize isThreadSafe:YES];
+    _imageQueue = [[VCHeapPriorityObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize isThreadSafe:YES];
+    _imageQueue.watermark = _watermark;
     
     _parserThread = [[NSThread alloc] initWithTarget:self selector:@selector(parserWorkThread) object:nil];
     _parserThread.name = @"VCPreviewer.parserThread";
@@ -192,6 +205,11 @@
     return ![self.dataQueue isFull];
 }
 
+- (void)endPushData {
+    if (self.dataQueue != nil && self.imageQueue != nil) {
+        self.imageQueue.watermark = 0;
+    }
+}
 - (void)parserWorkThread {
     while (![[NSThread currentThread] isCancelled]) {
         @autoreleasepool {

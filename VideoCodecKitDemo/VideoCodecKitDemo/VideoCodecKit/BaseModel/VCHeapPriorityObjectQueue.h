@@ -16,6 +16,7 @@
  是否需要线程安全
  */
 @property (nonatomic, assign) BOOL isThreadSafe;
+@property (nonatomic, assign) NSInteger watermark;
 
 - (instancetype)initWithSize:(int)size
                 isThreadSafe:(BOOL)isThreadSafe;

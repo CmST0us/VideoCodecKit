@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-#define kVCPriorityIDR (-1)
+#import "VCMarco.h"
 
 static const char *kVCPriorityObjectRuntimePriorityKey;
 static const char *kVCPriorityObjectRuntimeNextKey;
