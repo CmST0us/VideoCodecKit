@@ -49,8 +49,9 @@
 }
 
 - (void)attachToLayer:(CALayer *)layer {
-    if (layer != nil) {
+    if (layer != nil && _superLayer != layer) {
         self.renderLayer.frame = layer.bounds;
+        _superLayer = layer;
         [layer addSublayer:self.renderLayer];
     }
 }
