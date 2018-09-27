@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F0DDDF2215D25C400CFD59F /* VCHeapPriorityObjectQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0DDDF1215D25C400CFD59F /* VCHeapPriorityObjectQueue.m */; };
 		4F54ABD72152BFD0002E64F3 /* VCYUV420PImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABD62152BFD0002E64F3 /* VCYUV420PImage.m */; };
 		4F54ABDF2154167C002E64F3 /* VCSampleBufferRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABDE2154167C002E64F3 /* VCSampleBufferRender.m */; };
 		4F54ABE32155424A002E64F3 /* VCSafeQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F54ABE22155424A002E64F3 /* VCSafeQueue.m */; };
@@ -53,8 +54,8 @@
 		4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */; };
 		4FBF022D2144284B00CA0EC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF022C2144284B00CA0EC8 /* main.m */; };
 		4FBF02C621442B6700CA0EC8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02C521442B6700CA0EC8 /* README.md */; };
-		DF27DDD9215A687500658D98 /* 1.h264 in Resources */ = {isa = PBXBuildFile; fileRef = DF27DDD8215A687500658D98 /* 1.h264 */; };
 		4FEF6EF7215A94C5001C7446 /* VCPriorityObjectQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF6EF6215A94C5001C7446 /* VCPriorityObjectQueue.m */; };
+		DF27DDD9215A687500658D98 /* 1.h264 in Resources */ = {isa = PBXBuildFile; fileRef = DF27DDD8215A687500658D98 /* 1.h264 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -72,6 +73,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4F0DDDF0215D25C400CFD59F /* VCHeapPriorityObjectQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCHeapPriorityObjectQueue.h; sourceTree = "<group>"; };
+		4F0DDDF1215D25C400CFD59F /* VCHeapPriorityObjectQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCHeapPriorityObjectQueue.m; sourceTree = "<group>"; };
 		4F54ABD42152BF31002E64F3 /* VCImageTypeProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCImageTypeProtocol.h; sourceTree = "<group>"; };
 		4F54ABD52152BFD0002E64F3 /* VCYUV420PImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCYUV420PImage.h; sourceTree = "<group>"; };
 		4F54ABD62152BFD0002E64F3 /* VCYUV420PImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCYUV420PImage.m; sourceTree = "<group>"; };
@@ -148,9 +151,9 @@
 		4FBF022B2144284B00CA0EC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FBF022C2144284B00CA0EC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4FBF02C521442B6700CA0EC8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		DF27DDD8215A687500658D98 /* 1.h264 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1.h264; sourceTree = "<group>"; };
 		4FEF6EF5215A94C5001C7446 /* VCPriorityObjectQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCPriorityObjectQueue.h; sourceTree = "<group>"; };
 		4FEF6EF6215A94C5001C7446 /* VCPriorityObjectQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCPriorityObjectQueue.m; sourceTree = "<group>"; };
+		DF27DDD8215A687500658D98 /* 1.h264 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1.h264; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -389,6 +392,8 @@
 				4F54ABE821555B99002E64F3 /* VCSafeObjectQueue.m */,
 				4FEF6EF5215A94C5001C7446 /* VCPriorityObjectQueue.h */,
 				4FEF6EF6215A94C5001C7446 /* VCPriorityObjectQueue.m */,
+				4F0DDDF0215D25C400CFD59F /* VCHeapPriorityObjectQueue.h */,
+				4F0DDDF1215D25C400CFD59F /* VCHeapPriorityObjectQueue.m */,
 			);
 			path = BaseModel;
 			sourceTree = "<group>";
@@ -540,6 +545,7 @@
 				4F54ABDF2154167C002E64F3 /* VCSampleBufferRender.m in Sources */,
 				4F9279D12145042F00F17F9A /* VCH264Frame+FFmpeg.m in Sources */,
 				4F927A17214D7B9600F17F9A /* VCH264FFmpegFrameParser.m in Sources */,
+				4F0DDDF2215D25C400CFD59F /* VCHeapPriorityObjectQueue.m in Sources */,
 				4F9279CE214503D300F17F9A /* VCH264Frame.m in Sources */,
 				4F54ABE32155424A002E64F3 /* VCSafeQueue.m in Sources */,
 				4F9279CB2144FAB700F17F9A /* VCH264FFmpegFrameParserBuffer.m in Sources */,

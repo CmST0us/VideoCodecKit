@@ -132,6 +132,7 @@ static const char *kVCPriorityObjectRuntimeLastKey = "kVCPriorityObjectRuntimeLa
             _head = object;
         } else {
             // insert behind
+            // 如果是IDR, 或者和前一帧优先级相同的帧，直接接在最后一个图像后面
             [self setNextObjext:[self nextObjectOfObject:insertBehind] toObject:object];
             [self setLastObjext:insertBehind toObject:object];
             
