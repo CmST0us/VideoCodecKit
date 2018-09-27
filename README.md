@@ -22,7 +22,7 @@ after finish build fat ffmpeg directory you should copy ffmpeg library and heade
 - [x] ffmpeg parse h264 raw data
 - [x] ffmpeg decode h264
 - [x] multi-thread decode preview component
-- [ ] hardware-decode support
+- [x] hardware-decode support
 - [ ] rtmp publish
 - [ ] audio support
 - [ ] encode support
