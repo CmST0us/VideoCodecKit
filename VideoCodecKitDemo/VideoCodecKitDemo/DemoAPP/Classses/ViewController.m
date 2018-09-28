@@ -28,9 +28,9 @@
     self.decoderController = [[VCDecodeController alloc] init];
     self.decoderController.previewer.watermark = 10;
     self.decoderController.previewer.previewType = VCPreviewerTypeVTRawH264;
-//    self.decoderController.parseFilePath = [[NSBundle mainBundle] pathForResource:@"1" ofType:@"h264"];
-    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/4k.h264";
-    self.decoderController.previewer.fps = 30;
+    self.decoderController.parseFilePath = [[NSBundle mainBundle] pathForResource:@"1" ofType:@"h264"];
+//    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/4k.h264";
+    self.decoderController.previewer.fps = 60;
     [self setupDisplayLayer];
     [self bindData];
 }

@@ -27,8 +27,8 @@
 @end
 
 typedef NS_ENUM(NSUInteger, VCPreviewerType) {
-    VCPreviewerTypeFFmpegRawH264, // 使用ffmpeg和AVSampleBufferDisplayLayer
-    VCPreviewerTypeVTRawH264, // 使用VideoToolBox和AVSampleBufferDisplayLayer
+    VCPreviewerTypeFFmpegLiveH264VideoOnly, // 使用ffmpeg和AVSampleBufferDisplayLayer
+    VCPreviewerTypeVTLiveH264VideoOnly, // 使用VideoToolBox和AVSampleBufferDisplayLayer
 };
 
 @interface VCPreviewer : EKFSMObject<VCBaseFrameParserDelegate, VCBaseDecoderDelegate>
@@ -38,6 +38,9 @@ typedef NS_ENUM(NSUInteger, VCPreviewerType) {
 
 @property (nonatomic, strong) VCSafeObjectQueue *parserQueue;
 @property (nonatomic, strong) VCPriorityObjectQueue *imageQueue;
+/**
+ 如果有b帧，请确保水位大于等于3
+ */
 @property (nonatomic, assign) NSInteger watermark;
 
 @property (nonatomic, assign) VCPreviewerType previewType;
