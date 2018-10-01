@@ -41,12 +41,12 @@
      
      */
     return @{
-                // VCPreviewerTypeRawH264 使用的组件
+                // VCPreviewerTypeFFmpegLiveH264VideoOnly 使用的组件
                @(VCPreviewerTypeFFmpegLiveH264VideoOnly):@[NSStringFromClass([VCH264FFmpegFrameParser class]),
                                                            NSStringFromClass([VCH264FFmpegDecoder class]),
                                                            NSStringFromClass([VCSampleBufferRender class])],
                
-               // VCPreviewerTypeVTRawH264 使用的组件
+               // VCPreviewerTypeVTLiveH264VideoOnly 使用的组件
                @(VCPreviewerTypeVTLiveH264VideoOnly):@[NSStringFromClass([VCH264FFmpegFrameParser class]),
                                                        NSStringFromClass([VCVTH264Decoder class]),
                                                        NSStringFromClass([VCSampleBufferRender class])],

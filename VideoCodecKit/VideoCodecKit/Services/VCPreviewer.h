@@ -24,8 +24,8 @@
 @end
 
 typedef NS_ENUM(NSUInteger, VCPreviewerType) {
-    VCPreviewerTypeFFmpegRawH264, // 使用ffmpeg和AVSampleBufferDisplayLayer
-    VCPreviewerTypeVTRawH264, // 使用VideoToolBox和AVSampleBufferDisplayLayer
+    VCPreviewerTypeFFmpegLiveH264VideoOnly, // 使用ffmpeg和AVSampleBufferDisplayLayer
+    VCPreviewerTypeVTLiveH264VideoOnly, // 使用VideoToolBox和AVSampleBufferDisplayLayer
 };
 
 @interface VCPreviewer : EKFSMObject<VCBaseFrameParserDelegate, VCBaseDecoderDelegate>
