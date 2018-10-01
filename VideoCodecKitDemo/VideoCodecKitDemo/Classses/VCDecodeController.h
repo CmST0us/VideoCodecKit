@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "VCH264FFmpegFrameParser.h"
-#import "VCH264Frame.h"
-#import "VCH264FFmpegDecoder.h"
-#import "VCPreviewer.h"
+#import <VideoCodecKit/VCH264FFmpegFrameParser.h>
+#import <VideoCodecKit/VCH264Frame.h>
+#import <VideoCodecKit/VCH264FFmpegDecoder.h>
+#import <VideoCodecKit/VCPreviewer.h>
 
 @interface VCDecodeController : NSObject<VCPreviewerDelegate>
 

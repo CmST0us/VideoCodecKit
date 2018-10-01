@@ -6,8 +6,6 @@
 //  Copyright © 2018年 eric3u. All rights reserved.
 //
 
-#import <libavcodec/avcodec.h>
-
 #import "VCH264FrameParser.h"
 
 @interface VCH264FFmpegFrameParser : VCH264FrameParser

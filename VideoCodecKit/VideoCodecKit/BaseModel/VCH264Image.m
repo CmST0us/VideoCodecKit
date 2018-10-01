@@ -68,6 +68,11 @@
     
 }
 
+- (NSString *)classStringForImageType {
+    return NSStringFromClass([self class]);
+}
+
+
 - (void)dealloc {
     if (self.luma != nil) {
         free(self.luma);

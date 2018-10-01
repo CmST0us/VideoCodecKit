@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "VCBaseDecoder.h"
+#import <VideoCodecKit/VCBaseDecoder.h>
 
-@interface ViewController : UIViewController<VCBaseDecoderDelegate>
+@interface ViewController : UIViewController
 
 
 @end

@@ -10,6 +10,10 @@
 #import <semaphore.h>
 
 #import "VCPreviewer.h"
+#import "VCSafeQueue.h"
+#import "VCSafeObjectQueue.h"
+#import "VCPriorityObjectQueue.h"
+#import "VCHeapPriorityObjectQueue.h"
 
 #define kVCPreviewSafeQueueSize 100
 
@@ -24,6 +28,8 @@
 @property (nonatomic, strong) NSThread *decoderThread;
 @property (nonatomic, strong) CADisplayLink *displayLink;
 
+@property (nonatomic, strong) VCSafeObjectQueue *parserQueue;
+@property (nonatomic, strong) VCPriorityObjectQueue *imageQueue;
 @end
 
 @implementation VCPreviewer

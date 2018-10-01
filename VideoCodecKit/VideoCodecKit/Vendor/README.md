@@ -3,4 +3,3 @@
 
 * binary/ffmpeg/lib/*
 * binary/ffmpeg/include/*
-* framework/KVSig.framework

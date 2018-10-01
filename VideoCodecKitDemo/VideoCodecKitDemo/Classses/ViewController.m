@@ -10,11 +10,13 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
 
+#import <VideoCodecKit/VCYUV420PImage.h>
+#import <VideoCodecKit/VCSampleBufferRender.h>
+#import <VideoCodecKit/VCPreviewer.h>
+
 #import "ViewController.h"
 #import "VCDecodeController.h"
-#import "VCYUV420PImage.h"
-#import "VCSampleBufferRender.h"
-#import "VCPreviewer.h"
+
 
 @interface ViewController ()
 @property (nonatomic, strong) VCDecodeController *decoderController;
@@ -29,7 +31,7 @@
     self.decoderController.previewer.watermark = 10;
     self.decoderController.previewer.previewType = VCPreviewerTypeVTRawH264;
 //    self.decoderController.parseFilePath = [[NSBundle mainBundle] pathForResource:@"1" ofType:@"h264"];
-    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/4k.h264";
+    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/test.h264";
     self.decoderController.previewer.fps = 30;
     [self setupDisplayLayer];
     [self bindData];
