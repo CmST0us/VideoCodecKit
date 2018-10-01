@@ -1,6 +1,0 @@
-framework module KVSig {
-  umbrella header "KVSig.h"
-
-  export *
-  module * { export * }
-}

@@ -15,7 +15,18 @@ run `./build-ffmpeg.sh lipo` in FFmpeg-iOS-build-script directory
 
 after finish build fat ffmpeg directory you should copy ffmpeg library and header to vendor directory
 
-4. run Demo app
+4. add `-ObjC` link flag to other link flag
+
+5. add linked Frameworks and Libraries:
+    * AVFoundation.framework
+    * libz
+    * AudioToolbox.framework
+    * CoreMedia.framework
+    * VideoToolbox.framework
+    * libiconv
+    
+
+* or you can just setup 1-3 and run demo app.*
 
 # feature
 
@@ -28,4 +39,5 @@ after finish build fat ffmpeg directory you should copy ffmpeg library and heade
 - [ ] audio support
 - [ ] encode support
 - [ ] GPUImage support
-- [ ] build as framework
+- [x] build as framework
+
