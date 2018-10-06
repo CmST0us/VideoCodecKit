@@ -12,7 +12,7 @@
 #import "VCH264Frame.h"
 #import "VCYUV420PImage.h"
 #import "VCPriorityObjectQueue.h"
-
+#import "VCH264SPSFrame.h"
 @interface VCVTH264Decoder () {
     CMVideoFormatDescriptionRef _videoFormatDescription;
     VTDecompressionSessionRef _decodeSession;
@@ -238,7 +238,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
 - (id<VCImageTypeProtocol>)decode:(id<VCFrameTypeProtocol>)frame {
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return nil;
     
-    if (![frame isKindOfClass:[VCH264Frame class]]) nil;
+    if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return nil;
     
     VCH264Frame *decodeFrame = (VCH264Frame *)frame;
     
@@ -260,7 +260,9 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     
     if (decodeFrame.frameType == VCH264FrameTypeSPS) {
         // copy sps
-        [self tryUseSPS:decodeFrame.parseData + _startCodeSize length:nalSize];
+        VCH264SPSFrame *spsFrame = (VCH264SPSFrame *)frame;
+        VCH264SPS *sps = spsFrame.sps;
+        [self tryUseSPS:spsFrame.parseData + _startCodeSize length:nalSize];
         pthread_mutex_unlock(&_decoderLock);
         return nil;
     } else if (decodeFrame.frameType == VCH264FrameTypePPS) {

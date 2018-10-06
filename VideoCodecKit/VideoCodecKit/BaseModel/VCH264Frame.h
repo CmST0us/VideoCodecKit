@@ -29,7 +29,6 @@ typedef NS_ENUM(NSUInteger, VCH264FrameType) {
 
 @property (nonatomic, assign) NSUInteger width;
 @property (nonatomic, assign) NSUInteger height;
-@property (nonatomic, strong) VCVideoFPS *fps;
 
 @property (nonatomic, assign) int64_t pts;
 @property (nonatomic, assign) int64_t dts;
