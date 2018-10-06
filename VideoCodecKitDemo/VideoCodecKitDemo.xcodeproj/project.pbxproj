@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4F76FC5B21626ED5002E7F0D /* KVSig.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; };
 		4F76FC5C21626ED5002E7F0D /* KVSig.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4F76FC732162741C002E7F0D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF022B2144284B00CA0EC8 /* Info.plist */; };
 		4F76FC7521627512002E7F0D /* VideoCodecKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; };
 		4F76FC7621627512002E7F0D /* VideoCodecKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F9279D52145118600F17F9A /* VCDecodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9279D42145118600F17F9A /* VCDecodeController.m */; };
@@ -27,9 +26,6 @@
 		4FBF02272144284B00CA0EC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02262144284B00CA0EC8 /* Assets.xcassets */; };
 		4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */; };
 		4FBF022D2144284B00CA0EC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF022C2144284B00CA0EC8 /* main.m */; };
-		DF27DDD9215A687500658D98 /* 1.h264 in Resources */ = {isa = PBXBuildFile; fileRef = DF27DDD8215A687500658D98 /* 1.h264 */; };
-		4FBF02C621442B6700CA0EC8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02C521442B6700CA0EC8 /* README.md */; };
-		4FEF6EF7215A94C5001C7446 /* VCPriorityObjectQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF6EF6215A94C5001C7446 /* VCPriorityObjectQueue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -77,10 +73,6 @@
 		4FBF02292144284B00CA0EC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4FBF022B2144284B00CA0EC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FBF022C2144284B00CA0EC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		DF27DDD8215A687500658D98 /* 1.h264 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1.h264; sourceTree = "<group>"; };
-		4FBF02C521442B6700CA0EC8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		4FEF6EF5215A94C5001C7446 /* VCPriorityObjectQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCPriorityObjectQueue.h; sourceTree = "<group>"; };
-		4FEF6EF6215A94C5001C7446 /* VCPriorityObjectQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCPriorityObjectQueue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,7 +233,6 @@
 				4F927A22214E382D00F17F9A /* Shader.vsh in Resources */,
 				4FBF02252144284A00CA0EC8 /* Main.storyboard in Resources */,
 				4F927A20214E381000F17F9A /* Shader.fsh in Resources */,
-				4F76FC732162741C002E7F0D /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
