@@ -20,6 +20,7 @@
 		4F927A20214E381000F17F9A /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 4F927A1F214E381000F17F9A /* Shader.fsh */; };
 		4F927A22214E382D00F17F9A /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 4F927A21214E382D00F17F9A /* Shader.vsh */; };
 		4F927A242152A2B900F17F9A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F927A232152A2B900F17F9A /* AVFoundation.framework */; };
+		4F93584B2169EE2300A9F613 /* test.h264 in Resources */ = {isa = PBXBuildFile; fileRef = 4F93584A2169ECC700A9F613 /* test.h264 */; };
 		4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF021E2144284A00CA0EC8 /* AppDelegate.m */; };
 		4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF02212144284A00CA0EC8 /* ViewController.m */; };
 		4FBF02252144284A00CA0EC8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02232144284A00CA0EC8 /* Main.storyboard */; };
@@ -63,6 +64,7 @@
 		4F927A1F214E381000F17F9A /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
 		4F927A21214E382D00F17F9A /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		4F927A232152A2B900F17F9A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4F93584A2169ECC700A9F613 /* test.h264 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.h264; sourceTree = "<group>"; };
 		4FBF021A2144284A00CA0EC8 /* VideoCodecKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoCodecKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FBF021D2144284A00CA0EC8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4FBF021E2144284A00CA0EC8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 		4F9279A721442EDC00F17F9A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4F93584A2169ECC700A9F613 /* test.h264 */,
 				4FBF02262144284B00CA0EC8 /* Assets.xcassets */,
 				4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */,
 				4F927A1F214E381000F17F9A /* Shader.fsh */,
@@ -233,6 +236,7 @@
 				4F927A22214E382D00F17F9A /* Shader.vsh in Resources */,
 				4FBF02252144284A00CA0EC8 /* Main.storyboard in Resources */,
 				4F927A20214E381000F17F9A /* Shader.fsh in Resources */,
+				4F93584B2169EE2300A9F613 /* test.h264 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -72,6 +72,27 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     pthread_mutex_destroy(&_decoderLock);
 }
 
+#pragma mark - Decoder Public Method
+- (void)setup {
+    pthread_mutex_lock(&_decoderLock);
+    [self commitStateTransition];
+    pthread_mutex_unlock(&_decoderLock);
+}
+
+- (void)invalidate {
+    pthread_mutex_lock(&_decoderLock);
+    [self commitStateTransition];
+    
+    [self freeDecodeSession];
+    [self freeVideoFormatDescription];
+    [self freeSPS];
+    [self freePPS];
+    [self freeSEI];
+    pthread_mutex_unlock(&_decoderLock);
+}
+
+#pragma mark - Decoder Private Method
+
 - (void)freeDecodeSession {
     if (_decodeSession != NULL) {
         VTDecompressionSessionInvalidate(_decodeSession);
@@ -109,20 +130,6 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         _sei = NULL;
         _seiSize = 0;
     }
-}
-
-- (void)setup {
-    [self commitStateTransition];
-}
-
-- (void)invalidate {
-    [self commitStateTransition];
-    
-    [self freeDecodeSession];
-    [self freeVideoFormatDescription];
-    [self freeSPS];
-    [self freePPS];
-    [self freeSEI];
 }
 
 - (BOOL)setupVideoFormatDescription {
