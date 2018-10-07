@@ -178,17 +178,8 @@
             VCH264Frame *frame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext codecContext:_codecContext];
             frame.frameType = [VCH264FrameParser getFrameType:frame];
             
-            if (frame.isKeyFrame) {
-                NSArray *array = [self extractKeyFrame:frame];
-                [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if (self.useDelegate && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
-                        [self.delegate frameParserDidParseFrame:obj];
-                    }
-                }];
-            } else {
-                if (self.useDelegate && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
-                    [self.delegate frameParserDidParseFrame:frame];
-                }
+            if (self.useDelegate && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
+                [self.delegate frameParserDidParseFrame:frame];
             }
             
             self.pasrseCount += 1;
@@ -246,19 +237,9 @@
         if (packet->size > 0) {
             VCH264Frame *frame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext codecContext:_codecContext];
             frame.frameType = [VCH264FrameParser getFrameType:frame];
-            if (frame.isKeyFrame) {
-                NSArray *array = [self extractKeyFrame:frame];
-                [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    self.pasrseCount += 1;
-                    if (block) {
-                        block(obj);
-                    }
-                }];
-            } else {
-                self.pasrseCount += 1;
-                if (block) {
-                    block(frame);
-                }
+            self.pasrseCount += 1;
+            if (block) {
+                block(frame);
             }
         }
         
