@@ -256,6 +256,10 @@
 
 #pragma mark - Parser Delegate Method
 - (void)frameParserDidParseFrame:(id<VCFrameTypeProtocol>)aFrame {
+    if (aFrame == nil) {
+        return;
+    }
+    
     if (self.parserQueue) {
         while (![self.parserQueue push:aFrame]) {
             [NSThread sleepForTimeInterval:0.01];
@@ -265,6 +269,10 @@
 
 #pragma mark - Decoder Delegate Method
 - (void)decoder:(VCBaseDecoder *)decoder didProcessImage:(id<VCImageTypeProtocol>)image {
+    if (image == nil) {
+        return;
+    }
+    
     if (self.imageQueue) {
         while (![self.imageQueue push:image priority:image.priority]) {
             [NSThread sleepForTimeInterval:0.01];
