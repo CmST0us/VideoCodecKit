@@ -25,7 +25,6 @@
         _parseDataPtr = NULL;
         _parseSize = 0;
         _frameIndex = 0;
-        _fps = [[VCVideoFPS alloc] init];
     }
     return self;
 }

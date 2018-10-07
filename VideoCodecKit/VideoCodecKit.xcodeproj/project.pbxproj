@@ -64,6 +64,8 @@
 		4F76FC70216270E1002E7F0D /* VCH264Image+FFmpeg.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F76FC0421626AA2002E7F0D /* VCH264Image+FFmpeg.m */; };
 		4F76FC71216270E1002E7F0D /* VCBaseDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F76FC0821626AA2002E7F0D /* VCBaseDecoder.m */; };
 		4F76FC72216270E1002E7F0D /* VCBaseDecoderConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F76FC0A21626AA2002E7F0D /* VCBaseDecoderConfig.m */; };
+		4FE2251D2164DF8400103B61 /* VCH264SPSFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FE2251B2164DF8400103B61 /* VCH264SPSFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FE2251E2164DF8400103B61 /* VCH264SPSFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE2251C2164DF8400103B61 /* VCH264SPSFrame.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -133,6 +135,8 @@
 		4F76FC3721626C57002E7F0D /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		4F76FC3921626C60002E7F0D /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		4F76FC3B21626C6A002E7F0D /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		4FE2251B2164DF8400103B61 /* VCH264SPSFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264SPSFrame.h; sourceTree = "<group>"; };
+		4FE2251C2164DF8400103B61 /* VCH264SPSFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264SPSFrame.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -341,6 +345,8 @@
 				4F76FC1121626AA3002E7F0D /* VCImageTypeProtocol.h */,
 				4F76FC1221626AA3002E7F0D /* VCH264Frame.h */,
 				4F76FC1321626AA3002E7F0D /* VCH264Frame.m */,
+				4FE2251B2164DF8400103B61 /* VCH264SPSFrame.h */,
+				4FE2251C2164DF8400103B61 /* VCH264SPSFrame.m */,
 				4F76FC1421626AA3002E7F0D /* VCH264Image.h */,
 				4F76FC1521626AA3002E7F0D /* VCH264Image.m */,
 				4F76FC1621626AA3002E7F0D /* VCYUV420PImage.h */,
@@ -390,6 +396,7 @@
 				4F76FC5221626DCA002E7F0D /* VCH264FrameParser.h in Headers */,
 				4F76FC4221626D96002E7F0D /* VCFrameTypeProtocol.h in Headers */,
 				4F76FC5121626DCA002E7F0D /* VCH264FFmpegFrameParser.h in Headers */,
+				4FE2251D2164DF8400103B61 /* VCH264SPSFrame.h in Headers */,
 				4F76FBD3216269FC002E7F0D /* VideoCodecKit.h in Headers */,
 				4F76FC4C21626DCA002E7F0D /* VCSampleBufferRender.h in Headers */,
 				4F76FC5521626DCA002E7F0D /* VCH264FFmpegDecoder.h in Headers */,
@@ -504,6 +511,7 @@
 				4F76FC70216270E1002E7F0D /* VCH264Image+FFmpeg.m in Sources */,
 				4F76FC71216270E1002E7F0D /* VCBaseDecoder.m in Sources */,
 				4F76FC72216270E1002E7F0D /* VCBaseDecoderConfig.m in Sources */,
+				4FE2251E2164DF8400103B61 /* VCH264SPSFrame.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

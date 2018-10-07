@@ -12,6 +12,7 @@
 #import "VCH264FFmpegFrameParser.h"
 #import "VCH264FFmpegFrameParserBuffer.h"
 #import "VCH264Frame+FFmpeg.h"
+#import "VCH264SPSFrame.h"
 
 @interface VCH264FFmpegFrameParser () {
     AVCodecContext *_codecContext;
@@ -216,6 +217,14 @@
                     memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
                     
                     f.frameType = [VCH264FrameParser getFrameType:f];
+                    // check if frame is sps
+                    if (f.frameType == VCH264FrameTypeSPS) {
+                        f = [[VCH264SPSFrame alloc] initWithWidth:frame.width height:frame.height];
+                        [f createParseDataWithSize:size.integerValue];
+                        memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
+                        f.frameType = [VCH264FrameParser getFrameType:f];
+                    }
+                    
                     f.context = frame.context;
                     f.frameIndex = _parserContext->output_picture_number;
                     f.pts = _parserContext->pts;
@@ -224,6 +233,7 @@
                     if (self.useDelegate && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
                         [self.delegate frameParserDidParseFrame:f];
                     }
+                    
                 }
             } else {
                 
