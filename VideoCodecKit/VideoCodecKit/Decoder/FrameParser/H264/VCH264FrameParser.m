@@ -7,6 +7,7 @@
 //
 
 #import "VCH264FrameParser.h"
+#import "VCH264SPSFrame.h"
 
 @implementation VCH264FrameParser
 
@@ -34,6 +35,5 @@
     
     return VCH264FrameTypeUnknown;
 }
-
 
 @end
