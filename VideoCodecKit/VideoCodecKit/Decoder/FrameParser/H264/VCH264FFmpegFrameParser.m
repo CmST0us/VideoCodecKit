@@ -178,68 +178,8 @@
             VCH264Frame *frame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext codecContext:_codecContext];
             frame.frameType = [VCH264FrameParser getFrameType:frame];
             
-            if (frame.isKeyFrame) {
-                NSMutableDictionary *offsetDict = [NSMutableDictionary dictionary];
-                NSInteger lastIndex = 0;
-                for (NSInteger i = frame.startCodeSize; i < frame.parseSize - 4; i++) {
-                    
-                    static uint8_t startCode1[4] = {0x00, 0x00, 0x00, 0x01};
-                    static uint8_t startCode2[3] = {0x00, 0x00, 0x01};
-                    
-                    if (memcmp(frame.parseData + i, startCode1, sizeof(startCode1)) == 0) {
-                        offsetDict[@(lastIndex)] = @(i - lastIndex);
-                        lastIndex = i;
-                        i += 3;
-                    }
-                    
-                    if(memcmp(frame.parseData + i, startCode2, sizeof(startCode2)) == 0) {
-                        offsetDict[@(lastIndex)] = @(i - lastIndex);
-                        lastIndex = i;
-                        i += 3;
-                    }
-                    
-                }
-                
-                if (lastIndex < frame.parseSize) {
-                    offsetDict[@(lastIndex)] = @(frame.parseSize - lastIndex);
-                }
-                
-                NSArray *sortOffsetKeys = [offsetDict.allKeys sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-                    if ([obj1 integerValue] > [obj2 integerValue]) return NSOrderedDescending;
-                    if ([obj1 integerValue] < [obj2 integerValue]) return NSOrderedAscending;
-                    return NSOrderedSame;
-                }];
-                
-                for (NSNumber *offset in sortOffsetKeys) {
-                    NSNumber *size = offsetDict[offset];
-                    VCH264Frame *f = [[VCH264Frame alloc] initWithWidth:frame.width height:frame.height];
-                    [f createParseDataWithSize:size.integerValue];
-                    memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
-                    
-                    f.frameType = [VCH264FrameParser getFrameType:f];
-                    // check if frame is sps
-                    if (f.frameType == VCH264FrameTypeSPS) {
-                        f = [[VCH264SPSFrame alloc] initWithWidth:frame.width height:frame.height];
-                        [f createParseDataWithSize:size.integerValue];
-                        memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
-                        f.frameType = [VCH264FrameParser getFrameType:f];
-                    }
-                    
-                    f.context = frame.context;
-                    f.frameIndex = _parserContext->output_picture_number;
-                    f.pts = _parserContext->pts;
-                    f.dts = _parserContext->dts;
-                    
-                    if (self.useDelegate && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
-                        [self.delegate frameParserDidParseFrame:f];
-                    }
-                    
-                }
-            } else {
-                
-                if (self.useDelegate && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
-                    [self.delegate frameParserDidParseFrame:frame];
-                }
+            if (self.useDelegate && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
+                [self.delegate frameParserDidParseFrame:frame];
             }
             
             self.pasrseCount += 1;
@@ -297,7 +237,6 @@
         if (packet->size > 0) {
             VCH264Frame *frame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext codecContext:_codecContext];
             frame.frameType = [VCH264FrameParser getFrameType:frame];
-
             self.pasrseCount += 1;
             if (block) {
                 block(frame);
@@ -314,6 +253,62 @@
     return usedLength;
 }
 
+- (NSArray *)extractKeyFrame:(VCH264Frame *)frame {
+    if (!frame.isKeyFrame){
+        return nil;
+    }
+    
+    NSMutableArray *frames = [NSMutableArray array];
+    NSMutableDictionary *offsetDict = [NSMutableDictionary dictionary];
+    NSInteger lastIndex = 0;
+    for (NSInteger i = frame.startCodeSize; i < frame.parseSize - 4; i++) {
+        static uint8_t startCode1[4] = {0x00, 0x00, 0x00, 0x01};
+        static uint8_t startCode2[3] = {0x00, 0x00, 0x01};
+        if (memcmp(frame.parseData + i, startCode1, sizeof(startCode1)) == 0) {
+            offsetDict[@(lastIndex)] = @(i - lastIndex);
+            lastIndex = i;
+            i += 3;
+        }
+        if(memcmp(frame.parseData + i, startCode2, sizeof(startCode2)) == 0) {
+            offsetDict[@(lastIndex)] = @(i - lastIndex);
+            lastIndex = i;
+            i += 3;
+        }
+    }
+    
+    if (lastIndex < frame.parseSize) {
+        offsetDict[@(lastIndex)] = @(frame.parseSize - lastIndex);
+    }
+    
+    NSArray *sortOffsetKeys = [offsetDict.allKeys sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        if ([obj1 integerValue] > [obj2 integerValue]) return NSOrderedDescending;
+        if ([obj1 integerValue] < [obj2 integerValue]) return NSOrderedAscending;
+        return NSOrderedSame;
+    }];
+    
+    for (NSNumber *offset in sortOffsetKeys) {
+        NSNumber *size = offsetDict[offset];
+        VCH264Frame *f = [[VCH264Frame alloc] initWithWidth:frame.width height:frame.height];
+        [f createParseDataWithSize:size.integerValue];
+        memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
+        
+        f.frameType = [VCH264FrameParser getFrameType:f];
+        // check if frame is sps
+        if (f.frameType == VCH264FrameTypeSPS) {
+            f = [[VCH264SPSFrame alloc] initWithWidth:frame.width height:frame.height];
+            [f createParseDataWithSize:size.integerValue];
+            memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
+            f.frameType = [VCH264FrameParser getFrameType:f];
+        }
+        
+        f.context = frame.context;
+        f.frameIndex = _parserContext->output_picture_number;
+        f.pts = _parserContext->pts;
+        f.dts = _parserContext->dts;
+        [frames addObject:f];
+    }
+    return frames;
+}
 
 - (void)dealloc{
     [self free];

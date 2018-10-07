@@ -29,7 +29,7 @@
     [super viewDidLoad];
     self.decoderController = [[VCDecodeController alloc] init];
     self.decoderController.previewer.watermark = 3;
-    self.decoderController.previewer.previewType = VCPreviewerTypeVTLiveH264VideoOnly;
+    self.decoderController.previewer.previewType = VCPreviewerTypeFFmpegLiveH264VideoOnly;
     self.decoderController.parseFilePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"h264"];
 //    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/test.h264";
     self.decoderController.previewer.fps = 60;
