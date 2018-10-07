@@ -67,7 +67,10 @@
     
     NSDictionary *attr = @{
                            (id)kCVPixelBufferOpenGLCompatibilityKey: @(YES),
-                           (id)kCVPixelBufferBytesPerRowAlignmentKey: @(self.lumaLineSize)
+                           (id)kCVPixelBufferBytesPerRowAlignmentKey: @(self.lumaLineSize),
+                           (id)kCVPixelBufferIOSurfaceOpenGLESFBOCompatibilityKey: @(YES),
+                           (id)kCVPixelBufferIOSurfaceCoreAnimationCompatibilityKey: @(YES),
+                           (id)kCVPixelBufferIOSurfaceOpenGLESTextureCompatibilityKey: @(YES),
                            };
     
     CVPixelBufferCreate(kCFAllocatorDefault,
