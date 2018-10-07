@@ -18,8 +18,6 @@
 #define kVCPreviewSafeQueueSize 100
 
 @interface VCPreviewer () {
-    NSInteger _lastPOC;
-    
     sem_t *_parserThreadSem;
     sem_t *_decoderThreadSem;
 }
@@ -61,8 +59,7 @@
         _render = nil;
         _parserQueue = nil;
         _imageQueue = nil;
-        _lastPOC = 0;
-        _watermark = 0;
+        _watermark = 3;
         _parserThreadSem = sem_open("_parserThreadSem", 0);
         _decoderThreadSem = sem_open("_decoderThreadSem", 0);
     }
@@ -90,6 +87,14 @@
     sem_close(_decoderThreadSem);
 }
 
+- (CADisplayLink *)displayLink {
+    if (_displayLink != nil) {
+        return _displayLink;
+    }
+    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkLoop)];
+    return _displayLink;
+}
+
 - (void)setWatermark:(NSInteger)watermark {
     if (_imageQueue != nil) {
         _watermark = watermark;
@@ -111,9 +116,6 @@
 }
 
 - (void)setFps:(NSInteger)fps {
-    if (_fps == fps) {
-        return;
-    }
     _fps = fps;
     if (@available(iOS 10, *)) {
         self.displayLink.preferredFramesPerSecond = _fps;
@@ -173,8 +175,7 @@
     _decoderThread = [[NSThread alloc] initWithTarget:self selector:@selector(decoderWorkThread) object:nil];
     _decoderThread.name = @"VCPreviewer.decoderThread";
     _decoderThread.qualityOfService = NSQualityOfServiceDefault;
-    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkLoop)];
-    
+
 }
 
 - (void)run {
@@ -185,13 +186,13 @@
     [_decoder FSM(run)];
     [_parserThread start];
     [_decoderThread start];
-    [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+    [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 
 - (void)stop {
     [_parserThread cancel];
     [_decoderThread cancel];
-    [_displayLink invalidate];
+    [self.displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     [_decoder FSM(invalidate)];
     [self free];
     [self reset];
