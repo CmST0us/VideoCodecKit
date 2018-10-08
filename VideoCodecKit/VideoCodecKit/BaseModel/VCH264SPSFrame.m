@@ -544,6 +544,9 @@ int h264_decode_slice_header(IN unsigned char * buf,
 
 @implementation VCH264SPSFrame
 @synthesize sps = _sps;
+@synthesize fps = _fps;
+@synthesize outputHeight = _outputHeight;
+@synthesize outputWidth = _outputWidth;
 
 - (instancetype)init {
     self = [super init];
@@ -584,6 +587,27 @@ int h264_decode_slice_header(IN unsigned char * buf,
     _outputHeight = outputHeight;
     
     return _sps;
+}
+
+- (NSInteger)fps {
+    if (_sps == NULL) {
+        [self sps];
+    }
+    return _fps;
+}
+
+- (NSInteger)outputWidth {
+    if (_sps == NULL) {
+        [self sps];
+    }
+    return _outputWidth;
+}
+
+- (NSInteger)outputHeight {
+    if (_sps == NULL) {
+        [self sps];
+    }
+    return _outputHeight;
 }
 
 - (NSString *)frameClassString {
