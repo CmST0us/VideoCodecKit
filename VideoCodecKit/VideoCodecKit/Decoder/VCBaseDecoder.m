@@ -8,7 +8,14 @@
 
 #import "VCBaseDecoder.h"
 
+#define kVCBaseDecoderDefaultFPS (30)
+
+@interface VCBaseDecoder ()
+
+@end
+
 @implementation VCBaseDecoder
+@synthesize fps = _fps;
 
 - (instancetype)init {
     self = [super init];
@@ -30,6 +37,7 @@
     self = [self init];
     if (self) {
         _config = config;
+        _fps = kVCBaseDecoderDefaultFPS;
     }
     return self;
 }

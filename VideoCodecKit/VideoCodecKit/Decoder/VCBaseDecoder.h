@@ -113,7 +113,7 @@ typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
 
 /**
  解码器父类，维护了解码器状态机。
- 继承的子类都应该实现 VCBaseDecoderProtocol jie kou
+ 继承的子类都应该实现 VCBaseDecoderProtocol 接口
  */
 @interface VCBaseDecoder : EKFSMObject<VCBaseDecoderProtocol>
 
@@ -121,6 +121,8 @@ typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
 @property (nonatomic, readonly) VCBaseDecoderConfig *config;
 
 @property (nonatomic, weak) id<VCBaseDecoderDelegate> delegate;
+
+@property (nonatomic, assign) NSInteger fps;
 /**
  使用配置创建解码器
 

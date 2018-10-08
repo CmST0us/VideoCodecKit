@@ -326,7 +326,8 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     if (decodeFrame.frameType == VCH264FrameTypeSPS) {
         // copy sps
         VCH264SPSFrame *spsFrame = (VCH264SPSFrame *)frame;
-        VCH264SPS *sps = spsFrame.sps;
+        _currentSPSFrame = spsFrame;
+        self.fps = _currentSPSFrame.fps;
         [self tryUseSPS:spsFrame.parseData + _startCodeSize length:nalSize];
         pthread_mutex_unlock(&_decoderLock);
         return nil;
