@@ -45,9 +45,6 @@
     memset(self.parseData, 0, size);
 }
 
-- (NSString *)frameClassString {
-    return NSStringFromClass([self class]);
-}
 
 - (NSString *)description {
     

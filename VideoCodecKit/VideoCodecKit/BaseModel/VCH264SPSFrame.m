@@ -610,9 +610,6 @@ int h264_decode_slice_header(IN unsigned char * buf,
     return _outputHeight;
 }
 
-- (NSString *)frameClassString {
-    return NSStringFromClass([self class]);
-}
 
 - (void)dealloc {
     if (_sps != NULL) {
