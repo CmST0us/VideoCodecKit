@@ -48,7 +48,7 @@
     [self commitStateTransition];
 }
 
-- (void)decodeFrame:(id<VCFrameTypeProtocol>)frame
+- (void)decodeFrame:(VCBaseFrame *)frame
          completion:(void (^)(id<VCImageTypeProtocol> image))block {
     id<VCImageTypeProtocol> decodeImage = [self decode:frame];
     if (block) {
@@ -56,7 +56,7 @@
     }
 }
 
-- (id<VCImageTypeProtocol>)decode:(id<VCFrameTypeProtocol>)frame {
+- (id<VCImageTypeProtocol>)decode:(VCBaseFrame *)frame {
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return nil;
 
     // read frame parse
@@ -72,8 +72,13 @@
     packet->data = h264Frame.parseData;
     packet->size = (int)h264Frame.parseSize;
     
-    avcodec_send_packet(frame.context, packet);
-    int got_picture = avcodec_receive_frame(frame.context, _frame);
+    NSValue *context = [frame.userInfo objectForKey:kVCBaseFrameUserInfoFFmpegAVCodecContextKey];
+    AVCodecContext *codecContext = NULL;
+    if (context != nil && [context isKindOfClass:[NSValue class]]) {
+        codecContext = [context pointerValue];
+    }
+    avcodec_send_packet(codecContext, packet);
+    int got_picture = avcodec_receive_frame(codecContext, _frame);
     if (got_picture == 0) {
         image = [VCH264Image imageWithAVFrame:_frame];
         // ffmpeg 内部处理了
@@ -85,7 +90,7 @@
     return image;
 }
 
-- (void)decodeWithFrame:(id<VCFrameTypeProtocol>)frame {
+- (void)decodeWithFrame:(VCBaseFrame *)frame {
     id<VCImageTypeProtocol> decodeImage = [self decode:frame];
     if (self.delegate && [self.delegate respondsToSelector:@selector(decoder:didProcessImage:)]) {
         if (decodeImage != nil) {
@@ -95,8 +100,8 @@
 }
 
 
-+ (BOOL)isH264Frame:(id<VCFrameTypeProtocol>)frame {
-    if ([frame.frameClassString isEqualToString:NSStringFromClass([VCH264Frame class])]) {
++ (BOOL)isH264Frame:(VCBaseFrame *)frame {
+    if ([[frame class] isSubclassOfClass:[VCH264Frame class]]) {
         return YES;
     }
     return NO;

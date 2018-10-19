@@ -8,8 +8,15 @@
 
 #import "VCBaseFrame.h"
 
-NSString *kVCBaseFrameUserInfoFFmpegContextKey = @"kVCBaseFrameUserInfoFFmpegContextKey";
+CONST_STRING(kVCBaseFrameUserInfoFFmpegAVCodecContextKey);
 
 @implementation VCBaseFrame
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _userInfo = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
 @end

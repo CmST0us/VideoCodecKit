@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VCMarco.h"
 
-NSString const *kVCBaseFrameUserInfoFFmpegContextKey;
+DECLARE_CONST_STRING(kVCBaseFrameUserInfoFFmpegAVCodecContextKey);
 
 @interface VCBaseFrame: NSObject
-@property (nonatomic, strong) NSDictionary *userInfo;
+@property (nonatomic, strong) NSMutableDictionary *userInfo;
 @end
