@@ -15,7 +15,7 @@
     
     VCH264Frame *frame = [[VCH264Frame alloc] initWithWidth:parserContext->width height:parserContext->height];
     
-    frame.context = codecContext;
+    [frame.userInfo setObject:[NSValue valueWithPointer:codecContext] forKey:kVCBaseFrameUserInfoFFmpegAVCodecContextKey];
     [frame createParseDataWithSize:aPacket->size];
     memcpy(frame.parseData, aPacket->data, frame.parseSize);
 

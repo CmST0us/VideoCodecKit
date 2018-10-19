@@ -22,11 +22,11 @@
     return -1;
 }
 
-- (NSInteger)parseData:(void *)buffer length:(NSInteger)length completion:(void (^)(id<VCFrameTypeProtocol> _Nonnull))block {
+- (NSInteger)parseData:(void *)buffer length:(NSInteger)length completion:(void (^)(VCBaseFrame * _Nonnull))block {
     return -1;
 }
 
-- (id<VCFrameTypeProtocol>)parseData:(uint8_t *)buffer length:(NSInteger)length usedLength:(NSInteger *)usedLength {
+- (VCBaseFrame *)parseData:(uint8_t *)buffer length:(NSInteger)length usedLength:(NSInteger *)usedLength {
     return nil;
 }
 

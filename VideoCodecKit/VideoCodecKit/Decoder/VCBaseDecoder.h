@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 
 #import "VCBaseDecoderConfig.h"
-#import "VCFrameTypeProtocol.h"
+#import "VCBaseFrame.h"
 #import "VCImageTypeProtocol.h"
 #import "EKFSMObject.h"
 
@@ -83,7 +83,7 @@ typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
  @param frame 原始帧
  @return 解码图片
  */
-- (id<VCImageTypeProtocol>)decode:(id<VCFrameTypeProtocol>)frame;
+- (id<VCImageTypeProtocol>)decode:(VCBaseFrame *)frame;
 
 /**
  回调block
@@ -92,7 +92,7 @@ typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
  @param block 回调block
  */
 
-- (void)decodeFrame:(id<VCFrameTypeProtocol>)frame
+- (void)decodeFrame:(VCBaseFrame *)frame
          completion:(void (^)(id<VCImageTypeProtocol> image))block;
 
 /**
@@ -100,7 +100,7 @@ typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
 
  @param frame 原始帧
  */
-- (void)decodeWithFrame:(id<VCFrameTypeProtocol>)frame;
+- (void)decodeWithFrame:(VCBaseFrame *)frame;
 
 @end
 

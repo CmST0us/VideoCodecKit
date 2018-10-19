@@ -64,7 +64,7 @@
 }
 
 
-- (id<VCFrameTypeProtocol>)decode:(id<VCFrameTypeProtocol>)frame {
+- (VCBaseFrame *)decode:(VCBaseFrame *)frame {
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) {
         return nil;
     }
@@ -72,14 +72,14 @@
 }
 
 
-- (void)decodeFrame:(id<VCFrameTypeProtocol>)frame
+- (void)decodeFrame:(VCBaseFrame *)frame
          completion:(void (^)(id<VCImageTypeProtocol>))block {
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) {
         return;
     }
 }
 
-- (void)decodeWithFrame:(id<VCFrameTypeProtocol>)frame {
+- (void)decodeWithFrame:(VCBaseFrame *)frame {
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) {
         return;
     }

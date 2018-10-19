@@ -15,7 +15,7 @@
 #import "VCPriorityObjectQueue.h"
 #import "VCHeapPriorityObjectQueue.h"
 
-#define kVCPreviewSafeQueueSize 100
+#define kVCPreviewSafeQueueSize 20
 
 @interface VCPreviewer () {
     sem_t *_parserThreadSem;
@@ -237,8 +237,8 @@
     while (![[NSThread currentThread] isCancelled]) {
         @autoreleasepool {
             NSObject *frame = [self.parserQueue pull];
-            if (frame != nil && [frame conformsToProtocol:@protocol(VCFrameTypeProtocol)]) {
-                [self.decoder decodeWithFrame:(id<VCFrameTypeProtocol>)frame];
+            if (frame != nil && [[frame class] isSubclassOfClass:[VCBaseFrame class]]) {
+                [self.decoder decodeWithFrame:(VCBaseFrame *)frame];
             }
         }
     }
@@ -249,13 +249,13 @@
     @autoreleasepool {
         NSObject *image = [self.imageQueue pull];
         if (image != nil && [image conformsToProtocol:@protocol(VCImageTypeProtocol)]) {
-            [self.render renderImage:(id<VCImageTypeProtocol>)image];
+            [self.render renderImage:(VCBaseFrame *)image];
         }
     }
 }
 
 #pragma mark - Parser Delegate Method
-- (void)frameParserDidParseFrame:(id<VCFrameTypeProtocol>)aFrame {
+- (void)frameParserDidParseFrame:(VCBaseFrame *)aFrame {
     if (aFrame == nil) {
         return;
     }

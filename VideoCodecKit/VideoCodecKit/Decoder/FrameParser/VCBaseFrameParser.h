@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "VCFrameTypeProtocol.h"
+#import "VCBaseFrame.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @protocol VCBaseFrameParserDelegate<NSObject>
-- (void)frameParserDidParseFrame:(id<VCFrameTypeProtocol>)aFrame;
+- (void)frameParserDidParseFrame:(VCBaseFrame *)aFrame;
 @end
 
 @interface VCBaseFrameParser : NSObject
@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param usedLength 使用的缓冲区大小(inout)
  @return 一帧
  */
-- (id<VCFrameTypeProtocol>)parseData:(uint8_t *)buffer
+- (VCBaseFrame *)parseData:(uint8_t *)buffer
                               length:(NSInteger)length
                           usedLength:(NSInteger *)usedLength;
 
@@ -64,7 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSInteger)parseData:(void *)buffer
                 length:(NSInteger)length
-            completion:(void (^)(id<VCFrameTypeProtocol> frame))block;
+            completion:(void (^)(VCBaseFrame *frame))block;
 
 - (void)reset;
 
