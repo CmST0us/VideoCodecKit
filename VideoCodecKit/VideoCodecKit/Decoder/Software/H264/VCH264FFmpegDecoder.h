@@ -10,6 +10,6 @@
 #import "VCBaseDecoder.h"
 
 @interface VCH264FFmpegDecoder : VCBaseDecoder
-+ (BOOL)isH264Frame:(id<VCFrameTypeProtocol>)frame;
++ (BOOL)isH264Frame:(VCBaseFrame *)frame;
     
 @end

@@ -290,7 +290,6 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
             f.frameType = [VCH264FrameParser getFrameType:f];
         }
         
-        f.context = frame.context;
         f.frameIndex = frame.frameIndex;
         f.pts = frame.pts;
         f.dts = frame.dts;
@@ -300,7 +299,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     return frames;
 }
 
-- (id<VCImageTypeProtocol>)decode:(id<VCFrameTypeProtocol>)frame {
+- (id<VCImageTypeProtocol>)decode:(VCBaseFrame *)frame {
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return nil;
     
     if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return nil;
@@ -423,7 +422,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     return image;
 }
 
-- (void)decodeWithFrame:(id<VCFrameTypeProtocol>)frame {
+- (void)decodeWithFrame:(VCBaseFrame *)frame {
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return;
     if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return;
     VCH264Frame *decodeFrame = (VCH264Frame *)frame;
@@ -450,7 +449,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     }
 }
 
-- (void)decodeFrame:(id<VCFrameTypeProtocol>)frame completion:(void (^)(id<VCImageTypeProtocol>))block {
+- (void)decodeFrame:(VCBaseFrame *)frame completion:(void (^)(id<VCImageTypeProtocol>))block {
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return;
     if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return;
     VCH264Frame *decodeFrame = (VCH264Frame *)frame;
