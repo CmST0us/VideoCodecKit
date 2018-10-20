@@ -21,7 +21,7 @@ static const char *kVCPriorityObjectRuntimeLastKey;
 @property (nonatomic, assign) BOOL isThreadSafe;
 @property (nonatomic, assign) NSInteger watermark;
 // 一般用于流结束时设置。设置后如果数据个数不满水位，不会等待了，直接返回nil避免线程等待卡死主线程。
-@property (nonatomic, assign) BOOL willEnd;
+@property (nonatomic, assign) BOOL shouldWaitWhenPullFailed;
 
 - (instancetype)initWithSize:(int)size
                 isThreadSafe:(BOOL)isThreadSafe;

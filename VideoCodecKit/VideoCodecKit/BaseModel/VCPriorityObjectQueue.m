@@ -76,7 +76,7 @@ static const char *kVCPriorityObjectRuntimeLastKey = "kVCPriorityObjectRuntimeLa
         _tail = NULL;
         _count = 0;
         _size = size;
-        _willEnd = NO;
+        _shouldWaitWhenPullFailed = NO;
     }
     return self;
 }
@@ -87,7 +87,7 @@ static const char *kVCPriorityObjectRuntimeLastKey = "kVCPriorityObjectRuntimeLa
     _head = nil;
     _tail = nil;
     _count = 0;
-    _willEnd = NO;
+    _shouldWaitWhenPullFailed = NO;
     kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
 }
 
@@ -155,7 +155,7 @@ static const char *kVCPriorityObjectRuntimeLastKey = "kVCPriorityObjectRuntimeLa
 - (NSObject *)pull {
     kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
     if (_count <= _watermark) {
-        if (_isThreadSafe == NO || _willEnd == YES) {
+        if (_isThreadSafe == NO || _shouldWaitWhenPullFailed == YES) {
             kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
             return nil;
         }

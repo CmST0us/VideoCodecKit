@@ -234,7 +234,7 @@
     if (self.dataQueue != nil && self.imageQueue != nil) {
         self.imageQueue.watermark = 0;
     }
-    self.imageQueue.willEnd = YES;
+    self.imageQueue.shouldWaitWhenPullFailed = YES;
 }
 - (void)parserWorkThread {
     while (![[NSThread currentThread] isCancelled]) {
