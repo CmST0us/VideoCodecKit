@@ -9,21 +9,10 @@
 #import "VCH264Frame.h"
 #import "VCVideoFPS.h"
 
-@interface VCH264Frame () {
-    uint8_t *_parseDataPtr;
-}
-
-@end
-
 @implementation VCH264Frame
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _width = 0;
-        _height = 0;
-        _parseData = nil;
-        _parseDataPtr = NULL;
-        _parseSize = 0;
         _frameIndex = 0;
     }
     return self;
@@ -32,19 +21,10 @@
 - (instancetype)initWithWidth:(NSUInteger)width
                        height:(NSUInteger)height {
     self = [self init];
-    _width = width;
-    _height = height;
+    self.width = width;
+    self.height = height;
     return self;
 }
-
-- (void)createParseDataWithSize:(NSUInteger)size {
-    self.parseSize = size;
-    // 便于后面不同 startCode 转换
-    _parseDataPtr = (uint8_t *)malloc(size + 1);
-    self.parseData = _parseDataPtr + 1;
-    memset(self.parseData, 0, size);
-}
-
 
 - (NSString *)description {
     
@@ -80,12 +60,5 @@
             parseSize: %ld;\n", self.width, self.height, frameTypeDescdict[@(self.frameType)], self.parseSize];
 }
 
-- (void)dealloc {
-    if (_parseDataPtr != NULL) {
-        free(_parseDataPtr);
-        self.parseData = nil;
-        _parseDataPtr = NULL;
-        self.parseSize = 0;
-    }
-}
+
 @end
