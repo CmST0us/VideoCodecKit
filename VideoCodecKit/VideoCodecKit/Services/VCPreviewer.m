@@ -17,14 +17,15 @@
 
 #define kVCPreviewSafeQueueSize 20
 
-@interface VCPreviewer () {
-    sem_t *_parserThreadSem;
-    sem_t *_decoderThreadSem;
-}
+@interface VCPreviewer ()
+
 @property (nonatomic, strong) VCSafeQueue *dataQueue;
 @property (nonatomic, strong) NSThread *parserThread;
 @property (nonatomic, strong) NSThread *decoderThread;
 @property (nonatomic, strong) CADisplayLink *displayLink;
+
+@property (nonatomic, strong) dispatch_semaphore_t parserThreadSem;
+@property (nonatomic, strong) dispatch_semaphore_t decoderThreadSem;
 
 @property (nonatomic, strong) VCSafeObjectQueue *parserQueue;
 @property (nonatomic, strong) VCPriorityObjectQueue *imageQueue;
@@ -60,8 +61,8 @@
         _parserQueue = nil;
         _imageQueue = nil;
         _watermark = 3;
-        _parserThreadSem = sem_open("_parserThreadSem", 0);
-        _decoderThreadSem = sem_open("_decoderThreadSem", 0);
+        _parserThreadSem = dispatch_semaphore_create(0);
+        _decoderThreadSem = dispatch_semaphore_create(0);
     }
     return self;
 }
@@ -82,9 +83,6 @@
 
 - (void)dealloc {
     [self free];
-    
-    sem_close(_parserThreadSem);
-    sem_close(_decoderThreadSem);
 }
 
 - (CADisplayLink *)displayLink {
@@ -111,6 +109,7 @@
         return;
     }
     _previewType = previewType;
+    [self stop];
     [self free];
     [self reset];
 }
@@ -123,12 +122,26 @@
         self.displayLink.frameInterval = MIN(60 / _fps, 0);
     }
 }
+
+- (void)waitDecoderThreadStop {
+    if ([self.decoderThread isExecuting]) {
+        [self.decoderThread cancel];
+        dispatch_semaphore_wait(_decoderThreadSem, DISPATCH_TIME_FOREVER);
+    }
+}
+
+- (void)waitParserThreadStop {
+    if ([self.parserThread isExecuting]) {
+        [self.parserThread cancel];
+        dispatch_semaphore_wait(_parserThreadSem, DISPATCH_TIME_FOREVER);
+    }
+}
+
 - (void)free {
-    [self.parserThread cancel];
-    [self.decoderThread cancel];
-    
-    sem_wait(_parserThreadSem);
-    sem_wait(_decoderThreadSem);
+    // 特别注意这里需要先关解码器线程，再关组帧线程。
+    // 后面如果还要加线程的话，按照pipeline从结束到开始的顺序结束线程
+    [self waitDecoderThreadStop];
+    [self waitParserThreadStop];
     
     if (self.dataQueue) {
         [self.dataQueue clear];
@@ -143,6 +156,7 @@
         [self.imageQueue clear];
         self.imageQueue = nil;
     }
+    _displayLink = nil;
 }
 
 - (void)reset {
@@ -192,30 +206,35 @@
 - (void)stop {
     [_parserThread cancel];
     [_decoderThread cancel];
-    [self.displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-    [_decoder FSM(invalidate)];
+    if ([_decoder.currentState isKindOfState:@[@(VCBaseDecoderStateRunning),
+                                               @(VCBaseDecoderStateReady),
+                                               @(VCBaseDecoderStatePause)]]) {
+        [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+        [_decoder FSM(invalidate)];
+    }
     [self free];
     [self reset];
 }
 
-- (BOOL)pushData:(uint8_t *)data length:(int)length {
+- (BOOL)feedData:(uint8_t *)data length:(int)length {
     if (self.dataQueue == nil) {
         return NO;
     }
     return [self.dataQueue push:data length:length];
 }
 
-- (BOOL)canPushData {
+- (BOOL)canFeedData {
     if (self.dataQueue == nil) {
         return NO;
     }
     return ![self.dataQueue isFull];
 }
 
-- (void)endPushData {
+- (void)endFeedData {
     if (self.dataQueue != nil && self.imageQueue != nil) {
         self.imageQueue.watermark = 0;
     }
+    self.imageQueue.shouldWaitWhenPullFailed = YES;
 }
 - (void)parserWorkThread {
     while (![[NSThread currentThread] isCancelled]) {
@@ -230,7 +249,7 @@
             }
         }
     }
-    sem_post(_parserThreadSem);
+    dispatch_semaphore_signal(_parserThreadSem);
 }
 
 - (void)decoderWorkThread {
@@ -242,14 +261,14 @@
             }
         }
     }
-    sem_post(_decoderThreadSem);
+    dispatch_semaphore_signal(_decoderThreadSem);
 }
 
 - (void)displayLinkLoop {
     @autoreleasepool {
         NSObject *image = [self.imageQueue pull];
         if (image != nil && [image conformsToProtocol:@protocol(VCImageTypeProtocol)]) {
-            [self.render renderImage:(VCBaseFrame *)image];
+            [self.render renderImage:(id<VCImageTypeProtocol>)image];
         }
     }
 }
@@ -259,10 +278,13 @@
     if (aFrame == nil) {
         return;
     }
-    
     if (self.parserQueue) {
         while (![self.parserQueue push:aFrame]) {
-            [NSThread sleepForTimeInterval:0.01];
+            if ([[NSThread currentThread] isCancelled]) {
+                break;
+            } else {
+                [NSThread sleepForTimeInterval:0.01];
+            }
         }
     }
 }
@@ -275,7 +297,11 @@
     
     if (self.imageQueue) {
         while (![self.imageQueue push:image priority:image.priority]) {
-            [NSThread sleepForTimeInterval:0.01];
+            if ([[NSThread currentThread] isCancelled]) {
+                break;
+            } else {
+                [NSThread sleepForTimeInterval:0.01];
+            }
         }
     }
 }

@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 #import "VCBaseFrame.h"
-#import "VCH264Image.h"
 
 typedef NS_ENUM(NSUInteger, VCH264FrameType) {
     VCH264FrameTypeUnknown = 0,
@@ -20,25 +19,15 @@ typedef NS_ENUM(NSUInteger, VCH264FrameType) {
     VCH264FrameTypePPS = 8,
 };
 
-@class VCVideoFPS;
 @interface VCH264Frame : VCBaseFrame
 
 @property (nonatomic, assign) VCH264FrameType frameType;
 @property (nonatomic, assign) NSUInteger frameIndex;
 @property (nonatomic, assign) BOOL isKeyFrame;
 
-@property (nonatomic, assign) NSUInteger width;
-@property (nonatomic, assign) NSUInteger height;
-
 @property (nonatomic, assign) int64_t pts;
 @property (nonatomic, assign) int64_t dts;
 
-@property (nonatomic, assign) uint8_t *parseData;
-@property (nonatomic, assign) NSUInteger parseSize;
 @property (nonatomic, assign) NSInteger startCodeSize;
 
-- (instancetype)initWithWidth:(NSUInteger)width
-                       height:(NSUInteger)height;
-
-- (void)createParseDataWithSize:(NSUInteger)size;
 @end

@@ -10,6 +10,11 @@
 
 #define FSM(_s_) performSelector:@selector(_s_)
 
+@interface NSNumber (EKFSMObjectStateUtil)
+- (BOOL)isKindOfState:(NSArray<NSNumber *> *)states;
+- (BOOL)isEqualToInteger:(NSInteger)state;
+@end
+
 @interface EKFSMObject: NSObject
 
 @property (nonatomic, strong) NSDictionary *actionStateMap;

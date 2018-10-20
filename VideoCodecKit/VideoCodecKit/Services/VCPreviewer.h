@@ -29,6 +29,7 @@ typedef NS_ENUM(NSUInteger, VCPreviewerType) {
 };
 
 @interface VCPreviewer : EKFSMObject<VCBaseFrameParserDelegate, VCBaseDecoderDelegate>
+
 @property (nonatomic, strong) VCBaseFrameParser *parser;
 @property (nonatomic, strong) VCBaseDecoder *decoder;
 @property (nonatomic, strong) id<VCBaseRenderProtocol> render;
@@ -43,12 +44,13 @@ typedef NS_ENUM(NSUInteger, VCPreviewerType) {
 
 - (instancetype)initWithType:(VCPreviewerType)previewType;
 
-- (BOOL)pushData:(uint8_t *)data length:(int)length;
-- (BOOL)canPushData;
-- (void)endPushData;
+- (BOOL)feedData:(uint8_t *)data length:(int)length;
+- (BOOL)canFeedData;
+- (void)endFeedData;
 
 - (void)run;
 - (void)stop;
+- (void)pause;
 
 - (void)reset;
 

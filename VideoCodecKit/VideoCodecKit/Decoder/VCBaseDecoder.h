@@ -24,7 +24,7 @@
          setup     \/      run               invalidate      |
  init  --------->  ready --------> running --------------> stop
                                     ^ |
-                              resumu| |pause
+                              resume| |pause
                                     | |
                                     |\/
                                     pause
