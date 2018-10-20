@@ -8,6 +8,25 @@
 
 #import "EKFSMObject.h"
 
+@implementation NSNumber (EKFSMObjectStateUtil)
+
+- (BOOL)isKindOfState:(NSArray<NSNumber *> *)states {
+    for (NSNumber *number in states) {
+        if ([number isKindOfClass:[NSNumber class]]) {
+            if ([self isEqualToNumber:number]) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+- (BOOL)isEqualToInteger:(NSInteger)state {
+    return [self isEqualToNumber:@(state)];
+}
+
+@end
+
 @interface EKFSMObject ()
 @property (nonatomic, strong) NSNumber *changingState;
 @end

@@ -40,11 +40,11 @@
             NSInteger readLen = [stream read:fileBuffer maxLength:kVCDefaultBufferSize];
             if (readLen <= 0) {
                 // eof or error
-                [self.previewer endPushData];
+                [self.previewer endFeedData];
                 break;
             } else {
                 // 自旋锁
-                while (![self.previewer pushData:fileBuffer length:readLen]) {
+                while (![self.previewer feedData:fileBuffer length:readLen]) {
                     // 1Hz 重试
                     if ([[NSThread currentThread] isCancelled]) {
                         break;
@@ -61,7 +61,7 @@
     weakSelf(target);
     @autoreleasepool{
         NSData *data = [[NSData alloc] initWithContentsOfFile:self.parseFilePath];
-        [self.previewer pushData:data.bytes length:data.length];
+        [self.previewer feedData:data.bytes length:data.length];
         dispatch_semaphore_signal(self.workThreadSem);
     }
 }

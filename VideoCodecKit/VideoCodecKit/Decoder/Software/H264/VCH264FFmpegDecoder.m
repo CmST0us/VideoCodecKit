@@ -28,24 +28,17 @@
     self = [super init];
     if (self) {
         pthread_mutex_init(&_decodeLock, NULL);
+        _frame = av_frame_alloc();;
     }
     return self;
 }
 
 - (void)dealloc {
+    if (_frame != NULL) {
+        av_frame_free(&_frame);
+        _frame = nil;
+    }
     pthread_mutex_destroy(&_decodeLock);
-}
-
-- (void)setup {
-    _frame = av_frame_alloc();;
-    [self commitStateTransition];
-}
-
-
-- (void)invalidate {
-    av_frame_free(&_frame);
-    _frame = nil;
-    [self commitStateTransition];
 }
 
 - (void)decodeFrame:(VCBaseFrame *)frame
@@ -77,7 +70,12 @@
     if (context != nil && [context isKindOfClass:[NSValue class]]) {
         codecContext = [context pointerValue];
     }
-    avcodec_send_packet(codecContext, packet);
+    if (codecContext != NULL && avcodec_is_open(codecContext)) {
+        avcodec_send_packet(codecContext, packet);
+    } else {
+        pthread_mutex_unlock(&_decodeLock);
+        return nil;
+    }
     int got_picture = avcodec_receive_frame(codecContext, _frame);
     if (got_picture == 0) {
         image = [VCH264Image imageWithAVFrame:_frame];
