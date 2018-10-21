@@ -80,8 +80,5 @@
     [self.previewer stop];
 }
 
--(void)previewer:(VCPreviewer *)aPreviewer didProcessImage:(id<VCImageTypeProtocol>)aImage {
-    
-}
 
 @end

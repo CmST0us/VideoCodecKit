@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreVideo/CoreVideo.h>
-#import "VCImageTypeProtocol.h"
+#import "VCBaseImage.h"
+
+DECLARE_CONST_STRING(kVCBaseImageUserInfoFrameIndexKey); //GOP帧序号
 
 typedef NS_ENUM(NSUInteger, VCH264SliceType) {
     VCH264SliceTypeNone = 0, ///< Undefined
@@ -21,15 +23,9 @@ typedef NS_ENUM(NSUInteger, VCH264SliceType) {
     VCH264SliceTypeBI,    ///< BI type
 };
 
-@interface VCH264Image : NSObject<VCImageTypeProtocol> {
-@protected
-    CVPixelBufferRef _pixelBuffer;
-}
+@interface VCH264Image : VCBaseImage
 
 @property (nonatomic, assign) VCH264SliceType sliceType;
-
-@property (nonatomic, assign) NSUInteger width;
-@property (nonatomic, assign) NSUInteger height;
 
 @property (nonatomic, assign) uint8_t *luma; //Y
 @property (nonatomic, assign) NSUInteger lumaSize;
@@ -57,7 +53,4 @@ typedef NS_ENUM(NSUInteger, VCH264SliceType) {
 
 - (NSData *)yuv420pPlaneData;
 - (NSData *)nv12PlaneData;
-
-- (CVPixelBufferRef)pixelBuffer;
-- (void)setPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 @end

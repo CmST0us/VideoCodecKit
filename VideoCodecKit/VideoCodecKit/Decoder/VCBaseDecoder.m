@@ -73,7 +73,7 @@
 
 
 - (void)decodeFrame:(VCBaseFrame *)frame
-         completion:(void (^)(id<VCImageTypeProtocol>))block {
+         completion:(void (^)(VCBaseImage *))block {
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) {
         return;
     }

@@ -299,7 +299,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     return frames;
 }
 
-- (id<VCImageTypeProtocol>)decode:(VCBaseFrame *)frame {
+- (VCBaseImage *)decode:(VCBaseFrame *)frame {
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return nil;
     
     if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return nil;
@@ -410,9 +410,9 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     }
     
     VCYUV420PImage *image = [[VCYUV420PImage alloc] initWithWidth:decodeFrame.width height:decodeFrame.height];
-    image.priority = decodeFrame.frameIndex;
+    [image.userInfo setObject:@(decodeFrame.frameIndex) forKey:kVCBaseImageUserInfoFrameIndexKey];
     if (decodeFrame.frameType == VCH264FrameTypeIDR) {
-        image.priority = kVCPriorityIDR;
+        [image.userInfo setObject:@(kVCPriorityIDR) forKey:kVCBaseImageUserInfoFrameIndexKey];
     }
     
     [image setPixelBuffer:outputPixelBuffer];
@@ -432,7 +432,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     if (decodeFrame.isKeyFrame) {
         NSArray *array = [self extractKeyFrame:decodeFrame];
         [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            id<VCImageTypeProtocol> image = [self decode:obj];
+            VCBaseImage * image = [self decode:obj];
             if (image != NULL) {
                 if (self.delegate && [self.delegate respondsToSelector:@selector(decoder:didProcessImage:)]) {
                     [self.delegate decoder:self didProcessImage:image];
@@ -440,7 +440,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
             }
         }];
     } else {
-        id<VCImageTypeProtocol> image = [self decode:frame];
+        VCBaseImage * image = [self decode:frame];
         if (image != NULL) {
             if (self.delegate && [self.delegate respondsToSelector:@selector(decoder:didProcessImage:)]) {
                 [self.delegate decoder:self didProcessImage:image];
@@ -449,7 +449,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     }
 }
 
-- (void)decodeFrame:(VCBaseFrame *)frame completion:(void (^)(id<VCImageTypeProtocol>))block {
+- (void)decodeFrame:(VCBaseFrame *)frame completion:(void (^)(VCBaseImage *))block {
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return;
     if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return;
     VCH264Frame *decodeFrame = (VCH264Frame *)frame;
@@ -459,7 +459,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     if (decodeFrame.isKeyFrame) {
         NSArray *array = [self extractKeyFrame:decodeFrame];
         [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            id<VCImageTypeProtocol> image = [self decode:obj];
+            VCBaseImage * image = [self decode:obj];
             if (image != NULL) {
                 if (block) {
                     block(image);
@@ -467,7 +467,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
             }
         }];
     } else {
-        id<VCImageTypeProtocol> image = [self decode:frame];
+        VCBaseImage * image = [self decode:frame];
         if (image != NULL) {
             if (block) {
                 block(image);
