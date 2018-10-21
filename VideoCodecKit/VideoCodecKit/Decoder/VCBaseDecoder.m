@@ -20,15 +20,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        // 状态机配置
-        self.actionStateMap = @{
-                                @"setup": @[@(VCBaseDecoderStateReady), @(VCBaseDecoderStateInit), @(VCBaseDecoderStateStop)],
-                                @"run": @[@(VCBaseDecoderStateRunning), @(VCBaseDecoderStateReady), @(VCBaseDecoderStatePause)],
-                                @"invalidate": @[@(VCBaseDecoderStateStop), @(VCBaseDecoderStateReady), @(VCBaseDecoderStateRunning), @(VCBaseDecoderStatePause)],
-                                @"pause": @[@(VCBaseDecoderStatePause), @(VCBaseDecoderStateRunning)],
-                                @"resume": @[@(VCBaseDecoderStatePause), @(VCBaseDecoderStateRunning)],
-                                };
-        self.currentState = @(VCBaseDecoderStateInit);
+        
     }
     return self;
 }
@@ -43,29 +35,10 @@
 }
 
 #pragma mark - Public Method
-- (void)setup {
-    [self commitStateTransition];
-}
-
-- (void)run {
-    [self commitStateTransition];
-}
-
-- (void)invalidate {
-    [self commitStateTransition];
-}
-
-- (void)pause {
-    [self commitStateTransition];
-}
-
-- (void)resume {
-    [self commitStateTransition];
-}
 
 
 - (VCBaseFrame *)decode:(VCBaseFrame *)frame {
-    if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) {
+    if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) {
         return nil;
     }
     return nil;
@@ -74,13 +47,13 @@
 
 - (void)decodeFrame:(VCBaseFrame *)frame
          completion:(void (^)(VCBaseImage *))block {
-    if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) {
+    if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) {
         return;
     }
 }
 
 - (void)decodeWithFrame:(VCBaseFrame *)frame {
-    if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) {
+    if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) {
         return;
     }
 }

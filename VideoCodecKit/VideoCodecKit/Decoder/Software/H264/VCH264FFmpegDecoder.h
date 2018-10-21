@@ -11,5 +11,4 @@
 
 @interface VCH264FFmpegDecoder : VCBaseDecoder
 + (BOOL)isH264Frame:(VCBaseFrame *)frame;
-    
 @end

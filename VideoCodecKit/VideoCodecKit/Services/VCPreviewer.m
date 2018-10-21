@@ -193,8 +193,8 @@
 }
 
 - (void)run {
-    if ([[_decoder currentState] isEqualToNumber:@(VCBaseDecoderStateInit)]||
-        [_decoder.currentState isEqualToNumber:@(VCBaseDecoderStateStop)]) {
+    if ([[_decoder currentState] isEqualToNumber:@(VCBaseCodecStateInit)]||
+        [_decoder.currentState isEqualToNumber:@(VCBaseCodecStateStop)]) {
         [_decoder FSM(setup)];
     }
     [_decoder FSM(run)];
@@ -206,9 +206,9 @@
 - (void)stop {
     [_parserThread cancel];
     [_decoderThread cancel];
-    if ([_decoder.currentState isKindOfState:@[@(VCBaseDecoderStateRunning),
-                                               @(VCBaseDecoderStateReady),
-                                               @(VCBaseDecoderStatePause)]]) {
+    if ([_decoder.currentState isKindOfState:@[@(VCBaseCodecStateRunning),
+                                               @(VCBaseCodecStateReady),
+                                               @(VCBaseCodecStatePause)]]) {
         [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
         [_decoder FSM(invalidate)];
     }
