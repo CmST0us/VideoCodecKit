@@ -6,7 +6,7 @@
 //  Copyright © 2018 eric3u. All rights reserved.
 //
 
-#import <VideoCodecKit/VideoCodecKit.h>
+#import <Foundation/Foundation.h>
 #import "EKFSMObject.h"
 
 // 解码器状态机
