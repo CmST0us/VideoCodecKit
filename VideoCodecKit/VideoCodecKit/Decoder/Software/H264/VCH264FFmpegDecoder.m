@@ -42,14 +42,14 @@
 }
 
 - (void)decodeFrame:(VCBaseFrame *)frame
-         completion:(void (^)(id<VCImageTypeProtocol> image))block {
-    id<VCImageTypeProtocol> decodeImage = [self decode:frame];
+         completion:(void (^)(VCBaseImage * image))block {
+    VCBaseImage * decodeImage = [self decode:frame];
     if (block) {
         block(decodeImage);
     }
 }
 
-- (id<VCImageTypeProtocol>)decode:(VCBaseFrame *)frame {
+- (VCBaseImage *)decode:(VCBaseFrame *)frame {
     if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return nil;
 
     // read frame parse
@@ -80,7 +80,7 @@
     if (got_picture == 0) {
         image = [VCH264Image imageWithAVFrame:_frame];
         // ffmpeg 内部处理了
-        image.priority = 0;
+        [image.userInfo setObject:@(0) forKey:kVCBaseImageUserInfoFrameIndexKey];
     }
     
     av_packet_free(&packet);
@@ -89,7 +89,7 @@
 }
 
 - (void)decodeWithFrame:(VCBaseFrame *)frame {
-    id<VCImageTypeProtocol> decodeImage = [self decode:frame];
+    VCBaseImage * decodeImage = [self decode:frame];
     if (self.delegate && [self.delegate respondsToSelector:@selector(decoder:didProcessImage:)]) {
         if (decodeImage != nil) {
             [self.delegate decoder:self didProcessImage:decodeImage];

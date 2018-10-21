@@ -11,7 +11,7 @@
 
 #import "VCBaseDecoderConfig.h"
 #import "VCBaseFrame.h"
-#import "VCImageTypeProtocol.h"
+#import "VCBaseImage.h"
 #import "EKFSMObject.h"
 
 // 解码器状态机
@@ -83,7 +83,7 @@ typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
  @param frame 原始帧
  @return 解码图片
  */
-- (id<VCImageTypeProtocol>)decode:(VCBaseFrame *)frame;
+- (VCBaseImage *)decode:(VCBaseFrame *)frame;
 
 /**
  回调block
@@ -93,7 +93,7 @@ typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
  */
 
 - (void)decodeFrame:(VCBaseFrame *)frame
-         completion:(void (^)(id<VCImageTypeProtocol> image))block;
+         completion:(void (^)(VCBaseImage * image))block;
 
 /**
  delegate 方式回调
@@ -107,7 +107,7 @@ typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
 @class VCBaseDecoder;
 @protocol VCBaseDecoderDelegate<NSObject>
 
-- (void)decoder:(VCBaseDecoder *)decoder didProcessImage:(id<VCImageTypeProtocol>)image;
+- (void)decoder:(VCBaseDecoder *)decoder didProcessImage:(VCBaseImage *)image;
 
 @end
 
