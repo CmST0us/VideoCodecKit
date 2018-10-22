@@ -11,7 +11,7 @@
 		4F6C867D217E2FA500881F72 /* VCBaseEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C867B217E2FA500881F72 /* VCBaseEncoder.m */; };
 		4F6C8680217E2FB600881F72 /* VCBaseEncoderConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6C867E217E2FB600881F72 /* VCBaseEncoderConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F6C8681217E2FB600881F72 /* VCBaseEncoderConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C867F217E2FB600881F72 /* VCBaseEncoderConfig.m */; };
-		4F6C8685217E303400881F72 /* VCVTH264Encoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6C8683217E303400881F72 /* VCVTH264Encoder.h */; };
+		4F6C8685217E303400881F72 /* VCVTH264Encoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6C8683217E303400881F72 /* VCVTH264Encoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F6C8686217E303400881F72 /* VCVTH264Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C8684217E303400881F72 /* VCVTH264Encoder.m */; };
 		4F76FBD3216269FC002E7F0D /* VideoCodecKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBD1216269FC002E7F0D /* VideoCodecKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F76FC2121626AA3002E7F0D /* VideoCodecKit.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBDF21626A9C002E7F0D /* VideoCodecKit.pch */; };

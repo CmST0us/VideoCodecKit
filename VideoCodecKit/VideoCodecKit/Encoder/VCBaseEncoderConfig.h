@@ -7,8 +7,25 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreMedia/CoreMedia.h>
+
+typedef NS_ENUM(NSUInteger, VCBaseEncoderQuality) {
+    VCBaseEncoderQualitySpliendid,
+    VCBaseEncoderQualityGood,
+    VCBaseEncoderQualityNormal,
+    VCBaseEncoderQualityFast,
+};
 
 @interface VCBaseEncoderConfig : NSObject
+@property (nonatomic, assign) NSInteger width;
+@property (nonatomic, assign) NSInteger height;
+@property (nonatomic, assign) NSInteger bitrate;
+@property (nonatomic, assign) NSInteger fps;
 
+@property (nonatomic, assign) CMVideoCodecType codecType;
+
+@property (nonatomic, assign) BOOL isRealTime;
+@property (nonatomic, assign) NSInteger gopSize;
+@property (nonatomic, assign) VCBaseEncoderQuality quality;
 @end
 

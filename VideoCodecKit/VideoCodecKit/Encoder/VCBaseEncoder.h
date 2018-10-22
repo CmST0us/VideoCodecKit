@@ -53,7 +53,6 @@
 @property (nonatomic, strong) VCBaseEncoderConfig *config;
 @property (nonatomic, weak) id<VCBaseEncoderDelegate> delegate;
 
-@property (nonatomic, assign) NSInteger fps;
 
 - (instancetype)initWithConfig:(VCBaseEncoderConfig *)config;
 @end

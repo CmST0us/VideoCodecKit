@@ -14,7 +14,6 @@
     self = [super init];
     if (self) {
         _config = nil;
-        _fps = kVCDefaultFPS;
     }
     return self;
 }

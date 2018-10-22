@@ -9,5 +9,11 @@
 #import "VCBaseEncoderConfig.h"
 
 @implementation VCBaseEncoderConfig
-
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _fps = kVCDefaultFPS;
+    }
+    return self;
+}
 @end

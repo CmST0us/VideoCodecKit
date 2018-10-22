@@ -16,10 +16,11 @@
 
 #import "ViewController.h"
 #import "VCDecodeController.h"
-
+#import "VCEncoderController.h"
 
 @interface ViewController ()
 @property (nonatomic, strong) VCDecodeController *decoderController;
+@property (nonatomic, strong) VCEncoderController *encoderController;
 @property (nonatomic, assign) NSInteger decodeFrameCount;
 @property (nonatomic, strong) UITapGestureRecognizer *playGestureRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *stopGestureRecognizer;
@@ -43,6 +44,10 @@
     self.stopGestureRecognizer.numberOfTapsRequired = 1;
     [self.view addGestureRecognizer:self.playGestureRecognizer];
     [self.view addGestureRecognizer:self.stopGestureRecognizer];
+    
+    
+    self.encoderController = [[VCEncoderController alloc] init];
+    [self.encoderController runEncoder];
     
     [self setupDisplayLayer];
     [self bindData];

@@ -73,17 +73,18 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
 }
 
 #pragma mark - Decoder Public Method
-- (void)setup {
+- (BOOL)setup {
     if ([super setup]) {
         pthread_mutex_lock(&_decoderLock);
         [self commitStateTransition];
         pthread_mutex_unlock(&_decoderLock);
-    } else {
-        [self rollbackStateTransition];
+        return YES;
     }
+    [self rollbackStateTransition];
+    return NO;
 }
 
-- (void)invalidate {
+- (BOOL)invalidate {
     if ([super invalidate]) {
         pthread_mutex_lock(&_decoderLock);
         [self commitStateTransition];
@@ -94,9 +95,10 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         [self freePPS];
         [self freeSEI];
         pthread_mutex_unlock(&_decoderLock);
-    } else {
-        [self rollbackStateTransition];
+        return YES;
     }
+    [self rollbackStateTransition];
+    return NO;
 }
 
 #pragma mark - Decoder Private Method
