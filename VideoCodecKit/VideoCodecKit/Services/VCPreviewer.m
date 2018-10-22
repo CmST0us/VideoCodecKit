@@ -220,6 +220,26 @@
     return YES;
 }
 
+- (BOOL)pause {
+    if (![super pause]) {
+        [self rollbackStateTransition];
+        return NO;
+    }
+    [self.displayLink setPaused:YES];
+    [self commitStateTransition];
+    return YES;
+}
+
+- (BOOL)resume {
+    if (![super resume]) {
+        [self rollbackStateTransition];
+        return NO;
+    }
+    [self.displayLink setPaused:NO];
+    [self commitStateTransition];
+    return YES;
+}
+
 - (BOOL)invalidate {
     if (![super invalidate]) {
         [self rollbackStateTransition];
@@ -292,6 +312,8 @@
 
 - (void)displayLinkLoop {
     @autoreleasepool {
+        if (self.displayLink.isPaused == YES) return;
+        
         NSObject *image = [self.imageQueue pull];
         if (image != nil
             && [[image class] isSubclassOfClass:[VCBaseImage class]]) {

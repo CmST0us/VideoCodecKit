@@ -37,12 +37,17 @@
     self = [super init];
     if (self) {
         // 状态机配置
+        
+        /*
+         状态map
+         { SEL: [targetState, permittedState, ...] }
+         */
         self.actionStateMap = @{
                                 @"setup": @[@(VCBaseCodecStateReady), @(VCBaseCodecStateInit), @(VCBaseCodecStateStop)],
                                 @"run": @[@(VCBaseCodecStateRunning), @(VCBaseCodecStateReady), @(VCBaseCodecStatePause)],
                                 @"invalidate": @[@(VCBaseCodecStateStop), @(VCBaseCodecStateReady), @(VCBaseCodecStateRunning), @(VCBaseCodecStatePause)],
                                 @"pause": @[@(VCBaseCodecStatePause), @(VCBaseCodecStateRunning)],
-                                @"resume": @[@(VCBaseCodecStatePause), @(VCBaseCodecStateRunning)],
+                                @"resume": @[@(VCBaseCodecStateRunning), @(VCBaseCodecStatePause)],
                                 };
         self.currentState = @(VCBaseCodecStateInit);
         self.changingState = @(VCBaseCodecStateInit);

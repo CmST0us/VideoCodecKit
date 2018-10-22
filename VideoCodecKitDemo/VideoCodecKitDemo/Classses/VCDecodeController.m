@@ -23,6 +23,7 @@
     self = [super init];
     if (self) {
         _previewer = [[VCPreviewer alloc] initWithType:VCPreviewerTypeVTLiveH264VideoOnly];
+        [_previewer setup];
         _workThreadSem = dispatch_semaphore_create(0);
     }
     return self;
