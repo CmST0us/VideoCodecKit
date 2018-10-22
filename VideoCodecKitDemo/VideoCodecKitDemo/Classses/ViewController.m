@@ -21,6 +21,8 @@
 @interface ViewController ()
 @property (nonatomic, strong) VCDecodeController *decoderController;
 @property (nonatomic, assign) NSInteger decodeFrameCount;
+@property (nonatomic, strong) UITapGestureRecognizer *playGestureRecognizer;
+@property (nonatomic, strong) UITapGestureRecognizer *stopGestureRecognizer;
 @end
 
 @implementation ViewController
@@ -29,9 +31,19 @@
     [super viewDidLoad];
     self.decoderController = [[VCDecodeController alloc] init];
     self.decoderController.previewer.watermark = 3;
-    self.decoderController.previewer.previewType = VCPreviewerTypeFFmpegLiveH264VideoOnly;
+    self.decoderController.previewer.previewType = VCPreviewerTypeVTLiveH264VideoOnly;
     self.decoderController.parseFilePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"h264"];
 //    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/test.h264";
+    self.playGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playGestureHandler)];
+    self.playGestureRecognizer.numberOfTouchesRequired = 1;
+    self.playGestureRecognizer.numberOfTapsRequired = 1;
+    
+    self.stopGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(stopGestureHandler)];
+    self.stopGestureRecognizer.numberOfTouchesRequired = 2;
+    self.stopGestureRecognizer.numberOfTapsRequired = 1;
+    [self.view addGestureRecognizer:self.playGestureRecognizer];
+    [self.view addGestureRecognizer:self.stopGestureRecognizer];
+    
     [self setupDisplayLayer];
     [self bindData];
 }
@@ -50,20 +62,26 @@
     }];
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-
+- (void)playGestureHandler {
     if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateRunning]) {
-        [self.decoderController stopParse];
+        [self.decoderController.previewer pause];
+    } else if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStatePause]) {
+        [self.decoderController.previewer resume];
+    } else if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateReady]) {
+        [self.decoderController startParse];
     } else if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateStop]) {
+        [self.decoderController startParse];
+    }
+}
+
+- (void)stopGestureHandler {
+    if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateStop]) {
         [self.decoderController startParse];
     } else if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateReady]) {
         [self.decoderController startParse];
+    } else {
+        [self.decoderController stopParse];
     }
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [self.decoderController stopParse];
-//        [NSThread sleepForTimeInterval:1];
-//        [self.decoderController.parser reset];
-    });
 }
 
 - (void)didReceiveMemoryWarning {
