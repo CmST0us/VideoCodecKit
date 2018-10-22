@@ -50,7 +50,7 @@
 }
 
 - (VCBaseImage *)decode:(VCBaseFrame *)frame {
-    if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return nil;
+    if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) return nil;
 
     // read frame parse
     if (![VCH264FFmpegDecoder isH264Frame:frame]) {

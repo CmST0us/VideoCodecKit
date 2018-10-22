@@ -300,7 +300,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
 }
 
 - (VCBaseImage *)decode:(VCBaseFrame *)frame {
-    if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return nil;
+    if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) return nil;
     
     if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return nil;
     
@@ -423,7 +423,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
 }
 
 - (void)decodeWithFrame:(VCBaseFrame *)frame {
-    if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return;
+    if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) return;
     if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return;
     VCH264Frame *decodeFrame = (VCH264Frame *)frame;
     if (decodeFrame.startCodeSize < 0) return;
@@ -450,7 +450,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
 }
 
 - (void)decodeFrame:(VCBaseFrame *)frame completion:(void (^)(VCBaseImage *))block {
-    if (self.currentState.unsignedIntegerValue != VCBaseDecoderStateRunning) return;
+    if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) return;
     if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return;
     VCH264Frame *decodeFrame = (VCH264Frame *)frame;
     if (decodeFrame.startCodeSize < 0) return;
