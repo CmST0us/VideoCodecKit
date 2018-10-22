@@ -23,6 +23,7 @@
     self = [super init];
     if (self) {
         _previewer = [[VCPreviewer alloc] initWithType:VCPreviewerTypeVTLiveH264VideoOnly];
+        [_previewer setup];
         _workThreadSem = dispatch_semaphore_create(0);
     }
     return self;
@@ -67,6 +68,10 @@
 }
 
 - (void)startParse {
+    if ([self.previewer.currentState isEqualToInteger:VCBaseCodecStateInit]
+        || [self.previewer.currentState isEqualToInteger:VCBaseCodecStateStop]) {
+        [self.previewer setup];
+    }
     [self.previewer run];
     self.workThread = [[NSThread alloc] initWithTarget:self selector:@selector(workingThread) object:nil];
     self.workThread.name = @"workThread";
@@ -77,7 +82,7 @@
     [self.workThread cancel];
     self.workThread = nil;
     dispatch_semaphore_wait(self.workThreadSem, DISPATCH_TIME_FOREVER);
-    [self.previewer stop];
+    [self.previewer invalidate];
 }
 
 

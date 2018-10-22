@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "VCH264Frame.h"
 #import "VCH264Image.h"
+#import "VCBaseCodec.h"
 #import "VCBaseDecoder.h"
 #import "VCBaseFrameParser.h"
 #import "VCBaseRenderProtocol.h"
@@ -28,7 +29,7 @@ typedef NS_ENUM(NSUInteger, VCPreviewerType) {
     VCPreviewerTypeVTLiveH264VideoOnly, // 使用VideoToolBox和AVSampleBufferDisplayLayer
 };
 
-@interface VCPreviewer : EKFSMObject<VCBaseFrameParserDelegate, VCBaseDecoderDelegate>
+@interface VCPreviewer : VCBaseCodec<VCBaseFrameParserDelegate, VCBaseDecoderDelegate>
 
 @property (nonatomic, strong) VCBaseFrameParser *parser;
 @property (nonatomic, strong) VCBaseDecoder *decoder;
@@ -47,11 +48,5 @@ typedef NS_ENUM(NSUInteger, VCPreviewerType) {
 - (BOOL)feedData:(uint8_t *)data length:(int)length;
 - (BOOL)canFeedData;
 - (void)endFeedData;
-
-- (void)run;
-- (void)stop;
-- (void)pause;
-
-- (void)reset;
 
 @end

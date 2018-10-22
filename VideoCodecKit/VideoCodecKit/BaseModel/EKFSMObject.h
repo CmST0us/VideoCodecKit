@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+// 接口设计烂的一批
+// 不要用！！！！！！！！！！！1
+// Objective-C performSelector 兼容性太差了。
+// [TODO] 找一个替代状态转移的方案
+
 #define FSM(_s_) performSelector:@selector(_s_)
 
 @interface NSNumber (EKFSMObjectStateUtil)
