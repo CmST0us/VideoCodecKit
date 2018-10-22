@@ -73,14 +73,17 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     return [self performSelector:aSelector withObject:nil];
-    #pragma clang diagnostic pop
+#pragma clang diagnostic pop
 }
 
 - (id)performSelector:(SEL)aSelector withObject:(id)object {
     if ([self tryChangeStateFromSelector:aSelector]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        return [super performSelector:aSelector withObject:object];
+        if ([super respondsToSelector:aSelector]) {
+            [super performSelector:aSelector withObject:object];
+            return nil;
+        }
 #pragma clang diagnostic pop
     }
     [[NSException exceptionWithName:@"Can not incovacte" reason:@"Bad state transit" userInfo:nil] raise];

@@ -29,7 +29,7 @@
     [super viewDidLoad];
     self.decoderController = [[VCDecodeController alloc] init];
     self.decoderController.previewer.watermark = 3;
-    self.decoderController.previewer.previewType = VCPreviewerTypeVTLiveH264VideoOnly;
+    self.decoderController.previewer.previewType = VCPreviewerTypeFFmpegLiveH264VideoOnly;
     self.decoderController.parseFilePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"h264"];
 //    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/test.h264";
     [self setupDisplayLayer];
@@ -52,11 +52,11 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 
-    if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseCodecStateRunning)]) {
+    if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateRunning]) {
         [self.decoderController stopParse];
-    } else if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseCodecStateStop)]) {
+    } else if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateStop]) {
         [self.decoderController startParse];
-    } else if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseCodecStateInit)]) {
+    } else if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateReady]) {
         [self.decoderController startParse];
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

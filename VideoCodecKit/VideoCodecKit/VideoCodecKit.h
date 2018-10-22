@@ -32,4 +32,3 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCMarco.h>
 #import <VideoCodecKit/VCVideoFPS.h>
 #import <VideoCodecKit/VCBaseDecoderConfig.h>
-#import <VideoCodecKit/EKFSMObject.h>
