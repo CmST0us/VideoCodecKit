@@ -20,7 +20,7 @@
 
 @class VCPreviewer;
 @protocol VCPreviewerDelegate<NSObject>
-- (void)previewer:(VCPreviewer *)aPreviewer didProcessImage:(id<VCImageTypeProtocol>)aImage;
+- (void)previewer:(VCPreviewer *)aPreviewer didProcessImage:(VCBaseImage *)aImage;
 @end
 
 typedef NS_ENUM(NSUInteger, VCPreviewerType) {

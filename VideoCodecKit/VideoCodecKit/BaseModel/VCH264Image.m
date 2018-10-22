@@ -8,21 +8,21 @@
 
 #import "VCH264Image.h"
 
+CONST_STRING(kVCBaseImageUserInfoFrameIndexKey);
+
 @interface VCH264Image ()
 
 @end
 
 @implementation VCH264Image
-@synthesize priority = _priority;
 - (instancetype)initWithWidth:(NSUInteger)width
                        height:(NSUInteger)height {
 
-    self = [super self];
+    self = [super init];
     if (self) {
-        _width = width;
-        _height = height;
+        self.width = width;
+        self.height = height;
         _sliceType = VCH264SliceTypeNone;
-        _pixelBuffer = NULL;
     }
     return self;
 }
@@ -60,18 +60,6 @@
     return nil;
 }
 
-- (CVPixelBufferRef)pixelBuffer {
-    return nil;
-}
-
-- (void)setPixelBuffer:(CVPixelBufferRef)pixelBuffer {
-    
-}
-
-- (NSString *)classStringForImageType {
-    return NSStringFromClass([self class]);
-}
-
 
 - (void)dealloc {
     if (self.luma != nil) {
@@ -90,11 +78,6 @@
         free(self.chromaR);
         self.chromaR = nil;
         self.chromaRSize = 0;
-    }
-    
-    if (_pixelBuffer != NULL) {
-        CFRelease(_pixelBuffer);
-        _pixelBuffer = NULL;
     }
 }
 

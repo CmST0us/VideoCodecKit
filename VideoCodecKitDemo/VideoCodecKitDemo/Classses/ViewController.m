@@ -52,11 +52,11 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 
-    if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateRunning)]) {
+    if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseCodecStateRunning)]) {
         [self.decoderController stopParse];
-    } else if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateStop)]) {
+    } else if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseCodecStateStop)]) {
         [self.decoderController startParse];
-    } else if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseDecoderStateInit)]) {
+    } else if ([self.decoderController.previewer.decoder.currentState isEqualToNumber:@(VCBaseCodecStateInit)]) {
         [self.decoderController startParse];
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

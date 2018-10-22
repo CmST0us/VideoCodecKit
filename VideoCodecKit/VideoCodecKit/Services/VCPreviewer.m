@@ -193,8 +193,8 @@
 }
 
 - (void)run {
-    if ([[_decoder currentState] isEqualToNumber:@(VCBaseDecoderStateInit)]||
-        [_decoder.currentState isEqualToNumber:@(VCBaseDecoderStateStop)]) {
+    if ([[_decoder currentState] isEqualToNumber:@(VCBaseCodecStateInit)]||
+        [_decoder.currentState isEqualToNumber:@(VCBaseCodecStateStop)]) {
         [_decoder FSM(setup)];
     }
     [_decoder FSM(run)];
@@ -206,9 +206,9 @@
 - (void)stop {
     [_parserThread cancel];
     [_decoderThread cancel];
-    if ([_decoder.currentState isKindOfState:@[@(VCBaseDecoderStateRunning),
-                                               @(VCBaseDecoderStateReady),
-                                               @(VCBaseDecoderStatePause)]]) {
+    if ([_decoder.currentState isKindOfState:@[@(VCBaseCodecStateRunning),
+                                               @(VCBaseCodecStateReady),
+                                               @(VCBaseCodecStatePause)]]) {
         [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
         [_decoder FSM(invalidate)];
     }
@@ -267,8 +267,9 @@
 - (void)displayLinkLoop {
     @autoreleasepool {
         NSObject *image = [self.imageQueue pull];
-        if (image != nil && [image conformsToProtocol:@protocol(VCImageTypeProtocol)]) {
-            [self.render renderImage:(id<VCImageTypeProtocol>)image];
+        if (image != nil
+            && [[image class] isSubclassOfClass:[VCBaseImage class]]) {
+            [self.render renderImage:(VCBaseImage *)image];
         }
     }
 }
@@ -290,13 +291,21 @@
 }
 
 #pragma mark - Decoder Delegate Method
-- (void)decoder:(VCBaseDecoder *)decoder didProcessImage:(id<VCImageTypeProtocol>)image {
+- (void)decoder:(VCBaseDecoder *)decoder didProcessImage:(VCBaseImage *)image {
     if (image == nil) {
         return;
     }
     
     if (self.imageQueue) {
-        while (![self.imageQueue push:image priority:image.priority]) {
+        NSInteger priority = 0;
+        NSNumber *priorityNumber = [image.userInfo objectForKey:kVCBaseImageUserInfoFrameIndexKey];
+        if (priorityNumber != nil
+            && [priorityNumber isKindOfClass:[NSNumber class]]) {
+            priority = [priorityNumber integerValue];
+        } else {
+            priority = 0;
+        }
+        while (![self.imageQueue push:image priority:priority]) {
             if ([[NSThread currentThread] isCancelled]) {
                 break;
             } else {

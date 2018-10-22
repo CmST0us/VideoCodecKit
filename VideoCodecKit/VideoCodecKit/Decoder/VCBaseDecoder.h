@@ -11,79 +11,19 @@
 
 #import "VCBaseDecoderConfig.h"
 #import "VCBaseFrame.h"
-#import "VCImageTypeProtocol.h"
-#import "EKFSMObject.h"
+#import "VCBaseImage.h"
+#import "VCBaseCodec.h"
 
-// 解码器状态机
-/**
-                                    setup
-                    +----------------------------------------+
-                    |                                        |
-                    |                                        |
-                    |                                        |
-         setup     \/      run               invalidate      |
- init  --------->  ready --------> running --------------> stop
-                                    ^ |
-                              resume| |pause
-                                    | |
-                                    |\/
-                                    pause
- 
- P.S. setup之后的状态都能转到stop
- */
-
-/**
- 解码器状态
-
- - VCBaseDecoderStateInit: 正在初始化
- - VCBaseDecoderStateReady: 初始化完成可以启动
- - VCBaseDecoderStateRunning: 正在运行
- - VCBaseDecoderStatePause: 运行暂停，等待重新调度
- - VCBaseDecoderStateStop: 解码器被invalidate运行停止
- */
-typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
-    VCBaseDecoderStateInit,
-    VCBaseDecoderStateReady,
-    VCBaseDecoderStateRunning,
-    VCBaseDecoderStatePause,
-    VCBaseDecoderStateStop,
-};
 
 @protocol VCBaseDecoderProtocol<NSObject>
-
-/**
- 配置解码器
- */
-- (void)setup;
-
-/**
- 开始解码
- */
-- (void)run;
-
-/**
- 释放解码器
- */
-- (void)invalidate;
-
-/**
- 暂停解码
- */
-- (void)pause;
-
-/**
- 继续解码
- */
-- (void)resume;
-
-
+@optional
 /**
  一进一出，填充frame
 
  @param frame 原始帧
  @return 解码图片
  */
-- (id<VCImageTypeProtocol>)decode:(VCBaseFrame *)frame;
+- (VCBaseImage *)decode:(VCBaseFrame *)frame;
 
 /**
  回调block
@@ -93,29 +33,25 @@ typedef NS_ENUM(NSUInteger, VCBaseDecoderState) {
  */
 
 - (void)decodeFrame:(VCBaseFrame *)frame
-         completion:(void (^)(id<VCImageTypeProtocol> image))block;
+         completion:(void (^)(VCBaseImage * image))block;
 
 /**
  delegate 方式回调
 
  @param frame 原始帧
  */
+@required
 - (void)decodeWithFrame:(VCBaseFrame *)frame;
 
 @end
 
 @class VCBaseDecoder;
 @protocol VCBaseDecoderDelegate<NSObject>
-
-- (void)decoder:(VCBaseDecoder *)decoder didProcessImage:(id<VCImageTypeProtocol>)image;
-
+- (void)decoder:(VCBaseDecoder *)decoder didProcessImage:(VCBaseImage *)image;
 @end
 
-/**
- 解码器父类，维护了解码器状态机。
- 继承的子类都应该实现 VCBaseDecoderProtocol 接口
- */
-@interface VCBaseDecoder : EKFSMObject<VCBaseDecoderProtocol>
+
+@interface VCBaseDecoder : VCBaseCodec <VCBaseDecoderProtocol>
 
 // 解码器当前状态
 @property (nonatomic, readonly) VCBaseDecoderConfig *config;

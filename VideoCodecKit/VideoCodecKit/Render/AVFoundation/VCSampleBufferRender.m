@@ -10,7 +10,7 @@
 #import <CoreMedia/CoreMedia.h>
 #import "VCSampleBufferRender.h"
 #import "VCYUV420PImage.h"
-#import "VCImageTypeProtocol.h"
+#import "VCBaseImage.h"
 
 @interface VCSampleBufferRender ()
 @property (nonatomic, strong) AVSampleBufferDisplayLayer *renderLayer;
@@ -65,12 +65,12 @@
     [self attachToLayer:_superLayer];
 }
 
-- (void)renderImage:(id<VCImageTypeProtocol>)image {
+- (void)renderImage:(VCBaseImage *)image {
     if (image == nil) return;
     NSArray *supportImages = [self supportRenderImageClassName];
     BOOL isSupportRenderImage = NO;
     for (NSString *imageName in supportImages) {
-        if ([image.classStringForImageType isEqualToString:imageName]) {
+        if ([NSStringFromClass([image class]) isEqualToString:imageName]) {
             isSupportRenderImage = YES;
         }
     }
