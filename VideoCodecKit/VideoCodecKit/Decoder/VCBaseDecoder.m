@@ -36,6 +36,55 @@
 
 #pragma mark - Public Method
 
+- (BOOL)setup {
+    if ([super setup]) {
+        [self commitStateTransition];
+        return YES;
+    } else {
+        [self rollbackStateTransition];
+        return NO;
+    }
+}
+
+- (BOOL)run {
+    if ([super run]) {
+        [self commitStateTransition];
+        return YES;
+    } else {
+        [self rollbackStateTransition];
+        return NO;
+    }
+}
+
+- (BOOL)invalidate {
+    if ([super invalidate]) {
+        [self commitStateTransition];
+        return YES;
+    } else {
+        [self rollbackStateTransition];
+        return NO;
+    }
+}
+
+- (BOOL)pause {
+    if ([super pause]) {
+        [self commitStateTransition];
+        return YES;
+    } else {
+        [self rollbackStateTransition];
+        return NO;
+    }
+}
+
+- (BOOL)resume {
+    if ([super resume]) {
+        [self commitStateTransition];
+        return YES;
+    } else {
+        [self rollbackStateTransition];
+        return NO;
+    }
+}
 
 - (VCBaseFrame *)decode:(VCBaseFrame *)frame {
     if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) {

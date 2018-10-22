@@ -7,11 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EKFSMObject.h"
 
 // 解码器状态机
 /**
- setup
+                                        setup
                      +----------------------------------------+
                      |                                        |
                      |                                        |
@@ -45,37 +44,48 @@ typedef NS_ENUM(NSUInteger, VCBaseCodecState) {
     VCBaseCodecStateStop,
 };
 
+@interface NSNumber (StateUtil)
+- (BOOL)isKindOfState:(NSArray<NSNumber *> *)states;
+- (BOOL)isEqualToInteger:(NSInteger)state;
+@end
+
 /**
  编解码器父类，维护了编解码器状态机。
  继承的子类都应该实现 VCBaseDecoderProtocol 接口
  */
 
-@interface VCBaseCodec : EKFSMObject
+@interface VCBaseCodec : NSObject
+
+@property (nonatomic, strong) NSDictionary *actionStateMap;
+@property (nonatomic, strong) NSNumber *currentState;
+
+- (void)commitStateTransition;
+- (void)rollbackStateTransition;
 
 /**
  配置
  */
-- (void)setup;
+- (BOOL)setup NS_REQUIRES_SUPER;
 
 /**
  开始
  */
-- (void)run;
+- (BOOL)run NS_REQUIRES_SUPER;
 
 /**
  释放
  */
-- (void)invalidate;
+- (BOOL)invalidate NS_REQUIRES_SUPER;
 
 /**
  暂停
  */
-- (void)pause;
+- (BOOL)pause NS_REQUIRES_SUPER;
 
 /**
  继续
  */
-- (void)resume;
+- (BOOL)resume NS_REQUIRES_SUPER;
 
 @end
 

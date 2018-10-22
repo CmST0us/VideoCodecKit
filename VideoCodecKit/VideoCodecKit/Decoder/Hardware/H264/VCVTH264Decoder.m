@@ -74,21 +74,29 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
 
 #pragma mark - Decoder Public Method
 - (void)setup {
-    pthread_mutex_lock(&_decoderLock);
-    [self commitStateTransition];
-    pthread_mutex_unlock(&_decoderLock);
+    if ([super setup]) {
+        pthread_mutex_lock(&_decoderLock);
+        [self commitStateTransition];
+        pthread_mutex_unlock(&_decoderLock);
+    } else {
+        [self rollbackStateTransition];
+    }
 }
 
 - (void)invalidate {
-    pthread_mutex_lock(&_decoderLock);
-    [self commitStateTransition];
-    
-    [self freeDecodeSession];
-    [self freeVideoFormatDescription];
-    [self freeSPS];
-    [self freePPS];
-    [self freeSEI];
-    pthread_mutex_unlock(&_decoderLock);
+    if ([super invalidate]) {
+        pthread_mutex_lock(&_decoderLock);
+        [self commitStateTransition];
+        
+        [self freeDecodeSession];
+        [self freeVideoFormatDescription];
+        [self freeSPS];
+        [self freePPS];
+        [self freeSEI];
+        pthread_mutex_unlock(&_decoderLock);
+    } else {
+        [self rollbackStateTransition];
+    }
 }
 
 #pragma mark - Decoder Private Method

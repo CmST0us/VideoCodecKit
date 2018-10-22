@@ -70,13 +70,12 @@
 - (instancetype)initWithType:(VCPreviewerType)previewType {
     self = [self init];
     if (self) {
-        self.previewType = previewType;
+        _previewType = previewType;
         NSDictionary *supportComponents = [self supportPreviewerComponent];
         Class renderClass = NSClassFromString(supportComponents[@(previewType)][2]);
         if ([renderClass conformsToProtocol:@protocol(VCBaseRenderProtocol)]) {
             _render = [[renderClass alloc] init];
         }
-        [self reset];
     }
     return self;
 }
@@ -109,9 +108,9 @@
         return;
     }
     _previewType = previewType;
-    [self stop];
+    [self invalidate];
     [self free];
-    [self reset];
+    [self setup];
 }
 
 - (void)setFps:(NSInteger)fps {
@@ -159,17 +158,25 @@
     _displayLink = nil;
 }
 
-- (void)reset {
+#pragma mark - Public Method
+- (BOOL)setup {
+    if (![super setup]) {
+        [self rollbackStateTransition];
+        return NO;
+    }
+    
     NSDictionary *supportComponents = [self supportPreviewerComponent];
     Class parserClass = NSClassFromString(supportComponents[@(self.previewType)][0]);
     Class decoderClass = NSClassFromString(supportComponents[@(self.previewType)][1]);
     
     if (![parserClass isSubclassOfClass:[VCBaseFrameParser class]]) {
-        return;
+        [self rollbackStateTransition];
+        return NO;
     }
     
     if (![decoderClass isSubclassOfClass:[VCBaseDecoder class]]) {
-        return;
+        [self rollbackStateTransition];
+        return NO;
     }
     
     _parser = [[parserClass alloc] init];
@@ -189,33 +196,50 @@
     _decoderThread = [[NSThread alloc] initWithTarget:self selector:@selector(decoderWorkThread) object:nil];
     _decoderThread.name = @"VCPreviewer.decoderThread";
     _decoderThread.qualityOfService = NSQualityOfServiceDefault;
-
+    
+    [self commitStateTransition];
+    return YES;
 }
 
-- (void)run {
+- (BOOL)run {
+    if (![super run]) {
+        [self rollbackStateTransition];
+        return NO;
+    }
+    
     if ([[_decoder currentState] isEqualToNumber:@(VCBaseCodecStateInit)]||
         [_decoder.currentState isEqualToNumber:@(VCBaseCodecStateStop)]) {
-        [_decoder FSM(setup)];
+        [_decoder setup];
     }
-    [_decoder FSM(run)];
+    [_decoder run];
     [_parserThread start];
     [_decoderThread start];
     [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+    
+    [self commitStateTransition];
+    return YES;
 }
 
-- (void)stop {
+- (BOOL)invalidate {
+    if (![super invalidate]) {
+        [self rollbackStateTransition];
+        return NO;
+    }
+    
     [_parserThread cancel];
     [_decoderThread cancel];
     if ([_decoder.currentState isKindOfState:@[@(VCBaseCodecStateRunning),
                                                @(VCBaseCodecStateReady),
                                                @(VCBaseCodecStatePause)]]) {
         [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-        [_decoder FSM(invalidate)];
+        [_decoder invalidate];
     }
     [self free];
-    [self reset];
+    [self commitStateTransition];
+    return YES;
 }
 
+#pragma mark - Feed Data
 - (BOOL)feedData:(uint8_t *)data length:(int)length {
     if (self.dataQueue == nil) {
         return NO;
@@ -236,6 +260,8 @@
     }
     self.imageQueue.shouldWaitWhenPullFailed = YES;
 }
+
+#pragma mark - Thread
 - (void)parserWorkThread {
     while (![[NSThread currentThread] isCancelled]) {
         @autoreleasepool {
