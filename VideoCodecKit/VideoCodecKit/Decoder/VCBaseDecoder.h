@@ -53,7 +53,6 @@
 
 @interface VCBaseDecoder : VCBaseCodec <VCBaseDecoderProtocol>
 
-// 解码器当前状态
 @property (nonatomic, readonly) VCBaseDecoderConfig *config;
 
 @property (nonatomic, weak) id<VCBaseDecoderDelegate> delegate;

@@ -1,30 +1,25 @@
 //
-//  VCBaseDecoder.m
-//  VideoCodecKitDemo
+//  VCBaseEncoder.m
+//  VideoCodecKit
 //
-//  Created by CmST0us on 2018/9/9.
-//  Copyright © 2018年 eric3u. All rights reserved.
+//  Created by CmST0us on 2018/10/23.
+//  Copyright © 2018 eric3u. All rights reserved.
 //
 
-#import "VCBaseDecoder.h"
+#import "VCBaseEncoder.h"
 
-@interface VCBaseDecoder ()
-
-@end
-
-@implementation VCBaseDecoder
-@synthesize fps = _fps;
+@implementation VCBaseEncoder
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _fps = kVCDefaultFPS;
         _config = nil;
+        _fps = kVCDefaultFPS;
     }
     return self;
 }
 
-- (instancetype)initWithConfig:(VCBaseDecoderConfig *)config {
+- (instancetype)initWithConfig:(VCBaseEncoderConfig *)config {
     self = [self init];
     if (self) {
         _config = config;
@@ -84,25 +79,25 @@
     }
 }
 
-- (VCBaseFrame *)decode:(VCBaseFrame *)frame {
-    if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) {
+- (void)encodeWithImage:(VCBaseImage *)image {
+    if ([self.currentState isEqualToInteger:VCBaseCodecStateRunning]) {
+        return;
+    }
+    return;
+}
+
+- (VCBaseFrame *)encode:(VCBaseImage *)image {
+    if ([self.currentState isEqualToInteger:VCBaseCodecStateRunning]) {
         return nil;
     }
     return nil;
 }
 
-
-- (void)decodeFrame:(VCBaseFrame *)frame
-         completion:(void (^)(VCBaseImage *))block {
-    if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) {
+- (void)encodeImage:(VCBaseImage *)image withCompletion:(void (^)(VCBaseFrame *))block {
+    if ([self.currentState isEqualToInteger:VCBaseCodecStateRunning]) {
         return;
     }
-}
-
-- (void)decodeWithFrame:(VCBaseFrame *)frame {
-    if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) {
-        return;
-    }
+    return;
 }
 
 @end

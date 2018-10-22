@@ -18,5 +18,6 @@
 #define kVC480P (720 * 480)
 
 #define kVCPriorityIDR (0)
+#define kVCDefaultFPS (30)
 
 #endif /* VCMarco_h */
