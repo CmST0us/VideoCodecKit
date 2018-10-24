@@ -10,4 +10,17 @@
 
 @interface VCVTH264Encoder : VCBaseEncoder
 
+/**
+ 使用sps
+
+ @param spsData sps数据，注意不带start code
+ */
+- (void)useSPS:(NSData *)spsData;
+/**
+ 使用pps
+ 
+ @param spsData pps数据，注意不带start code
+ */
+- (void)usePPS:(NSData *)ppsData;
+
 @end

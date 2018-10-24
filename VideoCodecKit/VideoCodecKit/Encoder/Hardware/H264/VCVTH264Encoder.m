@@ -9,11 +9,15 @@
 #import <VideoToolbox/VideoToolbox.h>
 #import "VCBaseEncoderConfig.h"
 #import "VCVTH264Encoder.h"
+#import "VCBaseImage.h"
+#import "VCH264Frame.h"
+#import "VCH264SPSFrame.h"
 
 @interface VCVTH264Encoder () {
     VTCompressionSessionRef _compressionSession;
 }
-
+@property (nonatomic, strong) VCH264Frame *sps; // [TODO]: 改为VCH264SPSFrame
+@property (nonatomic, strong) VCH264Frame *pps; // [TODO]: 改为VCH264PPSFrame
 @end
 
 @implementation VCVTH264Encoder
@@ -23,6 +27,70 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
                                  OSStatus status,
                                  VTEncodeInfoFlags infoFlags,
                                  CM_NULLABLE CMSampleBufferRef sampleBuffer) {
+#if DEBUG
+    NSLog(@"[ENCODER][VT]: encoder callback with status %d, infoFlags %d", (int)status, (int)infoFlags);
+#endif
+    if (status != noErr) {
+        return;
+    }
+    
+    if (!(CMSampleBufferDataIsReady(sampleBuffer))) {
+#if DEBUG
+        NSLog(@"[ENCODER][VT]: sample buffer is not ready");
+#endif
+        return;
+    }
+    
+    VCVTH264Encoder *encoder = (__bridge VCVTH264Encoder *)outputCallbackRefCon;
+    BOOL isKeyFrame = !CFDictionaryContainsKey(
+                                              CFArrayGetValueAtIndex(CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, true), 0),
+                                              kCMSampleAttachmentKey_NotSync
+                                              );
+    if (isKeyFrame) {
+#if DEBUG
+        NSLog(@"[ENCODER][VT]: key frame");
+#endif
+        // SPS
+        CMFormatDescriptionRef format = CMSampleBufferGetFormatDescription(sampleBuffer);
+        size_t sparameterSetSize, sparameterSetCount;
+        const uint8_t *sparameterSet;
+        OSStatus statusCode = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(format,
+                                                                                 0,
+                                                                                 &sparameterSet,
+                                                                                 &sparameterSetSize,
+                                                                                 &sparameterSetCount,
+                                                                                 0);
+        if (statusCode == noErr) {
+#if DEBUG
+            NSLog(@"[ENCODER][VT]: get sps");
+#endif
+            // PPS
+            CMFormatDescriptionRef format = CMSampleBufferGetFormatDescription(sampleBuffer);
+            size_t pparameterSetSize, pparameterSetCount;
+            const uint8_t *pparameterSet;
+            OSStatus statusCode = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(format,
+                                                                                     1,
+                                                                                     &pparameterSet,
+                                                                                     &pparameterSetSize,
+                                                                                     &pparameterSetCount,
+                                                                                     0);
+            if (statusCode == noErr) {
+#if DEBUG
+                NSLog(@"[ENCODER][VT]: get sps");
+#endif
+                // USE SPS PPS
+                NSData *sps = [NSData dataWithBytes:sparameterSet length:sparameterSetSize];
+                NSData *pps = [NSData dataWithBytes:pparameterSet length:pparameterSetSize];
+                
+                if (encoder) {
+                    [encoder useSPS:sps];
+                    [encoder usePPS:pps];
+                }
+            }
+        }
+    }
+    
+    // GET Slice
     
 }
 
@@ -144,4 +212,48 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
     }
     return NO;
 }
+- (void)useSPS:(NSData *)spsData {
+    VCH264SPSFrame *frame = [[VCH264SPSFrame alloc] init];
+    [frame createParseDataWithSize:spsData.length];
+    frame.parseData -= 4;
+    *(frame.parseData + 3) = 1;
+    memcpy(frame.parseData + 4, spsData.bytes, spsData.length);
+    frame.frameType = [VCH264Frame getFrameType:frame];
+#if DEBUG
+    NSLog(@"[ENCODER][VT]: sps output width %d height %d fps %d", (int)frame.outputWidth, (int)frame.outputHeight, (int)frame.fps);
+#endif
+    self.sps = frame;
+}
+
+- (void)usePPS:(NSData *)ppsData {
+    VCH264Frame *frame = [[VCH264Frame alloc] init];
+    [frame createParseDataWithSize:ppsData.length];
+    frame.parseData -= 4;
+    *(frame.parseData + 3) = 1;
+    frame.frameType = [VCH264Frame getFrameType:frame];
+    memcpy(frame.parseData + 4, ppsData.bytes, ppsData.length);
+    self.pps = frame;
+}
+
+- (void)encodeWithImage:(VCBaseImage *)image {
+    CMTime ptsTime = CMTimeMake(self.pts++, 1000);
+    VTEncodeInfoFlags flags = 0;
+    OSStatus statusCode = VTCompressionSessionEncodeFrame(_compressionSession,
+                                    image.pixelBuffer,
+                                    ptsTime,
+                                    kCMTimeInvalid,
+                                    NULL,
+                                    NULL,
+                                    &flags);
+    if (statusCode != noErr) {
+#if DEBUG
+        NSLog(@"[ENCODER][VT]: encode frame failed with %d", (int)statusCode);
+#endif
+        VTCompressionSessionInvalidate(_compressionSession);
+        CFRelease(_compressionSession);
+        _compressionSession = NULL;
+        return;
+    }
+}
 @end
+
