@@ -183,7 +183,7 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
             VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_High_AutoLevel);
             break;
         case VCBaseEncoderQualitySpliendid:
-            VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_High_5_1);
+            VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Extended_AutoLevel);
             break;
         default:
             break;
