@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-// 解码器状态机
+// 编解码器状态机
 /**
                                         setup
                      +----------------------------------------+
@@ -27,7 +27,7 @@
  */
 
 /**
- 解码器状态
+ 编解码器状态
  
  - VCBaseCodecStateInit: 正在初始化
  - VCBaseCodecStateReady: 初始化完成可以启动
