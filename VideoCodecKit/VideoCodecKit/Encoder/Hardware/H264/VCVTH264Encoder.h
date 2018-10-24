@@ -19,7 +19,7 @@
 /**
  使用pps
  
- @param spsData pps数据，注意不带start code
+ @param ppsData pps数据，注意不带start code
  */
 - (void)usePPS:(NSData *)ppsData;
 

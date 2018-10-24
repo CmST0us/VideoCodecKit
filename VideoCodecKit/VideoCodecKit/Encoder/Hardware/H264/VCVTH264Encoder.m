@@ -85,13 +85,46 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
                 if (encoder) {
                     [encoder useSPS:sps];
                     [encoder usePPS:pps];
+                    if (encoder.delegate
+                        && [encoder.delegate respondsToSelector:@selector(encoder:didProcessFrame:)]) {
+                        [encoder.delegate encoder:encoder didProcessFrame:encoder.sps];
+                        [encoder.delegate encoder:encoder didProcessFrame:encoder.pps];
+                    }
                 }
             }
         }
     }
     
     // GET Slice
+    CMBlockBufferRef dataBuffer = CMSampleBufferGetDataBuffer(sampleBuffer);
+    size_t length, totalLength;
+    char *dataPtr;
     
+    OSStatus ret = CMBlockBufferGetDataPointer(dataBuffer, 0, &length, &totalLength, &dataPtr);
+    if (ret == noErr) {
+        size_t bufferOffset = 0;
+        
+        while (bufferOffset < totalLength - 4) {
+            @autoreleasepool {
+                uint32_t naulLength = *((uint32_t *)((uint8_t *)dataPtr + bufferOffset));
+                naulLength = CFSwapInt32BigToHost(naulLength);
+                VCH264Frame *frame = [[VCH264Frame alloc] init];
+                [frame createParseDataWithSize:naulLength];
+                [frame useExternParseDataLength:4];
+                *(frame.parseData + 3) = 1;
+                memcpy(frame.parseData + 4, dataPtr + bufferOffset + 4, naulLength);
+                
+                frame.frameType = [VCH264Frame getFrameType:frame];
+                
+                if (encoder && encoder.delegate) {
+                    if ([encoder.delegate respondsToSelector:@selector(encoder:didProcessFrame:)]) {
+                        [encoder.delegate encoder:encoder didProcessFrame:frame];
+                    }
+                }
+                bufferOffset += (4 + naulLength);
+            }
+        }
+    }
 }
 
 - (instancetype)init {
@@ -164,7 +197,6 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
     CFNumberRef fpsRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &fps);
     VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ExpectedFrameRate, fpsRef);
     
-//    int bitRate = width * height * 3 * 4 * 8;
     NSInteger bitrate = self.config.bitrate;
     CFNumberRef bitRateRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &bitrate);
     VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_AverageBitRate, bitRateRef);
@@ -215,7 +247,7 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
 - (void)useSPS:(NSData *)spsData {
     VCH264SPSFrame *frame = [[VCH264SPSFrame alloc] init];
     [frame createParseDataWithSize:spsData.length];
-    frame.parseData -= 4;
+    [frame useExternParseDataLength:4];
     *(frame.parseData + 3) = 1;
     memcpy(frame.parseData + 4, spsData.bytes, spsData.length);
     frame.frameType = [VCH264Frame getFrameType:frame];
@@ -228,7 +260,7 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
 - (void)usePPS:(NSData *)ppsData {
     VCH264Frame *frame = [[VCH264Frame alloc] init];
     [frame createParseDataWithSize:ppsData.length];
-    frame.parseData -= 4;
+    [frame useExternParseDataLength:4];
     *(frame.parseData + 3) = 1;
     frame.frameType = [VCH264Frame getFrameType:frame];
     memcpy(frame.parseData + 4, ppsData.bytes, ppsData.length);
@@ -236,7 +268,11 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
 }
 
 - (void)encodeWithImage:(VCBaseImage *)image {
-    CMTime ptsTime = CMTimeMake(self.pts++, 1000);
+    if (![self.currentState isEqualToInteger:VCBaseCodecStateRunning]) {
+        return;
+    }
+    
+    CMTime ptsTime = CMTimeMake(self.pts++, (int)self.config.fps);
     VTEncodeInfoFlags flags = 0;
     OSStatus statusCode = VTCompressionSessionEncodeFrame(_compressionSession,
                                     image.pixelBuffer,

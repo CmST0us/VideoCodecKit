@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <VideoCodecKit/VideoCodecKit.h>
 
-@interface VCEncoderController : NSObject
+@interface VCEncoderController : NSObject<VCBaseEncoderDelegate>
 @property (nonatomic, strong) VCVTH264Encoder *encoder;
+@property (nonatomic, copy) NSString *outputFile;
 - (void)runEncoder;
 @end
 

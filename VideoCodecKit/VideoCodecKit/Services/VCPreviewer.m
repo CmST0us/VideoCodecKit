@@ -323,7 +323,7 @@
             if (self.delegate) {
                 dispatch_queue_t workingQueue = [self.delegate processWorkingQueue];
                 dispatch_async(workingQueue, ^{
-                    [self.delegate previewer:self didProcessImage:image];
+                    [self.delegate previewer:self didProcessImage:(VCBaseImage *)image];
                 });
             }
         }

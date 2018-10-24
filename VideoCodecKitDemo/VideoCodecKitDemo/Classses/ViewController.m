@@ -50,7 +50,12 @@
     
     
     self.encoderController = [[VCEncoderController alloc] init];
-    [self.encoderController runEncoder];
+#if TARGET_IPHONE_SIMULATOR
+    self.encoderController.outputFile = @"/tmp/output.h264";
+#else
+    self.encoderController.outputFile = @"";
+#endif
+//    [self.encoderController runEncoder];
     
     [self setupDisplayLayer];
     [self bindData];

@@ -44,6 +44,11 @@ CONST_STRING(kVCBaseFrameUserInfoFFmpegAVCodecContextKey);
     memset(_parseDataPtr, 0, size + 4);
 }
 
+- (void)useExternParseDataLength:(NSUInteger)length {
+    self.parseData -= length;
+    self.parseSize += length;
+}
+
 - (void)dealloc {
     if (_parseDataPtr != NULL) {
         free(_parseDataPtr);
