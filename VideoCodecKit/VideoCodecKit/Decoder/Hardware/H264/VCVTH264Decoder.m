@@ -291,13 +291,13 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         [f createParseDataWithSize:size.integerValue];
         memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
         
-        f.frameType = [VCH264FrameParser getFrameType:f];
+        f.frameType = [VCH264Frame getFrameType:f];
         // check if frame is sps
         if (f.frameType == VCH264FrameTypeSPS) {
             f = [[VCH264SPSFrame alloc] initWithWidth:frame.width height:frame.height];
             [f createParseDataWithSize:size.integerValue];
             memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
-            f.frameType = [VCH264FrameParser getFrameType:f];
+            f.frameType = [VCH264Frame getFrameType:f];
         }
         
         f.frameIndex = frame.frameIndex;
