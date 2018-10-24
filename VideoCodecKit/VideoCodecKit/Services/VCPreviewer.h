@@ -21,6 +21,8 @@
 
 @class VCPreviewer;
 @protocol VCPreviewerDelegate<NSObject>
+@required;
+- (dispatch_queue_t)processWorkingQueue;
 - (void)previewer:(VCPreviewer *)aPreviewer didProcessImage:(VCBaseImage *)aImage;
 @end
 
