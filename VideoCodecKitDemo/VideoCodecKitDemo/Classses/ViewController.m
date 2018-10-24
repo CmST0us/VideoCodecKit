@@ -24,15 +24,18 @@
 @property (nonatomic, assign) NSInteger decodeFrameCount;
 @property (nonatomic, strong) UITapGestureRecognizer *playGestureRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *stopGestureRecognizer;
+@property (nonatomic, strong) dispatch_queue_t encodeWorkingQueue;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.encodeWorkingQueue = dispatch_queue_create("encode_work_queue", DISPATCH_QUEUE_SERIAL);
     self.decoderController = [[VCDecodeController alloc] init];
     self.decoderController.previewer.watermark = 3;
     self.decoderController.previewer.previewType = VCPreviewerTypeVTLiveH264VideoOnly;
+    self.decoderController.previewer.delegate = self;
     self.decoderController.parseFilePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"h264"];
 //    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/test.h264";
     self.playGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playGestureHandler)];
@@ -92,6 +95,14 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)previewer:(VCPreviewer *)aPreviewer didProcessImage:(VCBaseImage *)aImage {
+    [self.encoderController.encoder encodeWithImage:aImage];
+}
+
+- (dispatch_queue_t)processWorkingQueue {
+    return self.encodeWorkingQueue;
 }
 
 @end
