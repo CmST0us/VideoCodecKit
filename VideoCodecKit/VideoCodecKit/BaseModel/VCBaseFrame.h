@@ -22,5 +22,10 @@ DECLARE_CONST_STRING(kVCBaseFrameUserInfoFFmpegAVCodecContextKey);
 - (instancetype)initWithWidth:(NSUInteger)width
                        height:(NSUInteger)height;
 
+/**
+ 创建parseData内存
+
+ @param size 大小，注意实际创建的时候会在头多分配4字节，以便于添加修改start code。即parseData指向实际分配后4字节地址。
+ */
 - (void)createParseDataWithSize:(NSUInteger)size;
 @end
