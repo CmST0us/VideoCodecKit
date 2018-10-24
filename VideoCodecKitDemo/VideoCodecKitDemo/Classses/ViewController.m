@@ -55,7 +55,7 @@
 #else
     self.encoderController.outputFile = @"";
 #endif
-//    [self.encoderController runEncoder];
+    [self.encoderController runEncoder];
     
     [self setupDisplayLayer];
     [self bindData];

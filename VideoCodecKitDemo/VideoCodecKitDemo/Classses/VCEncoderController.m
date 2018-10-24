@@ -18,8 +18,8 @@
     self = [super init];
     if (self) {
         VCBaseEncoderConfig *config = [[VCBaseEncoderConfig alloc] init];
-        config.width = 1920;
-        config.height = 1080;
+        config.width = 720;
+        config.height = 480;
         config.fps = 60;
         config.bitrate = config.height * config.width * 3 * 8;
         config.codecType = kCMVideoCodecType_H264;

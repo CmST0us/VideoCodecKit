@@ -285,9 +285,7 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
 #if DEBUG
         NSLog(@"[ENCODER][VT]: encode frame failed with %d", (int)statusCode);
 #endif
-        VTCompressionSessionInvalidate(_compressionSession);
-        CFRelease(_compressionSession);
-        _compressionSession = NULL;
+        [self invalidate];
         return;
     }
 }
