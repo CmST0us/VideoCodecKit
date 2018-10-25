@@ -13,6 +13,7 @@
 #import "VCH264FFMpegFrameParser.h"
 #import "VCH264FFmpegDecoder.h"
 #import "VCH264Frame.h"
+#import "VCH264SPSFrame.h"
 #import "VCH264Image+FFmpeg.h"
 #import "VCPriorityObjectQueue.h"
 @interface VCH264FFmpegDecoder () {
@@ -60,6 +61,17 @@
     pthread_mutex_lock(&_decodeLock);
     VCH264Frame *h264Frame = (VCH264Frame *)frame;
     VCH264Image *image = nil;
+    
+    if (h264Frame.frameType == VCH264FrameTypeSPS) {
+        @autoreleasepool {
+            VCH264SPSFrame *spsFrame = [[VCH264SPSFrame alloc] init];
+            [spsFrame createParseDataWithSize:h264Frame.parseSize];
+            memcpy(spsFrame.parseData, h264Frame.parseData, h264Frame.parseSize);
+            spsFrame.frameType = [VCH264Frame getFrameType:spsFrame];
+            self.fps = spsFrame.fps;
+        }
+    }
+    
     AVPacket *packet = av_packet_alloc();
     
     packet->data = h264Frame.parseData;
