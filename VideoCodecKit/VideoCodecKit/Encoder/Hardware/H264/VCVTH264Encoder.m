@@ -172,6 +172,10 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
         VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_RealTime, kCFBooleanTrue);
     }
     
+    VTSessionSetProperty(_compressionSession,
+                         kVTCompressionPropertyKey_AllowFrameReordering,
+                         self.config.enableBFrame ? kCFBooleanTrue : kCFBooleanFalse);
+    
     switch (self.config.quality) {
         case VCBaseEncoderQualityNormal:
             VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Main_AutoLevel);
@@ -182,16 +186,20 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
         case VCBaseEncoderQualityGood:
             VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_High_AutoLevel);
             break;
-        case VCBaseEncoderQualitySpliendid:
+        case VCBaseEncoderQualitySplendid:
             VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Extended_AutoLevel);
             break;
         default:
             break;
     }
     
-    NSInteger gopSize = self.config.gopSize;
-    CFNumberRef gopSizeRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &gopSize);
-    VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, gopSizeRef);
+    NSInteger keyFrameIntervalDuration = self.config.keyFrameIntervalDuration;
+    CFNumberRef keyFrameIntervalDurationRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &keyFrameIntervalDuration);
+    VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, keyFrameIntervalDurationRef);
+    
+    NSInteger keyFrameInterval = self.config.keyFrameInterval;
+    CFNumberRef keyFrameIntervalRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &keyFrameInterval);
+    VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, keyFrameIntervalRef);
     
     NSInteger fps = self.config.fps;
     CFNumberRef fpsRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &fps);
@@ -202,9 +210,9 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
     VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_AverageBitRate, bitRateRef);
     
     //设置码率，上限，单位是bps
-//    int bitRateLimit = width * height * 3 * 4;
-//    CFNumberRef bitRateLimitRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &bitRateLimit);
-//    VTSessionSetProperty(encodingSession, kVTCompressionPropertyKey_DataRateLimits, bitRateLimitRef);
+    int bitRateLimit = self.config.width * self.config.height * 3 * 4;
+    CFNumberRef bitRateLimitRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &bitRateLimit);
+    VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_DataRateLimits, bitRateLimitRef);
     
     [self commitStateTransition];
     return YES;
@@ -272,12 +280,14 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
         return;
     }
     
-    CMTime ptsTime = CMTimeMake(self.pts++, (int)self.config.fps);
+    CMTime ptsTime = CMTimeMake(self.frameCount, (int)self.config.fps);
+    CMTime duration = CMTimeMake(1, (int)self.config.fps);
     VTEncodeInfoFlags flags = 0;
+    
     OSStatus statusCode = VTCompressionSessionEncodeFrame(_compressionSession,
                                     image.pixelBuffer,
                                     ptsTime,
-                                    kCMTimeInvalid,
+                                    duration,
                                     NULL,
                                     NULL,
                                     &flags);
