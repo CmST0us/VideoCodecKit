@@ -23,9 +23,11 @@
         config.fps = 60;
         config.bitrate = config.height * config.width * 3 * 8;
         config.codecType = kCMVideoCodecType_H264;
-        config.gopSize = 20;
-        config.quality = VCBaseEncoderQualitySpliendid;
+        config.keyFrameIntervalDuration = 1;
+        config.keyFrameInterval = config.fps;
+        config.quality = VCBaseEncoderQualityNormal ;
         config.isRealTime = YES;
+        config.enableBFrame = NO;
         
         _encoder = [[VCVTH264Encoder alloc] initWithConfig:config];
         _encoder.delegate = self;

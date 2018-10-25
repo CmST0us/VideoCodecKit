@@ -10,7 +10,7 @@
 #import <CoreMedia/CoreMedia.h>
 
 typedef NS_ENUM(NSUInteger, VCBaseEncoderQuality) {
-    VCBaseEncoderQualitySpliendid,
+    VCBaseEncoderQualitySplendid,
     VCBaseEncoderQualityGood,
     VCBaseEncoderQualityNormal,
     VCBaseEncoderQualityFast,
@@ -25,7 +25,12 @@ typedef NS_ENUM(NSUInteger, VCBaseEncoderQuality) {
 @property (nonatomic, assign) CMVideoCodecType codecType;
 
 @property (nonatomic, assign) BOOL isRealTime;
-@property (nonatomic, assign) NSInteger gopSize;
+@property (nonatomic, assign) BOOL enableBFrame;
+/**
+ 每隔多少秒一个I帧
+ */
+@property (nonatomic, assign) NSInteger keyFrameIntervalDuration;
+@property (nonatomic, assign) NSInteger keyFrameInterval;
 @property (nonatomic, assign) VCBaseEncoderQuality quality;
 @end
 

@@ -53,7 +53,7 @@
 @property (nonatomic, strong) VCBaseEncoderConfig *config;
 @property (nonatomic, weak) id<VCBaseEncoderDelegate> delegate;
 
-@property (nonatomic, assign) NSUInteger pts;
+@property (nonatomic, assign) NSUInteger frameCount;
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithConfig:(VCBaseEncoderConfig *)config;
