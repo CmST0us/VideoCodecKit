@@ -23,7 +23,7 @@
         config.fps = 60;
         config.bitrate = config.height * config.width * 3 * 8;
         config.codecType = kCMVideoCodecType_H264;
-        config.gopSize = 2;
+        config.gopSize = 20;
         config.quality = VCBaseEncoderQualitySpliendid;
         config.isRealTime = YES;
         
