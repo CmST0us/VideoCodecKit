@@ -50,10 +50,19 @@
     
     
     self.encoderController = [[VCEncoderController alloc] init];
+    
 #if TARGET_IPHONE_SIMULATOR
-    self.encoderController.outputFile = @"/tmp/output.h264";
+    NSString *filePath = @"/tmp/output.h264";
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    }
+    self.encoderController.outputFile = filePath;
 #else
-    self.encoderController.outputFile = @"";
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"output.h264"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    }
+    self.encoderController.outputFile = filePath;
 #endif
     [self.encoderController runEncoder];
     
