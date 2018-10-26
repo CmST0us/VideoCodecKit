@@ -37,7 +37,8 @@
     self.decoderController.previewer.previewType = VCPreviewerTypeVTLiveH264VideoOnly;
     self.decoderController.previewer.delegate = self;
     self.decoderController.parseFilePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"h264"];
-//    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/test.h264";
+//    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/encoder/abc.h264";
+//    self.decoderController.parseFilePath = @"/tmp/output.h264";
     self.playGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playGestureHandler)];
     self.playGestureRecognizer.numberOfTouchesRequired = 1;
     self.playGestureRecognizer.numberOfTapsRequired = 1;
@@ -54,7 +55,7 @@
 #if TARGET_IPHONE_SIMULATOR
     NSString *filePath = @"/tmp/output.h264";
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+//        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     }
     self.encoderController.outputFile = filePath;
 #else
@@ -64,7 +65,7 @@
     }
     self.encoderController.outputFile = filePath;
 #endif
-    [self.encoderController runEncoder];
+//    [self.encoderController runEncoder];
     
     [self setupDisplayLayer];
     [self bindData];
