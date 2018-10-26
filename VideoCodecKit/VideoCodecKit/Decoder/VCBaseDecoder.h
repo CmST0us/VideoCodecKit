@@ -37,7 +37,8 @@
 
 /**
  delegate 方式回调
-
+ !! 需要注意的是，对于一个VCBaseFrame，如果为一个keyFrame，则parseData必须为 |SPS|PPS|SEI(可选)|IDR|
+    对于一个非keyFrame, parseData必须为 |SEI(可选)|NAL| 
  @param frame 原始帧
  */
 @required
@@ -60,7 +61,6 @@
 @property (nonatomic, assign) NSInteger fps;
 /**
  使用配置创建解码器
-
  @param config 配置
  @return 解码器实例
  */
