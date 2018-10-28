@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F6C8689217E448300881F72 /* VCEncoderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C8688217E448300881F72 /* VCEncoderController.m */; };
 		4F76FC5B21626ED5002E7F0D /* KVSig.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; };
 		4F76FC5C21626ED5002E7F0D /* KVSig.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F76FC7521627512002E7F0D /* VideoCodecKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; };
@@ -45,6 +46,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4F6C8687217E448300881F72 /* VCEncoderController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCEncoderController.h; sourceTree = "<group>"; };
+		4F6C8688217E448300881F72 /* VCEncoderController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCEncoderController.m; sourceTree = "<group>"; };
 		4F76FC5A21626ED5002E7F0D /* KVSig.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KVSig.framework; path = VideoCodecKitDemo/KVSig.framework; sourceTree = "<group>"; };
 		4F76FC7421627512002E7F0D /* VideoCodecKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoCodecKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F92799921442E1700F17F9A /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavdevice.a; sourceTree = "<group>"; };
@@ -138,6 +141,8 @@
 				4FBF02232144284A00CA0EC8 /* Main.storyboard */,
 				4F9279D32145118600F17F9A /* VCDecodeController.h */,
 				4F9279D42145118600F17F9A /* VCDecodeController.m */,
+				4F6C8687217E448300881F72 /* VCEncoderController.h */,
+				4F6C8688217E448300881F72 /* VCEncoderController.m */,
 			);
 			path = Classses;
 			sourceTree = "<group>";
@@ -247,6 +252,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F6C8689217E448300881F72 /* VCEncoderController.m in Sources */,
 				4F9279D52145118600F17F9A /* VCDecodeController.m in Sources */,
 				4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */,
 				4FBF022D2144284B00CA0EC8 /* main.m in Sources */,

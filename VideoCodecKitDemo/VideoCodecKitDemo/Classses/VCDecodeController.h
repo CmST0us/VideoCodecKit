@@ -12,7 +12,7 @@
 #import <VideoCodecKit/VCH264FFmpegDecoder.h>
 #import <VideoCodecKit/VCPreviewer.h>
 
-@interface VCDecodeController : NSObject<VCPreviewerDelegate>
+@interface VCDecodeController : NSObject
 
 @property (nonatomic, copy) NSString *parseFilePath;
 @property (nonatomic, strong) VCPreviewer *previewer;

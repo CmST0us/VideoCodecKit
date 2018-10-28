@@ -38,9 +38,15 @@ CONST_STRING(kVCBaseFrameUserInfoFFmpegAVCodecContextKey);
 - (void)createParseDataWithSize:(NSUInteger)size {
     self.parseSize = size;
     // 便于后面不同 startCode 转换
-    _parseDataPtr = (uint8_t *)malloc(size + 1);
-    self.parseData = _parseDataPtr + 1;
-    memset(self.parseData, 0, size);
+    // 便于编码时补充 start code
+    _parseDataPtr = (uint8_t *)malloc(size + 4);
+    self.parseData = _parseDataPtr + 4;
+    memset(_parseDataPtr, 0, size + 4);
+}
+
+- (void)useExternParseDataLength:(NSUInteger)length {
+    self.parseData -= length;
+    self.parseSize += length;
 }
 
 - (void)dealloc {

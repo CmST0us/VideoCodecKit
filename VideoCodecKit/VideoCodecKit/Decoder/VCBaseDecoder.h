@@ -23,7 +23,7 @@
  @param frame 原始帧
  @return 解码图片
  */
-- (VCBaseImage *)decode:(VCBaseFrame *)frame;
+- (VCBaseImage *)decode:(VCBaseFrame *)frame DEPRECATED_MSG_ATTRIBUTE("由于FFmpeg问题，frame里面可能包含多个帧，请使用decodeFrame:completion: 或 decodeWithFrame:");
 
 /**
  回调block
@@ -37,7 +37,8 @@
 
 /**
  delegate 方式回调
-
+ !! 需要注意的是，对于一个VCBaseFrame，如果为一个keyFrame，则parseData必须为 |SPS|PPS|SEI(可选)|IDR|
+    对于一个非keyFrame, parseData必须为 |SEI(可选)|NAL| 
  @param frame 原始帧
  */
 @required
@@ -53,7 +54,6 @@
 
 @interface VCBaseDecoder : VCBaseCodec <VCBaseDecoderProtocol>
 
-// 解码器当前状态
 @property (nonatomic, readonly) VCBaseDecoderConfig *config;
 
 @property (nonatomic, weak) id<VCBaseDecoderDelegate> delegate;
@@ -61,7 +61,6 @@
 @property (nonatomic, assign) NSInteger fps;
 /**
  使用配置创建解码器
-
  @param config 配置
  @return 解码器实例
  */

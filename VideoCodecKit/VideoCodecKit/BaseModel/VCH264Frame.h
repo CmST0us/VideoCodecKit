@@ -30,4 +30,6 @@ typedef NS_ENUM(NSUInteger, VCH264FrameType) {
 
 @property (nonatomic, assign) NSInteger startCodeSize;
 
++ (VCH264FrameType)getFrameType:(VCH264Frame *)frame;
+
 @end

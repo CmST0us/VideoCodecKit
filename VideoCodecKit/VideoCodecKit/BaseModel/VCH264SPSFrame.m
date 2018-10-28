@@ -446,7 +446,7 @@ int h264_decode_seq_parameter_set_out(IN unsigned char * buf,
         }
         else
         {
-            *framerate = 30;
+            *framerate = 0;
         }
         
         
