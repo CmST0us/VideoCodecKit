@@ -368,6 +368,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     for (NSNumber *offset in sortOffsetKeys) {
         NSNumber *size = offsetDict[offset];
         VCH264Frame *f = [[VCH264Frame alloc] initWithWidth:frame.width height:frame.height];
+        f.frameIndex = decodeFrame.frameIndex;
         [f createParseDataWithSize:size.integerValue];
         memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
         f.frameType = [VCH264Frame getFrameType:f];
