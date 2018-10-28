@@ -9,6 +9,8 @@
 #import "VCBaseDecoder.h"
 
 @class VCH264SPSFrame;
+@class VCH264PPSFrame;
 @interface VCVTH264Decoder : VCBaseDecoder
 @property (nonatomic, readonly) VCH264SPSFrame *currentSPSFrame;
+@property (nonatomic, readonly) VCH264PPSFrame *currentPPSFrame;
 @end

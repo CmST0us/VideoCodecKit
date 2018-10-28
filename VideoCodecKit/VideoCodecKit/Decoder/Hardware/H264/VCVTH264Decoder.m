@@ -13,21 +13,14 @@
 #import "VCYUV420PImage.h"
 #import "VCPriorityObjectQueue.h"
 #import "VCH264SPSFrame.h"
+#import "VCH264PPSFrame.h"
 @interface VCVTH264Decoder () {
     CMVideoFormatDescriptionRef _videoFormatDescription;
     VTDecompressionSessionRef _decodeSession;
     
-    uint8_t *_sps;
-    size_t _spsSize;
-    uint8_t *_pps;
-    size_t _ppsSize;
-    uint8_t *_sei;
-    size_t _seiSize;
     NSInteger _startCodeSize;
     
     BOOL _isVideoFormatDescriptionUpdate;
-    BOOL _hasSEI;
-    
     pthread_mutex_t _decoderLock;
 }
 
@@ -51,22 +44,15 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     if (self) {
         _videoFormatDescription = NULL;
         _decodeSession = NULL;
-        _spsSize = 0;
-        _ppsSize = 0;
-        _seiSize = 0;
-        
+        _currentPPSFrame = nil;
+        _currentSPSFrame = nil;
         pthread_mutex_init(&_decoderLock, NULL);
-        _hasSEI = NO;
         _isVideoFormatDescriptionUpdate = NO;
     }
     return self;
 }
 
 - (void)dealloc {
-    [self freeSPS];
-    [self freePPS];
-    [self freeSEI];
-    
     [self freeVideoFormatDescription];
     [self freeDecodeSession];
     pthread_mutex_destroy(&_decoderLock);
@@ -91,9 +77,6 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         
         [self freeDecodeSession];
         [self freeVideoFormatDescription];
-        [self freeSPS];
-        [self freePPS];
-        [self freeSEI];
         pthread_mutex_unlock(&_decoderLock);
         return YES;
     }
@@ -118,38 +101,14 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     }
 }
 
-- (void)freeSPS {
-    if (_sps != NULL) {
-        free(_sps);
-        _sps = NULL;
-        _spsSize = 0;
-    }
-}
-
-- (void)freePPS {
-    if (_pps != NULL) {
-        free(_pps);
-        _pps = NULL;
-        _ppsSize = 0;
-    }
-}
-
-- (void)freeSEI {
-    if (_sei != NULL) {
-        free(_sei);
-        _sei = NULL;
-        _seiSize = 0;
-    }
-}
-
 - (BOOL)setupVideoFormatDescription {
     [self freeVideoFormatDescription];
     
-    const uint8_t *para[3] = {_sps, _pps, _sei};
-    const size_t paraSize[3] = {_spsSize, _ppsSize, _seiSize};
+    const uint8_t *para[2] = {_currentSPSFrame.parseData, _currentPPSFrame.parseData};
+    const size_t paraSize[2] = {_currentSPSFrame.parseSize, _currentPPSFrame.parseSize};
     
     OSStatus ret = CMVideoFormatDescriptionCreateFromH264ParameterSets(kCFAllocatorDefault,
-                                                                       _hasSEI ? 2 : 2,
+                                                                       2,
                                                                        para,
                                                                        paraSize,
                                                                        4,
@@ -208,77 +167,13 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     return NO;
 }
 
-- (void)tryUseSPS:(uint8_t *)spsData length:(size_t)length {
+- (BOOL)useSpsPpsFromKeyFrame:(VCH264Frame *)frame
+               outputIdrFrame:(VCH264Frame **)idrFrame{
+    if (!frame.isKeyFrame) return NO;
     
-    if (spsData != NULL && _sps != NULL && memcmp(spsData, _sps, length) == 0) {
-        // same
-        return;
-    }
-    
-    [self freeSPS];
-    
-    _spsSize = length;
-    _sps = (uint8_t *)malloc(_spsSize);
-    memcpy(_sps, spsData, _spsSize);
-    _isVideoFormatDescriptionUpdate = YES;
-}
-
-- (void)tryUsePPS:(uint8_t *)ppsData length:(size_t)length {
-    if (ppsData != NULL && _pps != NULL && memcmp(ppsData, _pps, length) == 0) {
-        // same
-        return;
-    }
-    
-    [self freePPS];
-    
-    _ppsSize = length;
-    _pps = (uint8_t *)malloc(_ppsSize);
-    memcpy(_pps, ppsData, _ppsSize);
-    _isVideoFormatDescriptionUpdate = YES;
-}
-
-- (void)tryUseSEI:(uint8_t *)seiData length:(size_t)length {
-    if (seiData != NULL && _sei != NULL && memcmp(seiData, _sei, length) == 0) {
-        // same
-        return;
-    }
-
-    [self freeSEI];
-    
-    _seiSize = length;
-    _sei = (uint8_t *)malloc(_seiSize);
-    memcpy(_sei, seiData, _seiSize);
-    _isVideoFormatDescriptionUpdate = YES;
-    _hasSEI = YES;
-}
-
-- (NSArray *)extractKeyFrame:(VCH264Frame *)frame {
-    if (!frame.isKeyFrame){
-        return nil;
-    }
-    
-    NSMutableArray *frames = [NSMutableArray array];
-    NSMutableDictionary *offsetDict = [NSMutableDictionary dictionary];
-    NSInteger lastIndex = 0;
-    for (NSInteger i = frame.startCodeSize; i < frame.parseSize - 4; i++) {
-        static uint8_t startCode1[4] = {0x00, 0x00, 0x00, 0x01};
-        static uint8_t startCode2[3] = {0x00, 0x00, 0x01};
-        if (memcmp(frame.parseData + i, startCode1, sizeof(startCode1)) == 0) {
-            offsetDict[@(lastIndex)] = @(i - lastIndex);
-            lastIndex = i;
-            i += 3;
-        }
-        if(memcmp(frame.parseData + i, startCode2, sizeof(startCode2)) == 0) {
-            offsetDict[@(lastIndex)] = @(i - lastIndex);
-            lastIndex = i;
-            i += 3;
-        }
-    }
-    
-    if (lastIndex < frame.parseSize) {
-        offsetDict[@(lastIndex)] = @(frame.parseSize - lastIndex);
-    }
-    
+    BOOL updateSPS = NO;
+    BOOL updatePPS = NO;
+    NSDictionary *offsetDict = [self findAllFrameNaulOffset:frame];
     NSArray *sortOffsetKeys = [offsetDict.allKeys sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         if ([obj1 integerValue] > [obj2 integerValue]) return NSOrderedDescending;
         if ([obj1 integerValue] < [obj2 integerValue]) return NSOrderedAscending;
@@ -298,61 +193,69 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
             [f createParseDataWithSize:size.integerValue];
             memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
             f.frameType = [VCH264Frame getFrameType:f];
+            _currentSPSFrame = (VCH264SPSFrame *)f;
+            updateSPS = YES;
+        } else if (f.frameType == VCH264FrameTypePPS) {
+            f = [[VCH264PPSFrame alloc] initWithWidth:frame.width height:frame.height];
+            [f createParseDataWithSize:size.integerValue];
+            memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
+            f.frameType = [VCH264Frame getFrameType:f];
+            _currentPPSFrame = (VCH264PPSFrame *)f;
+            updatePPS = YES;
+        } else if (f.frameType == VCH264FrameTypeIDR) {
+            f = [[VCH264Frame alloc] initWithWidth:frame.width height:frame.height];
+            [f createParseDataWithSize:size.integerValue];
+            memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
+            f.frameType = [VCH264Frame getFrameType:f];
+            *idrFrame = f;
         }
-        
-        f.frameIndex = frame.frameIndex;
-        f.pts = frame.pts;
-        f.dts = frame.dts;
-        f.isKeyFrame = NO;
-        [frames addObject:f];
     }
-    return frames;
+    
+    return updateSPS && updatePPS;
 }
 
-- (VCBaseImage *)decode:(VCBaseFrame *)frame {
+- (NSDictionary<NSNumber *, NSNumber *> *)findAllFrameNaulOffset:(VCH264Frame *)frame {
+    NSMutableDictionary *offsetDict = [NSMutableDictionary dictionary];
+    NSInteger lastIndex = 0;
+    for (NSInteger i = frame.startCodeSize; i < frame.parseSize - 4; i++) {
+        static uint8_t startCode1[4] = {0x00, 0x00, 0x00, 0x01};
+        static uint8_t startCode2[3] = {0x00, 0x00, 0x01};
+        if (memcmp(frame.parseData + i, startCode1, sizeof(startCode1)) == 0) {
+            offsetDict[@(lastIndex)] = @(i - lastIndex);
+            lastIndex = i;
+            i += 3;
+        }
+        if(memcmp(frame.parseData + i, startCode2, sizeof(startCode2)) == 0) {
+            offsetDict[@(lastIndex)] = @(i - lastIndex);
+            lastIndex = i;
+            i += 3;
+        }
+    }
+    if (lastIndex < frame.parseSize) {
+        offsetDict[@(lastIndex)] = @(frame.parseSize - lastIndex);
+    }
+    return offsetDict;
+}
+
+- (VCBaseImage *)decodeSingleFrame:(VCH264Frame *)frame {
+
     if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) return nil;
-    
     if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return nil;
-    
-    VCH264Frame *decodeFrame = (VCH264Frame *)frame;
-    
-    if (decodeFrame.startCodeSize < 0) return nil;
-    
+
+    VCH264Frame *h264Frame = (VCH264Frame *)frame;
+    if (h264Frame.startCodeSize < 0) return nil;
     pthread_mutex_lock(&_decoderLock);
-    
-    _startCodeSize = decodeFrame.startCodeSize;
+    _startCodeSize = h264Frame.startCodeSize;
     if (_startCodeSize == 3) {
-        decodeFrame.parseData -= 1;
-        decodeFrame.parseSize += 1;
-        decodeFrame.startCodeSize = 4;
+        [h264Frame useExternParseDataLength:1];
+        h264Frame.startCodeSize = 4;
         _startCodeSize = 4;
     }
-    
-    uint32_t nalSize = (uint32_t)(decodeFrame.parseSize - _startCodeSize);
-    uint32_t *pNalSize = (uint32_t *)decodeFrame.parseData;
+    uint32_t nalSize = (uint32_t)(h264Frame.parseSize - _startCodeSize);
+    uint32_t *pNalSize = (uint32_t *)h264Frame.parseData;
     *pNalSize = CFSwapInt32HostToBig(nalSize);
     
-    if (decodeFrame.frameType == VCH264FrameTypeSPS) {
-        // copy sps
-        VCH264SPSFrame *spsFrame = (VCH264SPSFrame *)frame;
-        _currentSPSFrame = spsFrame;
-        self.fps = _currentSPSFrame.fps;
-        [self tryUseSPS:spsFrame.parseData + _startCodeSize length:nalSize];
-        pthread_mutex_unlock(&_decoderLock);
-        return nil;
-    } else if (decodeFrame.frameType == VCH264FrameTypePPS) {
-        // copy pps
-        [self tryUsePPS:decodeFrame.parseData + _startCodeSize length:nalSize];
-        pthread_mutex_unlock(&_decoderLock);
-        return nil;
-    } else if (decodeFrame.frameType == VCH264FrameTypeSEI) {
-        // copy sei
-        [self tryUseSEI:decodeFrame.parseData + _startCodeSize length:nalSize];
-        pthread_mutex_unlock(&_decoderLock);
-        return nil;
-    }
-    
-    if (decodeFrame.frameType == VCH264FrameTypeIDR) {
+    if (h264Frame.frameType == VCH264FrameTypeIDR) {
         if (_isVideoFormatDescriptionUpdate) {
             if (![self setupVideoFormatDescription]) {
                 _isVideoFormatDescriptionUpdate = YES;
@@ -363,28 +266,26 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
             }
         }
     }
-    
     if (_videoFormatDescription == NULL) {
         pthread_mutex_unlock(&_decoderLock);
         return nil;
     }
-    
     // decode process
     CMBlockBufferRef blockBuffer = NULL;
     CVPixelBufferRef outputPixelBuffer = NULL;
     OSStatus ret = CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault,
-                                                      decodeFrame.parseData,
-                                                      decodeFrame.parseSize,
+                                                      h264Frame.parseData,
+                                                      h264Frame.parseSize,
                                                       kCFAllocatorNull,
                                                       NULL,
                                                       0,
-                                                      decodeFrame.parseSize,
+                                                      h264Frame.parseSize,
                                                       0,
                                                       &blockBuffer);
     if (ret == kCMBlockBufferNoErr) {
         // decode success
         CMSampleBufferRef sampleBuffer = NULL;
-        const size_t sampleSizeArray[] = {decodeFrame.parseSize};
+        const size_t sampleSizeArray[] = {h264Frame.parseSize};
         
         ret = CMSampleBufferCreateReady(kCFAllocatorDefault,
                                         blockBuffer,
@@ -419,9 +320,9 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         return nil;
     }
     
-    VCYUV420PImage *image = [[VCYUV420PImage alloc] initWithWidth:decodeFrame.width height:decodeFrame.height];
-    [image.userInfo setObject:@(decodeFrame.frameIndex) forKey:kVCBaseImageUserInfoFrameIndexKey];
-    if (decodeFrame.frameType == VCH264FrameTypeIDR) {
+    VCYUV420PImage *image = [[VCYUV420PImage alloc] initWithWidth:h264Frame.width height:h264Frame.height];
+    [image.userInfo setObject:@(h264Frame.frameIndex) forKey:kVCBaseImageUserInfoFrameIndexKey];
+    if (h264Frame.frameType == VCH264FrameTypeIDR) {
         [image.userInfo setObject:@(kVCPriorityIDR) forKey:kVCBaseImageUserInfoFrameIndexKey];
     }
     
@@ -432,30 +333,53 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     return image;
 }
 
+- (VCBaseImage *)decode:(VCBaseFrame *)frame {
+    if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) return nil;
+    if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return nil;
+    
+    VCH264Frame *decodeFrame = (VCH264Frame *)frame;
+    // 解帧
+    if (decodeFrame.isKeyFrame) {
+        // 关键帧提取SPS PPS
+        VCH264Frame *idrFrame = nil;
+        BOOL isUsedSpsPps = [self useSpsPpsFromKeyFrame:decodeFrame outputIdrFrame:&idrFrame];
+        if (isUsedSpsPps) {
+            _isVideoFormatDescriptionUpdate = YES;
+        } else {
+            _isVideoFormatDescriptionUpdate = NO;
+        }
+        return [self decodeSingleFrame:idrFrame];
+    } else {
+        NSDictionary *offsetDict = [self findAllFrameNaulOffset:decodeFrame];
+        NSArray *sortOffsetKeys = [offsetDict.allKeys sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            if ([obj1 integerValue] > [obj2 integerValue]) return NSOrderedDescending;
+            if ([obj1 integerValue] < [obj2 integerValue]) return NSOrderedAscending;
+            return NSOrderedSame;
+        }];
+        for (NSNumber *offset in sortOffsetKeys) {
+            NSNumber *size = offsetDict[offset];
+            VCH264Frame *f = [[VCH264Frame alloc] initWithWidth:frame.width height:frame.height];
+            [f createParseDataWithSize:size.integerValue];
+            memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);
+            f.frameType = [VCH264Frame getFrameType:f];
+            if (f.frameType == VCH264FrameTypeSEI) {
+                continue;
+            }
+            return [self decodeSingleFrame:f];
+        }
+    }
+    return nil;
+}
+
 - (void)decodeWithFrame:(VCBaseFrame *)frame {
     if (self.currentState.unsignedIntegerValue != VCBaseCodecStateRunning) return;
     if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return;
     VCH264Frame *decodeFrame = (VCH264Frame *)frame;
     if (decodeFrame.startCodeSize < 0) return;
     
-    // check is key frame
-    if (decodeFrame.isKeyFrame) {
-        NSArray *array = [self extractKeyFrame:decodeFrame];
-        [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            VCBaseImage * image = [self decode:obj];
-            if (image != NULL) {
-                if (self.delegate && [self.delegate respondsToSelector:@selector(decoder:didProcessImage:)]) {
-                    [self.delegate decoder:self didProcessImage:image];
-                }
-            }
-        }];
-    } else {
-        VCBaseImage * image = [self decode:frame];
-        if (image != NULL) {
-            if (self.delegate && [self.delegate respondsToSelector:@selector(decoder:didProcessImage:)]) {
-                [self.delegate decoder:self didProcessImage:image];
-            }
-        }
+    VCBaseImage *image = [self decode:frame];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(decoder:didProcessImage:)]) {
+        [self.delegate decoder:self didProcessImage:image];
     }
 }
 
@@ -464,24 +388,10 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     if (![[frame class] isSubclassOfClass:[VCH264Frame class]]) return;
     VCH264Frame *decodeFrame = (VCH264Frame *)frame;
     if (decodeFrame.startCodeSize < 0) return;
-    
-    // check is key frame
-    if (decodeFrame.isKeyFrame) {
-        NSArray *array = [self extractKeyFrame:decodeFrame];
-        [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            VCBaseImage * image = [self decode:obj];
-            if (image != NULL) {
-                if (block) {
-                    block(image);
-                }
-            }
-        }];
-    } else {
-        VCBaseImage * image = [self decode:frame];
-        if (image != NULL) {
-            if (block) {
-                block(image);
-            }
+    VCBaseImage * image = [self decode:frame];
+    if (image != NULL) {
+        if (block) {
+            block(image);
         }
     }
 }

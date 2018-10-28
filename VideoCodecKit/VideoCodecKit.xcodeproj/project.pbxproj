@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F1570462185ED160094FBEF /* VCH264PPSFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F1570442185ED160094FBEF /* VCH264PPSFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F1570472185ED160094FBEF /* VCH264PPSFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1570452185ED160094FBEF /* VCH264PPSFrame.m */; };
 		4F6C867C217E2FA500881F72 /* VCBaseEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6C867A217E2FA500881F72 /* VCBaseEncoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F6C867D217E2FA500881F72 /* VCBaseEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C867B217E2FA500881F72 /* VCBaseEncoder.m */; };
 		4F6C8680217E2FB600881F72 /* VCBaseEncoderConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6C867E217E2FB600881F72 /* VCBaseEncoderConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -79,6 +81,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F1570442185ED160094FBEF /* VCH264PPSFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264PPSFrame.h; sourceTree = "<group>"; };
+		4F1570452185ED160094FBEF /* VCH264PPSFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264PPSFrame.m; sourceTree = "<group>"; };
 		4F6C867A217E2FA500881F72 /* VCBaseEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseEncoder.h; sourceTree = "<group>"; };
 		4F6C867B217E2FA500881F72 /* VCBaseEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCBaseEncoder.m; sourceTree = "<group>"; };
 		4F6C867E217E2FB600881F72 /* VCBaseEncoderConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseEncoderConfig.h; sourceTree = "<group>"; };
@@ -401,6 +405,8 @@
 				4F76FC1321626AA3002E7F0D /* VCH264Frame.m */,
 				4FE2251B2164DF8400103B61 /* VCH264SPSFrame.h */,
 				4FE2251C2164DF8400103B61 /* VCH264SPSFrame.m */,
+				4F1570442185ED160094FBEF /* VCH264PPSFrame.h */,
+				4F1570452185ED160094FBEF /* VCH264PPSFrame.m */,
 				4F76FC1421626AA3002E7F0D /* VCH264Image.h */,
 				4F76FC1521626AA3002E7F0D /* VCH264Image.m */,
 				4F76FC1621626AA3002E7F0D /* VCYUV420PImage.h */,
@@ -457,6 +463,7 @@
 				4F76FC5521626DCA002E7F0D /* VCH264FFmpegDecoder.h in Headers */,
 				4F76FC5721626DCA002E7F0D /* VCBaseDecoder.h in Headers */,
 				4F935859217A242F00A9F613 /* VCBaseFrame.h in Headers */,
+				4F1570462185ED160094FBEF /* VCH264PPSFrame.h in Headers */,
 				4F76FC4D21626DCA002E7F0D /* VCBaseRenderProtocol.h in Headers */,
 				4F76FC4E21626DCA002E7F0D /* VCDecoderProgress.h in Headers */,
 				4F76FC4F21626DCA002E7F0D /* VCBaseFrameParser.h in Headers */,
@@ -551,6 +558,7 @@
 				4F76FC5E216270E1002E7F0D /* EKFSMObject.m in Sources */,
 				4F76FC5F216270E1002E7F0D /* VCVideoFPS.m in Sources */,
 				4F76FC60216270E1002E7F0D /* VCH264Frame.m in Sources */,
+				4F1570472185ED160094FBEF /* VCH264PPSFrame.m in Sources */,
 				4F76FC61216270E1002E7F0D /* VCH264Image.m in Sources */,
 				4F76FC62216270E1002E7F0D /* VCYUV420PImage.m in Sources */,
 				4F76FC63216270E1002E7F0D /* VCSafeQueue.m in Sources */,
