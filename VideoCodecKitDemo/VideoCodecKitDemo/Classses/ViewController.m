@@ -16,24 +16,29 @@
 
 #import "ViewController.h"
 #import "VCDecodeController.h"
-
+#import "VCEncoderController.h"
 
 @interface ViewController ()
 @property (nonatomic, strong) VCDecodeController *decoderController;
+@property (nonatomic, strong) VCEncoderController *encoderController;
 @property (nonatomic, assign) NSInteger decodeFrameCount;
 @property (nonatomic, strong) UITapGestureRecognizer *playGestureRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *stopGestureRecognizer;
+@property (nonatomic, strong) dispatch_queue_t encodeWorkingQueue;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.encodeWorkingQueue = dispatch_queue_create("encode_work_queue", DISPATCH_QUEUE_SERIAL);
     self.decoderController = [[VCDecodeController alloc] init];
     self.decoderController.previewer.watermark = 3;
     self.decoderController.previewer.previewType = VCPreviewerTypeVTLiveH264VideoOnly;
+    self.decoderController.previewer.delegate = self;
     self.decoderController.parseFilePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"h264"];
-//    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/test.h264";
+//    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/encoder/abc.h264";
+//    self.decoderController.parseFilePath = @"/tmp/output.h264";
     self.playGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playGestureHandler)];
     self.playGestureRecognizer.numberOfTouchesRequired = 1;
     self.playGestureRecognizer.numberOfTapsRequired = 1;
@@ -43,6 +48,24 @@
     self.stopGestureRecognizer.numberOfTapsRequired = 1;
     [self.view addGestureRecognizer:self.playGestureRecognizer];
     [self.view addGestureRecognizer:self.stopGestureRecognizer];
+    
+    
+    self.encoderController = [[VCEncoderController alloc] init];
+    
+#if TARGET_IPHONE_SIMULATOR
+    NSString *filePath = @"/tmp/output.h264";
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+//        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    }
+    self.encoderController.outputFile = filePath;
+#else
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"output.h264"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    }
+    self.encoderController.outputFile = filePath;
+#endif
+//    [self.encoderController runEncoder];
     
     [self setupDisplayLayer];
     [self bindData];
@@ -87,6 +110,14 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)previewer:(VCPreviewer *)aPreviewer didProcessImage:(VCBaseImage *)aImage {
+    [self.encoderController.encoder encodeWithImage:aImage];
+}
+
+- (dispatch_queue_t)processWorkingQueue {
+    return self.encodeWorkingQueue;
 }
 
 @end

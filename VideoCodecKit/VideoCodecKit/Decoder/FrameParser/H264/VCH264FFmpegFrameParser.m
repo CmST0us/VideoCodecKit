@@ -114,7 +114,7 @@
         if (packet->size > 0) {
             
             outputFrame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext codecContext:_codecContext];
-            outputFrame.frameType = [VCH264FrameParser getFrameType:outputFrame];
+            outputFrame.frameType = [VCH264Frame getFrameType:outputFrame];
             if (outputFrame != nil) {
                 if (self.useDelegate && self.delegate != nil && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
                     [self.delegate frameParserDidParseFrame:outputFrame];
@@ -176,7 +176,7 @@
         if (packet->size > 0) {
             // ffmpeg 对于关键帧 会把所有信息推一次，手动解一下
             VCH264Frame *frame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext codecContext:_codecContext];
-            frame.frameType = [VCH264FrameParser getFrameType:frame];
+            frame.frameType = [VCH264Frame getFrameType:frame];
             
             if (self.useDelegate && [self.delegate respondsToSelector:@selector(frameParserDidParseFrame:)]) {
                 [self.delegate frameParserDidParseFrame:frame];
@@ -236,7 +236,7 @@
         
         if (packet->size > 0) {
             VCH264Frame *frame = [VCH264Frame h264FrameWithAVPacket:packet parserContext:_parserContext codecContext:_codecContext];
-            frame.frameType = [VCH264FrameParser getFrameType:frame];
+            frame.frameType = [VCH264Frame getFrameType:frame];
             self.pasrseCount += 1;
             if (block) {
                 block(frame);

@@ -60,6 +60,7 @@
         _render = nil;
         _parserQueue = nil;
         _imageQueue = nil;
+        _delegate = nil;
         _watermark = 3;
         _parserThreadSem = dispatch_semaphore_create(0);
         _decoderThreadSem = dispatch_semaphore_create(0);
@@ -318,6 +319,12 @@
         if (image != nil
             && [[image class] isSubclassOfClass:[VCBaseImage class]]) {
             [self.render renderImage:(VCBaseImage *)image];
+            if (self.delegate) {
+                dispatch_queue_t workingQueue = [self.delegate processWorkingQueue];
+                dispatch_async(workingQueue, ^{
+                    [self.delegate previewer:self didProcessImage:(VCBaseImage *)image];
+                });
+            }
         }
     }
 }

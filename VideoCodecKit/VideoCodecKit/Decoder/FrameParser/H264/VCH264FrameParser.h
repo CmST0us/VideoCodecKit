@@ -11,6 +11,4 @@
 
 @class VCH264Frame;
 @interface VCH264FrameParser : VCBaseFrameParser
-
-+ (VCH264FrameType)getFrameType:(VCH264Frame *)frame;
 @end
