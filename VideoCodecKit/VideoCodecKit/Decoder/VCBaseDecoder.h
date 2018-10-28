@@ -23,7 +23,7 @@
  @param frame 原始帧
  @return 解码图片
  */
-- (VCBaseImage *)decode:(VCBaseFrame *)frame;
+- (VCBaseImage *)decode:(VCBaseFrame *)frame DEPRECATED_MSG_ATTRIBUTE("由于FFmpeg问题，frame里面可能包含多个帧，请使用decodeFrame:completion: 或 decodeWithFrame:");
 
 /**
  回调block
