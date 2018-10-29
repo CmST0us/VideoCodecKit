@@ -295,11 +295,6 @@
         VCBaseImage *image = (VCBaseImage *)[self.imageQueue pull];
         if (image != nil
             && [[image class] isSubclassOfClass:[VCBaseImage class]]) {
-#if DEBUG
-            NSNumber * frameIndex = image.userInfo[kVCBaseImageUserInfoFrameIndexKey];
-            int i = frameIndex.integerValue;
-            NSLog(@"show frame index %d", i);
-#endif
             [self.render renderImage:(VCBaseImage *)image];
             if (self.delegate) {
                 dispatch_queue_t workingQueue = [self.delegate processWorkingQueue];
