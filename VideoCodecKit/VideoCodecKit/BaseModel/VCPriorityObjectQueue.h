@@ -19,8 +19,9 @@ static const char *kVCPriorityObjectRuntimeLastKey;
  是否需要线程安全
  */
 @property (nonatomic, assign) BOOL isThreadSafe;
+// 默认为3帧。队列需要有3帧的水位，以适应重排帧。可以在流结束的时候放掉水位（设为0），但是需要注意和解码，显示线程的同步
 @property (nonatomic, assign) NSInteger watermark;
-// 一般用于流结束时设置。设置后如果数据个数不满水位，不会等待了，直接返回nil避免线程等待卡死主线程。
+// 默认YES，一般用于流结束时设置。设置为NO后如果数据个数不满水位，不会等待了，直接返回nil避免线程等待卡死主线程。
 @property (nonatomic, assign) BOOL shouldWaitWhenPullFailed;
 
 - (instancetype)initWithSize:(int)size

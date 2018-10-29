@@ -13,10 +13,11 @@
 #import "VCHeapPriorityObjectQueue.h"
 
 #define kVCPerformIfNeedThreadSafe(__code__) if (_isThreadSafe) { __code__;}
-
 #define SWAP_OBJECT(__a__, __b__) NSObject *t = __a__; __a__ = __b__; __b__ = t;
 
-static const char *kVCPriorityObjectRuntimePriorityKey = "kVCPriorityObjectRuntimePriorityKey";
+#define kVCHeapPriorityObjectQueueWatermark (3)
+
+static const char *kVCHeapPriorityObjectRuntimePriorityKey = "kVCHeapPriorityObjectRuntimePriorityKey";
 
 @interface VCHeapPriorityObjectQueue () {
     int _size;
@@ -32,7 +33,7 @@ static const char *kVCPriorityObjectRuntimePriorityKey = "kVCPriorityObjectRunti
 @implementation VCHeapPriorityObjectQueue
 
 - (NSInteger)priorityOfObject:(NSObject *)object {
-    id priorityObj = objc_getAssociatedObject(object, kVCPriorityObjectRuntimePriorityKey);
+    id priorityObj = objc_getAssociatedObject(object, kVCHeapPriorityObjectRuntimePriorityKey);
     if ([priorityObj isKindOfClass:[NSNumber class]]) {
         return [priorityObj integerValue];
     }
@@ -41,7 +42,7 @@ static const char *kVCPriorityObjectRuntimePriorityKey = "kVCPriorityObjectRunti
 
 - (void)setPriority:(NSInteger)priority
            toObject:(NSObject *)object {
-    objc_setAssociatedObject(object, kVCPriorityObjectRuntimePriorityKey, @(priority), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(object, kVCHeapPriorityObjectRuntimePriorityKey, @(priority), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 
@@ -55,7 +56,7 @@ static const char *kVCPriorityObjectRuntimePriorityKey = "kVCPriorityObjectRunti
         kVCPerformIfNeedThreadSafe(pthread_cond_init(&_cond, NULL));
         
         _count = 0;
-        _watermark = 0;
+        _watermark = kVCHeapPriorityObjectQueueWatermark;
         _size = size;
         _queue = [[NSMutableArray alloc] initWithCapacity:_size];
     }

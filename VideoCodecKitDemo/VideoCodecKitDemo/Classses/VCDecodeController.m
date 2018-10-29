@@ -9,7 +9,7 @@
 #import "VCDecodeController.h"
 #import <KVSig/KVSig.h>
 
-#define kVCDefaultBufferSize 1500
+#define kVCDefaultBufferSize kVC1080P
 
 @interface VCDecodeController ()
 @property (nonatomic, strong) NSThread *workThread;

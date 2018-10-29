@@ -55,6 +55,5 @@
 
 @property (nonatomic, assign) NSUInteger frameCount;
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
-- (instancetype)initWithConfig:(VCBaseEncoderConfig *)config;
+- (instancetype)initWithConfig:(VCBaseEncoderConfig *)config NS_DESIGNATED_INITIALIZER;
 @end

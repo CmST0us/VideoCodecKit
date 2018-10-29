@@ -33,7 +33,6 @@
     [super viewDidLoad];
     self.encodeWorkingQueue = dispatch_queue_create("encode_work_queue", DISPATCH_QUEUE_SERIAL);
     self.decoderController = [[VCDecodeController alloc] init];
-    self.decoderController.previewer.watermark = 3;
     self.decoderController.previewer.previewType = VCPreviewerTypeVTLiveH264VideoOnly;
     self.decoderController.previewer.delegate = self;
     self.decoderController.parseFilePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"h264"];
@@ -55,7 +54,7 @@
 #if TARGET_IPHONE_SIMULATOR
     NSString *filePath = @"/tmp/output.h264";
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-//        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     }
     self.encoderController.outputFile = filePath;
 #else

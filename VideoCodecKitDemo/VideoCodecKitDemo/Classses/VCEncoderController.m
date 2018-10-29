@@ -25,7 +25,7 @@
         config.codecType = kCMVideoCodecType_H264;
         config.keyFrameIntervalDuration = 1;
         config.keyFrameInterval = config.fps;
-        config.quality = VCBaseEncoderQualityFast;
+        config.quality = VCBaseEncoderQualitySplendid;
         config.isRealTime = YES;
         config.enableBFrame = NO;
         
