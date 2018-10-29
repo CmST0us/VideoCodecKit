@@ -32,7 +32,6 @@
 @end
 
 @implementation VCPreviewer
-@synthesize watermark = _watermark;
 
 - (NSDictionary *)supportPreviewerComponent {
     /*
@@ -58,10 +57,10 @@
         _parser = nil;
         _decoder = nil;
         _render = nil;
-        _parserQueue = nil;
-        _imageQueue = nil;
         _delegate = nil;
-        _watermark = 3;
+        _dataQueue = [[VCSafeQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
+        _parserQueue = [[VCSafeObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
+        _imageQueue = [[VCPriorityObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize isThreadSafe:YES];
         _parserThreadSem = dispatch_semaphore_create(0);
         _decoderThreadSem = dispatch_semaphore_create(0);
     }
@@ -91,17 +90,6 @@
     }
     _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkLoop)];
     return _displayLink;
-}
-
-- (void)setWatermark:(NSInteger)watermark {
-    if (_imageQueue != nil) {
-        _watermark = watermark;
-        _imageQueue.watermark = watermark;
-    }
-}
-
-- (NSInteger)watermark {
-    return _watermark;
 }
 
 - (void)setPreviewType:(VCPreviewerType)previewType {
@@ -145,16 +133,13 @@
     
     if (self.dataQueue) {
         [self.dataQueue clear];
-        self.dataQueue = nil;
     }
     if (self.parserQueue) {
         [self.parserQueue clear];
-        self.parserQueue = nil;
     }
     
     if (self.imageQueue) {
         [self.imageQueue clear];
-        self.imageQueue = nil;
     }
     _displayLink = nil;
 }
@@ -185,11 +170,6 @@
     
     _decoder = [[decoderClass alloc] init];
     _decoder.delegate = self;
-    
-    _dataQueue = [[VCSafeQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
-    _parserQueue = [[VCSafeObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize];
-    _imageQueue = [[VCPriorityObjectQueue alloc] initWithSize:kVCPreviewSafeQueueSize isThreadSafe:YES];
-    _imageQueue.watermark = _watermark;
     
     _parserThread = [[NSThread alloc] initWithTarget:self selector:@selector(parserWorkThread) object:nil];
     _parserThread.name = @"VCPreviewer.parserThread";
@@ -276,10 +256,7 @@
 }
 
 - (void)endFeedData {
-    if (self.dataQueue != nil && self.imageQueue != nil) {
-        self.imageQueue.watermark = 0;
-    }
-    self.imageQueue.shouldWaitWhenPullFailed = YES;
+    self.imageQueue.shouldWaitWhenPullFailed = NO;
 }
 
 #pragma mark - Thread
@@ -315,7 +292,7 @@
     @autoreleasepool {
         if (self.displayLink.isPaused == YES) return;
         
-        NSObject *image = [self.imageQueue pull];
+        VCBaseImage *image = (VCBaseImage *)[self.imageQueue pull];
         if (image != nil
             && [[image class] isSubclassOfClass:[VCBaseImage class]]) {
             [self.render renderImage:(VCBaseImage *)image];
