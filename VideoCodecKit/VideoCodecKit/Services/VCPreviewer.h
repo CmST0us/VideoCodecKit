@@ -37,8 +37,6 @@ typedef NS_ENUM(NSUInteger, VCPreviewerType) {
 @property (nonatomic, strong) VCBaseDecoder *decoder;
 @property (nonatomic, strong) id<VCBaseRenderProtocol> render;
 
-@property (nonatomic, assign) NSInteger watermark;
-
 @property (nonatomic, assign) VCPreviewerType previewType;
 
 @property (nonatomic, weak) id<VCPreviewerDelegate> delegate;
