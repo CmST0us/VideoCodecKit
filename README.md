@@ -28,16 +28,30 @@ after finish build fat ffmpeg directory you should copy ffmpeg library and heade
 
 * or you can just setup 1-3 and run demo app.*
 
-# feature
+# Feature
 
 - [x] ffmpeg parse h264 raw data
 - [x] ffmpeg decode h264
 - [x] multi-thread decode preview component
 - [x] hardware-decode support
-- [ ] metal render `WIP`
+- [ ] metal render `Next Ver`
 - [ ] rtmp publish
 - [ ] audio support
-- [ ] encode support
+- [x] hardware-encode support
+- [ ] ffmpeg encode support
 - [ ] GPUImage support
 - [x] build as framework
 
+# Release Note
+## 0.2
+- support h264 videotoolbox encode
+- add camera capture demo
+- frame reorder bugfix
+- thread sync bugfix
+- API change
+
+## 0.1
+- support h264 videotoolbox decode
+- support h264 ffmpeg decode
+- add multi-thread h264 preview object VCPreviewer
+- build as framework, easy to use
