@@ -29,6 +29,16 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
 #if DEBUG
     NSLog(@"[ENCODER][VT]: encoder callback with status %d, infoFlags %d", (int)status, (int)infoFlags);
 #endif
+    
+    if (infoFlags == 0) {
+#if DEBUG
+        // 似乎是VT的一个bug，如果你在Serial dispatch_queue中调用编码函数，这个infoFlags可能为0，从而导致编码出来的NAL顺序错误！
+        // [TODO] 进一步验证是不是VT的bug
+        NSLog(@"[ENCODER][VT]: did not support sync info flags!");
+#endif
+        return;
+    }
+
     if (status != noErr) {
         return;
     }
