@@ -13,15 +13,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _config = nil;
-    }
-    return self;
-}
-
-- (instancetype)initWithConfig:(VCBaseEncoderConfig *)config {
-    self = [self init];
-    if (self) {
-        _config = config;
+        
     }
     return self;
 }

@@ -9,11 +9,13 @@
 #import "VCBaseEncoderConfig.h"
 
 @implementation VCBaseEncoderConfig
+@synthesize codecType = _codecType;
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _fps = kVCDefaultFPS;
+        _codecType = kCMVideoCodecType_H264;
     }
     return self;
 }
+
 @end

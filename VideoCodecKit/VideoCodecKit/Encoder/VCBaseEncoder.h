@@ -49,11 +49,6 @@
 @end
 
 @interface VCBaseEncoder : VCBaseCodec<VCBaseEncoderProtocol>
-
-@property (nonatomic, strong) VCBaseEncoderConfig *config;
 @property (nonatomic, weak) id<VCBaseEncoderDelegate> delegate;
-
 @property (nonatomic, assign) NSUInteger frameCount;
-
-- (instancetype)initWithConfig:(VCBaseEncoderConfig *)config NS_DESIGNATED_INITIALIZER;
 @end

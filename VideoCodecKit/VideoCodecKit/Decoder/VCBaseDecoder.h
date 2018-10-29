@@ -53,18 +53,6 @@
 
 
 @interface VCBaseDecoder : VCBaseCodec <VCBaseDecoderProtocol>
-
-@property (nonatomic, readonly) VCBaseDecoderConfig *config;
-
 @property (nonatomic, weak) id<VCBaseDecoderDelegate> delegate;
-
 @property (nonatomic, assign) NSInteger fps;
-/**
- 使用配置创建解码器
- @param config 配置
- @return 解码器实例
- */
-- (instancetype)initWithConfig:(VCBaseDecoderConfig *)config;
-
-
 @end

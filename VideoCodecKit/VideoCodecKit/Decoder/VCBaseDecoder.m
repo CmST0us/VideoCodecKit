@@ -19,15 +19,6 @@
     self = [super init];
     if (self) {
         _fps = kVCDefaultFPS;
-        _config = nil;
-    }
-    return self;
-}
-
-- (instancetype)initWithConfig:(VCBaseDecoderConfig *)config {
-    self = [self init];
-    if (self) {
-        _config = config;
     }
     return self;
 }

@@ -17,17 +17,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        VCBaseEncoderConfig *config = [[VCBaseEncoderConfig alloc] init];
-        config.width = 1920;
-        config.height = 1080;
-        config.fps = 60;
-        config.bitrate = config.height * config.width * 3 * 8;
-        config.codecType = kCMVideoCodecType_H264;
-        config.keyFrameIntervalDuration = 1;
-        config.keyFrameInterval = config.fps;
-        config.quality = VCBaseEncoderQualitySplendid;
-        config.isRealTime = YES;
-        config.enableBFrame = NO;
+        VCBaseEncoderConfig *config = [VCH264EncoderConfig defaultConfig];
         
         _encoder = [[VCVTH264Encoder alloc] initWithConfig:config];
         _encoder.delegate = self;
