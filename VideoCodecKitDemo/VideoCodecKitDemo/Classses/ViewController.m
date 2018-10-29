@@ -65,7 +65,7 @@
     }
     self.encoderController.outputFile = filePath;
 #endif
-    [self.encoderController runEncoder];
+//    [self.encoderController runEncoder];
     
     [self setupDisplayLayer];
     [self bindData];
