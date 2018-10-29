@@ -16,8 +16,8 @@
  是否需要线程安全
  */
 @property (nonatomic, assign) BOOL isThreadSafe;
-// [TODO]: 同VCPriotiryObjectQueue
-@property (nonatomic, readonly) NSInteger watermark;
+// 参考VCPriotiryObjectQueue
+@property (nonatomic, assign) NSInteger watermark;
 
 - (instancetype)initWithSize:(int)size
                 isThreadSafe:(BOOL)isThreadSafe;
