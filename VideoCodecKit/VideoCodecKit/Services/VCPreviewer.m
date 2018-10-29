@@ -321,7 +321,7 @@
             [self.render renderImage:(VCBaseImage *)image];
             if (self.delegate) {
                 dispatch_queue_t workingQueue = [self.delegate processWorkingQueue];
-                dispatch_async(workingQueue, ^{
+                dispatch_sync(workingQueue, ^{
                     [self.delegate previewer:self didProcessImage:(VCBaseImage *)image];
                 });
             }

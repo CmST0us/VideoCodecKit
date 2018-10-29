@@ -13,11 +13,10 @@
 #import "VCH264Frame.h"
 #import "VCH264SPSFrame.h"
 
-@interface VCVTH264Encoder () {
-    VTCompressionSessionRef _compressionSession;
-}
-@property (nonatomic, strong) VCH264Frame *sps; // [TODO]: 改为VCH264SPSFrame
-@property (nonatomic, strong) VCH264Frame *pps; // [TODO]: 改为VCH264PPSFrame
+@interface VCVTH264Encoder ()
+@property (nonatomic, assign) VTCompressionSessionRef compressionSession;
+@property (nonatomic, strong) VCH264SPSFrame *sps; // [TODO]: 改为VCH264SPSFrame
+@property (nonatomic, strong) VCH264PPSFrame *pps; // [TODO]: 改为VCH264PPSFrame
 @end
 
 @implementation VCVTH264Encoder
@@ -30,6 +29,16 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
 #if DEBUG
     NSLog(@"[ENCODER][VT]: encoder callback with status %d, infoFlags %d", (int)status, (int)infoFlags);
 #endif
+    
+    if (infoFlags == 0) {
+#if DEBUG
+        // 似乎是VT的一个bug，如果你在Serial dispatch_queue中调用编码函数，这个infoFlags可能为0，从而导致编码出来的NAL顺序错误！
+        // [TODO] 进一步验证是不是VT的bug
+        NSLog(@"[ENCODER][VT]: did not support sync info flags!");
+#endif
+        return;
+    }
+
     if (status != noErr) {
         return;
     }
@@ -76,7 +85,7 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
                                                                                      0);
             if (statusCode == noErr) {
 #if DEBUG
-                NSLog(@"[ENCODER][VT]: get sps");
+                NSLog(@"[ENCODER][VT]: get pps");
 #endif
                 // USE SPS PPS
                 NSData *sps = [NSData dataWithBytes:sparameterSet length:sparameterSetSize];
@@ -127,18 +136,10 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
     }
 }
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        _compressionSession = nil;
-    }
-    return self;
-}
-
 - (instancetype)initWithConfig:(VCBaseEncoderConfig *)config {
     self = [super initWithConfig:config];
     if (self) {
-        
+        _compressionSession = nil;
     }
     return self;
 }
@@ -210,7 +211,7 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
     VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_AverageBitRate, bitRateRef);
     
     //设置码率，上限，单位是bps
-    int bitRateLimit = self.config.width * self.config.height * 3 * 4;
+    int bitRateLimit = (int)(self.config.width * self.config.height * 3 * 4);
     CFNumberRef bitRateLimitRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &bitRateLimit);
     VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_DataRateLimits, bitRateLimitRef);
     
@@ -266,7 +267,7 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
 }
 
 - (void)usePPS:(NSData *)ppsData {
-    VCH264Frame *frame = [[VCH264Frame alloc] init];
+    VCH264PPSFrame *frame = [[VCH264PPSFrame alloc] init];
     [frame createParseDataWithSize:ppsData.length];
     [frame useExternParseDataLength:4];
     *(frame.parseData + 3) = 1;
@@ -279,18 +280,17 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
     if (![self.currentState isEqualToInteger:VCBaseCodecStateRunning]) {
         return;
     }
-    
-    CMTime ptsTime = CMTimeMake(self.frameCount, (int)self.config.fps);
+    CMTime ptsTime = CMTimeMake(self.frameCount++, (int)self.config.fps);
     CMTime duration = CMTimeMake(1, (int)self.config.fps);
-    VTEncodeInfoFlags flags = 0;
+    VTEncodeInfoFlags flags;
     
-    OSStatus statusCode = VTCompressionSessionEncodeFrame(_compressionSession,
-                                    image.pixelBuffer,
-                                    ptsTime,
-                                    duration,
-                                    NULL,
-                                    NULL,
-                                    &flags);
+    OSStatus statusCode = VTCompressionSessionEncodeFrame(self.compressionSession,
+                                                          image.pixelBuffer,
+                                                          ptsTime,
+                                                          duration,
+                                                          NULL,
+                                                          NULL,
+                                                          &flags);
     if (statusCode != noErr) {
 #if DEBUG
         NSLog(@"[ENCODER][VT]: encode frame failed with %d", (int)statusCode);

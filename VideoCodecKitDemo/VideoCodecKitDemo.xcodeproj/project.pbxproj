@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F15704A21873AF30094FBEF /* VCCameraCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15704921873AF30094FBEF /* VCCameraCaptureViewController.m */; };
 		4F6C8689217E448300881F72 /* VCEncoderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C8688217E448300881F72 /* VCEncoderController.m */; };
 		4F76FC5B21626ED5002E7F0D /* KVSig.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; };
 		4F76FC5C21626ED5002E7F0D /* KVSig.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -46,6 +47,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4F15704821873AF30094FBEF /* VCCameraCaptureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCCameraCaptureViewController.h; sourceTree = "<group>"; };
+		4F15704921873AF30094FBEF /* VCCameraCaptureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCCameraCaptureViewController.m; sourceTree = "<group>"; };
 		4F6C8687217E448300881F72 /* VCEncoderController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCEncoderController.h; sourceTree = "<group>"; };
 		4F6C8688217E448300881F72 /* VCEncoderController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCEncoderController.m; sourceTree = "<group>"; };
 		4F76FC5A21626ED5002E7F0D /* KVSig.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KVSig.framework; path = VideoCodecKitDemo/KVSig.framework; sourceTree = "<group>"; };
@@ -138,6 +141,8 @@
 				4FBF021E2144284A00CA0EC8 /* AppDelegate.m */,
 				4FBF02202144284A00CA0EC8 /* ViewController.h */,
 				4FBF02212144284A00CA0EC8 /* ViewController.m */,
+				4F15704821873AF30094FBEF /* VCCameraCaptureViewController.h */,
+				4F15704921873AF30094FBEF /* VCCameraCaptureViewController.m */,
 				4FBF02232144284A00CA0EC8 /* Main.storyboard */,
 				4F9279D32145118600F17F9A /* VCDecodeController.h */,
 				4F9279D42145118600F17F9A /* VCDecodeController.m */,
@@ -257,6 +262,7 @@
 				4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */,
 				4FBF022D2144284B00CA0EC8 /* main.m in Sources */,
 				4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */,
+				4F15704A21873AF30094FBEF /* VCCameraCaptureViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

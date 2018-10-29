@@ -347,7 +347,6 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
             if (![self setupVideoFormatDescription]) {
                 _isVideoFormatDescriptionUpdate = YES;
             } else {
-                // [TODO]: 尝试一下能不能不重新配置解码器
                 if ([self setupDecompressionSession]) {
                     _isVideoFormatDescriptionUpdate = NO;
                 }
