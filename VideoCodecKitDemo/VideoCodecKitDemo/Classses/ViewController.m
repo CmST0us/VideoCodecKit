@@ -55,7 +55,7 @@
 #if TARGET_IPHONE_SIMULATOR
     NSString *filePath = @"/tmp/output.h264";
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-//        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     }
     self.encoderController.outputFile = filePath;
 #else
@@ -65,7 +65,7 @@
     }
     self.encoderController.outputFile = filePath;
 #endif
-//    [self.encoderController runEncoder];
+    [self.encoderController runEncoder];
     
     [self setupDisplayLayer];
     [self bindData];

@@ -11,6 +11,14 @@
 @interface VCVTH264Encoder : VCBaseEncoder
 
 /**
+ 初始化方法
+
+ @param config 编码器配置
+ @return 编码起
+ */
+- (instancetype)initWithConfig:(VCBaseEncoderConfig *)config NS_DESIGNATED_INITIALIZER;
+
+/**
  使用sps
 
  @param spsData sps数据，注意不带start code
