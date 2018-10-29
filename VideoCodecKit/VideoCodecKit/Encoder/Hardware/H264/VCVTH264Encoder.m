@@ -136,14 +136,16 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
     }
 }
 
-- (instancetype)initWithConfig:(VCBaseEncoderConfig *)config {
-    self = [super initWithConfig:config];
+- (instancetype)initWithConfig:(VCH264EncoderConfig *)config {
+    self = [super init];
     if (self) {
         _compressionSession = nil;
+        _config = config;
     }
     return self;
 }
 
+#pragma mark - Codec Method
 - (BOOL)setup {
     if (![super setup]) {
         [self rollbackStateTransition];
@@ -178,16 +180,16 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
                          self.config.enableBFrame ? kCFBooleanTrue : kCFBooleanFalse);
     
     switch (self.config.quality) {
-        case VCBaseEncoderQualityNormal:
+        case VCH264EncoderQualityNormal:
             VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Main_AutoLevel);
             break;
-        case VCBaseEncoderQualityFast:
+        case VCH264EncoderQualityFast:
             VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Baseline_AutoLevel);
             break;
-        case VCBaseEncoderQualityGood:
+        case VCH264EncoderQualityGood:
             VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_High_AutoLevel);
             break;
-        case VCBaseEncoderQualitySplendid:
+        case VCH264EncoderQualitySplendid:
             VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Extended_AutoLevel);
             break;
         default:
@@ -253,6 +255,7 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
     }
     return NO;
 }
+#pragma mark - Private Method
 - (void)useSPS:(NSData *)spsData {
     VCH264SPSFrame *frame = [[VCH264SPSFrame alloc] init];
     [frame createParseDataWithSize:spsData.length];
@@ -276,6 +279,7 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
     self.pps = frame;
 }
 
+#pragma mark - Protocol Method
 - (void)encodeWithImage:(VCBaseImage *)image {
     if (![self.currentState isEqualToInteger:VCBaseCodecStateRunning]) {
         return;

@@ -37,6 +37,7 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 // Encoder
 #import <VideoCodecKit/VCBaseEncoder.h>
 #import <VideoCodecKit/VCBaseEncoderConfig.h>
+#import <VideoCodecKit/VCH264EncoderConfig.h>
 #import <VideoCodecKit/VCVTH264Encoder.h>
 // Render
 #import <VideoCodecKit/VCSampleBufferRender.h>

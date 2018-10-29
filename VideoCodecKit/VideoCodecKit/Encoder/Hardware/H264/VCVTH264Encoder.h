@@ -7,16 +7,18 @@
 //
 
 #import "VCBaseEncoder.h"
+#import "VCH264EncoderConfig.h"
 
 @interface VCVTH264Encoder : VCBaseEncoder
 
+@property (nonatomic, strong) VCH264EncoderConfig *config;
 /**
  初始化方法
 
  @param config 编码器配置
  @return 编码起
  */
-- (instancetype)initWithConfig:(VCBaseEncoderConfig *)config NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithConfig:(VCH264EncoderConfig *)config NS_DESIGNATED_INITIALIZER;
 
 /**
  使用sps
