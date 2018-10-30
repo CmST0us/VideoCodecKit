@@ -47,15 +47,15 @@
     self.stopGestureRecognizer.numberOfTouchesRequired = 2;
     self.stopGestureRecognizer.numberOfTapsRequired = 1;
     
-    [self.view addGestureRecognizer:self.playGestureRecognizer];
-    [self.view addGestureRecognizer:self.stopGestureRecognizer];
+    [self.previewerView addGestureRecognizer:self.playGestureRecognizer];
+    [self.previewerView addGestureRecognizer:self.stopGestureRecognizer];
     
     [self bindData];
 }
 
 #pragma mark - Private
 - (void)createViews {
-    self.previewerView = [[UIView alloc] init];
+    self.previewerView = [[VCAVCaptureVideoPreviewView alloc] init];
     [self.view addSubview:self.previewerView];
     self.hintInfoLabel = [[UILabel alloc] init];
     [self.view addSubview:self.hintInfoLabel];
@@ -82,6 +82,7 @@
 
 - (void)setupDisplayLayer {
     [self.decoderController.previewer.render attachToLayer:self.previewerView.layer];
+    self.previewerView.captureVideoPreviewLayer = (AVCaptureVideoPreviewLayer *)[self.previewerView.layer sublayers][0];
 }
 
 - (void)bindData {
