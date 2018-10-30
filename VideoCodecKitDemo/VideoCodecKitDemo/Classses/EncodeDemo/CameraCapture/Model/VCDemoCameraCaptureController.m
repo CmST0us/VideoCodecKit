@@ -1,52 +1,41 @@
 //
-//  VCCameraCaptureViewController.m
+//  VCDemoCameraCaptureController.m
 //  VideoCodecKitDemo
 //
-//  Created by CmST0us on 2018/10/29.
+//  Created by CmST0us on 2018/10/30.
 //  Copyright © 2018 eric3u. All rights reserved.
 //
-#import <CoreVideo/CoreVideo.h>
-#import <CoreMedia/CoreMedia.h>
-#import "VCCameraCaptureViewController.h"
 
-@interface VCCameraCaptureViewController () <AVCaptureVideoDataOutputSampleBufferDelegate> {
+#import "VCDemoCameraCaptureController.h"
+@interface VCDemoCameraCaptureController ()<VCBaseEncoderDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
     dispatch_queue_t _captureQueue;
     dispatch_queue_t _encodeQueue;
     NSFileHandle *_fileHandle;
 }
-@property (nonatomic, strong) VCVTH264Encoder *encoder;
-
-@property (nonatomic, strong) UILabel *infoLabel;
-
-@property (nonatomic , strong) AVCaptureSession *captureSession; //负责输入和输出设备之间的数据传递
-@property (nonatomic , strong) AVCaptureDeviceInput *captureDeviceInput;//负责从AVCaptureDevice获得输入数据
-@property (nonatomic , strong) AVCaptureVideoDataOutput *captureDeviceOutput; //
-@property (nonatomic , strong) AVCaptureVideoPreviewLayer *previewLayer;
+@property (nonatomic, weak) AVCaptureConnection *connection;
 @end
 
-@implementation VCCameraCaptureViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self createUI];
+@implementation VCDemoCameraCaptureController
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [self customInit];
+    }
+    return self;
 }
 
-- (void)createUI {
-    self.infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, 200, 100)];
-    self.infoLabel.textColor = [UIColor redColor];
-    [self.view addSubview:self.infoLabel];
-    self.infoLabel.text = @"测试H264硬编码";
+- (void)customInit {
+    _currentStatus = VCDemoCameraCaptureStatusReady;
+    [self setupEncoder];
     
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(200, 20, 100, 100)];
-    [button setTitle:@"play" forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    [self.view addSubview:button];
-    [button addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarOrientationChange:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 - (void)setupEncoder {
-    VCBaseEncoderConfig *config = [VCH264EncoderConfig defaultConfig];
-    
+    VCH264EncoderConfig *config = [VCH264EncoderConfig defaultConfig];
     self.encoder = [[VCVTH264Encoder alloc] initWithConfig:config];
     self.encoder.delegate = self;
     [self.encoder setup];
@@ -83,13 +72,8 @@
     if ([self.captureSession canAddOutput:self.captureDeviceOutput]) {
         [self.captureSession addOutput:self.captureDeviceOutput];
     }
-    AVCaptureConnection *connection = [self.captureDeviceOutput connectionWithMediaType:AVMediaTypeVideo];
-    [connection setVideoOrientation:AVCaptureVideoOrientationPortrait];
-    
-    self.previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.captureSession];
-    [self.previewLayer setVideoGravity:AVLayerVideoGravityResizeAspect];
-    [self.previewLayer setFrame:self.view.bounds];
-    [self.view.layer addSublayer:self.previewLayer];
+    self.connection = [self.captureDeviceOutput connectionWithMediaType:AVMediaTypeVideo];
+    [self changeCameraOrientation];
     
     NSString *file = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"abc.h264"];
     [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
@@ -101,37 +85,49 @@
         return;
     }
     [self.captureSession startRunning];
+    _currentStatus = VCDemoCameraCaptureStatusRunning;
 }
 
 - (void)stopCapture {
     [self.captureSession stopRunning];
-    [self.previewLayer removeFromSuperlayer];
     [self.encoder invalidate];
     [_fileHandle closeFile];
     _fileHandle = nil;
+    _currentStatus = VCDemoCameraCaptureStatusStop;
 }
 
-#pragma mark - Action
-- (void)onClick:(UIButton *)button {
-    if (!self.captureSession || !self.captureSession.running) {
-        [button setTitle:@"stop" forState:UIControlStateNormal];
-        [self startCapture];
-        
+- (NSString *)nextStatusActionTitle {
+    if (self.currentStatus == VCDemoCameraCaptureStatusReady
+        || self.currentStatus == VCDemoCameraCaptureStatusStop) {
+        return NSLocalizedString(@"拍摄", nil);
+    } else if (self.currentStatus == VCDemoCameraCaptureStatusRunning) {
+        return NSLocalizedString(@"停止拍摄", nil);
     }
-    else {
-        [button setTitle:@"play" forState:UIControlStateNormal];
-        [self stopCapture];
+    return @"";
+}
+
+- (void)changeCameraOrientation {
+    UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (interfaceOrientation == UIInterfaceOrientationPortrait) {
+        [self.connection setVideoOrientation:AVCaptureVideoOrientationPortrait];
+    } else if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
+        [self.connection setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
+    } else if (interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+        [self.connection setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
     }
+}
+- (void)statusBarOrientationChange:(NSNotification *)notification{
+    [self changeCameraOrientation];
 }
 
 #pragma mark - Capture Delegate
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-//    dispatch_async(_encodeQueue, ^{
-        VCYUV420PImage *image = [[VCYUV420PImage alloc] init];
-        CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-        [image setPixelBuffer:pixelBuffer];
-        [self.encoder encodeWithImage:image];
-//    });
+    //    dispatch_async(_encodeQueue, ^{
+    VCYUV420PImage *image = [[VCYUV420PImage alloc] init];
+    CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    [image setPixelBuffer:pixelBuffer];
+    [self.encoder encodeWithImage:image];
+    //    });
 }
 
 #pragma mark - Encoder Delegate

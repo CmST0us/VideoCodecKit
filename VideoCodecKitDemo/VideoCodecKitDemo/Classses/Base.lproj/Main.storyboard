@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zcr-hf-EAf">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,19 +10,64 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Demo Navigation Controller-->
+        <scene sceneID="wOE-I4-Y6Z">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                <navigationController navigationBarHidden="YES" id="zcr-hf-EAf" customClass="VCDemoNavigationController" sceneMemberID="viewController">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="56L-Dp-ClZ">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="8OA-Fv-syv">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="fpQ-sd-aAn" kind="relationship" relationship="rootViewController" id="7Qg-2U-7bF"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cjg-kK-dZL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-438" y="45"/>
+        </scene>
+        <!--Demo List View Controller-->
+        <scene sceneID="nJQ-Nx-qhd">
+            <objects>
+                <viewController id="fpQ-sd-aAn" customClass="VCDemoListViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="XGu-rZ-hTm">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WzP-b0-2S0">
+                                <rect key="frame" x="60" y="108" width="255" height="30"/>
+                                <state key="normal" title="摄像头捕捉编码测试"/>
+                                <connections>
+                                    <action selector="onDemoItemButtonClick:" destination="fpQ-sd-aAn" eventType="touchUpInside" id="QWS-ge-AOS"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PqN-UA-1ud">
+                                <rect key="frame" x="60" y="182" width="255" height="30"/>
+                                <state key="normal" title="H264解码测试"/>
+                                <connections>
+                                    <action selector="onDemoItemButtonClick:" destination="fpQ-sd-aAn" eventType="touchUpInside" id="DNu-Wa-3Ko"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="PqN-UA-1ud" firstAttribute="top" secondItem="WzP-b0-2S0" secondAttribute="bottom" constant="44" id="4PV-Hi-HH1"/>
+                            <constraint firstItem="WzP-b0-2S0" firstAttribute="leading" secondItem="XGu-rZ-hTm" secondAttribute="leadingMargin" constant="44" id="Ghg-o6-gMe"/>
+                            <constraint firstItem="WzP-b0-2S0" firstAttribute="top" secondItem="XGu-rZ-hTm" secondAttribute="topMargin" constant="88" id="PtL-t4-8SO"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="PqN-UA-1ud" secondAttribute="trailing" constant="44" id="jHA-x7-1ol"/>
+                            <constraint firstItem="PqN-UA-1ud" firstAttribute="leading" secondItem="XGu-rZ-hTm" secondAttribute="leadingMargin" constant="44" id="rua-QV-51b"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="WzP-b0-2S0" secondAttribute="trailing" constant="44" id="tDQ-OW-npN"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="EF0-gl-NZR"/>
                     </view>
+                    <navigationItem key="navigationItem" id="Kdw-q3-H59"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ESC-I0-RAi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="428" y="45"/>
         </scene>
     </scenes>
 </document>

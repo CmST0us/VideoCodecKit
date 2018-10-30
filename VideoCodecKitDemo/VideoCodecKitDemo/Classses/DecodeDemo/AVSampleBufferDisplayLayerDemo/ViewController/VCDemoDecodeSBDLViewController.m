@@ -1,77 +1,86 @@
 //
-//  ViewController.m
+//  VCDemoDecodeSBDLViewController.m
 //  VideoCodecKitDemo
 //
-//  Created by CmST0us on 2018/9/8.
-//  Copyright © 2018年 eric3u. All rights reserved.
+//  Created by CmST0us on 2018/10/30.
+//  Copyright © 2018 eric3u. All rights reserved.
 //
 
 #import <KVSig/KVSig.h>
-#import <AVFoundation/AVFoundation.h>
-#import <CoreMedia/CoreMedia.h>
-
-#import <VideoCodecKit/VCYUV420PImage.h>
-#import <VideoCodecKit/VCSampleBufferRender.h>
-#import <VideoCodecKit/VCPreviewer.h>
-
-#import "ViewController.h"
+#import "VCDemoDecodeSBDLViewController.h"
 #import "VCDecodeController.h"
-#import "VCEncoderController.h"
 
-@interface ViewController ()
+@interface VCDemoDecodeSBDLViewController ()
+@property (nonatomic, strong) UIView *previewerView;
+@property (nonatomic, strong) UILabel *hintInfoLabel;
+
 @property (nonatomic, strong) VCDecodeController *decoderController;
-@property (nonatomic, strong) VCEncoderController *encoderController;
 @property (nonatomic, assign) NSInteger decodeFrameCount;
+
 @property (nonatomic, strong) UITapGestureRecognizer *playGestureRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *stopGestureRecognizer;
+
 @property (nonatomic, strong) dispatch_queue_t encodeWorkingQueue;
 @end
 
-@implementation ViewController
+@implementation VCDemoDecodeSBDLViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+#pragma mark - Override
+
+- (void)customInit {
+    [super customInit];
+    
+    [self createViews];
+    [self setupViews];
+    [self createConstraints];
+    
     self.encodeWorkingQueue = dispatch_queue_create("encode_work_queue", DISPATCH_QUEUE_SERIAL);
     self.decoderController = [[VCDecodeController alloc] init];
     self.decoderController.previewer.previewType = VCPreviewerTypeVTLiveH264VideoOnly;
-    self.decoderController.previewer.delegate = self;
     self.decoderController.parseFilePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"h264"];
-//    self.decoderController.parseFilePath = @"/Users/cmst0us/Desktop/encoder/abc.h264";
-//    self.decoderController.parseFilePath = @"/tmp/output.h264";
+    
     self.playGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playGestureHandler)];
     self.playGestureRecognizer.numberOfTouchesRequired = 1;
     self.playGestureRecognizer.numberOfTapsRequired = 1;
-    
     self.stopGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(stopGestureHandler)];
     self.stopGestureRecognizer.numberOfTouchesRequired = 2;
     self.stopGestureRecognizer.numberOfTapsRequired = 1;
+    
     [self.view addGestureRecognizer:self.playGestureRecognizer];
     [self.view addGestureRecognizer:self.stopGestureRecognizer];
     
-    
-    self.encoderController = [[VCEncoderController alloc] init];
-    
-#if TARGET_IPHONE_SIMULATOR
-    NSString *filePath = @"/tmp/output.h264";
-    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-    }
-    self.encoderController.outputFile = filePath;
-#else
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"output.h264"];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-    }
-    self.encoderController.outputFile = filePath;
-#endif
-//    [self.encoderController runEncoder];
-    
-    [self setupDisplayLayer];
     [self bindData];
 }
 
+#pragma mark - Private
+- (void)createViews {
+    self.previewerView = [[UIView alloc] init];
+    [self.view addSubview:self.previewerView];
+    self.hintInfoLabel = [[UILabel alloc] init];
+    [self.view addSubview:self.hintInfoLabel];
+}
+
+- (void)setupViews {
+    self.previewerView.backgroundColor = [UIColor clearColor];
+    self.hintInfoLabel.text = NSLocalizedString(@"单指轻点播放/暂停，双指轻点停止播放", nil);
+    self.hintInfoLabel.textAlignment = NSTextAlignmentRight;
+    [self.hintInfoLabel setFont:[UIFont systemFontOfSize:14 weight:UIFontWeightThin]];
+    [self.hintInfoLabel sizeToFit];
+}
+
+- (void)createConstraints {
+    [self.previewerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.mas_equalTo(self.view);
+        make.top.mas_equalTo(self.hintInfoLabel.mas_bottom).offset(8);
+    }];
+    [self.hintInfoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.view.mas_rightMargin).offset(-4);
+        make.baseline.mas_equalTo(self.backButton.mas_baseline);
+    }];
+}
+
 - (void)setupDisplayLayer {
-    [self.decoderController.previewer.render attachToLayer:self.view.layer];
+    [self.decoderController.previewer.render attachToLayer:self.previewerView.layer];
 }
 
 - (void)bindData {
@@ -83,7 +92,22 @@
         }
     }];
 }
+#pragma mark - Lift Cycle
+- (void)viewDidLoad {
+    [super viewDidLoad];
+}
 
+- (void)viewDidAppear:(BOOL)animated {
+    [self setupDisplayLayer];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    // 处理屏幕选择时重新layout
+    // [TODO] Need Debug
+    [self.previewerView.layer layoutSublayers];
+}
+
+#pragma mark - Action
 - (void)playGestureHandler {
     if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateRunning]) {
         [self.decoderController.previewer pause];
@@ -106,17 +130,8 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)onBack:(UIButton *)button {
+    [super onBack:button];
+    [self.decoderController stopParse];
 }
-
-- (void)previewer:(VCPreviewer *)aPreviewer didProcessImage:(VCBaseImage *)aImage {
-    [self.encoderController.encoder encodeWithImage:aImage];
-}
-
-- (dispatch_queue_t)processWorkingQueue {
-    return self.encodeWorkingQueue;
-}
-
 @end

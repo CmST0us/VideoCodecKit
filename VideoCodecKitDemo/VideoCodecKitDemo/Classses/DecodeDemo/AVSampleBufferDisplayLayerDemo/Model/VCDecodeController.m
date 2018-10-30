@@ -30,7 +30,6 @@
 }
 
 - (void)workingThread {
-    weakSelf(target);
     @autoreleasepool{
         // do not release
         NSInputStream *stream = [[NSInputStream alloc] initWithFileAtPath:self.parseFilePath];
@@ -58,15 +57,6 @@
     }
 }
 
-- (void)workingThread1 {
-    weakSelf(target);
-    @autoreleasepool{
-        NSData *data = [[NSData alloc] initWithContentsOfFile:self.parseFilePath];
-        [self.previewer feedData:data.bytes length:data.length];
-        dispatch_semaphore_signal(self.workThreadSem);
-    }
-}
-
 - (void)startParse {
     if ([self.previewer.currentState isEqualToInteger:VCBaseCodecStateInit]
         || [self.previewer.currentState isEqualToInteger:VCBaseCodecStateStop]) {
@@ -74,7 +64,7 @@
     }
     [self.previewer run];
     self.workThread = [[NSThread alloc] initWithTarget:self selector:@selector(workingThread) object:nil];
-    self.workThread.name = @"workThread";
+    self.workThread.name = @"feedThread";
     [self.workThread start];
 }
 
