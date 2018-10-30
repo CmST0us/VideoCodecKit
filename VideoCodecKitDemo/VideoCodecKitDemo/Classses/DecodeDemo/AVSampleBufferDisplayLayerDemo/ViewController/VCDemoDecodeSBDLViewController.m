@@ -9,9 +9,10 @@
 #import <KVSig/KVSig.h>
 #import "VCDemoDecodeSBDLViewController.h"
 #import "VCDecodeController.h"
+#import "VCAVCaptureVideoPreviewView.h"
 
 @interface VCDemoDecodeSBDLViewController ()
-@property (nonatomic, strong) UIView *previewerView;
+@property (nonatomic, strong) VCAVCaptureVideoPreviewView *previewerView;
 @property (nonatomic, strong) UILabel *hintInfoLabel;
 
 @property (nonatomic, strong) VCDecodeController *decoderController;
@@ -99,12 +100,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [self setupDisplayLayer];
-}
-
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    // 处理屏幕选择时重新layout
-    // [TODO] Need Debug
-    [self.previewerView.layer layoutSublayers];
 }
 
 #pragma mark - Action

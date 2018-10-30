@@ -225,10 +225,17 @@
 		4F0F953C2188D1E100CB9BAE /* View */ = {
 			isa = PBXGroup;
 			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		4F0F953D2188DB8F00CB9BAE /* BaseView */ = {
+			isa = PBXGroup;
+			children = (
 				4F0F95392188D1C700CB9BAE /* VCAVCaptureVideoPreviewView.h */,
 				4F0F953A2188D1C700CB9BAE /* VCAVCaptureVideoPreviewView.m */,
 			);
-			path = View;
+			path = BaseView;
 			sourceTree = "<group>";
 		};
 		4F92799821442E1700F17F9A /* Frameworks */ = {
@@ -266,6 +273,7 @@
 		4F9279A821442F0800F17F9A /* Classses */ = {
 			isa = PBXGroup;
 			children = (
+				4F0F953D2188DB8F00CB9BAE /* BaseView */,
 				4F0F95152188934D00CB9BAE /* EncodeDemo */,
 				4F0F95142188933800CB9BAE /* DecodeDemo */,
 				4F0F9513218891E600CB9BAE /* BaseViewController */,
