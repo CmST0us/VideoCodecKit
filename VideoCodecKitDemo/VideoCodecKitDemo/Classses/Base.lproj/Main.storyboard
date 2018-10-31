@@ -51,10 +51,17 @@
                                     <action selector="onDemoItemButtonClick:" destination="fpQ-sd-aAn" eventType="touchUpInside" id="DNu-Wa-3Ko"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NFi-HS-eTH">
+                                <rect key="frame" x="60" y="256" width="255" height="30"/>
+                                <state key="normal" title="Metal 渲染测试"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="PqN-UA-1ud" firstAttribute="top" secondItem="WzP-b0-2S0" secondAttribute="bottom" constant="44" id="4PV-Hi-HH1"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="NFi-HS-eTH" secondAttribute="trailing" constant="44" id="5sg-6r-Dx0"/>
+                            <constraint firstItem="NFi-HS-eTH" firstAttribute="top" secondItem="PqN-UA-1ud" secondAttribute="bottom" constant="44" id="66j-we-G5z"/>
+                            <constraint firstItem="NFi-HS-eTH" firstAttribute="leading" secondItem="XGu-rZ-hTm" secondAttribute="leadingMargin" constant="44" id="APk-tr-6Yr"/>
                             <constraint firstItem="WzP-b0-2S0" firstAttribute="leading" secondItem="XGu-rZ-hTm" secondAttribute="leadingMargin" constant="44" id="Ghg-o6-gMe"/>
                             <constraint firstItem="WzP-b0-2S0" firstAttribute="top" secondItem="XGu-rZ-hTm" secondAttribute="topMargin" constant="88" id="PtL-t4-8SO"/>
                             <constraint firstAttribute="trailingMargin" secondItem="PqN-UA-1ud" secondAttribute="trailing" constant="44" id="jHA-x7-1ol"/>
