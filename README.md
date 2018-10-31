@@ -43,6 +43,10 @@ after finish build fat ffmpeg directory you should copy ffmpeg library and heade
 - [x] build as framework
 
 # Release Note
+## 0.3
+- refactor demo app
+- fix encoder release bug
+
 ## 0.2
 - support h264 videotoolbox encode
 - add camera capture demo
