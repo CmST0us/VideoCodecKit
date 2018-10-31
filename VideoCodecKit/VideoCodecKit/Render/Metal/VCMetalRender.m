@@ -11,7 +11,8 @@
 #import "VCMetalShaderType.h"
 #import "VCSafeObjectQueue.h"
 
-#define kVCMetalRenderImageQueueSize 20
+// 如果外部sampleBuffer有重用，则必须为1
+#define kVCMetalRenderImageQueueSize 1
 
 @interface VCMetalRender ()<MTKViewDelegate>
 @property (nonatomic, strong) id<MTLRenderPipelineState> pipelineState;

@@ -49,7 +49,7 @@
     self.captureSession = [[AVCaptureSession alloc] init];
     self.captureSession.sessionPreset = AVCaptureSessionPreset1920x1080;
     
-    _captureQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    _captureQueue = dispatch_queue_create("metal_camera_capture_queue", DISPATCH_QUEUE_SERIAL);
     AVCaptureDevice *inputCamera = nil;
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     for (AVCaptureDevice *device in devices)
@@ -85,6 +85,7 @@
 - (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     VCYUV420PImage *image = [[VCYUV420PImage alloc] init];
     CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    // 注意这个会持有pixelBuffer,导致sampleBuffer 重用出问题
     [image setPixelBuffer:pixelBuffer];
     [self.render renderImage:image];
 }
