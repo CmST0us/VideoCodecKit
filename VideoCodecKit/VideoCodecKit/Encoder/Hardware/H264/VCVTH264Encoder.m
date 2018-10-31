@@ -145,6 +145,10 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
     return self;
 }
 
+- (void)dealloc {
+    [self invalidate];
+}
+
 #pragma mark - Codec Method
 - (BOOL)setup {
     if (![super setup]) {
@@ -250,6 +254,7 @@ void outputCallback(void * CM_NULLABLE outputCallbackRefCon,
     
     if (_compressionSession != NULL) {
         VTCompressionSessionInvalidate(_compressionSession);
+        CFRelease(_compressionSession);
         _compressionSession = NULL;
         return YES;
     }

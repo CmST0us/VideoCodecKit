@@ -7,8 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4F15704A21873AF30094FBEF /* VCCameraCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15704921873AF30094FBEF /* VCCameraCaptureViewController.m */; };
-		4F6C8689217E448300881F72 /* VCEncoderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C8688217E448300881F72 /* VCEncoderController.m */; };
+		4F0F951B2188941F00CB9BAE /* VCDemoNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F951A2188941F00CB9BAE /* VCDemoNavigationController.m */; };
+		4F0F951E218894FC00CB9BAE /* VCDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F951D218894FC00CB9BAE /* VCDemoViewController.m */; };
+		4F0F95212188962C00CB9BAE /* VCDemoBackableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F95202188962C00CB9BAE /* VCDemoBackableViewController.m */; };
+		4F0F9523218899E500CB9BAE /* Masonry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0F9522218899E500CB9BAE /* Masonry.framework */; };
+		4F0F9524218899E500CB9BAE /* Masonry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0F9522218899E500CB9BAE /* Masonry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4F0F952821889DEB00CB9BAE /* VCDemoDecodeSBDLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F952721889DEB00CB9BAE /* VCDemoDecodeSBDLViewController.m */; };
+		4F0F952E2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F952D2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.m */; };
+		4F0F95342188A51300CB9BAE /* VCDemoCameraCaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F95332188A51300CB9BAE /* VCDemoCameraCaptureController.m */; };
+		4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */; };
 		4F76FC5B21626ED5002E7F0D /* KVSig.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; };
 		4F76FC5C21626ED5002E7F0D /* KVSig.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F76FC7521627512002E7F0D /* VideoCodecKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; };
@@ -24,11 +31,11 @@
 		4F927A242152A2B900F17F9A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F927A232152A2B900F17F9A /* AVFoundation.framework */; };
 		4F93584B2169EE2300A9F613 /* test.h264 in Resources */ = {isa = PBXBuildFile; fileRef = 4F93584A2169ECC700A9F613 /* test.h264 */; };
 		4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF021E2144284A00CA0EC8 /* AppDelegate.m */; };
-		4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF02212144284A00CA0EC8 /* ViewController.m */; };
 		4FBF02252144284A00CA0EC8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02232144284A00CA0EC8 /* Main.storyboard */; };
 		4FBF02272144284B00CA0EC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02262144284B00CA0EC8 /* Assets.xcassets */; };
 		4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */; };
 		4FBF022D2144284B00CA0EC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF022C2144284B00CA0EC8 /* main.m */; };
+		4FC1273621899678009C239D /* VCAutoResizeLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC1273521899678009C239D /* VCAutoResizeLayerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +47,7 @@
 			files = (
 				4F76FC7621627512002E7F0D /* VideoCodecKit.framework in Embed Frameworks */,
 				4F76FC5C21626ED5002E7F0D /* KVSig.framework in Embed Frameworks */,
+				4F0F9524218899E500CB9BAE /* Masonry.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -47,10 +55,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4F15704821873AF30094FBEF /* VCCameraCaptureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCCameraCaptureViewController.h; sourceTree = "<group>"; };
-		4F15704921873AF30094FBEF /* VCCameraCaptureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCCameraCaptureViewController.m; sourceTree = "<group>"; };
-		4F6C8687217E448300881F72 /* VCEncoderController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCEncoderController.h; sourceTree = "<group>"; };
-		4F6C8688217E448300881F72 /* VCEncoderController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCEncoderController.m; sourceTree = "<group>"; };
+		4F0F95192188941F00CB9BAE /* VCDemoNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoNavigationController.h; sourceTree = "<group>"; };
+		4F0F951A2188941F00CB9BAE /* VCDemoNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoNavigationController.m; sourceTree = "<group>"; };
+		4F0F951C218894FC00CB9BAE /* VCDemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoViewController.h; sourceTree = "<group>"; };
+		4F0F951D218894FC00CB9BAE /* VCDemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoViewController.m; sourceTree = "<group>"; };
+		4F0F951F2188962C00CB9BAE /* VCDemoBackableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoBackableViewController.h; sourceTree = "<group>"; };
+		4F0F95202188962C00CB9BAE /* VCDemoBackableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoBackableViewController.m; sourceTree = "<group>"; };
+		4F0F9522218899E500CB9BAE /* Masonry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Masonry.framework; path = VideoCodecKitDemo/Masonry.framework; sourceTree = "<group>"; };
+		4F0F952621889DEB00CB9BAE /* VCDemoDecodeSBDLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoDecodeSBDLViewController.h; sourceTree = "<group>"; };
+		4F0F952721889DEB00CB9BAE /* VCDemoDecodeSBDLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoDecodeSBDLViewController.m; sourceTree = "<group>"; };
+		4F0F952C2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoCameraCaptureEncodeViewController.h; sourceTree = "<group>"; };
+		4F0F952D2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoCameraCaptureEncodeViewController.m; sourceTree = "<group>"; };
+		4F0F95322188A51300CB9BAE /* VCDemoCameraCaptureController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoCameraCaptureController.h; sourceTree = "<group>"; };
+		4F0F95332188A51300CB9BAE /* VCDemoCameraCaptureController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoCameraCaptureController.m; sourceTree = "<group>"; };
+		4F0F95362188BCB100CB9BAE /* VCDemoListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoListViewController.h; sourceTree = "<group>"; };
+		4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoListViewController.m; sourceTree = "<group>"; };
 		4F76FC5A21626ED5002E7F0D /* KVSig.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KVSig.framework; path = VideoCodecKitDemo/KVSig.framework; sourceTree = "<group>"; };
 		4F76FC7421627512002E7F0D /* VideoCodecKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoCodecKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F92799921442E1700F17F9A /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavdevice.a; sourceTree = "<group>"; };
@@ -74,13 +93,13 @@
 		4FBF021A2144284A00CA0EC8 /* VideoCodecKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoCodecKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FBF021D2144284A00CA0EC8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4FBF021E2144284A00CA0EC8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4FBF02202144284A00CA0EC8 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		4FBF02212144284A00CA0EC8 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		4FBF02242144284A00CA0EC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4FBF02262144284B00CA0EC8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4FBF02292144284B00CA0EC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4FBF022B2144284B00CA0EC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FBF022C2144284B00CA0EC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4FC1273421899678009C239D /* VCAutoResizeLayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAutoResizeLayerView.h; sourceTree = "<group>"; };
+		4FC1273521899678009C239D /* VCAutoResizeLayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAutoResizeLayerView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +112,7 @@
 				4F9279F021451A9C00F17F9A /* libz.tbd in Frameworks */,
 				4F9279EE21451A9000F17F9A /* AudioToolbox.framework in Frameworks */,
 				4F9279EC21451A8100F17F9A /* CoreMedia.framework in Frameworks */,
+				4F0F9523218899E500CB9BAE /* Masonry.framework in Frameworks */,
 				4F9279EA21451A7600F17F9A /* VideoToolbox.framework in Frameworks */,
 				4F9279D72145180800F17F9A /* libiconv.tbd in Frameworks */,
 				4F76FC5B21626ED5002E7F0D /* KVSig.framework in Frameworks */,
@@ -102,6 +122,122 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F0F9513218891E600CB9BAE /* BaseViewController */ = {
+			isa = PBXGroup;
+			children = (
+				4F0F95192188941F00CB9BAE /* VCDemoNavigationController.h */,
+				4F0F951A2188941F00CB9BAE /* VCDemoNavigationController.m */,
+				4F0F951C218894FC00CB9BAE /* VCDemoViewController.h */,
+				4F0F951D218894FC00CB9BAE /* VCDemoViewController.m */,
+				4F0F951F2188962C00CB9BAE /* VCDemoBackableViewController.h */,
+				4F0F95202188962C00CB9BAE /* VCDemoBackableViewController.m */,
+			);
+			path = BaseViewController;
+			sourceTree = "<group>";
+		};
+		4F0F95142188933800CB9BAE /* DecodeDemo */ = {
+			isa = PBXGroup;
+			children = (
+				4F0F95182188936E00CB9BAE /* AVSampleBufferDisplayLayerDemo */,
+				4F0F95172188936600CB9BAE /* MetalDemo */,
+			);
+			path = DecodeDemo;
+			sourceTree = "<group>";
+		};
+		4F0F95152188934D00CB9BAE /* EncodeDemo */ = {
+			isa = PBXGroup;
+			children = (
+				4F0F952F2188A36300CB9BAE /* CameraCapture */,
+			);
+			path = EncodeDemo;
+			sourceTree = "<group>";
+		};
+		4F0F95172188936600CB9BAE /* MetalDemo */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MetalDemo;
+			sourceTree = "<group>";
+		};
+		4F0F95182188936E00CB9BAE /* AVSampleBufferDisplayLayerDemo */ = {
+			isa = PBXGroup;
+			children = (
+				4F0F952B21889E8300CB9BAE /* View */,
+				4F0F952A21889E7800CB9BAE /* ViewController */,
+				4F0F952921889E7000CB9BAE /* Model */,
+			);
+			path = AVSampleBufferDisplayLayerDemo;
+			sourceTree = "<group>";
+		};
+		4F0F952921889E7000CB9BAE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4F9279D32145118600F17F9A /* VCDecodeController.h */,
+				4F9279D42145118600F17F9A /* VCDecodeController.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4F0F952A21889E7800CB9BAE /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				4F0F952621889DEB00CB9BAE /* VCDemoDecodeSBDLViewController.h */,
+				4F0F952721889DEB00CB9BAE /* VCDemoDecodeSBDLViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		4F0F952B21889E8300CB9BAE /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		4F0F952F2188A36300CB9BAE /* CameraCapture */ = {
+			isa = PBXGroup;
+			children = (
+				4F0F953C2188D1E100CB9BAE /* View */,
+				4F0F95312188A4B400CB9BAE /* Model */,
+				4F0F95302188A4AC00CB9BAE /* ViewController */,
+			);
+			path = CameraCapture;
+			sourceTree = "<group>";
+		};
+		4F0F95302188A4AC00CB9BAE /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				4F0F952C2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.h */,
+				4F0F952D2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		4F0F95312188A4B400CB9BAE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4F0F95322188A51300CB9BAE /* VCDemoCameraCaptureController.h */,
+				4F0F95332188A51300CB9BAE /* VCDemoCameraCaptureController.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4F0F953C2188D1E100CB9BAE /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		4F0F953D2188DB8F00CB9BAE /* BaseView */ = {
+			isa = PBXGroup;
+			children = (
+				4FC1273421899678009C239D /* VCAutoResizeLayerView.h */,
+				4FC1273521899678009C239D /* VCAutoResizeLayerView.m */,
+			);
+			path = BaseView;
+			sourceTree = "<group>";
+		};
 		4F92799821442E1700F17F9A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -137,17 +273,15 @@
 		4F9279A821442F0800F17F9A /* Classses */ = {
 			isa = PBXGroup;
 			children = (
+				4F0F953D2188DB8F00CB9BAE /* BaseView */,
+				4F0F95152188934D00CB9BAE /* EncodeDemo */,
+				4F0F95142188933800CB9BAE /* DecodeDemo */,
+				4F0F9513218891E600CB9BAE /* BaseViewController */,
 				4FBF021D2144284A00CA0EC8 /* AppDelegate.h */,
 				4FBF021E2144284A00CA0EC8 /* AppDelegate.m */,
-				4FBF02202144284A00CA0EC8 /* ViewController.h */,
-				4FBF02212144284A00CA0EC8 /* ViewController.m */,
-				4F15704821873AF30094FBEF /* VCCameraCaptureViewController.h */,
-				4F15704921873AF30094FBEF /* VCCameraCaptureViewController.m */,
+				4F0F95362188BCB100CB9BAE /* VCDemoListViewController.h */,
+				4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */,
 				4FBF02232144284A00CA0EC8 /* Main.storyboard */,
-				4F9279D32145118600F17F9A /* VCDecodeController.h */,
-				4F9279D42145118600F17F9A /* VCDecodeController.m */,
-				4F6C8687217E448300881F72 /* VCEncoderController.h */,
-				4F6C8688217E448300881F72 /* VCEncoderController.m */,
 			);
 			path = Classses;
 			sourceTree = "<group>";
@@ -155,6 +289,7 @@
 		4FBF02112144284A00CA0EC8 = {
 			isa = PBXGroup;
 			children = (
+				4F0F9522218899E500CB9BAE /* Masonry.framework */,
 				4F76FC7421627512002E7F0D /* VideoCodecKit.framework */,
 				4F76FC5A21626ED5002E7F0D /* KVSig.framework */,
 				4FBF021C2144284A00CA0EC8 /* VideoCodecKitDemo */,
@@ -257,12 +392,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F6C8689217E448300881F72 /* VCEncoderController.m in Sources */,
+				4F0F952821889DEB00CB9BAE /* VCDemoDecodeSBDLViewController.m in Sources */,
+				4F0F95342188A51300CB9BAE /* VCDemoCameraCaptureController.m in Sources */,
+				4F0F951B2188941F00CB9BAE /* VCDemoNavigationController.m in Sources */,
+				4F0F952E2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.m in Sources */,
+				4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */,
 				4F9279D52145118600F17F9A /* VCDecodeController.m in Sources */,
-				4FBF02222144284A00CA0EC8 /* ViewController.m in Sources */,
+				4F0F95212188962C00CB9BAE /* VCDemoBackableViewController.m in Sources */,
 				4FBF022D2144284B00CA0EC8 /* main.m in Sources */,
 				4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */,
-				4F15704A21873AF30094FBEF /* VCCameraCaptureViewController.m in Sources */,
+				4FC1273621899678009C239D /* VCAutoResizeLayerView.m in Sources */,
+				4F0F951E218894FC00CB9BAE /* VCDemoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

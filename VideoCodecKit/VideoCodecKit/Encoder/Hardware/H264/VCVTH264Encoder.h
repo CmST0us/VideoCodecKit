@@ -18,7 +18,7 @@
  @param config 编码器配置
  @return 编码起
  */
-- (instancetype)initWithConfig:(VCH264EncoderConfig *)config NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithConfig:(VCH264EncoderConfig *)config;
 
 /**
  使用sps
