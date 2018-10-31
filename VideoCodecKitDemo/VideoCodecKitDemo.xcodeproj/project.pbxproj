@@ -16,7 +16,6 @@
 		4F0F952E2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F952D2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.m */; };
 		4F0F95342188A51300CB9BAE /* VCDemoCameraCaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F95332188A51300CB9BAE /* VCDemoCameraCaptureController.m */; };
 		4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */; };
-		4F0F953B2188D1C700CB9BAE /* VCAVCaptureVideoPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F953A2188D1C700CB9BAE /* VCAVCaptureVideoPreviewView.m */; };
 		4F76FC5B21626ED5002E7F0D /* KVSig.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; };
 		4F76FC5C21626ED5002E7F0D /* KVSig.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F76FC7521627512002E7F0D /* VideoCodecKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; };
@@ -36,6 +35,7 @@
 		4FBF02272144284B00CA0EC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02262144284B00CA0EC8 /* Assets.xcassets */; };
 		4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */; };
 		4FBF022D2144284B00CA0EC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF022C2144284B00CA0EC8 /* main.m */; };
+		4FC1273621899678009C239D /* VCAutoResizeLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC1273521899678009C239D /* VCAutoResizeLayerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -70,8 +70,6 @@
 		4F0F95332188A51300CB9BAE /* VCDemoCameraCaptureController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoCameraCaptureController.m; sourceTree = "<group>"; };
 		4F0F95362188BCB100CB9BAE /* VCDemoListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoListViewController.h; sourceTree = "<group>"; };
 		4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoListViewController.m; sourceTree = "<group>"; };
-		4F0F95392188D1C700CB9BAE /* VCAVCaptureVideoPreviewView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAVCaptureVideoPreviewView.h; sourceTree = "<group>"; };
-		4F0F953A2188D1C700CB9BAE /* VCAVCaptureVideoPreviewView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAVCaptureVideoPreviewView.m; sourceTree = "<group>"; };
 		4F76FC5A21626ED5002E7F0D /* KVSig.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KVSig.framework; path = VideoCodecKitDemo/KVSig.framework; sourceTree = "<group>"; };
 		4F76FC7421627512002E7F0D /* VideoCodecKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoCodecKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F92799921442E1700F17F9A /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavdevice.a; sourceTree = "<group>"; };
@@ -100,6 +98,8 @@
 		4FBF02292144284B00CA0EC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4FBF022B2144284B00CA0EC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FBF022C2144284B00CA0EC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4FC1273421899678009C239D /* VCAutoResizeLayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAutoResizeLayerView.h; sourceTree = "<group>"; };
+		4FC1273521899678009C239D /* VCAutoResizeLayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAutoResizeLayerView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,8 +232,8 @@
 		4F0F953D2188DB8F00CB9BAE /* BaseView */ = {
 			isa = PBXGroup;
 			children = (
-				4F0F95392188D1C700CB9BAE /* VCAVCaptureVideoPreviewView.h */,
-				4F0F953A2188D1C700CB9BAE /* VCAVCaptureVideoPreviewView.m */,
+				4FC1273421899678009C239D /* VCAutoResizeLayerView.h */,
+				4FC1273521899678009C239D /* VCAutoResizeLayerView.m */,
 			);
 			path = BaseView;
 			sourceTree = "<group>";
@@ -396,12 +396,12 @@
 				4F0F95342188A51300CB9BAE /* VCDemoCameraCaptureController.m in Sources */,
 				4F0F951B2188941F00CB9BAE /* VCDemoNavigationController.m in Sources */,
 				4F0F952E2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.m in Sources */,
-				4F0F953B2188D1C700CB9BAE /* VCAVCaptureVideoPreviewView.m in Sources */,
 				4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */,
 				4F9279D52145118600F17F9A /* VCDecodeController.m in Sources */,
 				4F0F95212188962C00CB9BAE /* VCDemoBackableViewController.m in Sources */,
 				4FBF022D2144284B00CA0EC8 /* main.m in Sources */,
 				4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */,
+				4FC1273621899678009C239D /* VCAutoResizeLayerView.m in Sources */,
 				4F0F951E218894FC00CB9BAE /* VCDemoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

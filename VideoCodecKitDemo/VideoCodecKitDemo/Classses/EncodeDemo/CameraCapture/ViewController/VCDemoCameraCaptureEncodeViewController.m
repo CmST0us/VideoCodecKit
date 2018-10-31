@@ -8,10 +8,10 @@
 
 #import "VCDemoCameraCaptureEncodeViewController.h"
 #import "VCDemoCameraCaptureController.h"
-#import "VCAVCaptureVideoPreviewView.h"
+#import "VCAutoResizeLayerView.h"
 @interface VCDemoCameraCaptureEncodeViewController ()
 @property (nonatomic, strong) UIButton *captureButton;
-@property (nonatomic, strong) VCAVCaptureVideoPreviewView *previewView;
+@property (nonatomic, strong) VCAutoResizeLayerView *previewView;
 @property (nonatomic, strong) VCDemoCameraCaptureController *captureController;
 @property (nonatomic , strong) AVCaptureVideoPreviewLayer *previewLayer;
 @end
@@ -39,7 +39,7 @@
 - (void)createViews {
     self.captureButton = [[UIButton alloc] init];
     [self.view addSubview:self.captureButton];
-    self.previewView = [[VCAVCaptureVideoPreviewView alloc] init];
+    self.previewView = [[VCAutoResizeLayerView alloc] init];
     [self.view addSubview:self.previewView];
 }
 
@@ -80,8 +80,7 @@
         self.previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.captureController.captureSession];
         [self.previewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
         [self.previewLayer setFrame:self.previewView.bounds];
-        [self.previewView.layer addSublayer:self.previewLayer];
-        self.previewView.captureVideoPreviewLayer = self.previewLayer;
+        [self.previewView addAutoResizeSubLayer:self.previewLayer];
         [self statusBarOrientationChange:nil];
         
         [button setTitle:[self.captureController nextStatusActionTitle] forState:UIControlStateNormal];

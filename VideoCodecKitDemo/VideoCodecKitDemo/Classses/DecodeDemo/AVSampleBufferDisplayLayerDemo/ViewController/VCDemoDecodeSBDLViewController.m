@@ -9,10 +9,10 @@
 #import <KVSig/KVSig.h>
 #import "VCDemoDecodeSBDLViewController.h"
 #import "VCDecodeController.h"
-#import "VCAVCaptureVideoPreviewView.h"
+#import "VCAutoResizeLayerView.h"
 
 @interface VCDemoDecodeSBDLViewController ()
-@property (nonatomic, strong) VCAVCaptureVideoPreviewView *previewerView;
+@property (nonatomic, strong) VCAutoResizeLayerView *previewerView;
 @property (nonatomic, strong) UILabel *hintInfoLabel;
 
 @property (nonatomic, strong) VCDecodeController *decoderController;
@@ -55,7 +55,7 @@
 
 #pragma mark - Private
 - (void)createViews {
-    self.previewerView = [[VCAVCaptureVideoPreviewView alloc] init];
+    self.previewerView = [[VCAutoResizeLayerView alloc] init];
     [self.view addSubview:self.previewerView];
     self.hintInfoLabel = [[UILabel alloc] init];
     [self.view addSubview:self.hintInfoLabel];
@@ -82,7 +82,9 @@
 
 - (void)setupDisplayLayer {
     [self.decoderController.previewer.render attachToLayer:self.previewerView.layer];
-    self.previewerView.captureVideoPreviewLayer = (AVCaptureVideoPreviewLayer *)[self.previewerView.layer sublayers][0];
+    CALayer *displayLayer = [self.previewerView.layer sublayers][0];
+    [displayLayer removeFromSuperlayer];
+    [self.previewerView addAutoResizeSubLayer:displayLayer];
 }
 
 - (void)bindData {
