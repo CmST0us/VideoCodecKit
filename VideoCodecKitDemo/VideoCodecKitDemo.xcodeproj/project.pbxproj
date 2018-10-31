@@ -36,6 +36,7 @@
 		4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */; };
 		4FBF022D2144284B00CA0EC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF022C2144284B00CA0EC8 /* main.m */; };
 		4FC1273621899678009C239D /* VCAutoResizeLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC1273521899678009C239D /* VCAutoResizeLayerView.m */; };
+		4FC127432189FE91009C239D /* VCDemoMetalRenderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC127422189FE91009C239D /* VCDemoMetalRenderViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -100,6 +101,8 @@
 		4FBF022C2144284B00CA0EC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4FC1273421899678009C239D /* VCAutoResizeLayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAutoResizeLayerView.h; sourceTree = "<group>"; };
 		4FC1273521899678009C239D /* VCAutoResizeLayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAutoResizeLayerView.m; sourceTree = "<group>"; };
+		4FC127412189FE91009C239D /* VCDemoMetalRenderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoMetalRenderViewController.h; sourceTree = "<group>"; };
+		4FC127422189FE91009C239D /* VCDemoMetalRenderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoMetalRenderViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +158,8 @@
 		4F0F95172188936600CB9BAE /* MetalDemo */ = {
 			isa = PBXGroup;
 			children = (
+				4FC127412189FE91009C239D /* VCDemoMetalRenderViewController.h */,
+				4FC127422189FE91009C239D /* VCDemoMetalRenderViewController.m */,
 			);
 			path = MetalDemo;
 			sourceTree = "<group>";
@@ -396,6 +401,7 @@
 				4F0F95342188A51300CB9BAE /* VCDemoCameraCaptureController.m in Sources */,
 				4F0F951B2188941F00CB9BAE /* VCDemoNavigationController.m in Sources */,
 				4F0F952E2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.m in Sources */,
+				4FC127432189FE91009C239D /* VCDemoMetalRenderViewController.m in Sources */,
 				4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */,
 				4F9279D52145118600F17F9A /* VCDecodeController.m in Sources */,
 				4F0F95212188962C00CB9BAE /* VCDemoBackableViewController.m in Sources */,

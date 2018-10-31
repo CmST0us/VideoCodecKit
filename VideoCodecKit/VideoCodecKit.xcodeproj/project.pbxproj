@@ -78,6 +78,14 @@
 		4F935861217C48DA00A9F613 /* VCBaseImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F93585F217C48DA00A9F613 /* VCBaseImage.m */; };
 		4F935866217C55E500A9F613 /* VCBaseCodec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F935864217C55E500A9F613 /* VCBaseCodec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F935867217C55E500A9F613 /* VCBaseCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F935865217C55E500A9F613 /* VCBaseCodec.m */; };
+		4FC127392189A92B009C239D /* VCMetalRender.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FC127372189A92B009C239D /* VCMetalRender.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FC1273A2189A92B009C239D /* VCMetalRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC127382189A92B009C239D /* VCMetalRender.m */; };
+		4FC1273C2189DE5D009C239D /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FC1273B2189DE5D009C239D /* Metal.framework */; };
+		4FC1273E2189DE8A009C239D /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FC1273D2189DE8A009C239D /* MetalKit.framework */; };
+		4FC127402189E5C7009C239D /* VCMetalShaderType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FC1273F2189E5BB009C239D /* VCMetalShaderType.h */; };
+		4FC12745218A01FC009C239D /* shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4FC12744218A01FC009C239D /* shaders.metal */; };
+		4FC12748218A05C8009C239D /* VideoCodecKitTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FC12746218A05C8009C239D /* VideoCodecKitTools.h */; };
+		4FC12749218A05C8009C239D /* VideoCodecKitTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC12747218A05C8009C239D /* VideoCodecKitTools.m */; };
 		4FE2251D2164DF8400103B61 /* VCH264SPSFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FE2251B2164DF8400103B61 /* VCH264SPSFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FE2251E2164DF8400103B61 /* VCH264SPSFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE2251C2164DF8400103B61 /* VCH264SPSFrame.m */; };
 /* End PBXBuildFile section */
@@ -163,6 +171,14 @@
 		4F93585F217C48DA00A9F613 /* VCBaseImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCBaseImage.m; sourceTree = "<group>"; };
 		4F935864217C55E500A9F613 /* VCBaseCodec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseCodec.h; sourceTree = "<group>"; };
 		4F935865217C55E500A9F613 /* VCBaseCodec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCBaseCodec.m; sourceTree = "<group>"; };
+		4FC127372189A92B009C239D /* VCMetalRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCMetalRender.h; sourceTree = "<group>"; };
+		4FC127382189A92B009C239D /* VCMetalRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCMetalRender.m; sourceTree = "<group>"; };
+		4FC1273B2189DE5D009C239D /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		4FC1273D2189DE8A009C239D /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		4FC1273F2189E5BB009C239D /* VCMetalShaderType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCMetalShaderType.h; sourceTree = "<group>"; };
+		4FC12744218A01FC009C239D /* shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shaders.metal; sourceTree = "<group>"; };
+		4FC12746218A05C8009C239D /* VideoCodecKitTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCodecKitTools.h; sourceTree = "<group>"; };
+		4FC12747218A05C8009C239D /* VideoCodecKitTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoCodecKitTools.m; sourceTree = "<group>"; };
 		4FE2251B2164DF8400103B61 /* VCH264SPSFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264SPSFrame.h; sourceTree = "<group>"; };
 		4FE2251C2164DF8400103B61 /* VCH264SPSFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264SPSFrame.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -172,6 +188,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FC1273E2189DE8A009C239D /* MetalKit.framework in Frameworks */,
+				4FC1273C2189DE5D009C239D /* Metal.framework in Frameworks */,
 				4F76FC2A21626BD4002E7F0D /* libavfilter.a in Frameworks */,
 				4F76FC2B21626BD4002E7F0D /* libswscale.a in Frameworks */,
 				4F76FC2C21626BD4002E7F0D /* libswresample.a in Frameworks */,
@@ -238,6 +256,8 @@
 				4F76FC0B21626AA2002E7F0D /* Decoder */,
 				4F76FBE721626A9C002E7F0D /* Encoder */,
 				4F76FBE821626A9C002E7F0D /* VCMarco.h */,
+				4FC12746218A05C8009C239D /* VideoCodecKitTools.h */,
+				4FC12747218A05C8009C239D /* VideoCodecKitTools.m */,
 				4F76FBDF21626A9C002E7F0D /* VideoCodecKit.pch */,
 				4F76FBD1216269FC002E7F0D /* VideoCodecKit.h */,
 				4F76FBD2216269FC002E7F0D /* Info.plist */,
@@ -248,6 +268,10 @@
 		4F76FBE021626A9C002E7F0D /* Metal */ = {
 			isa = PBXGroup;
 			children = (
+				4FC1273F2189E5BB009C239D /* VCMetalShaderType.h */,
+				4FC127372189A92B009C239D /* VCMetalRender.h */,
+				4FC127382189A92B009C239D /* VCMetalRender.m */,
+				4FC12744218A01FC009C239D /* shaders.metal */,
 			);
 			path = Metal;
 			sourceTree = "<group>";
@@ -432,6 +456,8 @@
 		4F76FC2221626BD4002E7F0D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4FC1273D2189DE8A009C239D /* MetalKit.framework */,
+				4FC1273B2189DE5D009C239D /* Metal.framework */,
 				4F76FC3B21626C6A002E7F0D /* libiconv.tbd */,
 				4F76FC3921626C60002E7F0D /* VideoToolbox.framework */,
 				4F76FC3721626C57002E7F0D /* CoreMedia.framework */,
@@ -464,6 +490,7 @@
 				4F76FC5121626DCA002E7F0D /* VCH264FFmpegFrameParser.h in Headers */,
 				4FE2251D2164DF8400103B61 /* VCH264SPSFrame.h in Headers */,
 				4F76FBD3216269FC002E7F0D /* VideoCodecKit.h in Headers */,
+				4FC12748218A05C8009C239D /* VideoCodecKitTools.h in Headers */,
 				4F6C8685217E303400881F72 /* VCVTH264Encoder.h in Headers */,
 				4F76FC4C21626DCA002E7F0D /* VCSampleBufferRender.h in Headers */,
 				4F76FC5521626DCA002E7F0D /* VCH264FFmpegDecoder.h in Headers */,
@@ -485,9 +512,11 @@
 				4F76FC4621626DCA002E7F0D /* EKFSMObject.h in Headers */,
 				4F76FC4821626DCA002E7F0D /* VCSafeQueue.h in Headers */,
 				4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */,
+				4FC127392189A92B009C239D /* VCMetalRender.h in Headers */,
 				4F76FC4A21626DCA002E7F0D /* VCPriorityObjectQueue.h in Headers */,
 				4F76FC4B21626DCA002E7F0D /* VCHeapPriorityObjectQueue.h in Headers */,
 				4F76FC5021626DCA002E7F0D /* VCH264Frame+FFmpeg.h in Headers */,
+				4FC127402189E5C7009C239D /* VCMetalShaderType.h in Headers */,
 				4F76FC5321626DCA002E7F0D /* VCH264FFmpegFrameParserBuffer.h in Headers */,
 				4F76FC5621626DCA002E7F0D /* VCH264Image+FFmpeg.h in Headers */,
 				4F76FC2121626AA3002E7F0D /* VideoCodecKit.pch in Headers */,
@@ -568,6 +597,7 @@
 				4F1570472185ED160094FBEF /* VCH264PPSFrame.m in Sources */,
 				4F76FC61216270E1002E7F0D /* VCH264Image.m in Sources */,
 				4F76FC62216270E1002E7F0D /* VCYUV420PImage.m in Sources */,
+				4FC12749218A05C8009C239D /* VideoCodecKitTools.m in Sources */,
 				4F76FC63216270E1002E7F0D /* VCSafeQueue.m in Sources */,
 				4F76FC64216270E1002E7F0D /* VCSafeObjectQueue.m in Sources */,
 				4F76FC65216270E1002E7F0D /* VCPriorityObjectQueue.m in Sources */,
@@ -583,6 +613,7 @@
 				4F6C867D217E2FA500881F72 /* VCBaseEncoder.m in Sources */,
 				4F76FC6D216270E1002E7F0D /* VCH264FFmpegFrameParserBuffer.m in Sources */,
 				4F935861217C48DA00A9F613 /* VCBaseImage.m in Sources */,
+				4FC1273A2189A92B009C239D /* VCMetalRender.m in Sources */,
 				4F76FC6E216270E1002E7F0D /* VCVTH264Decoder.m in Sources */,
 				4F6C8686217E303400881F72 /* VCVTH264Encoder.m in Sources */,
 				4F76FC6F216270E1002E7F0D /* VCH264FFmpegDecoder.m in Sources */,
@@ -592,6 +623,7 @@
 				4F76FC72216270E1002E7F0D /* VCBaseDecoderConfig.m in Sources */,
 				4F6C8681217E2FB600881F72 /* VCBaseEncoderConfig.m in Sources */,
 				4FE2251E2164DF8400103B61 /* VCH264SPSFrame.m in Sources */,
+				4FC12745218A01FC009C239D /* shaders.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

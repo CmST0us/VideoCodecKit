@@ -33,7 +33,7 @@
     self = [super init];
     if (self) {
         _isThreadSafe = isThreadSafe;
-        
+        _shouldWaitWhenPullFailed = YES;
         kVCPerformIfNeedThreadSafe(pthread_mutex_init(&_mutex, NULL));
         kVCPerformIfNeedThreadSafe(pthread_cond_init(&_cond, NULL));
         
@@ -81,6 +81,11 @@
     kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
     if(_count == 0)
     {
+        if (!_shouldWaitWhenPullFailed) {
+            kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+            return NULL;
+        }
+        
         struct timeval tv;
         gettimeofday(&tv, NULL);
         

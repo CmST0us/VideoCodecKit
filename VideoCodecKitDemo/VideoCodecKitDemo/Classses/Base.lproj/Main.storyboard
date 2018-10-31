@@ -51,9 +51,12 @@
                                     <action selector="onDemoItemButtonClick:" destination="fpQ-sd-aAn" eventType="touchUpInside" id="DNu-Wa-3Ko"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NFi-HS-eTH">
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NFi-HS-eTH">
                                 <rect key="frame" x="60" y="256" width="255" height="30"/>
                                 <state key="normal" title="Metal 渲染测试"/>
+                                <connections>
+                                    <action selector="onDemoItemButtonClick:" destination="fpQ-sd-aAn" eventType="touchUpInside" id="RxS-pJ-Y19"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
