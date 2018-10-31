@@ -69,6 +69,9 @@
 }
 
 - (void)stopParse {
+    if (self.workThread == nil) {
+        return;
+    }
     [self.workThread cancel];
     self.workThread = nil;
     dispatch_semaphore_wait(self.workThreadSem, DISPATCH_TIME_FOREVER);
