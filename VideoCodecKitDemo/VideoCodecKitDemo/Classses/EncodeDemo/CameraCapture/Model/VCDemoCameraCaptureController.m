@@ -123,9 +123,8 @@
 #pragma mark - Capture Delegate
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     //    dispatch_async(_encodeQueue, ^{
-    VCYUV420PImage *image = [[VCYUV420PImage alloc] init];
     CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-    [image setPixelBuffer:pixelBuffer];
+    VCYUV420PImage *image = [[VCYUV420PImage alloc] initWithPixelBuffer:pixelBuffer];
     [self.encoder encodeWithImage:image];
     //    });
 }

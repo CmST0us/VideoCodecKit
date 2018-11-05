@@ -15,10 +15,11 @@
 }
 // 显示优先级
 @property (nonatomic, strong) NSMutableDictionary *userInfo;
-@property (nonatomic, assign) CVPixelBufferRef pixelBuffer;
+@property (nonatomic, readonly) CVPixelBufferRef pixelBuffer;
 
 @property (nonatomic, assign) NSInteger width;
 @property (nonatomic, assign) NSInteger height;
 
+- (instancetype)initWithPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 @end
 
