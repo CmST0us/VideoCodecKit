@@ -11,7 +11,7 @@
 
 #ifdef __OBJC__
 #import "VCMarco.h"
-
+#import "VideoCodecKitTools.h"
 #endif
 
 #endif /* VideoCodecKit_pch */

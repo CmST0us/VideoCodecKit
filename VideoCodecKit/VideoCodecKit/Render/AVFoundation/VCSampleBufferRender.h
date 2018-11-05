@@ -16,11 +16,10 @@
 
 @interface VCSampleBufferRender : NSObject<VCBaseRenderProtocol>
 @property (nonatomic, readonly) AVSampleBufferDisplayLayer *renderLayer;
-@property (nonatomic, weak) CALayer *superLayer;
 @property (nonatomic, weak) id<VCSampleBufferRenderDelegate> delegate;
 
-- (instancetype)initWithSuperLayer:(CALayer *)layer;
-- (void)attachToSuperLayer;
+- (instancetype)initWithSuperView:(UIView *)view;
+- (void)attachToSuperView;
 
 + (CMSampleBufferRef)sampleBufferWithPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 @end

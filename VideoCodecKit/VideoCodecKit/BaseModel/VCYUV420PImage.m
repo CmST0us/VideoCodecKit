@@ -59,6 +59,7 @@
     NSDictionary *attr = @{
                            (id)kCVPixelBufferOpenGLCompatibilityKey: @(YES),
                            (id)kCVPixelBufferBytesPerRowAlignmentKey: @(self.lumaLineSize),
+                           (id)kCVPixelBufferMetalCompatibilityKey: @(YES),
 #if !(TARGET_IPHONE_SIMULATOR)
                            (id)kCVPixelBufferIOSurfaceOpenGLESFBOCompatibilityKey: @(YES),
                            (id)kCVPixelBufferIOSurfaceCoreAnimationCompatibilityKey: @(YES),

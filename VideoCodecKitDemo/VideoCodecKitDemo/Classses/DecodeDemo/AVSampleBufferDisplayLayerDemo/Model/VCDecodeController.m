@@ -40,6 +40,7 @@
             NSInteger readLen = [stream read:fileBuffer maxLength:kVCDefaultBufferSize];
             if (readLen <= 0) {
                 // eof or error
+                free(fileBuffer);
                 [self.previewer endFeedData];
                 break;
             } else {
@@ -62,6 +63,7 @@
         || [self.previewer.currentState isEqualToInteger:VCBaseCodecStateStop]) {
         [self.previewer setup];
     }
+    // [TODO]: render 需要在previewer run 之前初始化，不然可能会丢前几帧
     [self.previewer run];
     self.workThread = [[NSThread alloc] initWithTarget:self selector:@selector(workingThread) object:nil];
     self.workThread.name = @"feedThread";
