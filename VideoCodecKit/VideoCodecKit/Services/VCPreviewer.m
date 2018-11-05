@@ -244,6 +244,7 @@
                                                @(VCBaseCodecStatePause)]]) {
         [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
         [_decoder invalidate];
+        [_render.renderView removeFromSuperview];
     }
     [self free];
     [self commitStateTransition];

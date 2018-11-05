@@ -42,6 +42,12 @@
     return self;
 }
 
+- (void)dealloc {
+    if (_textureCache != NULL) {
+        CFRelease(_textureCache);
+        _textureCache = NULL;
+    }
+}
 
 #pragma mark - Metal Setup
 // 设置渲染管道
