@@ -239,6 +239,9 @@
     
     [_parserThread cancel];
     [_decoderThread cancel];
+    [self waitParserThreadStop];
+    [self waitDecoderThreadStop];
+    
     if ([_decoder.currentState isKindOfState:@[@(VCBaseCodecStateRunning),
                                                @(VCBaseCodecStateReady),
                                                @(VCBaseCodecStatePause)]]) {
