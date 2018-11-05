@@ -83,10 +83,9 @@
 }
 
 - (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-    VCYUV420PImage *image = [[VCYUV420PImage alloc] init];
     CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    VCYUV420PImage *image = [[VCYUV420PImage alloc] initWithPixelBuffer:pixelBuffer];
     // 注意这个会持有pixelBuffer,导致sampleBuffer 重用出问题
-    [image setPixelBuffer:pixelBuffer];
     [self.render renderImage:image];
 }
 @end

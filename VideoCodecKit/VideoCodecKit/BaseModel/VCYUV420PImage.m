@@ -72,7 +72,13 @@
                         self.height,
                         kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)attr, &pixelBuffer);
     
-    [self setPixelBuffer:pixelBuffer];
+    if (_pixelBuffer != NULL) {
+        CVPixelBufferRelease(_pixelBuffer);
+        _pixelBuffer = NULL;
+    }
+    
+    _pixelBuffer = CVPixelBufferRetain(pixelBuffer);
+    
     CVPixelBufferLockBaseAddress(pixelBuffer, 0);
     
     uint8_t *yData = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
@@ -94,15 +100,6 @@
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     CVPixelBufferRelease(pixelBuffer);
     return pixelBuffer;
-}
-
-- (void)setPixelBuffer:(CVPixelBufferRef)pixelBuffer {
-    if (_pixelBuffer != NULL) {
-        CVPixelBufferRelease(_pixelBuffer);
-        _pixelBuffer = NULL;
-    }
-    
-    _pixelBuffer = CVPixelBufferRetain(pixelBuffer);
 }
 
 - (NSString *)classStringForImageType {
