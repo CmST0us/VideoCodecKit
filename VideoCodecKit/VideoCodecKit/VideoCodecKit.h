@@ -25,6 +25,7 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCDecoderProgress.h>
 #import <VideoCodecKit/VCMarco.h>
 #import <VideoCodecKit/VCVideoFPS.h>
+#import <VideoCodecKit/VCAutoResizeLayerView.h>
 
 // Parser
 #import <VideoCodecKit/VCBaseFrameParser.h>

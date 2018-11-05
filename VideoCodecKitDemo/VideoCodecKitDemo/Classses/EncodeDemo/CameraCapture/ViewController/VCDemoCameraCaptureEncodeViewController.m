@@ -8,7 +8,8 @@
 
 #import "VCDemoCameraCaptureEncodeViewController.h"
 #import "VCDemoCameraCaptureController.h"
-#import "VCAutoResizeLayerView.h"
+#import <VideoCodecKit/VCAutoResizeLayerView.h>
+
 @interface VCDemoCameraCaptureEncodeViewController ()
 @property (nonatomic, strong) UIButton *captureButton;
 @property (nonatomic, strong) VCAutoResizeLayerView *previewView;

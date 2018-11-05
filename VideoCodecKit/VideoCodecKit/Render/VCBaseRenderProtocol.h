@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
 #import "VCBaseImage.h"
 
+@class UIView;
 @protocol VCBaseRenderProtocol<NSObject>
 @required
-- (void)attachToLayer:(CALayer *)layer;
-
+- (UIView *)renderView;
+- (void)attachToView:(UIView *)view;
 - (void)renderImage:(VCBaseImage *)image;
 - (NSArray<NSString *> *)supportRenderImageClassName;
 @end

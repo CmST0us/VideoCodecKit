@@ -86,6 +86,8 @@
 		4FC12745218A01FC009C239D /* shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4FC12744218A01FC009C239D /* shaders.metal */; };
 		4FC12748218A05C8009C239D /* VideoCodecKitTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FC12746218A05C8009C239D /* VideoCodecKitTools.h */; };
 		4FC12749218A05C8009C239D /* VideoCodecKitTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC12747218A05C8009C239D /* VideoCodecKitTools.m */; };
+		4FC1274C21901811009C239D /* VCAutoResizeLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC1274B21901811009C239D /* VCAutoResizeLayerView.m */; };
+		4FC1274D21901857009C239D /* VCAutoResizeLayerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FC1274A21901811009C239D /* VCAutoResizeLayerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FE2251D2164DF8400103B61 /* VCH264SPSFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FE2251B2164DF8400103B61 /* VCH264SPSFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FE2251E2164DF8400103B61 /* VCH264SPSFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE2251C2164DF8400103B61 /* VCH264SPSFrame.m */; };
 /* End PBXBuildFile section */
@@ -179,6 +181,8 @@
 		4FC12744218A01FC009C239D /* shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shaders.metal; sourceTree = "<group>"; };
 		4FC12746218A05C8009C239D /* VideoCodecKitTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCodecKitTools.h; sourceTree = "<group>"; };
 		4FC12747218A05C8009C239D /* VideoCodecKitTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoCodecKitTools.m; sourceTree = "<group>"; };
+		4FC1274A21901811009C239D /* VCAutoResizeLayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAutoResizeLayerView.h; sourceTree = "<group>"; };
+		4FC1274B21901811009C239D /* VCAutoResizeLayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAutoResizeLayerView.m; sourceTree = "<group>"; };
 		4FE2251B2164DF8400103B61 /* VCH264SPSFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264SPSFrame.h; sourceTree = "<group>"; };
 		4FE2251C2164DF8400103B61 /* VCH264SPSFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264SPSFrame.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -299,6 +303,8 @@
 				4F76FBE321626A9C002E7F0D /* AVFoundation */,
 				4F76FBE421626A9C002E7F0D /* OpenGL */,
 				4F76FBE521626A9C002E7F0D /* VCBaseRenderProtocol.h */,
+				4FC1274A21901811009C239D /* VCAutoResizeLayerView.h */,
+				4FC1274B21901811009C239D /* VCAutoResizeLayerView.m */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -519,6 +525,7 @@
 				4FC127402189E5C7009C239D /* VCMetalShaderType.h in Headers */,
 				4F76FC5321626DCA002E7F0D /* VCH264FFmpegFrameParserBuffer.h in Headers */,
 				4F76FC5621626DCA002E7F0D /* VCH264Image+FFmpeg.h in Headers */,
+				4FC1274D21901857009C239D /* VCAutoResizeLayerView.h in Headers */,
 				4F76FC2121626AA3002E7F0D /* VideoCodecKit.pch in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -595,6 +602,7 @@
 				4F76FC5F216270E1002E7F0D /* VCVideoFPS.m in Sources */,
 				4F76FC60216270E1002E7F0D /* VCH264Frame.m in Sources */,
 				4F1570472185ED160094FBEF /* VCH264PPSFrame.m in Sources */,
+				4FC1274C21901811009C239D /* VCAutoResizeLayerView.m in Sources */,
 				4F76FC61216270E1002E7F0D /* VCH264Image.m in Sources */,
 				4F76FC62216270E1002E7F0D /* VCYUV420PImage.m in Sources */,
 				4FC12749218A05C8009C239D /* VideoCodecKitTools.m in Sources */,

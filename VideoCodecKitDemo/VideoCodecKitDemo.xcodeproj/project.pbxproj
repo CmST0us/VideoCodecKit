@@ -35,7 +35,6 @@
 		4FBF02272144284B00CA0EC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02262144284B00CA0EC8 /* Assets.xcassets */; };
 		4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */; };
 		4FBF022D2144284B00CA0EC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF022C2144284B00CA0EC8 /* main.m */; };
-		4FC1273621899678009C239D /* VCAutoResizeLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC1273521899678009C239D /* VCAutoResizeLayerView.m */; };
 		4FC127432189FE91009C239D /* VCDemoMetalRenderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC127422189FE91009C239D /* VCDemoMetalRenderViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -99,8 +98,6 @@
 		4FBF02292144284B00CA0EC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4FBF022B2144284B00CA0EC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FBF022C2144284B00CA0EC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		4FC1273421899678009C239D /* VCAutoResizeLayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAutoResizeLayerView.h; sourceTree = "<group>"; };
-		4FC1273521899678009C239D /* VCAutoResizeLayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAutoResizeLayerView.m; sourceTree = "<group>"; };
 		4FC127412189FE91009C239D /* VCDemoMetalRenderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoMetalRenderViewController.h; sourceTree = "<group>"; };
 		4FC127422189FE91009C239D /* VCDemoMetalRenderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoMetalRenderViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -234,15 +231,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		4F0F953D2188DB8F00CB9BAE /* BaseView */ = {
-			isa = PBXGroup;
-			children = (
-				4FC1273421899678009C239D /* VCAutoResizeLayerView.h */,
-				4FC1273521899678009C239D /* VCAutoResizeLayerView.m */,
-			);
-			path = BaseView;
-			sourceTree = "<group>";
-		};
 		4F92799821442E1700F17F9A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -278,7 +266,6 @@
 		4F9279A821442F0800F17F9A /* Classses */ = {
 			isa = PBXGroup;
 			children = (
-				4F0F953D2188DB8F00CB9BAE /* BaseView */,
 				4F0F95152188934D00CB9BAE /* EncodeDemo */,
 				4F0F95142188933800CB9BAE /* DecodeDemo */,
 				4F0F9513218891E600CB9BAE /* BaseViewController */,
@@ -407,7 +394,6 @@
 				4F0F95212188962C00CB9BAE /* VCDemoBackableViewController.m in Sources */,
 				4FBF022D2144284B00CA0EC8 /* main.m in Sources */,
 				4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */,
-				4FC1273621899678009C239D /* VCAutoResizeLayerView.m in Sources */,
 				4F0F951E218894FC00CB9BAE /* VCDemoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

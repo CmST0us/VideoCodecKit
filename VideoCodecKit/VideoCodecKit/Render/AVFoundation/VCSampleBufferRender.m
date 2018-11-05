@@ -11,9 +11,11 @@
 #import "VCSampleBufferRender.h"
 #import "VCYUV420PImage.h"
 #import "VCBaseImage.h"
+#import "VCAutoResizeLayerView.h"
 
 @interface VCSampleBufferRender ()
 @property (nonatomic, strong) AVSampleBufferDisplayLayer *renderLayer;
+@property (nonatomic, strong) VCAutoResizeLayerView *autoResizeLayerView;
 @end
 
 @implementation VCSampleBufferRender
@@ -29,40 +31,22 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _renderLayer = nil;
+        _renderLayer = [[AVSampleBufferDisplayLayer alloc] init];;
+        _autoResizeLayerView = [[VCAutoResizeLayerView alloc] init];
+        [_autoResizeLayerView addAutoResizeSubLayer:_renderLayer];
     }
     return self;
 }
 
-- (AVSampleBufferDisplayLayer *)renderLayer {
-    if (_renderLayer != nil) {
-        return _renderLayer;
-    }
-    _renderLayer = [[AVSampleBufferDisplayLayer alloc] init];
-    return _renderLayer;
+- (UIView *)renderView {
+    return _autoResizeLayerView;
 }
 
-- (instancetype)initWithSuperLayer:(CALayer *)layer {
-    self = [self init];
-    _superLayer = layer;
-    return self;
-}
-
-- (void)attachToLayer:(CALayer *)layer {
-    if (layer != nil && _superLayer != layer) {
-        self.renderLayer.frame = layer.bounds;
-        _superLayer = layer;
-        [layer addSublayer:self.renderLayer];
+- (void)attachToView:(UIView *)view {
+    [_autoResizeLayerView removeFromSuperview];
+    if (view && _autoResizeLayerView) {
+        [view addSubview:_autoResizeLayerView];
     }
-}
-
-- (void)detachLayer {
-    if ([self superLayer]) {
-        [self.renderLayer removeFromSuperlayer];
-    }
-}
-- (void)attachToSuperLayer {
-    [self attachToLayer:_superLayer];
 }
 
 - (void)renderImage:(VCBaseImage *)image {

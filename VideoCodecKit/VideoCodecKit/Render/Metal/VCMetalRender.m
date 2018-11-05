@@ -20,7 +20,7 @@
 @property (nonatomic, strong) id<MTLBuffer> converMatrix;
 @property (nonatomic, strong) id<MTLBuffer> vertics;
 @property (nonatomic, assign) NSInteger numberOfVertics;
-@property (nonatomic, strong) VCSafeObjectQueue *imageQueue;
+@property (nonatomic, strong) VCBaseImage *renderImage;
 @property (nonatomic, assign) CVMetalTextureCacheRef textureCache;
 
 @end
@@ -29,9 +29,6 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.imageQueue = [[VCSafeObjectQueue alloc] initWithSize:kVCMetalRenderImageQueueSize];
-        self.imageQueue.shouldWaitWhenPullFailed = NO;
-        self.imageQueue.isThreadSafe = NO;
         self.mtkView = [[MTKView alloc] init];
         self.mtkView.device = MTLCreateSystemDefaultDevice();;
         self.mtkView.delegate = self;
@@ -45,9 +42,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [self.imageQueue clear];
-}
 
 #pragma mark - Metal Setup
 // 设置渲染管道
@@ -149,7 +143,7 @@
 - (void)drawInMTKView:(MTKView *)view {
     id<MTLCommandBuffer> commandBuffer = [self.commandQueue commandBuffer];
     MTLRenderPassDescriptor *renderPassDescription = view.currentRenderPassDescriptor;
-    VCYUV420PImage *image = (VCYUV420PImage *)[self.imageQueue pull];
+    VCYUV420PImage *image = (VCYUV420PImage *)self.renderImage;
     if (renderPassDescription == nil
         || image == nil
         || [image isKindOfClass:[VCYUV420PImage class]] == NO) {
@@ -159,7 +153,7 @@
     };
     renderPassDescription.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 0.5, 0.5, 1.0f);
     id<MTLRenderCommandEncoder> renderEncoder = [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescription];
-    [renderEncoder setViewport:(MTLViewport){0.0, 0.0, self.viewportSize.x, self.viewportSize.y, -1.0, 1.0}];// [TODO]: 确定默认viewpoint
+    [renderEncoder setViewport:(MTLViewport){0.0, 0.0, self.viewportSize.x, self.viewportSize.y, -1.0, 1.0}];
     [renderEncoder setRenderPipelineState:self.pipelineState]; // 设置渲染管道
     [renderEncoder setVertexBuffer:self.vertics offset:0 atIndex:0];
     // texture
@@ -176,14 +170,21 @@
 }
 
 #pragma mark - Override
-- (void)attachToLayer:(CALayer *)layer {
-    
+- (void)attachToView:(UIView *)view {
+    if (self.mtkView && view) {
+        [self.mtkView removeFromSuperview];
+        [view addSubview:self.mtkView];
+    }
+}
+
+- (UIView *)renderView {
+    return self.mtkView;
 }
 
 - (void)renderImage:(VCBaseImage *)image {
     if (image != nil) {
         // 断言渲染速度比喂数据快，如果渲染慢也没必要把时间消耗在过期的帧上了，直接显示最新的就行了
-        [self.imageQueue push:image];
+        self.renderImage = image;
     }
 }
 

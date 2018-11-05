@@ -9,10 +9,9 @@
 #import <KVSig/KVSig.h>
 #import "VCDemoDecodeSBDLViewController.h"
 #import "VCDecodeController.h"
-#import "VCAutoResizeLayerView.h"
 
 @interface VCDemoDecodeSBDLViewController ()
-@property (nonatomic, strong) VCAutoResizeLayerView *previewerView;
+@property (nonatomic, strong) UIView *previewerView;
 @property (nonatomic, strong) UILabel *hintInfoLabel;
 
 @property (nonatomic, strong) VCDecodeController *decoderController;
@@ -37,7 +36,7 @@
     
     self.encodeWorkingQueue = dispatch_queue_create("encode_work_queue", DISPATCH_QUEUE_SERIAL);
     self.decoderController = [[VCDecodeController alloc] init];
-    self.decoderController.previewer.previewType = VCPreviewerTypeVTLiveH264VideoOnly;
+    self.decoderController.previewer.previewType = VCPreviewerTypeMetalRenderVTLiveH264VideoOnly;
     self.decoderController.parseFilePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"h264"];
     
     self.playGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playGestureHandler)];
@@ -55,7 +54,7 @@
 
 #pragma mark - Private
 - (void)createViews {
-    self.previewerView = [[VCAutoResizeLayerView alloc] init];
+    self.previewerView = [[UIView alloc] init];
     [self.view addSubview:self.previewerView];
     self.hintInfoLabel = [[UILabel alloc] init];
     [self.view addSubview:self.hintInfoLabel];
@@ -81,10 +80,12 @@
 }
 
 - (void)setupDisplayLayer {
-    [self.decoderController.previewer.render attachToLayer:self.previewerView.layer];
-    CALayer *displayLayer = [self.previewerView.layer sublayers][0];
-    [displayLayer removeFromSuperlayer];
-    [self.previewerView addAutoResizeSubLayer:displayLayer];
+    UIView *renderView = self.decoderController.previewer.render.renderView;
+    [renderView removeFromSuperview];
+    [self.previewerView addSubview:renderView];
+    [renderView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(self.previewerView);
+    }];
 }
 
 - (void)bindData {
@@ -113,16 +114,20 @@
         [self.decoderController.previewer resume];
     } else if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateReady]) {
         [self.decoderController startParse];
+        [self setupDisplayLayer];
     } else if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateStop]) {
         [self.decoderController startParse];
+        [self setupDisplayLayer];
     }
 }
 
 - (void)stopGestureHandler {
     if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateStop]) {
         [self.decoderController startParse];
+        [self setupDisplayLayer];
     } else if ([self.decoderController.previewer.currentState isEqualToInteger:VCBaseCodecStateReady]) {
         [self.decoderController startParse];
+        [self setupDisplayLayer];
     } else {
         [self.decoderController stopParse];
     }
