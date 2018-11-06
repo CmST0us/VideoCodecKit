@@ -36,6 +36,8 @@
 		4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */; };
 		4FBF022D2144284B00CA0EC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF022C2144284B00CA0EC8 /* main.m */; };
 		4FC127432189FE91009C239D /* VCDemoMetalRenderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC127422189FE91009C239D /* VCDemoMetalRenderViewController.m */; };
+		4FD047002191818100FFC7D2 /* VCDemoVideoAudioSyncViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD046FF2191818100FFC7D2 /* VCDemoVideoAudioSyncViewController.m */; };
+		4FD047032191819D00FFC7D2 /* VCDemoVideoAudioSyncController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD047022191819D00FFC7D2 /* VCDemoVideoAudioSyncController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -100,6 +102,10 @@
 		4FBF022C2144284B00CA0EC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4FC127412189FE91009C239D /* VCDemoMetalRenderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoMetalRenderViewController.h; sourceTree = "<group>"; };
 		4FC127422189FE91009C239D /* VCDemoMetalRenderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoMetalRenderViewController.m; sourceTree = "<group>"; };
+		4FD046FE2191818100FFC7D2 /* VCDemoVideoAudioSyncViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoVideoAudioSyncViewController.h; sourceTree = "<group>"; };
+		4FD046FF2191818100FFC7D2 /* VCDemoVideoAudioSyncViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoVideoAudioSyncViewController.m; sourceTree = "<group>"; };
+		4FD047012191819D00FFC7D2 /* VCDemoVideoAudioSyncController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoVideoAudioSyncController.h; sourceTree = "<group>"; };
+		4FD047022191819D00FFC7D2 /* VCDemoVideoAudioSyncController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoVideoAudioSyncController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,6 +272,7 @@
 		4F9279A821442F0800F17F9A /* Classses */ = {
 			isa = PBXGroup;
 			children = (
+				4FD046FA2191813100FFC7D2 /* VideoAudioSyncDemo */,
 				4F0F95152188934D00CB9BAE /* EncodeDemo */,
 				4F0F95142188933800CB9BAE /* DecodeDemo */,
 				4F0F9513218891E600CB9BAE /* BaseViewController */,
@@ -307,6 +314,41 @@
 				4FBF022B2144284B00CA0EC8 /* Info.plist */,
 			);
 			path = VideoCodecKitDemo;
+			sourceTree = "<group>";
+		};
+		4FD046FA2191813100FFC7D2 /* VideoAudioSyncDemo */ = {
+			isa = PBXGroup;
+			children = (
+				4FD046FD2191815C00FFC7D2 /* Model */,
+				4FD046FC2191815700FFC7D2 /* View */,
+				4FD046FB2191814D00FFC7D2 /* ViewController */,
+			);
+			path = VideoAudioSyncDemo;
+			sourceTree = "<group>";
+		};
+		4FD046FB2191814D00FFC7D2 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				4FD046FE2191818100FFC7D2 /* VCDemoVideoAudioSyncViewController.h */,
+				4FD046FF2191818100FFC7D2 /* VCDemoVideoAudioSyncViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		4FD046FC2191815700FFC7D2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		4FD046FD2191815C00FFC7D2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4FD047012191819D00FFC7D2 /* VCDemoVideoAudioSyncController.h */,
+				4FD047022191819D00FFC7D2 /* VCDemoVideoAudioSyncController.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -386,6 +428,7 @@
 			files = (
 				4F0F952821889DEB00CB9BAE /* VCDemoDecodeSBDLViewController.m in Sources */,
 				4F0F95342188A51300CB9BAE /* VCDemoCameraCaptureController.m in Sources */,
+				4FD047002191818100FFC7D2 /* VCDemoVideoAudioSyncViewController.m in Sources */,
 				4F0F951B2188941F00CB9BAE /* VCDemoNavigationController.m in Sources */,
 				4F0F952E2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.m in Sources */,
 				4FC127432189FE91009C239D /* VCDemoMetalRenderViewController.m in Sources */,
@@ -393,6 +436,7 @@
 				4F9279D52145118600F17F9A /* VCDecodeController.m in Sources */,
 				4F0F95212188962C00CB9BAE /* VCDemoBackableViewController.m in Sources */,
 				4FBF022D2144284B00CA0EC8 /* main.m in Sources */,
+				4FD047032191819D00FFC7D2 /* VCDemoVideoAudioSyncController.m in Sources */,
 				4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */,
 				4F0F951E218894FC00CB9BAE /* VCDemoViewController.m in Sources */,
 			);

@@ -15,6 +15,7 @@ typedef NS_ENUM(NSUInteger, VCDemoListItem) {
     VCDemoListItemCameraCaptureEncode = 0,
     VCDemoListItemH264Decode,
     VCDemoListItemMetalRender,
+    VCDemoListItemVideoAudioSync,
     
     VCDemoListItemCount,
 };
@@ -54,6 +55,11 @@ typedef NS_ENUM(NSUInteger, VCDemoListItem) {
             [self.navigationController pushViewController:vc animated:YES];
 #endif
         }
+            
+        case VCDemoListItemVideoAudioSync: {
+            
+        }
+            
         break;
             
             
