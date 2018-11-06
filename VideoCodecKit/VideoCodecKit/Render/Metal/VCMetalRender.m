@@ -14,6 +14,9 @@
 // 如果外部sampleBuffer有重用，则必须为1
 #define kVCMetalRenderImageQueueSize 1
 
+#if (TARGET_IPHONE_SIMULATOR)
+#else
+
 @interface VCMetalRender ()<MTKViewDelegate>
 @property (nonatomic, strong) id<MTLRenderPipelineState> pipelineState;
 @property (nonatomic, strong) id<MTLCommandQueue> commandQueue;
@@ -200,3 +203,5 @@
              ];
 }
 @end
+
+#endif

@@ -8,6 +8,9 @@
 
 #import "VCDemoMetalRenderViewController.h"
 #import <VideoCodecKit/VideoCodecKit.h>
+#if (TARGET_IPHONE_SIMULATOR)
+#else
+
 @interface VCDemoMetalRenderViewController ()<AVCaptureVideoDataOutputSampleBufferDelegate> {
     dispatch_queue_t _captureQueue;
 }
@@ -89,3 +92,4 @@
     [self.render renderImage:image];
 }
 @end
+#endif
