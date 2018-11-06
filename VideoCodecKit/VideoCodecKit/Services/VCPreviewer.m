@@ -50,9 +50,11 @@
                                                        NSStringFromClass([VCSampleBufferRender class])],
                
                // VCPreviewerTypeMetalRenderVTLiveH264VideoOnly 使用的组件
+#if (!TARGET_IPHONE_SIMULATOR)
                @(VCPreviewerTypeMetalRenderVTLiveH264VideoOnly):@[NSStringFromClass([VCH264FFmpegFrameParser class]),
                                                                   NSStringFromClass([VCVTH264Decoder class]),
                                                                   NSStringFromClass([VCMetalRender class])],
+#endif
                };
 }
 

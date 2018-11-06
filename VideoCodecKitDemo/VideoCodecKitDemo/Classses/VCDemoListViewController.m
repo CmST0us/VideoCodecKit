@@ -44,8 +44,15 @@ typedef NS_ENUM(NSUInteger, VCDemoListItem) {
         break;
 
         case VCDemoListItemMetalRender: {
+#if (TARGET_IPHONE_SIMULATOR)
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"不支持" message:@"模拟器不支持Metal" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
+            [alert addAction:cancelAction];
+            [self presentViewController:alert animated:YES completion:nil];
+#else
             VCDemoMetalRenderViewController *vc = [[VCDemoMetalRenderViewController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
+#endif
         }
         break;
             

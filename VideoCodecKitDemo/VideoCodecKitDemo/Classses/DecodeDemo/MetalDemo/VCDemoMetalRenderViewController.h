@@ -9,6 +9,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import "VCDemoBackableViewController.h"
 
+#if (TARGET_IPHONE_SIMULATOR)
+#else
+
 @interface VCDemoMetalRenderViewController : VCDemoBackableViewController
 @property (nonatomic , strong) AVCaptureSession *captureSession; //负责输入和输出设备之间的数据传递
 @property (nonatomic , strong) AVCaptureDeviceInput *captureDeviceInput;//负责从AVCaptureDevice获得输入数据
@@ -16,3 +19,5 @@
 - (void)startCapture;
 - (void)stopCapture;
 @end
+
+#endif
