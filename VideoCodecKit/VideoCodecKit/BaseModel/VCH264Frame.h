@@ -21,6 +21,9 @@ typedef NS_ENUM(NSUInteger, VCH264FrameType) {
 
 @interface VCH264Frame : VCBaseFrame
 
+@property (nonatomic, assign) NSUInteger width;
+@property (nonatomic, assign) NSUInteger height;
+
 @property (nonatomic, assign) VCH264FrameType frameType;
 @property (nonatomic, assign) NSUInteger frameIndex;
 @property (nonatomic, assign) BOOL isKeyFrame;
@@ -29,6 +32,9 @@ typedef NS_ENUM(NSUInteger, VCH264FrameType) {
 @property (nonatomic, assign) int64_t dts;
 
 @property (nonatomic, assign) NSInteger startCodeSize;
+
+- (instancetype)initWithWidth:(NSUInteger)width
+                       height:(NSUInteger)height;
 
 + (VCH264FrameType)getFrameType:(VCH264Frame *)frame;
 
