@@ -25,6 +25,22 @@
     return self;
 }
 
+- (instancetype)initWithAudioStramBasicDescription:(AudioStreamBasicDescription)desc {
+    self = [super init];
+    if (self) {
+        _sampleRate = desc.mSampleRate;
+        _formatID = desc.mFormatID;
+        _formatFlags = desc.mFormatFlags;
+        _framesPerPacket = desc.mFramesPerPacket;
+        _channelsPerFrame = desc.mChannelsPerFrame;
+        _bytesPerPacket = desc.mBytesPerPacket;
+        _bytesPerFrame = desc.mBytesPerFrame;
+        _bitsPerChannel = desc.mBitsPerChannel;
+        _reserved = desc.mReserved;
+    }
+    return self;
+}
+
 - (AudioStreamBasicDescription)audioStreamBasicDescription {
     AudioStreamBasicDescription desc;
     desc.mSampleRate = _sampleRate;

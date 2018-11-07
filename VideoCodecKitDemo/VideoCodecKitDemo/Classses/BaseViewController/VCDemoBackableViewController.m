@@ -17,10 +17,6 @@
 #pragma mmark - Override
 - (void)customInit {
     [super customInit];
-    
-    [self createBackButton];
-    [self setupBackButton];
-    [self createBackButtonConstraints];
 }
 
 #pragma mark - Private Method
@@ -50,6 +46,10 @@
 #pragma mark - Life Cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self createBackButton];
+    [self setupBackButton];
+    [self createBackButtonConstraints];
 }
 
 #pragma mark - Action

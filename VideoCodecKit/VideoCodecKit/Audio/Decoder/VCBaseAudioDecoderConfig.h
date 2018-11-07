@@ -27,5 +27,6 @@ typedef NS_ENUM(NSInteger, VCBaseAudioSampleRate) {
 @property (nonatomic, assign) NSUInteger                 bitsPerChannel;     // Default is 16
 @property (nonatomic, assign) NSUInteger                 reserved;           // Default is 0
 
+- (instancetype)initWithAudioStramBasicDescription:(AudioStreamBasicDescription)desc;
 - (AudioStreamBasicDescription)audioStreamBasicDescription;
 @end

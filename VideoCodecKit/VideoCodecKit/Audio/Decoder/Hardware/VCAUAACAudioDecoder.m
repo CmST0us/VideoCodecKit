@@ -10,7 +10,7 @@
 #import <AudioUnit/AudioUnit.h>
 #import <AVFoundation/AVFoundation.h>
 #import "VCAUAACAudioDecoder.h"
-#import "VCAACFrame.h"
+#import "VCAudioFrame.h"
 #import "VCSafeObjectQueue.h"
 
 #define kVCAUAACAudioDecoderQueueSize 100
@@ -42,13 +42,13 @@ static OSStatus audioPlayCallback(void *inRefCon,
         return noErr;
     }
     
-    VCAACFrame *firstFrame = (VCAACFrame *)[decoder.audioFrameList fetch];
+    VCAudioFrame *firstFrame = (VCAudioFrame *)[decoder.audioFrameList fetch];
     
     if (decoder.readSize + ioData->mBuffers[0].mDataByteSize > firstFrame.parseSize) {
         decoder.readSize = 0;
     }
     for (int i = 0; i < MIN(ioData->mNumberBuffers, decoder.audioFrameList.count); ++i) {
-        VCAACFrame *aacFrame = (VCAACFrame *)[decoder.audioFrameList fetch];
+        VCAudioFrame *aacFrame = (VCAudioFrame *)[decoder.audioFrameList fetch];
         if (aacFrame == nil) {
             continue;
         }
@@ -180,13 +180,13 @@ static OSStatus audioPlayCallback(void *inRefCon,
 }
 
 - (void)decodeWithFrame:(VCBaseFrame *)frame {
-    if (frame == nil || ![[frame class] isSubclassOfClass:[VCAACFrame class]]) {
+    if (frame == nil || ![[frame class] isSubclassOfClass:[VCAudioFrame class]]) {
         return;
     }
     if (![self.currentState isEqualToInteger:VCBaseCodecStateRunning]) {
         return;
     }
-    VCAACFrame *aacFrame = (VCBaseFrame *)frame;
+    VCAudioFrame *aacFrame = (VCAudioFrame *)frame;
     [self.audioFrameList push:aacFrame];
 }
 
