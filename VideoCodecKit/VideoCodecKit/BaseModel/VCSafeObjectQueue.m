@@ -108,6 +108,34 @@
     return tmp;
 }
 
+- (NSObject *)fetch {
+    kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
+    if(_count == 0)
+    {
+        if (!_shouldWaitWhenPullFailed) {
+            kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+            return NULL;
+        }
+        
+        struct timeval tv;
+        gettimeofday(&tv, NULL);
+        
+        struct timespec ts;
+        ts.tv_sec = tv.tv_sec + 1;
+        ts.tv_nsec = tv.tv_usec * 1000;
+        kVCPerformIfNeedThreadSafe(pthread_cond_timedwait(&_cond, &_mutex, &ts));
+        if(_count == 0)
+        {
+            kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+            return NULL;
+        }
+    }
+    
+    NSObject *tmp = [_node objectAtIndex:_head];
+    kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+    return tmp;
+}
+
 - (void)wakeupReader{
     kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
     kVCPerformIfNeedThreadSafe(pthread_cond_signal(&_cond));

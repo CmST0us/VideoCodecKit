@@ -10,6 +10,7 @@
 #import "VCDemoDecodeSBDLViewController.h"
 #import "VCDemoCameraCaptureEncodeViewController.h"
 #import "VCDemoMetalRenderViewController.h"
+#import "VCDemoVideoAudioSyncViewController.h"
 
 typedef NS_ENUM(NSUInteger, VCDemoListItem) {
     VCDemoListItemCameraCaptureEncode = 0,
@@ -57,7 +58,8 @@ typedef NS_ENUM(NSUInteger, VCDemoListItem) {
         }
             
         case VCDemoListItemVideoAudioSync: {
-            
+            VCDemoVideoAudioSyncViewController *vc = [[VCDemoVideoAudioSyncViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
         }
             
         break;

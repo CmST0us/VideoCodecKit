@@ -6,6 +6,7 @@
 //  Copyright © 2018 eric3u. All rights reserved.
 //
 
+#import <VideoCodecKit/VideoCodecKit.h>
 #import "VCDemoVideoAudioSyncViewController.h"
 
 @interface VCDemoVideoAudioSyncViewController ()
@@ -16,6 +17,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    VCAUAACAudioDecoderConfig *config = [[VCAUAACAudioDecoderConfig alloc] init];
+    NSLog(@"%@", config);
     // Do any additional setup after loading the view.
 }
 
