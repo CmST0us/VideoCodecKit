@@ -78,7 +78,7 @@
             CMBlockBufferRef blockBuffer;
             size_t bufferListSizeNeededOut = 0;
             if (!sampleBuffer) {
-                continue;
+                break;
             }
             AudioBufferList audioBufferList;
             OSStatus err = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(sampleBuffer,
