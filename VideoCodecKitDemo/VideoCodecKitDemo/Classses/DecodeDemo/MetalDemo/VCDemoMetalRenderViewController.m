@@ -21,11 +21,7 @@
 
 - (void)customInit {
     [super customInit];
-    
     self.render = [[VCMetalRender alloc] init];
-    [self.view addSubview:self.render.mtkView];
-    
-    [self createConstraint];
 }
 
 - (void)createConstraint {
@@ -38,6 +34,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.view addSubview:self.render.mtkView];
+    [self createConstraint];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

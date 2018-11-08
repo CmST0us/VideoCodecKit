@@ -9,6 +9,7 @@
 #import "VCBaseFrame.h"
 
 CONST_STRING(kVCBaseFrameUserInfoFFmpegAVCodecContextKey);
+CONST_STRING(kVCBaseFrameUserInfoAudioPropertyDictionaryKey);
 
 @implementation VCBaseFrame {
     uint8_t *_parseDataPtr;

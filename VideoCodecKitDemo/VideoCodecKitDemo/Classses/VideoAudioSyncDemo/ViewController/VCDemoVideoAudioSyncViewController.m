@@ -10,57 +10,26 @@
 #import "VCDemoVideoAudioSyncViewController.h"
 #import <AVFoundation/AVFoundation.h>
 
-@interface VCDemoVideoAudioSyncViewController ()
-@property (nonatomic, strong) AVURLAsset *asset;
-@property (nonatomic, strong) AVAssetReader *assetReader;
-@property (nonatomic, strong) AVAssetReaderTrackOutput *trackOutput;
-@property (nonatomic, strong) VCAUAACAudioDecoder *decoder;
-@property (nonatomic, strong) VCAUAACAudioDecoderConfig *config;
+
+#define kVCDemoVideoAudioSyncReadBufferSize (4096)
+
+@interface VCDemoVideoAudioSyncViewController () <VCBaseFrameParserDelegate>
 @property (nonatomic, strong) NSThread *feedThread;
+@property (nonatomic, strong) VCAudioFrameParser *parser;
+@property (nonatomic, strong) NSInputStream *inputStream;
 @end
 
 @implementation VCDemoVideoAudioSyncViewController
 
 - (void)customInit {
     [super customInit];
-    NSError *err = nil;
     
-    self.asset = [[AVURLAsset alloc] initWithURL:[[NSBundle mainBundle] URLForResource:@"test" withExtension:@"aac"]
-                                         options:@{
-                                                   AVURLAssetPreferPreciseDurationAndTimingKey: @(YES)
-                                                   }];
-    self.assetReader = [[AVAssetReader alloc] initWithAsset:self.asset error:&err];
-    NSArray<AVAssetTrack *> *audioTracks = [self.asset tracksWithMediaType:AVMediaTypeAudio];
+    self.parser = [[VCAudioFrameParser alloc] initWithAudioType:kAudioFileAAC_ADTSType];
+    self.parser.delegate = self;
     
-    NSDictionary *outputSetting = @{
-                                    AVFormatIDKey: @(kAudioFormatLinearPCM),
-                                    AVLinearPCMBitDepthKey: @(16),
-                                    AVLinearPCMIsBigEndianKey: @(NO),
-                                    AVLinearPCMIsFloatKey: @(NO),
-                                    AVLinearPCMIsNonInterleaved: @(YES),
-                                    AVSampleRateKey: @(44100.0),
-                                    AVNumberOfChannelsKey: @(1),
-                                    };
-    
-    self.trackOutput = [AVAssetReaderTrackOutput assetReaderTrackOutputWithTrack:audioTracks[0] outputSettings:outputSetting];
-    self.trackOutput.alwaysCopiesSampleData = NO;
-    [self.assetReader addOutput:self.trackOutput];
-    [self.assetReader startReading];
-    NSArray *formatDesc = audioTracks[0].formatDescriptions;
-    for(unsigned int i = 0; i < [formatDesc count]; ++i) {
-        CMAudioFormatDescriptionRef item = (__bridge_retained CMAudioFormatDescriptionRef)[formatDesc objectAtIndex:i];
-        const AudioStreamBasicDescription* fmtDesc = CMAudioFormatDescriptionGetStreamBasicDescription(item);
-        if (fmtDesc) {
-            VCAUAACAudioDecoderConfig *c = [[VCAUAACAudioDecoderConfig alloc] initWithAudioStramBasicDescription:*fmtDesc];
-            NSLog(@"%@", c);
-            self.config = [[VCAUAACAudioDecoderConfig alloc] init];
-        }
-        CFRelease(item);
-    }
-    
-    self.decoder = [[VCAUAACAudioDecoder alloc] initWithConfig:self.config];
-    [self.decoder setup];
-    [self.decoder run];
+    NSString *aacFilePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"aac"];
+    self.inputStream = [[NSInputStream alloc] initWithFileAtPath:aacFilePath];
+    [self.inputStream open];
 }
 
 - (void)viewDidLoad {
@@ -72,38 +41,18 @@
 
 
 - (void)workThread {
+    void *readBuffer = malloc(kVCDemoVideoAudioSyncReadBufferSize);
     while (![[NSThread currentThread] isCancelled]) {
         @autoreleasepool {
-            CMSampleBufferRef sampleBuffer = [self.trackOutput copyNextSampleBuffer];
-            CMBlockBufferRef blockBuffer;
-            size_t bufferListSizeNeededOut = 0;
-            if (!sampleBuffer) {
+            ssize_t readLen = 0;
+            readLen = [self.inputStream read:readBuffer maxLength:kVCDemoVideoAudioSyncReadBufferSize];
+            if (readLen > 0) {
+                if ([self.parser parseData:readBuffer length:readLen] < 0) {
+                    free(readBuffer);
+                }
+            } else {
+                free(readBuffer);
                 break;
-            }
-            AudioBufferList audioBufferList;
-            OSStatus err = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(sampleBuffer,
-                                                                                   &bufferListSizeNeededOut,
-                                                                                   &audioBufferList,
-                                                                                   sizeof(audioBufferList),
-                                                                                   kCFAllocatorSystemDefault,
-                                                                                   kCFAllocatorSystemDefault,
-                                                                                   kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment,
-                                                                                   &blockBuffer);
-            if (err) {
-                NSLog(@"CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer error: %d", (int)err);
-            }
-            
-            CMTime presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-            int timeStamp = (1000 * (int)presentationTimeStamp.value) / presentationTimeStamp.timescale;
-            NSLog(@"audio timestamp %d", timeStamp);
-            CFRelease(sampleBuffer);
-            
-            for (int i = 0; i < audioBufferList.mNumberBuffers; ++i) {
-                VCAudioFrame *audioFrame = [[VCAudioFrame alloc] init];
-                [audioFrame createParseDataWithSize:audioBufferList.mBuffers[i].mDataByteSize];
-                memcpy(audioFrame.parseData, audioBufferList.mBuffers[i].mData, audioBufferList.mBuffers[i].mDataByteSize);
-                audioFrame.numberChannels = audioBufferList.mBuffers[i].mNumberChannels;
-                [self.decoder decodeWithFrame:audioFrame];
             }
         }
     }
@@ -111,7 +60,10 @@
 - (void)onBack:(UIButton *)button {
     [super onBack:button];
     [self.feedThread cancel];
-    [self.decoder invalidate];
+}
+
+- (void)frameParserDidParseFrame:(VCBaseFrame *)aFrame {
+    
 }
 
 @end

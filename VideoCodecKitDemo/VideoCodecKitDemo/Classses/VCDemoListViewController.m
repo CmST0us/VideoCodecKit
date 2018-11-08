@@ -56,6 +56,7 @@ typedef NS_ENUM(NSUInteger, VCDemoListItem) {
             [self.navigationController pushViewController:vc animated:YES];
 #endif
         }
+        break;
             
         case VCDemoListItemVideoAudioSync: {
             VCDemoVideoAudioSyncViewController *vc = [[VCDemoVideoAudioSyncViewController alloc] init];

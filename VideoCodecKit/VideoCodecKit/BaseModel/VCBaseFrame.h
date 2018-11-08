@@ -10,6 +10,7 @@
 #import "VCMarco.h"
 
 DECLARE_CONST_STRING(kVCBaseFrameUserInfoFFmpegAVCodecContextKey);
+DECLARE_CONST_STRING(kVCBaseFrameUserInfoAudioPropertyDictionaryKey);
 
 @interface VCBaseFrame: NSObject
 @property (nonatomic, assign) uint8_t *parseData;
