@@ -11,9 +11,11 @@
 #import "VCAudioFrame.h"
 #import "VCSafeObjectQueue.h"
 
-#define kVCAudioRenderQueueSize 3
+#define kVCAudioRenderBufferSize 3
 
-@interface VCAudioRender ()
+@interface VCAudioRender () {
+    AudioQueueBufferRef _audioBuffer[kVCAudioRenderBufferSize];
+}
 //@property (nonatomic, assign) UInt32 bufferByteSize;
 //@property (nonatomic, assign) SInt64 currentPacket;
 //@property (nonatomic, assign) UInt32 numPacketsToRead;
@@ -30,7 +32,7 @@ void audioQueueOutputCallback(void * __nullable   inUserData,
                               AudioQueueRef       inAQ,
                               AudioQueueBufferRef inBuffer) {
     VCAudioRender *render = (__bridge VCAudioRender *)(inUserData);
-
+    AudioStreamPacketDescription desc = {0};
     VCAudioFrame *frame = (VCAudioFrame *)[render.queue fetch];
     if (frame != nil) {
         if (inBuffer->mAudioDataBytesCapacity > frame.parseSize) {
@@ -48,7 +50,37 @@ void audioQueueOutputCallback(void * __nullable   inUserData,
                 render.frameReadedSize += inBuffer->mAudioDataBytesCapacity;
             }
         }
+        desc = frame.packetDescription;
     }
+    OSStatus ret= AudioQueueEnqueueBuffer(inAQ, inBuffer, 1, &desc);
+    if (ret != noErr) {
+        NSLog(@"[RENDER][AUDIO]: can not enqueue buffer");
+    }
+}
+
+#pragma mark - Private Method
+- (NSInteger)preferAudioBufferSize {
+    return 360;
+    static const int maxBufferSize = 0x10000;
+    static const int minBufferSize = 0x4000;
+    UInt32 outBufferSize = 0;
+//    if (_basicDescription.mFramesPerPacket != 0) {
+//        // [TODO] magic number 0.5
+//        Float64 numPacketsForTime = _basicDescription.mSampleRate / _basicDescription.mFramesPerPacket * 0.5;
+//        outBufferSize = numPacketsForTime * maxPacketSize;
+//    } else {
+//        outBufferSize = maxBufferSize > maxPacketSize ? maxBufferSize : maxPacketSize;
+//    }
+//    if (outBufferSize > maxBufferSize && outBufferSize > maxPacketSize){
+//        outBufferSize = maxBufferSize;
+//    }
+//    else {
+//        if (outBufferSize < minBufferSize){
+//            outBufferSize = minBufferSize;
+//        }
+//    }
+    return minBufferSize;
+//    *outNumPacketsToRead = *outBufferSize / maxPacketSize;
 }
 
 #pragma mark - Public Method
@@ -60,12 +92,26 @@ void audioQueueOutputCallback(void * __nullable   inUserData,
 - (instancetype)initWithAudioStreamBasicDescription:(AudioStreamBasicDescription)description {
     self = [super init];
     if (self) {
-        _queue = [[VCSafeObjectQueue alloc] initWithSize:kVCAudioRenderQueueSize];
+        _queue = [[VCSafeObjectQueue alloc] initWithSize:kVCAudioRenderBufferSize];
         _frameReadedSize = 0;
+        _basicDescription = description;
         OSStatus ret = AudioQueueNewOutput(&description, audioQueueOutputCallback, (__bridge void * _Nullable)(self), NULL, NULL, 0, &_audioQueue);
         if (ret != noErr) {
             NSLog(@"[RENDER][AUDIO]: can not init audio output");
             return nil;
+        }
+        for (int i = 0; i < kVCAudioRenderBufferSize; ++i) {
+            ret = AudioQueueAllocateBuffer(_audioQueue, (UInt32)[self preferAudioBufferSize], _audioBuffer + i);
+            if (ret != noErr) {
+                NSLog(@"[RENDER][AUDIO]: can not init buffer");
+                return nil;
+            }
+            _audioBuffer[i]->mAudioDataByteSize = (UInt32)[self preferAudioBufferSize];
+            ret = AudioQueueEnqueueBuffer(_audioQueue, _audioBuffer[i], 0, NULL);
+            if (ret != noErr) {
+                NSLog(@"[RENDER][AUDIO]: can not enqueu audio buffer");
+                return nil;
+            }
         }
         ret = AudioQueueStart(_audioQueue, NULL);
         if (ret != noErr) {
@@ -91,10 +137,10 @@ void audioQueueOutputCallback(void * __nullable   inUserData,
 }
 
 - (void)stop {
-    [_queue clear];
     if (_audioQueue != NULL) {
         AudioQueueReset(_audioQueue);
     }
+    [_queue clear];
 }
 
 #pragma mark - Override Method
@@ -119,6 +165,25 @@ void audioQueueOutputCallback(void * __nullable   inUserData,
     
     VCAudioFrame *frame = (VCAudioFrame *)object;
     [self.queue push:frame];
+//    AudioQueueBufferRef buffer;
+//    OSStatus ret = AudioQueueAllocateBuffer(self.audioQueue, (UInt32)frame.parseSize, &buffer);
+//    if (ret != noErr) {
+//#if DEBUG
+//        NSLog(@"[RENDER][AUDIO]: can not allocate buffer;");
+//#endif
+//        return;
+//    }
+//    buffer->mAudioDataByteSize = (UInt32)frame.parseSize;
+//
+//    AudioStreamPacketDescription desc = frame.packetDescription;
+//    desc.mStartOffset = 0;
+//    ret = AudioQueueEnqueueBuffer(self.audioQueue, buffer, 1, &desc);
+//    if (ret != noErr) {
+//#if DEBUG
+//        NSLog(@"[RENDER][AUDIO]: can not enqueue buffer;");
+//#endif
+//        return;
+//    }
 }
 
 @end

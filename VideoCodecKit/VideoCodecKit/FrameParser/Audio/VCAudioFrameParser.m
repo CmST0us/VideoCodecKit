@@ -60,6 +60,7 @@ void packetsProc(void *                        inClientData,
             SInt64 packetStart = inPacketDescriptions[i].mStartOffset;
             UInt32 packetSize = inPacketDescriptions[i].mDataByteSize;
             VCAudioFrame *frame = [[VCAudioFrame alloc] init];
+            frame.packetDescription = *inPacketDescriptions;
             [frame createParseDataWithSize:packetSize];
             memcpy(frame.parseData, inInputData + packetStart, packetSize);
             [frame.userInfo addEntriesFromDictionary:parser.audioProperty];

@@ -10,6 +10,8 @@
 #import "VCBaseRenderProtocol.h"
 
 @interface VCAudioRender : NSObject<VCBaseRenderProtocol>
+@property (nonatomic, readonly) AudioStreamBasicDescription basicDescription;
+
 - (instancetype)initWithAudioStreamBasicDescription:(AudioStreamBasicDescription)description;
 
 - (void)stop;
