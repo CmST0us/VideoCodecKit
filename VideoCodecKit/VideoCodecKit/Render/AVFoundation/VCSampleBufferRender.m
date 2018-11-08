@@ -49,12 +49,12 @@
     }
 }
 
-- (void)render:(id)image {
-    if (image == nil) return;
+- (void)render:(id)object {
+    if (object == nil) return;
     NSArray *supportImages = [self supportRenderClassName];
     BOOL isSupportRenderImage = NO;
     for (NSString *imageName in supportImages) {
-        if ([NSStringFromClass([image class]) isEqualToString:imageName]) {
+        if ([NSStringFromClass([object class]) isEqualToString:imageName]) {
             isSupportRenderImage = YES;
         }
     }
@@ -62,7 +62,7 @@
         return;
     }
     
-    CVPixelBufferRef pixelBuffer = ((VCYUV420PImage *)image).pixelBuffer;
+    CVPixelBufferRef pixelBuffer = ((VCYUV420PImage *)object).pixelBuffer;
     if (pixelBuffer == NULL) {
         return;
     }

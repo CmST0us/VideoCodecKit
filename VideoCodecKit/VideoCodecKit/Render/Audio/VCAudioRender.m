@@ -15,10 +15,17 @@
 
 @implementation VCAudioRender
 
+
+
 - (NSArray<NSString *> *)supportRenderClassName {
     return @[
              NSStringFromClass([VCAudioFrame class]),
              ];
+}
+
+
+- (void)render:(id)object {
+    
 }
 
 @end

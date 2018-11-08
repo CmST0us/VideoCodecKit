@@ -12,9 +12,10 @@
 
 @class UIView;
 @protocol VCBaseRenderProtocol<NSObject>
+@optional
 - (UIView *)renderView;
 - (void)attachToView:(UIView *)view;
-- (void)render:(id)image;
 @required
+- (void)render:(id)object;
 - (NSArray<NSString *> *)supportRenderClassName;
 @end
