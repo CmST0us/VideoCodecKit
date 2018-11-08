@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSThread *feedThread;
 @property (nonatomic, strong) VCAudioFrameParser *parser;
 @property (nonatomic, strong) NSInputStream *inputStream;
+@property (nonatomic, strong) VCAudioRender *render;
 @end
 
 @implementation VCDemoVideoAudioSyncViewController
@@ -60,10 +61,21 @@
 - (void)onBack:(UIButton *)button {
     [super onBack:button];
     [self.feedThread cancel];
+    [self.render stop];
 }
 
 - (void)frameParserDidParseFrame:(VCBaseFrame *)aFrame {
+    VCAudioFrame *frame = (VCAudioFrame *)aFrame;
+    if (frame == nil) return;
     
+    if (self.render == nil) {
+        NSData *raw = frame.userInfo[@(kAudioFileStreamProperty_DataFormat)];
+        AudioStreamBasicDescription desc;
+        memcpy(&desc, raw.bytes, sizeof(desc));
+        
+        self.render = [[VCAudioRender alloc] initWithAudioStreamBasicDescription:desc];
+    }
+    [self.render render:frame];
 }
 
 @end
