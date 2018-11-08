@@ -77,6 +77,8 @@
 		4F7FBEF121946AE000182A00 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC3521626C4C002E7F0D /* AudioToolbox.framework */; };
 		4F7FBEF621947A8200182A00 /* VCAudioFrameParser+AudioFileStreamPropertyParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F7FBEF421947A8200182A00 /* VCAudioFrameParser+AudioFileStreamPropertyParser.h */; };
 		4F7FBEF721947A8200182A00 /* VCAudioFrameParser+AudioFileStreamPropertyParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7FBEF521947A8200182A00 /* VCAudioFrameParser+AudioFileStreamPropertyParser.m */; };
+		4F7FBEFE21948A0900182A00 /* VCAudioRender.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F7FBEFC21948A0900182A00 /* VCAudioRender.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F7FBEFF21948A0900182A00 /* VCAudioRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7FBEFD21948A0900182A00 /* VCAudioRender.m */; };
 		4F935859217A242F00A9F613 /* VCBaseFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F935857217A242F00A9F613 /* VCBaseFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F93585A217A242F00A9F613 /* VCBaseFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F935858217A242F00A9F613 /* VCBaseFrame.m */; };
 		4F935860217C48DA00A9F613 /* VCBaseImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F93585E217C48DA00A9F613 /* VCBaseImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -188,6 +190,8 @@
 		4F7FBEEE2194633100182A00 /* VCAudioFrameParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAudioFrameParser.m; sourceTree = "<group>"; };
 		4F7FBEF421947A8200182A00 /* VCAudioFrameParser+AudioFileStreamPropertyParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VCAudioFrameParser+AudioFileStreamPropertyParser.h"; sourceTree = "<group>"; };
 		4F7FBEF521947A8200182A00 /* VCAudioFrameParser+AudioFileStreamPropertyParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "VCAudioFrameParser+AudioFileStreamPropertyParser.m"; sourceTree = "<group>"; };
+		4F7FBEFC21948A0900182A00 /* VCAudioRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAudioRender.h; sourceTree = "<group>"; };
+		4F7FBEFD21948A0900182A00 /* VCAudioRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAudioRender.m; sourceTree = "<group>"; };
 		4F935857217A242F00A9F613 /* VCBaseFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VCBaseFrame.h; sourceTree = "<group>"; };
 		4F935858217A242F00A9F613 /* VCBaseFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VCBaseFrame.m; sourceTree = "<group>"; };
 		4F93585E217C48DA00A9F613 /* VCBaseImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseImage.h; sourceTree = "<group>"; };
@@ -336,6 +340,7 @@
 		4F76FBE621626A9C002E7F0D /* Render */ = {
 			isa = PBXGroup;
 			children = (
+				4F7FBF0021948AAF00182A00 /* Audio */,
 				4F76FBE021626A9C002E7F0D /* Metal */,
 				4F76FBE321626A9C002E7F0D /* AVFoundation */,
 				4F76FBE421626A9C002E7F0D /* OpenGL */,
@@ -534,6 +539,15 @@
 			path = Audio;
 			sourceTree = "<group>";
 		};
+		4F7FBF0021948AAF00182A00 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				4F7FBEFC21948A0900182A00 /* VCAudioRender.h */,
+				4F7FBEFD21948A0900182A00 /* VCAudioRender.m */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
 		4FD047042191DB9A00FFC7D2 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -636,6 +650,7 @@
 				4F935860217C48DA00A9F613 /* VCBaseImage.h in Headers */,
 				4F76FC4121626D8E002E7F0D /* VCVideoFPS.h in Headers */,
 				4F6C8680217E2FB600881F72 /* VCBaseEncoderConfig.h in Headers */,
+				4F7FBEFE21948A0900182A00 /* VCAudioRender.h in Headers */,
 				4F76FC5821626DCA002E7F0D /* VCBaseDecoderConfig.h in Headers */,
 				4F76FC4621626DCA002E7F0D /* EKFSMObject.h in Headers */,
 				4F76FC4821626DCA002E7F0D /* VCSafeQueue.h in Headers */,
@@ -750,6 +765,7 @@
 				4F6C867D217E2FA500881F72 /* VCBaseEncoder.m in Sources */,
 				4F76FC6D216270E1002E7F0D /* VCH264FFmpegFrameParserBuffer.m in Sources */,
 				4FD0472321928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.m in Sources */,
+				4F7FBEFF21948A0900182A00 /* VCAudioRender.m in Sources */,
 				4F935861217C48DA00A9F613 /* VCBaseImage.m in Sources */,
 				4FC1273A2189A92B009C239D /* VCMetalRender.m in Sources */,
 				4F76FC6E216270E1002E7F0D /* VCVTH264Decoder.m in Sources */,

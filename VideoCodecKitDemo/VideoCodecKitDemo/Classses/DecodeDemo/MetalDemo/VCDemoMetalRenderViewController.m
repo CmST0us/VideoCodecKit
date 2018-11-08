@@ -87,7 +87,7 @@
     CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     VCYUV420PImage *image = [[VCYUV420PImage alloc] initWithPixelBuffer:pixelBuffer];
     // 注意这个会持有pixelBuffer,导致sampleBuffer 重用出问题
-    [self.render renderImage:image];
+    [self.render render:image];
 }
 @end
 #endif

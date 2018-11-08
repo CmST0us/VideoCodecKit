@@ -190,14 +190,14 @@
     return self.mtkView;
 }
 
-- (void)renderImage:(VCBaseImage *)image {
+- (void)render:(id)image {
     if (image != nil) {
         // 断言渲染速度比喂数据快，如果渲染慢也没必要把时间消耗在过期的帧上了，直接显示最新的就行了
         self.renderImage = image;
     }
 }
 
-- (NSArray<NSString *> *)supportRenderImageClassName {
+- (NSArray<NSString *> *)supportRenderClassName {
     return @[
              NSStringFromClass([VCYUV420PImage class]),
              ];

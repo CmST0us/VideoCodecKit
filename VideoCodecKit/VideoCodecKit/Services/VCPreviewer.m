@@ -310,8 +310,9 @@
         
         VCBaseImage *image = (VCBaseImage *)[self.imageQueue pull];
         if (image != nil
-            && [[image class] isSubclassOfClass:[VCBaseImage class]]) {
-            [self.render renderImage:(VCBaseImage *)image];
+            && [[image class] isSubclassOfClass:[VCBaseImage class]]
+            && [self.render respondsToSelector:@selector(render:)]) {
+            [self.render render:image];
             if (self.delegate) {
                 dispatch_queue_t workingQueue = [self.delegate processWorkingQueue];
                 dispatch_sync(workingQueue, ^{

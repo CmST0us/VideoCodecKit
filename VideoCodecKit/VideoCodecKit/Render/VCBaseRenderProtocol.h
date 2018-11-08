@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "VCBaseImage.h"
+#import "VCAudioFrame.h"
 
 @class UIView;
 @protocol VCBaseRenderProtocol<NSObject>
-@required
 - (UIView *)renderView;
 - (void)attachToView:(UIView *)view;
-- (void)renderImage:(VCBaseImage *)image;
-- (NSArray<NSString *> *)supportRenderImageClassName;
+- (void)render:(id)image;
+@required
+- (NSArray<NSString *> *)supportRenderClassName;
 @end
