@@ -8,7 +8,143 @@
 
 #import "VCAudioFrameParser+AudioFileStreamPropertyParser.h"
 
+#define RET_DEFAULT_VALUE(t) t d = {0};return d;
+#define GET_PROPERTY_RAW_DATA(k) self.userInfo[@(k)]
+#define RET_PROPERTY(t, s) \
+t p;\
+memcpy(&p, s, sizeof(p));\
+return p;
+
 #define PROPERTY_PARSER_MAP_KEY_VALUE(k, v) @(k): @(sizeof(v))
+
+@implementation VCAudioFrame (AudioFileStreamProperty)
+- (UInt32)readyToProducePackets {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_ReadyToProducePackets);
+    if (raw == nil) {RET_DEFAULT_VALUE(UInt32);}
+    
+    RET_PROPERTY(UInt32, raw.bytes);
+}
+
+- (AudioStreamBasicDescription)dataFormat {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_DataFormat);
+    if (raw == nil) {RET_DEFAULT_VALUE(AudioStreamBasicDescription);}
+    
+    RET_PROPERTY(AudioStreamBasicDescription, raw.bytes);
+}
+
+- (AudioFormatListItem)formatList {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_FormatList);
+    if (raw == nil) {RET_DEFAULT_VALUE(AudioFormatListItem);}
+    
+    RET_PROPERTY(AudioFormatListItem, raw.bytes);
+}
+
+- (void *)magicCookieData {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_MagicCookieData);
+    if (raw == nil) {RET_DEFAULT_VALUE(void *);}
+    
+    RET_PROPERTY(void *, raw.bytes);
+}
+
+- (UInt64)audioDataByteCount {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_AudioDataByteCount);
+    if (raw == nil) {RET_DEFAULT_VALUE(UInt64);}
+    
+    RET_PROPERTY(UInt64, raw.bytes);
+}
+
+- (UInt64)audioDataPacketCount {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_AudioDataPacketCount);
+    if (raw == nil) {RET_DEFAULT_VALUE(UInt64);}
+    
+    RET_PROPERTY(UInt32, raw.bytes);
+}
+
+- (UInt32)maximumPacketSize {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_MaximumPacketSize);
+    if (raw == nil) {RET_DEFAULT_VALUE(UInt32);}
+    
+    RET_PROPERTY(UInt32, raw.bytes);
+}
+
+- (SInt64)dataOffset {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_DataOffset);
+    if (raw == nil) {RET_DEFAULT_VALUE(SInt64);}
+    
+    RET_PROPERTY(SInt64, raw.bytes);
+}
+
+- (AudioChannelLayout)channelLayout {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_ChannelLayout);
+    if (raw == nil) {RET_DEFAULT_VALUE(AudioChannelLayout);}
+    
+    RET_PROPERTY(AudioChannelLayout, raw.bytes);
+}
+
+- (AudioFramePacketTranslation)packetToFrame {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_PacketToFrame);
+    if (raw == nil) {RET_DEFAULT_VALUE(AudioFramePacketTranslation);}
+    
+    RET_PROPERTY(AudioFramePacketTranslation, raw.bytes);
+}
+
+- (AudioFramePacketTranslation)frameToPacket {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_FrameToPacket);
+    if (raw == nil) {RET_DEFAULT_VALUE(AudioFramePacketTranslation);}
+    
+    RET_PROPERTY(AudioFramePacketTranslation, raw.bytes);
+}
+
+- (AudioFramePacketTranslation)packetToByte {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_PacketToByte);
+    if (raw == nil) {RET_DEFAULT_VALUE(AudioFramePacketTranslation);}
+    
+    RET_PROPERTY(AudioFramePacketTranslation, raw.bytes);
+}
+
+- (AudioFramePacketTranslation)byteToPacket {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_ByteToPacket);
+    if (raw == nil) {RET_DEFAULT_VALUE(AudioFramePacketTranslation);}
+    
+    RET_PROPERTY(AudioFramePacketTranslation, raw.bytes);
+}
+
+- (AudioFilePacketTableInfo)packetTableInfo {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_PacketTableInfo);
+    if (raw == nil) {RET_DEFAULT_VALUE(AudioFilePacketTableInfo);}
+    
+    RET_PROPERTY(AudioFilePacketTableInfo, raw.bytes);
+}
+
+- (UInt32)packetSizeUpperBound {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_PacketSizeUpperBound);
+    if (raw == nil) {RET_DEFAULT_VALUE(UInt32);}
+    
+    RET_PROPERTY(UInt32, raw.bytes);
+}
+
+- (Float64)averageBytesPerPacket {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_AverageBytesPerPacket);
+    if (raw == nil) {RET_DEFAULT_VALUE(Float64);}
+    
+    RET_PROPERTY(UInt32, raw.bytes);
+}
+
+- (UInt32)bitRate {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_BitRate);
+    if (raw == nil) {RET_DEFAULT_VALUE(UInt32);}
+    
+    RET_PROPERTY(UInt32, raw.bytes);
+}
+
+- (CFDictionaryRef)infoDictionary {
+    NSData *raw = GET_PROPERTY_RAW_DATA(kAudioFileStreamProperty_InfoDictionary);
+    if (raw == nil) {RET_DEFAULT_VALUE(CFDictionaryRef);}
+    
+    RET_PROPERTY(CFDictionaryRef, raw.bytes);
+}
+
+@end
 
 @implementation VCAudioFrameParser (AudioFileStreamPropertyParser)
 + (NSDictionary *)propertyParserMap {
