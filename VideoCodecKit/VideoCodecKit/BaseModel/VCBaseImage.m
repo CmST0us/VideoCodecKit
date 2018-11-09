@@ -21,6 +21,19 @@
     }
     return self;
 }
+- (instancetype)initWithPixelBuffer:(CVPixelBufferRef)pixelBuffer {
+    if (pixelBuffer == NULL) return nil;
+    self = [self init];
+    if (self) {
+        _pixelBuffer = CVPixelBufferRetain(pixelBuffer);
+        size_t planeCount = CVPixelBufferGetPlaneCount(_pixelBuffer);
+        if (planeCount > 0) {
+            _width = planeCount > 1 ? CVPixelBufferGetWidthOfPlane(_pixelBuffer, 0) : CVPixelBufferGetWidth(_pixelBuffer);
+            _height = planeCount > 1 ? CVPixelBufferGetHeightOfPlane(_pixelBuffer, 0) : CVPixelBufferGetHeight(_pixelBuffer);
+        }
+    }
+    return self;
+}
 
 - (void)dealloc {
     if (_pixelBuffer != NULL) {

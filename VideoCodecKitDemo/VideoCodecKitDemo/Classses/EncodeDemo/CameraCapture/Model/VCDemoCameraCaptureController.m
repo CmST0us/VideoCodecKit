@@ -45,8 +45,8 @@
     self.captureSession = [[AVCaptureSession alloc] init];
     self.captureSession.sessionPreset = AVCaptureSessionPreset1920x1080;
     
-    _captureQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    _encodeQueue = dispatch_queue_create("encode_queue", DISPATCH_QUEUE_SERIAL);
+    _captureQueue = dispatch_queue_create("camera_capture_queue", DISPATCH_QUEUE_SERIAL);
+    _encodeQueue = dispatch_queue_create("camera_encode_queue", DISPATCH_QUEUE_SERIAL);
     
     AVCaptureDevice *inputCamera = nil;
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -123,9 +123,8 @@
 #pragma mark - Capture Delegate
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     //    dispatch_async(_encodeQueue, ^{
-    VCYUV420PImage *image = [[VCYUV420PImage alloc] init];
     CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-    [image setPixelBuffer:pixelBuffer];
+    VCYUV420PImage *image = [[VCYUV420PImage alloc] initWithPixelBuffer:pixelBuffer];
     [self.encoder encodeWithImage:image];
     //    });
 }

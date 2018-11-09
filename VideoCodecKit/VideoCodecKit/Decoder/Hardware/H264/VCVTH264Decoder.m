@@ -312,13 +312,11 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         return nil;
     }
     
-    VCYUV420PImage *image = [[VCYUV420PImage alloc] initWithWidth:h264Frame.width height:h264Frame.height];
+    VCYUV420PImage *image = [[VCYUV420PImage alloc] initWithPixelBuffer:outputPixelBuffer];
     [image.userInfo setObject:@(h264Frame.frameIndex) forKey:kVCBaseImageUserInfoFrameIndexKey];
     if (h264Frame.frameType == VCH264FrameTypeIDR) {
         [image.userInfo setObject:@(kVCPriorityIDR) forKey:kVCBaseImageUserInfoFrameIndexKey];
     }
-    
-    [image setPixelBuffer:outputPixelBuffer];
     
     CVPixelBufferRelease(outputPixelBuffer);
     pthread_mutex_unlock(&_decoderLock);
@@ -366,7 +364,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     }];
     for (NSNumber *offset in sortOffsetKeys) {
         NSNumber *size = offsetDict[offset];
-        VCH264Frame *f = [[VCH264Frame alloc] initWithWidth:frame.width height:frame.height];
+        VCH264Frame *f = [[VCH264Frame alloc] initWithWidth:decodeFrame.width height:decodeFrame.height];
         f.frameIndex = decodeFrame.frameIndex;
         [f createParseDataWithSize:size.integerValue];
         memcpy(f.parseData, frame.parseData + offset.integerValue, size.integerValue);

@@ -48,6 +48,13 @@
                @(VCPreviewerTypeVTLiveH264VideoOnly):@[NSStringFromClass([VCH264FFmpegFrameParser class]),
                                                        NSStringFromClass([VCVTH264Decoder class]),
                                                        NSStringFromClass([VCSampleBufferRender class])],
+               
+               // VCPreviewerTypeMetalRenderVTLiveH264VideoOnly 使用的组件
+#if (!TARGET_IPHONE_SIMULATOR)
+               @(VCPreviewerTypeMetalRenderVTLiveH264VideoOnly):@[NSStringFromClass([VCH264FFmpegFrameParser class]),
+                                                                  NSStringFromClass([VCVTH264Decoder class]),
+                                                                  NSStringFromClass([VCMetalRender class])],
+#endif
                };
 }
 
@@ -154,6 +161,7 @@
     NSDictionary *supportComponents = [self supportPreviewerComponent];
     Class parserClass = NSClassFromString(supportComponents[@(self.previewType)][0]);
     Class decoderClass = NSClassFromString(supportComponents[@(self.previewType)][1]);
+    Class renderClass = NSClassFromString(supportComponents[@(self.previewType)][2]);
     
     if (![parserClass isSubclassOfClass:[VCBaseFrameParser class]]) {
         [self rollbackStateTransition];
@@ -163,6 +171,10 @@
     if (![decoderClass isSubclassOfClass:[VCBaseDecoder class]]) {
         [self rollbackStateTransition];
         return NO;
+    }
+    
+    if ([renderClass conformsToProtocol:@protocol(VCBaseRenderProtocol)]) {
+        _render = [[renderClass alloc] init];
     }
     
     _parser = [[parserClass alloc] init];
@@ -229,11 +241,15 @@
     
     [_parserThread cancel];
     [_decoderThread cancel];
+    [self waitParserThreadStop];
+    [self waitDecoderThreadStop];
+    
     if ([_decoder.currentState isKindOfState:@[@(VCBaseCodecStateRunning),
                                                @(VCBaseCodecStateReady),
                                                @(VCBaseCodecStatePause)]]) {
         [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
         [_decoder invalidate];
+        [_render.renderView removeFromSuperview];
     }
     [self free];
     [self commitStateTransition];
@@ -295,7 +311,7 @@
         VCBaseImage *image = (VCBaseImage *)[self.imageQueue pull];
         if (image != nil
             && [[image class] isSubclassOfClass:[VCBaseImage class]]) {
-            [self.render renderImage:(VCBaseImage *)image];
+            [self.render render:image];
             if (self.delegate) {
                 dispatch_queue_t workingQueue = [self.delegate processWorkingQueue];
                 dispatch_sync(workingQueue, ^{

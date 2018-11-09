@@ -34,15 +34,21 @@ after finish build fat ffmpeg directory you should copy ffmpeg library and heade
 - [x] ffmpeg decode h264
 - [x] multi-thread decode preview component
 - [x] hardware-decode support
-- [ ] metal render `Next Ver`
+- [x] metal render
 - [ ] rtmp publish
-- [ ] audio support
+- [ ] audio support `WIP` `Next Ver`
 - [x] hardware-encode support
 - [ ] ffmpeg encode support
 - [ ] GPUImage support
 - [x] build as framework
 
 # Release Note
+## 0.4
+- metal render
+- audio frame parser
+- audio demo `WIP`
+- audio interface `WIP`
+
 ## 0.3
 - refactor demo app
 - fix encoder release bug

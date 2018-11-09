@@ -16,6 +16,10 @@
  */
 @property (nonatomic, assign) BOOL isThreadSafe;
 /**
+ 拉取失败是否等待并重试，默认YES
+ */
+@property (nonatomic, assign) BOOL shouldWaitWhenPullFailed;
+/**
  创建一个队列
  
  @param size 队列大小
@@ -73,7 +77,12 @@
  */
 - (NSObject *)pull;
 
+/**
+ 只取队头对象，不出队列
 
+ @return 对象
+ */
+- (NSObject *)fetch;
 /**
  队列是否满
  
