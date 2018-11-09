@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "VCBaseRenderProtocol.h"
 
+/**
+ render 一个 VCAudioFrameParser 对象。
+ */
 @interface VCAudioRender : NSObject<VCBaseRenderProtocol>
 @property (nonatomic, readonly) AudioStreamBasicDescription basicDescription;
-
-- (instancetype)initWithAudioStreamBasicDescription:(AudioStreamBasicDescription)description;
 
 - (void)stop;
 - (void)play;

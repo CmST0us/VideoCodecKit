@@ -32,7 +32,6 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 // Parser
 #import <VideoCodecKit/VCBaseFrameParser.h>
 #import <VideoCodecKit/VCH264FFmpegFrameParser.h>
-#import <VideoCodecKit/VCAudioFrameParser.h>
 // Decoder
 #import <VideoCodecKit/VCBaseDecoder.h>
 #import <VideoCodecKit/VCVTH264Decoder.h>
@@ -46,13 +45,10 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 // Render
 #import <VideoCodecKit/VCSampleBufferRender.h>
 #import <VideoCodecKit/VCMetalRender.h>
-#import <VideoCodecKit/VCAudioRender.h>
 // Service
 #import <VideoCodecKit/VCPreviewer.h>
 
 // Audio
-#import <VideoCodecKit/VCBaseAudioDecoderConfig.h>
-#import <VideoCodecKit/VCBaseAudioDecoder.h>
-#import <VideoCodecKit/VCAUAACAudioDecoderConfig.h>
-#import <VideoCodecKit/VCAUAACAudioDecoder.h>
+#import <VideoCodecKit/VCAudioFrameParser.h>
+#import <VideoCodecKit/VCAudioRender.h>
 

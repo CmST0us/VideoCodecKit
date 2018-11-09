@@ -8,6 +8,10 @@
 
 #import "VCBaseAudioDecoder.h"
 #import "VCAUAACAudioDecoderConfig.h"
+
+/**
+ 废弃！
+ */
 @interface VCAUAACAudioDecoder : VCBaseAudioDecoder
 @property (nonatomic, readonly) VCAUAACAudioDecoderConfig *config;
 - (instancetype)initWithConfig:(VCAUAACAudioDecoderConfig *)config;
