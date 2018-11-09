@@ -63,7 +63,7 @@
  @param data 数据
  @return 是否添加成功
  */
-- (BOOL)push:(NSData *)data;
+- (BOOL)push:(VCSafeBufferNode *)data;
 
 
 /**

@@ -54,6 +54,10 @@
 
 @implementation VCSafeBuffer
 
+- (instancetype)init {
+    return [self initWithThreadSafe:YES];
+}
+
 - (instancetype)initWithThreadSafe:(BOOL)isThreadSafe {
     self = [super init];
     if (self) {
@@ -91,6 +95,7 @@
 
 
 - (NSData *)pull:(NSInteger *)length {
+    if (*length == 0) return nil;
     kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_lock));
     NSInteger desiredLength = *length;
     NSMutableData *totalData = [[NSMutableData alloc] initWithCapacity:desiredLength];
@@ -120,6 +125,9 @@
     }
     *length = pullLength;
     kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_lock));
+    if (pullLength == 0) {
+        return nil;
+    }
     return totalData;
 }
 
