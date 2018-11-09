@@ -13,7 +13,7 @@
 
 #define kVCDemoVideoAudioSyncReadBufferSize (4096)
 
-@interface VCDemoVideoAudioSyncViewController () <VCBaseFrameParserDelegate>
+@interface VCDemoVideoAudioSyncViewController ()
 @property (nonatomic, strong) NSThread *feedThread;
 @property (nonatomic, strong) VCAudioFrameParser *parser;
 @property (nonatomic, strong) NSInputStream *inputStream;
@@ -26,8 +26,8 @@
     [super customInit];
     
     self.parser = [[VCAudioFrameParser alloc] initWithAudioType:kAudioFileAAC_ADTSType];
-    self.parser.delegate = self;
-    
+    self.render = [[VCAudioRender alloc] init];
+    [self.render render:self.parser];
     NSString *aacFilePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"aac"];
     self.inputStream = [[NSInputStream alloc] initWithFileAtPath:aacFilePath];
     [self.inputStream open];
@@ -62,20 +62,6 @@
     [super onBack:button];
     [self.feedThread cancel];
     [self.render stop];
-}
-
-- (void)frameParserDidParseFrame:(VCBaseFrame *)aFrame {
-    VCAudioFrame *frame = (VCAudioFrame *)aFrame;
-    if (frame == nil) return;
-    
-    if (self.render == nil) {
-        NSData *raw = frame.userInfo[@(kAudioFileStreamProperty_DataFormat)];
-        AudioStreamBasicDescription desc;
-        memcpy(&desc, raw.bytes, sizeof(desc));
-        
-        self.render = [[VCAudioRender alloc] initWithAudioStreamBasicDescription:desc];
-    }
-    [self.render render:frame];
 }
 
 @end

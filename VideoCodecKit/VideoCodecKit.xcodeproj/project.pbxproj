@@ -99,13 +99,13 @@
 		4FD0470F2191DCFA00FFC7D2 /* VCAudioFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD0470D2191DCFA00FFC7D2 /* VCAudioFrame.m */; };
 		4FD047122191DD3C00FFC7D2 /* VCBaseAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD047102191DD3C00FFC7D2 /* VCBaseAudio.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FD047132191DD3C00FFC7D2 /* VCBaseAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD047112191DD3C00FFC7D2 /* VCBaseAudio.m */; };
-		4FD047162191E52900FFC7D2 /* VCAUAACAudioDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD047142191E52900FFC7D2 /* VCAUAACAudioDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FD047162191E52900FFC7D2 /* VCAUAACAudioDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD047142191E52900FFC7D2 /* VCAUAACAudioDecoder.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4FD047172191E52900FFC7D2 /* VCAUAACAudioDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD047152191E52900FFC7D2 /* VCAUAACAudioDecoder.m */; };
-		4FD0471A2191E55200FFC7D2 /* VCBaseAudioDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD047182191E55200FFC7D2 /* VCBaseAudioDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FD0471A2191E55200FFC7D2 /* VCBaseAudioDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD047182191E55200FFC7D2 /* VCBaseAudioDecoder.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4FD0471B2191E55200FFC7D2 /* VCBaseAudioDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD047192191E55200FFC7D2 /* VCBaseAudioDecoder.m */; };
-		4FD0471E21928DF000FFC7D2 /* VCBaseAudioDecoderConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD0471C21928DF000FFC7D2 /* VCBaseAudioDecoderConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FD0471E21928DF000FFC7D2 /* VCBaseAudioDecoderConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD0471C21928DF000FFC7D2 /* VCBaseAudioDecoderConfig.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4FD0471F21928DF000FFC7D2 /* VCBaseAudioDecoderConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD0471D21928DF000FFC7D2 /* VCBaseAudioDecoderConfig.m */; };
-		4FD0472221928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD0472021928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FD0472221928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD0472021928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4FD0472321928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD0472121928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.m */; };
 		4FE2251D2164DF8400103B61 /* VCH264SPSFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FE2251B2164DF8400103B61 /* VCH264SPSFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FE2251E2164DF8400103B61 /* VCH264SPSFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE2251C2164DF8400103B61 /* VCH264SPSFrame.m */; };
