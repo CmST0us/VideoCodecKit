@@ -21,8 +21,10 @@
 - (instancetype)initWithWidth:(NSUInteger)width
                        height:(NSUInteger)height {
     self = [self init];
-    self.width = width;
-    self.height = height;
+    if (self) {
+        _width = width;
+        _height = height;
+    }
     return self;
 }
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zcr-hf-EAf">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zcr-hf-EAf">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -58,16 +58,26 @@
                                     <action selector="onDemoItemButtonClick:" destination="fpQ-sd-aAn" eventType="touchUpInside" id="RxS-pJ-Y19"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u6A-qI-w5Q">
+                                <rect key="frame" x="60" y="330" width="255" height="30"/>
+                                <state key="normal" title="音视频同步测试"/>
+                                <connections>
+                                    <action selector="onDemoItemButtonClick:" destination="fpQ-sd-aAn" eventType="touchUpInside" id="hZD-Ta-d3r"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="PqN-UA-1ud" firstAttribute="top" secondItem="WzP-b0-2S0" secondAttribute="bottom" constant="44" id="4PV-Hi-HH1"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="u6A-qI-w5Q" secondAttribute="trailing" constant="44" id="5G4-JJ-4bE"/>
                             <constraint firstAttribute="trailingMargin" secondItem="NFi-HS-eTH" secondAttribute="trailing" constant="44" id="5sg-6r-Dx0"/>
                             <constraint firstItem="NFi-HS-eTH" firstAttribute="top" secondItem="PqN-UA-1ud" secondAttribute="bottom" constant="44" id="66j-we-G5z"/>
                             <constraint firstItem="NFi-HS-eTH" firstAttribute="leading" secondItem="XGu-rZ-hTm" secondAttribute="leadingMargin" constant="44" id="APk-tr-6Yr"/>
                             <constraint firstItem="WzP-b0-2S0" firstAttribute="leading" secondItem="XGu-rZ-hTm" secondAttribute="leadingMargin" constant="44" id="Ghg-o6-gMe"/>
                             <constraint firstItem="WzP-b0-2S0" firstAttribute="top" secondItem="XGu-rZ-hTm" secondAttribute="topMargin" constant="88" id="PtL-t4-8SO"/>
+                            <constraint firstItem="u6A-qI-w5Q" firstAttribute="top" secondItem="NFi-HS-eTH" secondAttribute="bottom" constant="44" id="huL-CA-Lp6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="PqN-UA-1ud" secondAttribute="trailing" constant="44" id="jHA-x7-1ol"/>
+                            <constraint firstItem="u6A-qI-w5Q" firstAttribute="leading" secondItem="XGu-rZ-hTm" secondAttribute="leadingMargin" constant="44" id="npJ-0A-jpy"/>
                             <constraint firstItem="PqN-UA-1ud" firstAttribute="leading" secondItem="XGu-rZ-hTm" secondAttribute="leadingMargin" constant="44" id="rua-QV-51b"/>
                             <constraint firstAttribute="trailingMargin" secondItem="WzP-b0-2S0" secondAttribute="trailing" constant="44" id="tDQ-OW-npN"/>
                         </constraints>

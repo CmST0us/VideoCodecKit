@@ -77,7 +77,12 @@
  */
 - (NSObject *)pull;
 
+/**
+ 只取队头对象，不出队列
 
+ @return 对象
+ */
+- (NSObject *)fetch;
 /**
  队列是否满
  

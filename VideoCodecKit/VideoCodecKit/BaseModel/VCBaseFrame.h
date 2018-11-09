@@ -10,17 +10,13 @@
 #import "VCMarco.h"
 
 DECLARE_CONST_STRING(kVCBaseFrameUserInfoFFmpegAVCodecContextKey);
+DECLARE_CONST_STRING(kVCBaseFrameUserInfoAudioPropertyDictionaryKey);
 
 @interface VCBaseFrame: NSObject
 @property (nonatomic, assign) uint8_t *parseData;
 @property (nonatomic, assign) NSUInteger parseSize;
 @property (nonatomic, strong) NSMutableDictionary *userInfo;
 
-@property (nonatomic, assign) NSUInteger width;
-@property (nonatomic, assign) NSUInteger height;
-
-- (instancetype)initWithWidth:(NSUInteger)width
-                       height:(NSUInteger)height;
 
 /**
  创建parseData内存

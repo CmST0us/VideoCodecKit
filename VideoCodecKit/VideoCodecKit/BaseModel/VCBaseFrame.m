@@ -9,6 +9,7 @@
 #import "VCBaseFrame.h"
 
 CONST_STRING(kVCBaseFrameUserInfoFFmpegAVCodecContextKey);
+CONST_STRING(kVCBaseFrameUserInfoAudioPropertyDictionaryKey);
 
 @implementation VCBaseFrame {
     uint8_t *_parseDataPtr;
@@ -18,20 +19,10 @@ CONST_STRING(kVCBaseFrameUserInfoFFmpegAVCodecContextKey);
     self = [super init];
     if (self) {
         _userInfo = [NSMutableDictionary dictionary];
-        _width = 0;
-        _height = 0;
         _parseData = NULL;
         _parseDataPtr = NULL;
         _parseSize = 0;
     }
-    return self;
-}
-
-- (instancetype)initWithWidth:(NSUInteger)width
-                       height:(NSUInteger)height {
-    self = [self init];
-    _width = width;
-    _height = height;
     return self;
 }
 

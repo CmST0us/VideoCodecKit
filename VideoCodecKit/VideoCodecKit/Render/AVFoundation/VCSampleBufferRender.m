@@ -21,7 +21,7 @@
 @implementation VCSampleBufferRender
 
 #pragma mark - Support Render Image Class Name
-- (NSArray<NSString *> *)supportRenderImageClassName {
+- (NSArray<NSString *> *)supportRenderClassName {
     return @[
              NSStringFromClass([VCYUV420PImage class]),
              ];
@@ -49,12 +49,12 @@
     }
 }
 
-- (void)renderImage:(VCBaseImage *)image {
-    if (image == nil) return;
-    NSArray *supportImages = [self supportRenderImageClassName];
+- (void)render:(id)object {
+    if (object == nil) return;
+    NSArray *supportImages = [self supportRenderClassName];
     BOOL isSupportRenderImage = NO;
     for (NSString *imageName in supportImages) {
-        if ([NSStringFromClass([image class]) isEqualToString:imageName]) {
+        if ([NSStringFromClass([object class]) isEqualToString:imageName]) {
             isSupportRenderImage = YES;
         }
     }
@@ -62,7 +62,7 @@
         return;
     }
     
-    CVPixelBufferRef pixelBuffer = image.pixelBuffer;
+    CVPixelBufferRef pixelBuffer = ((VCYUV420PImage *)object).pixelBuffer;
     if (pixelBuffer == NULL) {
         return;
     }
