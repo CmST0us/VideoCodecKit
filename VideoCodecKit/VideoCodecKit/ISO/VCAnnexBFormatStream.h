@@ -9,7 +9,11 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
+// Read as AnnexB format stream
+// 00 00 00 01 xx xx xx ....
+// 00 00 01 xx xx xx xx ....
+// -----------------------------
+// Conver stream to packet
 @interface VCAnnexBFormatStream : NSObject
 
 @end

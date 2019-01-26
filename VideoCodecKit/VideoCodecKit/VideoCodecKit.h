@@ -52,3 +52,6 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCAudioFrameParser.h>
 #import <VideoCodecKit/VCAudioRender.h>
 
+
+#pragma mark - New Interface
+#import <VideoCodecKit/VCByteArray.h>

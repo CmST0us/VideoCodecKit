@@ -646,6 +646,7 @@
 		4FBCCE3521F32EE000E7BF3C /* ISO */ = {
 			isa = PBXGroup;
 			children = (
+				4FBCCE6121FCA85A00E7BF3C /* FileFormat */,
 				4FBCCE4721F36E4500E7BF3C /* VCAnnexBFormatStream.h */,
 				4FBCCE4821F36E4500E7BF3C /* VCAnnexBFormatStream.m */,
 				4FBCCE4321F36E3000E7BF3C /* VCAVCFormatStream.h */,
@@ -663,6 +664,37 @@
 				4FBCCE4021F36DA700E7BF3C /* VCByteArray.m */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		4FBCCE6121FCA85A00E7BF3C /* FileFormat */ = {
+			isa = PBXGroup;
+			children = (
+				4FBCCE6421FCA87E00E7BF3C /* TS */,
+				4FBCCE6321FCA87700E7BF3C /* MP4 */,
+				4FBCCE6221FCA87200E7BF3C /* FLV */,
+			);
+			path = FileFormat;
+			sourceTree = "<group>";
+		};
+		4FBCCE6221FCA87200E7BF3C /* FLV */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = FLV;
+			sourceTree = "<group>";
+		};
+		4FBCCE6321FCA87700E7BF3C /* MP4 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MP4;
+			sourceTree = "<group>";
+		};
+		4FBCCE6421FCA87E00E7BF3C /* TS */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TS;
 			sourceTree = "<group>";
 		};
 		4FD047042191DB9A00FFC7D2 /* Audio */ = {
