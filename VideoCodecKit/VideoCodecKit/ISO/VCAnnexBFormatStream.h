@@ -9,13 +9,15 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
-// Read as AnnexB format stream
+// Convert annex-b format to avc format
+// Annex-B Format:
 // 00 00 00 01 xx xx xx ....
 // 00 00 01 xx xx xx xx ....
+// AVC Format:
+// xx xx xx xx [4 bytes length] | xx xx xx xx .... [data]
 // -----------------------------
-// Conver stream to packet
 @interface VCAnnexBFormatStream : NSObject
-
+- (NSData *)toAVCFormatData;
 @end
 
 NS_ASSUME_NONNULL_END
