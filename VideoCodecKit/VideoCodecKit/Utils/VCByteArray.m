@@ -209,8 +209,7 @@
 }
 
 - (void)writeInt24:(int32_t)value {
-    int32_t v = CFSwapInt32HostToBig(value);
-    v = v << 8;
+    int32_t v = CFSwapInt32HostToBig(value) >> 8;
     NSData *data = [[NSData alloc] initWithBytes:&v length:kVCByteArraySizeOfInt24];
     [self writeBytes:data];
 }
@@ -234,8 +233,7 @@
 }
 
 - (void)writeUInt24:(uint32_t)value {
-    int32_t v = CFSwapInt32HostToBig(value);
-    v = v << 8;
+    uint32_t v = CFSwapInt32HostToBig(value) >> 8;
     NSData *data = [[NSData alloc] initWithBytes:&v length:kVCByteArraySizeOfInt24];
     [self writeBytes:data];
 }
@@ -262,7 +260,8 @@
         @throw [VCByteArrayException eofException];
     }
     uint8_t *ptr = (uint8_t *)[_mutableData bytes];
-    int16_t v = CFSwapInt16BigToHost(*(ptr + _postion));
+    int16_t *p = (int16_t *)(ptr + _postion);
+    int16_t v = CFSwapInt16BigToHost(*p);
     
     _postion += kVCByteArraySizeOfInt16;
     return v;
@@ -273,8 +272,8 @@
         @throw [VCByteArrayException eofException];
     }
     uint8_t *ptr = (uint8_t *)[_mutableData bytes];
-    int32_t v = CFSwapInt32BigToHost(*(ptr + _postion));
-    v = v & 0x00FFFFFF;
+    int32_t *p = (int32_t *)(ptr + _postion);
+    int32_t v = CFSwapInt32BigToHost(*p << 8);
     _postion += kVCByteArraySizeOfInt24;
     return v;
 }
@@ -284,7 +283,8 @@
         @throw [VCByteArrayException eofException];
     }
     uint8_t *ptr = (uint8_t *)[_mutableData bytes];
-    int32_t v = CFSwapInt32BigToHost(*(ptr + _postion));
+    int32_t *p = (int32_t *)(ptr + _postion);
+    int32_t v = CFSwapInt32BigToHost(*p);
     
     _postion += kVCByteArraySizeOfInt32;
     return v;
@@ -306,7 +306,8 @@
         @throw [VCByteArrayException eofException];
     }
     uint8_t *ptr = (uint8_t *)[_mutableData bytes];
-    uint16_t v = CFSwapInt16BigToHost(*(ptr + _postion));
+    uint16_t *p = (uint16_t *)(ptr + _postion);
+    uint16_t v = CFSwapInt16BigToHost(*p);
     
     _postion += kVCByteArraySizeOfInt16;
     return v;
@@ -317,8 +318,8 @@
         @throw [VCByteArrayException eofException];
     }
     uint8_t *ptr = (uint8_t *)[_mutableData bytes];
-    uint32_t v = CFSwapInt32BigToHost(*(ptr + _postion));
-    v = v & 0x00FFFFFF;
+    uint32_t *p = (uint32_t *)(ptr + _postion);
+    uint32_t v = CFSwapInt32BigToHost(*p << 8);
     _postion += kVCByteArraySizeOfInt24;
     return v;
 }
@@ -328,7 +329,8 @@
         @throw [VCByteArrayException eofException];
     }
     uint8_t *ptr = (uint8_t *)[_mutableData bytes];
-    uint32_t v = CFSwapInt32BigToHost(*(ptr + _postion));
+    uint32_t *p = (uint32_t *)(ptr + _postion);
+    uint32_t v = CFSwapInt32BigToHost(*p);
     
     _postion += kVCByteArraySizeOfInt32;
     return v;
@@ -339,7 +341,8 @@
         @throw [VCByteArrayException eofException];
     }
     uint8_t *ptr = (uint8_t *)[_mutableData bytes];
-    uint64_t v = CFSwapInt64BigToHost(*(ptr + _postion));
+    uint64_t *p = (uint64_t *)(ptr + _postion);
+    uint64_t v = CFSwapInt64BigToHost(*p);
     
     CFSwappedFloat64 swappedDouble;
     swappedDouble.v = v;
@@ -354,7 +357,8 @@
         @throw [VCByteArrayException eofException];
     }
     uint8_t *ptr = (uint8_t *)[_mutableData bytes];
-    uint32_t v = CFSwapInt32BigToHost(*(ptr + _postion));
+    uint32_t *p = (uint32_t *)(ptr + _postion);
+    uint32_t v = CFSwapInt32BigToHost(*p);
     
     CFSwappedFloat32 swappedFloat;
     swappedFloat.v = v;
