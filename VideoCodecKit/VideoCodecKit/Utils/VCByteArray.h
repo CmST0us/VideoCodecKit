@@ -8,7 +8,26 @@
 
 #import <Foundation/Foundation.h>
 
+#define kVCByteArraySizeOfInt8 1
+#define kVCByteArraySizeOfInt16 2
+#define kVCByteArraySizeOfInt24 3
+#define kVCByteArraySizeOfInt32 4
+#define kVCByteArraySizeOfFloat 4
+#define kVCByteArraySizeOfDouble 8
+
 NS_ASSUME_NONNULL_BEGIN
+
+typedef NS_ENUM(NSUInteger, VCByteArrayError) {
+    VCByteArrayErrorEOF,
+    VCByteArrayErrorParse,
+};
+
+@interface VCByteArrayException : NSException
+@property (nonatomic, readonly) VCByteArrayError errorType;
+
++ (instancetype)eofException;
++ (instancetype)parseException;
+@end
 
 @class VCByteArray;
 @interface VCByteArrayWriter: NSObject
@@ -29,6 +48,12 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void(^VCByteArrayWriterBlock)(VCByteArrayWriter *writer);
 
 @interface VCByteArray : NSObject
+@property (nonatomic, readonly) NSData *data;
+@property (nonatomic, assign) NSInteger postion;
+@property (nonatomic, assign) NSInteger length;
+@property (nonatomic, readonly) NSInteger bytesAvailable;
+
+- (instancetype)initWithData:(NSData *)data NS_DESIGNATED_INITIALIZER;
 
 - (uint8_t)readUInt8;
 - (int8_t)readInt8;
@@ -57,7 +82,7 @@ typedef void(^VCByteArrayWriterBlock)(VCByteArrayWriter *writer);
 - (void)writeBytes:(NSData *)value;
 
 - (void)writing:(VCByteArrayWriterBlock)block;
-
+- (void)clear;
 @end
 
 NS_ASSUME_NONNULL_END
