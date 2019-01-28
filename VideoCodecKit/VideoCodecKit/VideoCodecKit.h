@@ -57,4 +57,4 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCByteArray.h>
 #import <VideoCodecKit/VCAnnexBFormatStream.h>
 #import <VideoCodecKit/VCAVCFormatStream.h>
-
+#import <VideoCodecKit/VCAnnexBFormatParser.h>
