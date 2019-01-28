@@ -29,7 +29,12 @@
     
     @try {
         do {
-            uint32_t len = [array readUInt32];
+            uint32_t len = 0;
+            if (self.startCodeLength == 4) {
+                len = [array readUInt32];
+            } else if (self.startCodeLength == 3) {
+                len = [array readUInt24];
+            }
             [outputData appendBytes:startCode length:4];
             [outputData appendData:[array readBytes:len]];
         } while (array.bytesAvailable > 0);

@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface VCAVCFormatStream : NSObject
 
 @property (nonatomic, readonly) NSData *data;
+// should be 4 or 3
 @property (nonatomic, readonly) NSUInteger startCodeLength;
 
 - (instancetype)initWithData:(NSData *)aData

@@ -12,7 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 @class VCAnnexBFormatStream;
 @interface VCAnnexBFormatParser : NSObject
 
-- (VCAnnexBFormatStream *)next;
+- (void)appendData:(NSData *)data;
+- (nullable VCAnnexBFormatStream *)next;
 @end
 
 NS_ASSUME_NONNULL_END
