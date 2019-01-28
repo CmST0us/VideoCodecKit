@@ -19,6 +19,7 @@
 #import "VCSampleBufferRender.h"
 #import "VCVTH264Decoder.h"
 #import "VCMetalRender.h"
+#import "VCH264AnnexBFrameParser.h"
 
 @class VCPreviewer;
 @protocol VCPreviewerDelegate<NSObject>
@@ -31,6 +32,7 @@ typedef NS_ENUM(NSUInteger, VCPreviewerType) {
     VCPreviewerTypeFFmpegLiveH264VideoOnly, // 使用ffmpeg和AVSampleBufferDisplayLayer
     VCPreviewerTypeVTLiveH264VideoOnly, // 使用VideoToolBox和AVSampleBufferDisplayLayer
     VCPreviewerTypeMetalRenderVTLiveH264VideoOnly, // 使用VideoToolBox和Metal
+    VCPreviewerTypeAnnexBParserVTLiveH264VideoOnly, // 使用VideoToolBox和AVSampleBufferDisplayLayer
 };
 
 @interface VCPreviewer : VCBaseCodec<VCBaseFrameParserDelegate, VCBaseDecoderDelegate>

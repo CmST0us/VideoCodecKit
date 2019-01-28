@@ -55,6 +55,9 @@
                                                                   NSStringFromClass([VCVTH264Decoder class]),
                                                                   NSStringFromClass([VCMetalRender class])],
 #endif
+               @(VCPreviewerTypeAnnexBParserVTLiveH264VideoOnly):@[NSStringFromClass([VCH264AnnexBFrameParser class]),
+                                                                   NSStringFromClass([VCVTH264Decoder class]),
+                                                                   NSStringFromClass([VCSampleBufferRender class])],
                };
 }
 

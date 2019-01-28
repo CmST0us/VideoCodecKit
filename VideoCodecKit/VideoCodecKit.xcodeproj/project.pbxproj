@@ -13,6 +13,8 @@
 		4F157052218779060094FBEF /* VCH264EncoderConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F157050218779060094FBEF /* VCH264EncoderConfig.m */; };
 		4F1913A821FED9C800921CAF /* VCAnnexBFormatParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F1913A621FED9C800921CAF /* VCAnnexBFormatParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F1913A921FED9C800921CAF /* VCAnnexBFormatParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1913A721FED9C800921CAF /* VCAnnexBFormatParser.m */; };
+		4F1913AE21FF37FA00921CAF /* VCH264AnnexBFrameParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F1913AC21FF37FA00921CAF /* VCH264AnnexBFrameParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F1913AF21FF37FA00921CAF /* VCH264AnnexBFrameParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1913AD21FF37FA00921CAF /* VCH264AnnexBFrameParser.m */; };
 		4F6C867C217E2FA500881F72 /* VCBaseEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6C867A217E2FA500881F72 /* VCBaseEncoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F6C867D217E2FA500881F72 /* VCBaseEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C867B217E2FA500881F72 /* VCBaseEncoder.m */; };
 		4F6C8680217E2FB600881F72 /* VCBaseEncoderConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6C867E217E2FB600881F72 /* VCBaseEncoderConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -143,6 +145,8 @@
 		4F157050218779060094FBEF /* VCH264EncoderConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264EncoderConfig.m; sourceTree = "<group>"; };
 		4F1913A621FED9C800921CAF /* VCAnnexBFormatParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAnnexBFormatParser.h; sourceTree = "<group>"; };
 		4F1913A721FED9C800921CAF /* VCAnnexBFormatParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAnnexBFormatParser.m; sourceTree = "<group>"; };
+		4F1913AC21FF37FA00921CAF /* VCH264AnnexBFrameParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264AnnexBFrameParser.h; sourceTree = "<group>"; };
+		4F1913AD21FF37FA00921CAF /* VCH264AnnexBFrameParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264AnnexBFrameParser.m; sourceTree = "<group>"; };
 		4F6C867A217E2FA500881F72 /* VCBaseEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseEncoder.h; sourceTree = "<group>"; };
 		4F6C867B217E2FA500881F72 /* VCBaseEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCBaseEncoder.m; sourceTree = "<group>"; };
 		4F6C867E217E2FB600881F72 /* VCBaseEncoderConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseEncoderConfig.h; sourceTree = "<group>"; };
@@ -477,6 +481,8 @@
 				4F76FBF621626AA2002E7F0D /* VCH264FFmpegFrameParser.m */,
 				4F76FBF921626AA2002E7F0D /* VCH264FFmpegFrameParserBuffer.h */,
 				4F76FBFA21626AA2002E7F0D /* VCH264FFmpegFrameParserBuffer.m */,
+				4F1913AC21FF37FA00921CAF /* VCH264AnnexBFrameParser.h */,
+				4F1913AD21FF37FA00921CAF /* VCH264AnnexBFrameParser.m */,
 			);
 			path = H264;
 			sourceTree = "<group>";
@@ -823,6 +829,7 @@
 				4FBCCE4921F36E4500E7BF3C /* VCAnnexBFormatStream.h in Headers */,
 				4F935866217C55E500A9F613 /* VCBaseCodec.h in Headers */,
 				4FD047162191E52900FFC7D2 /* VCAUAACAudioDecoder.h in Headers */,
+				4F1913AE21FF37FA00921CAF /* VCH264AnnexBFrameParser.h in Headers */,
 				4F76FC5421626DCA002E7F0D /* VCVTH264Decoder.h in Headers */,
 				4F76FC5921626DCA002E7F0D /* VCMarco.h in Headers */,
 				4F935860217C48DA00A9F613 /* VCBaseImage.h in Headers */,
@@ -942,6 +949,7 @@
 				4F76FC67216270E1002E7F0D /* VCSampleBufferRender.m in Sources */,
 				4F76FC68216270E1002E7F0D /* VCDecoderProgress.m in Sources */,
 				4F76FC69216270E1002E7F0D /* VCBaseFrameParser.m in Sources */,
+				4F1913AF21FF37FA00921CAF /* VCH264AnnexBFrameParser.m in Sources */,
 				4F7FBEF721947A8200182A00 /* VCAudioFrameParser+AudioFileStreamPropertyParser.m in Sources */,
 				4FBCCE1C21F320B700E7BF3C /* VCSampleBuffer.m in Sources */,
 				4FBCCE2021F324F000E7BF3C /* VCH264HardwareDecoder.m in Sources */,

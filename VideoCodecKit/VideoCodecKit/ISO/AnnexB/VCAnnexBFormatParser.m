@@ -118,13 +118,16 @@ typedef NS_ENUM(NSUInteger, VCAnnexBFormatParserState) {
     
     if (payloadData.length > 0) {
         // 末尾数据
-        _appendingBuffer = payloadData;
+        [outputData appendBytes:reserveStartCode length:4];
+        [outputData appendData:payloadData];
+        _appendingBuffer = outputData;
     }
     
     return nil;
 }
 
 - (void)appendData:(NSData *)data {
+    _parsingBuffer = [[NSMutableData alloc] initWithCapacity:_appendingBuffer.length + data.length];
     if ([self.appendingBuffer length] > 0) {
         [_parsingBuffer appendData:_appendingBuffer];
         _appendingBuffer = [[NSMutableData alloc] initWithCapacity:kVCAnnexBFormatParserDefaultBufferCapacity];
