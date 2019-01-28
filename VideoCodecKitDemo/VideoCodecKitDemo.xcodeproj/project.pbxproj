@@ -30,6 +30,7 @@
 		4F927A22214E382D00F17F9A /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 4F927A21214E382D00F17F9A /* Shader.vsh */; };
 		4F927A242152A2B900F17F9A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F927A232152A2B900F17F9A /* AVFoundation.framework */; };
 		4F93584B2169EE2300A9F613 /* test.h264 in Resources */ = {isa = PBXBuildFile; fileRef = 4F93584A2169ECC700A9F613 /* test.h264 */; };
+		4FBCCE6A21FCD08B00E7BF3C /* VCDemoISOTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBCCE6921FCD08B00E7BF3C /* VCDemoISOTestViewController.m */; };
 		4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF021E2144284A00CA0EC8 /* AppDelegate.m */; };
 		4FBF02252144284A00CA0EC8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02232144284A00CA0EC8 /* Main.storyboard */; };
 		4FBF02272144284B00CA0EC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02262144284B00CA0EC8 /* Assets.xcassets */; };
@@ -93,6 +94,8 @@
 		4F927A21214E382D00F17F9A /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		4F927A232152A2B900F17F9A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4F93584A2169ECC700A9F613 /* test.h264 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.h264; sourceTree = "<group>"; };
+		4FBCCE6821FCD08B00E7BF3C /* VCDemoISOTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoISOTestViewController.h; sourceTree = "<group>"; };
+		4FBCCE6921FCD08B00E7BF3C /* VCDemoISOTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoISOTestViewController.m; sourceTree = "<group>"; };
 		4FBF021A2144284A00CA0EC8 /* VideoCodecKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoCodecKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FBF021D2144284A00CA0EC8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4FBF021E2144284A00CA0EC8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -275,6 +278,7 @@
 		4F9279A821442F0800F17F9A /* Classses */ = {
 			isa = PBXGroup;
 			children = (
+				4FBCCE6721FCD03900E7BF3C /* ISO */,
 				4FD046FA2191813100FFC7D2 /* VideoAudioSyncDemo */,
 				4F0F95152188934D00CB9BAE /* EncodeDemo */,
 				4F0F95142188933800CB9BAE /* DecodeDemo */,
@@ -286,6 +290,15 @@
 				4FBF02232144284A00CA0EC8 /* Main.storyboard */,
 			);
 			path = Classses;
+			sourceTree = "<group>";
+		};
+		4FBCCE6721FCD03900E7BF3C /* ISO */ = {
+			isa = PBXGroup;
+			children = (
+				4FBCCE6821FCD08B00E7BF3C /* VCDemoISOTestViewController.h */,
+				4FBCCE6921FCD08B00E7BF3C /* VCDemoISOTestViewController.m */,
+			);
+			path = ISO;
 			sourceTree = "<group>";
 		};
 		4FBF02112144284A00CA0EC8 = {
@@ -434,6 +447,7 @@
 				4F0F95342188A51300CB9BAE /* VCDemoCameraCaptureController.m in Sources */,
 				4FD047002191818100FFC7D2 /* VCDemoVideoAudioSyncViewController.m in Sources */,
 				4F0F951B2188941F00CB9BAE /* VCDemoNavigationController.m in Sources */,
+				4FBCCE6A21FCD08B00E7BF3C /* VCDemoISOTestViewController.m in Sources */,
 				4F0F952E2188A35F00CB9BAE /* VCDemoCameraCaptureEncodeViewController.m in Sources */,
 				4FC127432189FE91009C239D /* VCDemoMetalRenderViewController.m in Sources */,
 				4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */,

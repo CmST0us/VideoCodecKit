@@ -55,3 +55,6 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 
 #pragma mark - New Interface
 #import <VideoCodecKit/VCByteArray.h>
+#import <VideoCodecKit/VCAnnexBFormatStream.h>
+#import <VideoCodecKit/VCAVCFormatStream.h>
+

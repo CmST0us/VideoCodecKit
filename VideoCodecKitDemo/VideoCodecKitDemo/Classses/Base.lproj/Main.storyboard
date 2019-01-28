@@ -65,6 +65,17 @@
                                     <action selector="onDemoItemButtonClick:" destination="fpQ-sd-aAn" eventType="touchUpInside" id="hZD-Ta-d3r"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hUH-UA-1qg">
+                                <rect key="frame" x="124.5" y="404" width="126" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="126" id="D41-2A-I9g"/>
+                                    <constraint firstAttribute="height" constant="30" id="Urd-Z9-FGL"/>
+                                </constraints>
+                                <state key="normal" title="ISO"/>
+                                <connections>
+                                    <action selector="onDemoItemButtonClick:" destination="fpQ-sd-aAn" eventType="touchUpInside" id="nRU-ll-9nx"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -74,10 +85,12 @@
                             <constraint firstItem="NFi-HS-eTH" firstAttribute="top" secondItem="PqN-UA-1ud" secondAttribute="bottom" constant="44" id="66j-we-G5z"/>
                             <constraint firstItem="NFi-HS-eTH" firstAttribute="leading" secondItem="XGu-rZ-hTm" secondAttribute="leadingMargin" constant="44" id="APk-tr-6Yr"/>
                             <constraint firstItem="WzP-b0-2S0" firstAttribute="leading" secondItem="XGu-rZ-hTm" secondAttribute="leadingMargin" constant="44" id="Ghg-o6-gMe"/>
+                            <constraint firstItem="hUH-UA-1qg" firstAttribute="centerX" secondItem="XGu-rZ-hTm" secondAttribute="centerX" id="OTM-5p-5iv"/>
                             <constraint firstItem="WzP-b0-2S0" firstAttribute="top" secondItem="XGu-rZ-hTm" secondAttribute="topMargin" constant="88" id="PtL-t4-8SO"/>
                             <constraint firstItem="u6A-qI-w5Q" firstAttribute="top" secondItem="NFi-HS-eTH" secondAttribute="bottom" constant="44" id="huL-CA-Lp6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="PqN-UA-1ud" secondAttribute="trailing" constant="44" id="jHA-x7-1ol"/>
                             <constraint firstItem="u6A-qI-w5Q" firstAttribute="leading" secondItem="XGu-rZ-hTm" secondAttribute="leadingMargin" constant="44" id="npJ-0A-jpy"/>
+                            <constraint firstItem="hUH-UA-1qg" firstAttribute="top" secondItem="u6A-qI-w5Q" secondAttribute="bottom" constant="44" id="opT-bc-40x"/>
                             <constraint firstItem="PqN-UA-1ud" firstAttribute="leading" secondItem="XGu-rZ-hTm" secondAttribute="leadingMargin" constant="44" id="rua-QV-51b"/>
                             <constraint firstAttribute="trailingMargin" secondItem="WzP-b0-2S0" secondAttribute="trailing" constant="44" id="tDQ-OW-npN"/>
                         </constraints>
@@ -87,7 +100,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ESC-I0-RAi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="428" y="45"/>
+            <point key="canvasLocation" x="428" y="44.527736131934034"/>
         </scene>
     </scenes>
 </document>

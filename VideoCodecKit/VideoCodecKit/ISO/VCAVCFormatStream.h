@@ -16,8 +16,17 @@ NS_ASSUME_NONNULL_BEGIN
 // 00 00 00 01 xx xx xx xx
 // 00 00 01 xx xx xx
 // ------------------------------------------------------
+@class VCAnnexBFormatStream;
 @interface VCAVCFormatStream : NSObject
-- (NSData *)toAnnexBFormatData;
+
+@property (nonatomic, readonly) NSData *data;
+@property (nonatomic, readonly) NSUInteger startCodeLength;
+
+- (instancetype)initWithData:(NSData *)aData
+             startCodeLength:(NSUInteger)startCodeLength;
+
+- (VCAnnexBFormatStream *)toAnnexBFormatData;
+
 @end
 
 NS_ASSUME_NONNULL_END

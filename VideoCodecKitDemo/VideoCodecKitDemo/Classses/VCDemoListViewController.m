@@ -11,12 +11,14 @@
 #import "VCDemoCameraCaptureEncodeViewController.h"
 #import "VCDemoMetalRenderViewController.h"
 #import "VCDemoVideoAudioSyncViewController.h"
+#import "VCDemoISOTestViewController.h"
 
 typedef NS_ENUM(NSUInteger, VCDemoListItem) {
     VCDemoListItemCameraCaptureEncode = 0,
     VCDemoListItemH264Decode,
     VCDemoListItemMetalRender,
     VCDemoListItemVideoAudioSync,
+    VCDemoListItemISO,
     
     VCDemoListItemCount,
 };
@@ -65,7 +67,11 @@ typedef NS_ENUM(NSUInteger, VCDemoListItem) {
             
         break;
             
-            
+        case VCDemoListItemISO: {
+            VCDemoISOTestViewController *vc = [[VCDemoISOTestViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
         default:
         break;
     }

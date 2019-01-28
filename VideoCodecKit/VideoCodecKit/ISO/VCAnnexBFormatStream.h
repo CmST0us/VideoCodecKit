@@ -16,8 +16,15 @@ NS_ASSUME_NONNULL_BEGIN
 // AVC Format:
 // xx xx xx xx [4 bytes length] | xx xx xx xx .... [data]
 // -----------------------------
+@class VCAVCFormatStream;
 @interface VCAnnexBFormatStream : NSObject
-- (NSData *)toAVCFormatData;
+
+@property (nonatomic, readonly) NSData *data;
+// 使用AnnexB格式数据初始化
+- (instancetype)initWithData:(NSData *)aData;
+
+- (VCAVCFormatStream *)toAVCFormatStream;
+
 @end
 
 NS_ASSUME_NONNULL_END
