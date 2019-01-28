@@ -41,6 +41,7 @@ typedef NS_ENUM(NSUInteger, VCAnnexBFormatParserState) {
 // 解析位置
 @property (nonatomic, assign) NSInteger position;
 @property (nonatomic, assign) NSInteger nextFramePosition;
+@property (nonatomic, assign) BOOL hasFirstStartCode;
 @end
 
 @implementation VCAnnexBFormatParser
@@ -50,13 +51,15 @@ typedef NS_ENUM(NSUInteger, VCAnnexBFormatParserState) {
     if (self) {
         _parsingBuffer = [[NSMutableData alloc] initWithCapacity:kVCAnnexBFormatParserDefaultBufferCapacity];
         _appendingBuffer = [[NSMutableData alloc] initWithCapacity:kVCAnnexBFormatParserDefaultBufferCapacity];
+        _hasFirstStartCode = NO;
     }
     return self;
 }
 
 - (VCAnnexBFormatStream *)next {
     NSMutableData *outputData = [[NSMutableData alloc] initWithCapacity:self.parsingBuffer.length];
-    NSMutableData *payloadData = [[NSMutableData alloc] initWithCapacity:self.parsingBuffer.length];
+    NSData *payloadData = nil;
+    BOOL findStartCode = NO;
     
     VCAnnexBFormatParserState state = VCAnnexBFormatParserStateInit;
     static uint8_t reserveStartCode[4] = {0x00, 0x00, 0x00, 0x01};
@@ -82,42 +85,52 @@ typedef NS_ENUM(NSUInteger, VCAnnexBFormatParserState) {
                 state >>= 1; // 发现一个0
             }
         } else if (state <= VCAnnexBFormatParserStateFindMoreThan2ZeroAnd1One) {
-            _nextFramePosition = _position;
-            if (state == VCAnnexBFormatParserStateFind2ZeroAnd1One) {
-                // 找到 00 00 01
-                if (payloadData.length > 3) {
-                    [outputData appendBytes:reserveStartCode length:4];
-                    [outputData appendData:[payloadData subdataWithRange:NSMakeRange(0, payloadData.length - 3)]];
-                    payloadData = [[NSMutableData alloc] initWithCapacity:self.parsingBuffer.length];
-                    
-                    VCAnnexBFormatStream *data = [[VCAnnexBFormatStream alloc] initWithData:outputData];
-                    return data;
-                }
-            } else if (state == VCAnnexBFormatParserStateFindMoreThan2ZeroAnd1One) {
-                // 找到 00 00 00 01
-                if (payloadData.length > 4) {
-                    [outputData appendBytes:reserveStartCode length:4];
-                    [outputData appendData:[payloadData subdataWithRange:NSMakeRange(0, payloadData.length - 4)]];
-                    payloadData = [[NSMutableData alloc] initWithCapacity:self.parsingBuffer.length];
-                    
-                    VCAnnexBFormatStream *data = [[VCAnnexBFormatStream alloc] initWithData:outputData];
-                    return data;
-                }
+            if (!_hasFirstStartCode) {
+                _hasFirstStartCode = YES;
+                state = VCAnnexBFormatParserStateInit;
+                _nextFramePosition = _position;
+                continue;
             }
-            state = VCAnnexBFormatParserStateInit;
+            findStartCode = YES;
+            break;
         } else {
             // TODO
-            
-        }
-        
-        if (_position >= _nextFramePosition) {
-            // read data
-            [payloadData appendBytes:&byte length:1];
         }
     }
     
-    if (payloadData.length > 0) {
+    if (findStartCode) {
+        if (state == VCAnnexBFormatParserStateFindMoreThan2ZeroAnd1One) {
+            // 00 00 00 01
+            if (_position - _nextFramePosition > 4) {
+                payloadData = [self.parsingBuffer subdataWithRange:NSMakeRange(_nextFramePosition, _position - _nextFramePosition)];
+                [outputData appendBytes:reserveStartCode length:4];
+                [outputData appendData:[payloadData subdataWithRange:NSMakeRange(0, payloadData.length - 4)]];
+                payloadData = [[NSMutableData alloc] initWithCapacity:self.parsingBuffer.length];
+                
+                VCAnnexBFormatStream *data = [[VCAnnexBFormatStream alloc] initWithData:outputData];
+                findStartCode = NO;
+                state = VCAnnexBFormatParserStateInit;
+                _nextFramePosition = _position;
+                return data;
+            }
+        } else if (state == VCAnnexBFormatParserStateFind2ZeroAnd1One) {
+            // 00 00 01
+            if (_position - _nextFramePosition > 3) {
+                payloadData = [self.parsingBuffer subdataWithRange:NSMakeRange(_nextFramePosition, _position - _nextFramePosition)];
+                [outputData appendBytes:reserveStartCode length:4];
+                [outputData appendData:[payloadData subdataWithRange:NSMakeRange(0, payloadData.length - 3)]];
+                payloadData = [[NSMutableData alloc] initWithCapacity:self.parsingBuffer.length];
+                
+                VCAnnexBFormatStream *data = [[VCAnnexBFormatStream alloc] initWithData:outputData];
+                findStartCode = NO;
+                state = VCAnnexBFormatParserStateInit;
+                _nextFramePosition = _position;
+                return data;
+            }
+        }
+    } else {
         // 末尾数据
+        payloadData = [self.parsingBuffer subdataWithRange:NSMakeRange(_nextFramePosition, _position - _nextFramePosition)];
         [outputData appendBytes:reserveStartCode length:4];
         [outputData appendData:payloadData];
         _appendingBuffer = outputData;
@@ -135,6 +148,7 @@ typedef NS_ENUM(NSUInteger, VCAnnexBFormatParserState) {
     [_parsingBuffer appendData:data];
     _position = 0;
     _nextFramePosition = _parsingBuffer.length;
+    _hasFirstStartCode = NO;
 }
 
 @end
