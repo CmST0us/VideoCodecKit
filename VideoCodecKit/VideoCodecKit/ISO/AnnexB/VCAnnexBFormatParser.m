@@ -41,7 +41,7 @@ typedef NS_ENUM(NSUInteger, VCAnnexBFormatParserState) {
 // 解析位置
 @property (nonatomic, assign) NSInteger position;
 @property (nonatomic, assign) NSInteger nextFramePosition;
-@property (nonatomic, assign) BOOL hasFirstStartCode;
+@property (nonatomic, assign) BOOL isFirstStartCode;
 @end
 
 @implementation VCAnnexBFormatParser
@@ -51,7 +51,7 @@ typedef NS_ENUM(NSUInteger, VCAnnexBFormatParserState) {
     if (self) {
         _parsingBuffer = [[NSMutableData alloc] initWithCapacity:kVCAnnexBFormatParserDefaultBufferCapacity];
         _appendingBuffer = [[NSMutableData alloc] initWithCapacity:kVCAnnexBFormatParserDefaultBufferCapacity];
-        _hasFirstStartCode = NO;
+        _isFirstStartCode = YES;
     }
     return self;
 }
@@ -85,8 +85,9 @@ typedef NS_ENUM(NSUInteger, VCAnnexBFormatParserState) {
                 state >>= 1; // 发现一个0
             }
         } else if (state <= VCAnnexBFormatParserStateFindMoreThan2ZeroAnd1One) {
-            if (!_hasFirstStartCode) {
-                _hasFirstStartCode = YES;
+            // 如果startCode之前无数据，跳过
+            if (!_isFirstStartCode) {
+                _isFirstStartCode = NO;
                 state = VCAnnexBFormatParserStateInit;
                 _nextFramePosition = _position;
                 continue;
@@ -148,7 +149,7 @@ typedef NS_ENUM(NSUInteger, VCAnnexBFormatParserState) {
     [_parsingBuffer appendData:data];
     _position = 0;
     _nextFramePosition = _parsingBuffer.length;
-    _hasFirstStartCode = NO;
+    _isFirstStartCode = YES;
 }
 
 @end
