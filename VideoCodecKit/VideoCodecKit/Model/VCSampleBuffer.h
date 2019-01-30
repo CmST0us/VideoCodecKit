@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) CMTime decodeTimeStamp;
 @property (nonatomic, readonly) CMTime presentationTimeStamp;
 
-- (instancetype)initWithSampleBuffer:(CMSampleBufferRef)aSampleBuffer;
+- (instancetype)initWithSampleBuffer:(CMSampleBufferRef)aSampleBuffer NS_DESIGNATED_INITIALIZER;
 @end
 
 NS_ASSUME_NONNULL_END

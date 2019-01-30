@@ -14,4 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 @required
 - (OSStatus)decodeSampleBuffer:(VCSampleBuffer *)sampleBuffer;
 @end
+
+@protocol VCVideoDecoderDelegate <NSObject>
+- (void)videoDecoder:(id<VCVideoDecoder>)decoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer;
+@end
+
 NS_ASSUME_NONNULL_END

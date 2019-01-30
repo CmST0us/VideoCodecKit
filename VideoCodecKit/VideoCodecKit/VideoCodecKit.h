@@ -63,3 +63,5 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCFLVWriter.h>
 #import <VideoCodecKit/VCFLVTag.h>
 #import <VideoCodecKit/VCFLVFile.h>
+
+#import <VideoCodecKit/VCH264HardwareDecoder.h>

@@ -10,6 +10,23 @@
 
 @implementation VCSampleBuffer
 
+- (instancetype)init {
+    CMSampleBufferRef sampleBuffer = nil;
+    CMSampleBufferCreate(kCFAllocatorDefault,
+                         nil,
+                         false,
+                         nil,
+                         nil,
+                         nil,
+                         0,
+                         0,
+                         nil,
+                         0,
+                         nil,
+                         &sampleBuffer);
+    return [self initWithSampleBuffer:sampleBuffer];
+}
+
 - (instancetype)initWithSampleBuffer:(CMSampleBufferRef)aSampleBuffer {
     self = [super init];
     if (self) {

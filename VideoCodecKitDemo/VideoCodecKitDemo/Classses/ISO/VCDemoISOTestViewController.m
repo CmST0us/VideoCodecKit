@@ -9,14 +9,24 @@
 #import "VCDemoISOTestViewController.h"
 #import <VideoCodecKit/VideoCodecKit.h>
 
-@interface VCDemoISOTestViewController ()
-
+@interface VCDemoISOTestViewController () <VCFLVReaderDelegate, VCVideoDecoderDelegate> {
+    dispatch_queue_t _decodeWorkQueue;
+}
+@property (nonatomic, strong) VCH264HardwareDecoder *decoder;
+@property (nonatomic, strong) AVSampleBufferDisplayLayer *displayLayer;
 @end
 
 @implementation VCDemoISOTestViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _decodeWorkQueue = dispatch_queue_create("com.vc.decode", DISPATCH_QUEUE_SERIAL);
+    self.decoder = [[VCH264HardwareDecoder alloc] init];
+    self.decoder.delegate = self;
+    self.displayLayer = [[AVSampleBufferDisplayLayer alloc] init];
+    self.displayLayer.frame = self.view.bounds;
+    [self.view.layer addSublayer:self.displayLayer];
+    
 //    uint8_t d[] = {
 //        0x00, 0x00, 0x00, 0x01, 0x00, 0x23, 0x00, 0x00, 0x01, 0x65, 0x00, 0x00, 0x00, 0x01, 0x67, 0x00, 0x03
 //    };
@@ -49,15 +59,33 @@
 //        } while (next != nil);
 //
 //    }
-    VCFLVFile *flv = [[VCFLVFile alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/cmst0us/Desktop/test.flv"]];
-    VCFLVTag *tag = nil;
-    do {
-        tag = [flv nextTag];
-        if (tag) {
-            NSLog(@"%@", tag);
-        }
-    } while (tag != nil);
+    
+    VCFLVReader *reader = [[VCFLVReader alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/cmst0us/Desktop/test.flv"]];
+    reader.delegate = self;
+    [reader startRead];
+    
 }
 
+- (void)reader:(VCFLVReader *)reader didGetVideoSampleBuffer:(VCSampleBuffer *)sampleBuffer {
+    NSLog(@"did get video sample buffer");
+    dispatch_async(_decodeWorkQueue, ^{
+        OSStatus ret = [self.decoder decodeSampleBuffer:sampleBuffer];
+        if (ret == noErr) {
+            
+        }
+    });
+}
+
+- (void)reader:(VCFLVReader *)reader didGetVideoFormatDescription:(CMFormatDescriptionRef)formatDescription {
+    NSLog(@"did get sps pps");
+    [self.decoder setFormatDescription:formatDescription];
+}
+
+- (void)videoDecoder:(id<VCVideoDecoder>)decoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
+    NSLog(@"get output image");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.displayLayer enqueueSampleBuffer:sampleBuffer.sampleBuffer];
+    });
+}
 
 @end

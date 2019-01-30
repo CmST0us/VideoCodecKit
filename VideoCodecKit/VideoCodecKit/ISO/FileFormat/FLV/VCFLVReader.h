@@ -7,11 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreMedia/CoreMedia.h>
 
 NS_ASSUME_NONNULL_BEGIN
+@class VCFLVReader;
+@class VCSampleBuffer;
 
+@protocol VCFLVReaderDelegate <NSObject>
+- (void)reader:(VCFLVReader *)reader didGetVideoFormatDescription:(CMFormatDescriptionRef)formatDescription;
+- (void)reader:(VCFLVReader *)reader didGetVideoSampleBuffer:(VCSampleBuffer *)sampleBuffer;
+- (void)reader:(VCFLVReader *)reader didGetAudioSampleBuffer:(VCSampleBuffer *)sampleBuffer;
+@end
+
+@class VCSampleBuffer;
 @interface VCFLVReader : NSObject
+@property (nonatomic, weak) id<VCFLVReaderDelegate> delegate;
+- (nullable instancetype)initWithURL:(NSURL *)url;
 
+- (void)startRead;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -9,7 +9,7 @@
 #import <VideoToolbox/VideoToolbox.h>
 #import "VCH264HardwareDecoder.h"
 
-#define kVCH264HardwareDecoderMinGOPCount 12
+#define kVCH264HardwareDecoderMinGOPCount 3
 
 @interface VCH264HardwareDecoder ()
 @property (nonatomic, strong) NSMutableArray<VCSampleBuffer *> *decodeBuffer;

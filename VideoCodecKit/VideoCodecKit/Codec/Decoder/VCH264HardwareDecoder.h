@@ -12,16 +12,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol VCVideoDecoderDelegate <NSObject>
-- (void)videoDecoder:(id<VCVideoDecoder>)decoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer;
-@end
-
 @interface VCH264HardwareDecoder : NSObject<VCVideoDecoder>
 
 @property (nonatomic, weak) id<VCVideoDecoderDelegate> delegate;
 @property (nonatomic, strong) NSDictionary *attributes; // defaultAttributes
 
 + (NSDictionary *)defaultAttributes;
+- (void)setFormatDescription:(CMFormatDescriptionRef)formatDescription;
 
 - (OSStatus)decodeSampleBuffer:(VCSampleBuffer *)sampleBuffer;
 - (void)clear;
