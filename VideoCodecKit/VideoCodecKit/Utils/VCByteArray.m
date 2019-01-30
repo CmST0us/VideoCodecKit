@@ -158,7 +158,7 @@
 
 - (void)clear {
     _postion = 0;
-    _data = [NSMutableData data];
+    _mutableData = [NSMutableData data];
 }
 
 - (void)writing:(VCByteArrayWriterBlock)block {
@@ -400,5 +400,8 @@
     return s;
 }
 
+- (NSData *)data {
+    return [_mutableData copy];
+}
 
 @end

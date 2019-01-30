@@ -15,6 +15,14 @@
 		4F1913A921FED9C800921CAF /* VCAnnexBFormatParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1913A721FED9C800921CAF /* VCAnnexBFormatParser.m */; };
 		4F1913AE21FF37FA00921CAF /* VCH264AnnexBFrameParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F1913AC21FF37FA00921CAF /* VCH264AnnexBFrameParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F1913AF21FF37FA00921CAF /* VCH264AnnexBFrameParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1913AD21FF37FA00921CAF /* VCH264AnnexBFrameParser.m */; };
+		4F1913B3220145A300921CAF /* VCFLVReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F1913B1220145A300921CAF /* VCFLVReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F1913B4220145A300921CAF /* VCFLVReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1913B2220145A300921CAF /* VCFLVReader.m */; };
+		4F1913B72201465700921CAF /* VCFLVWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F1913B52201465700921CAF /* VCFLVWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F1913B82201465700921CAF /* VCFLVWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1913B62201465700921CAF /* VCFLVWriter.m */; };
+		4F1913BB2201466A00921CAF /* VCFLVTag.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F1913B92201466A00921CAF /* VCFLVTag.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F1913BC2201466A00921CAF /* VCFLVTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1913BA2201466A00921CAF /* VCFLVTag.m */; };
+		4F1913BF220161FB00921CAF /* VCFLVFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F1913BD220161FB00921CAF /* VCFLVFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F1913C0220161FB00921CAF /* VCFLVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1913BE220161FB00921CAF /* VCFLVFile.m */; };
 		4F6C867C217E2FA500881F72 /* VCBaseEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6C867A217E2FA500881F72 /* VCBaseEncoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F6C867D217E2FA500881F72 /* VCBaseEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C867B217E2FA500881F72 /* VCBaseEncoder.m */; };
 		4F6C8680217E2FB600881F72 /* VCBaseEncoderConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6C867E217E2FB600881F72 /* VCBaseEncoderConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -147,6 +155,14 @@
 		4F1913A721FED9C800921CAF /* VCAnnexBFormatParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAnnexBFormatParser.m; sourceTree = "<group>"; };
 		4F1913AC21FF37FA00921CAF /* VCH264AnnexBFrameParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264AnnexBFrameParser.h; sourceTree = "<group>"; };
 		4F1913AD21FF37FA00921CAF /* VCH264AnnexBFrameParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264AnnexBFrameParser.m; sourceTree = "<group>"; };
+		4F1913B1220145A300921CAF /* VCFLVReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCFLVReader.h; sourceTree = "<group>"; };
+		4F1913B2220145A300921CAF /* VCFLVReader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCFLVReader.m; sourceTree = "<group>"; };
+		4F1913B52201465700921CAF /* VCFLVWriter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCFLVWriter.h; sourceTree = "<group>"; };
+		4F1913B62201465700921CAF /* VCFLVWriter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCFLVWriter.m; sourceTree = "<group>"; };
+		4F1913B92201466A00921CAF /* VCFLVTag.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCFLVTag.h; sourceTree = "<group>"; };
+		4F1913BA2201466A00921CAF /* VCFLVTag.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCFLVTag.m; sourceTree = "<group>"; };
+		4F1913BD220161FB00921CAF /* VCFLVFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCFLVFile.h; sourceTree = "<group>"; };
+		4F1913BE220161FB00921CAF /* VCFLVFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCFLVFile.m; sourceTree = "<group>"; };
 		4F6C867A217E2FA500881F72 /* VCBaseEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseEncoder.h; sourceTree = "<group>"; };
 		4F6C867B217E2FA500881F72 /* VCBaseEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCBaseEncoder.m; sourceTree = "<group>"; };
 		4F6C867E217E2FB600881F72 /* VCBaseEncoderConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCBaseEncoderConfig.h; sourceTree = "<group>"; };
@@ -322,6 +338,13 @@
 			path = AVC;
 			sourceTree = "<group>";
 		};
+		4F1913B02201432C00921CAF /* Publish */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Publish;
+			sourceTree = "<group>";
+		};
 		4F6C8678217E2F6100881F72 /* Hardware */ = {
 			isa = PBXGroup;
 			children = (
@@ -368,6 +391,7 @@
 		4F76FBD0216269FC002E7F0D /* VideoCodecKit */ = {
 			isa = PBXGroup;
 			children = (
+				4F1913B02201432C00921CAF /* Publish */,
 				4FBCCE3E21F36D9900E7BF3C /* Utils */,
 				4FBCCE3521F32EE000E7BF3C /* ISO */,
 				4FBCCE1821F3208100E7BF3C /* Model */,
@@ -707,6 +731,14 @@
 		4FBCCE6221FCA87200E7BF3C /* FLV */ = {
 			isa = PBXGroup;
 			children = (
+				4F1913B1220145A300921CAF /* VCFLVReader.h */,
+				4F1913B2220145A300921CAF /* VCFLVReader.m */,
+				4F1913B52201465700921CAF /* VCFLVWriter.h */,
+				4F1913B62201465700921CAF /* VCFLVWriter.m */,
+				4F1913B92201466A00921CAF /* VCFLVTag.h */,
+				4F1913BA2201466A00921CAF /* VCFLVTag.m */,
+				4F1913BD220161FB00921CAF /* VCFLVFile.h */,
+				4F1913BE220161FB00921CAF /* VCFLVFile.m */,
 			);
 			path = FLV;
 			sourceTree = "<group>";
@@ -830,6 +862,7 @@
 				4F935866217C55E500A9F613 /* VCBaseCodec.h in Headers */,
 				4FD047162191E52900FFC7D2 /* VCAUAACAudioDecoder.h in Headers */,
 				4F1913AE21FF37FA00921CAF /* VCH264AnnexBFrameParser.h in Headers */,
+				4F1913BB2201466A00921CAF /* VCFLVTag.h in Headers */,
 				4F76FC5421626DCA002E7F0D /* VCVTH264Decoder.h in Headers */,
 				4F76FC5921626DCA002E7F0D /* VCMarco.h in Headers */,
 				4F935860217C48DA00A9F613 /* VCBaseImage.h in Headers */,
@@ -838,6 +871,7 @@
 				4F76FC4121626D8E002E7F0D /* VCVideoFPS.h in Headers */,
 				4F6C8680217E2FB600881F72 /* VCBaseEncoderConfig.h in Headers */,
 				4FBCCE3021F325CD00E7BF3C /* VCVideoDecoder.h in Headers */,
+				4F1913BF220161FB00921CAF /* VCFLVFile.h in Headers */,
 				4F7FBEFE21948A0900182A00 /* VCAudioRender.h in Headers */,
 				4F76FC5821626DCA002E7F0D /* VCBaseDecoderConfig.h in Headers */,
 				4FBCCE2721F3251400E7BF3C /* VCH264SoftwareDecoder.h in Headers */,
@@ -850,12 +884,14 @@
 				4F76FC4A21626DCA002E7F0D /* VCPriorityObjectQueue.h in Headers */,
 				4F76FC4B21626DCA002E7F0D /* VCHeapPriorityObjectQueue.h in Headers */,
 				4F1913A821FED9C800921CAF /* VCAnnexBFormatParser.h in Headers */,
+				4F1913B3220145A300921CAF /* VCFLVReader.h in Headers */,
 				4FBCCE2B21F3252600E7BF3C /* VCH264SoftwareEncoder.h in Headers */,
 				4F76FC5021626DCA002E7F0D /* VCH264Frame+FFmpeg.h in Headers */,
 				4FC127402189E5C7009C239D /* VCMetalShaderType.h in Headers */,
 				4F76FC5321626DCA002E7F0D /* VCH264FFmpegFrameParserBuffer.h in Headers */,
 				4F76FC5621626DCA002E7F0D /* VCH264Image+FFmpeg.h in Headers */,
 				4FBCCE4521F36E3000E7BF3C /* VCAVCFormatStream.h in Headers */,
+				4F1913B72201465700921CAF /* VCFLVWriter.h in Headers */,
 				4FC1274D21901857009C239D /* VCAutoResizeLayerView.h in Headers */,
 				4F76FC2121626AA3002E7F0D /* VideoCodecKit.pch in Headers */,
 			);
@@ -946,6 +982,8 @@
 				4FBCCE3D21F33E0800E7BF3C /* VCAVCConfigurationRecord.m in Sources */,
 				4FBCCE4221F36DA700E7BF3C /* VCByteArray.m in Sources */,
 				4F935867217C55E500A9F613 /* VCBaseCodec.m in Sources */,
+				4F1913B82201465700921CAF /* VCFLVWriter.m in Sources */,
+				4F1913C0220161FB00921CAF /* VCFLVFile.m in Sources */,
 				4F76FC67216270E1002E7F0D /* VCSampleBufferRender.m in Sources */,
 				4F76FC68216270E1002E7F0D /* VCDecoderProgress.m in Sources */,
 				4F76FC69216270E1002E7F0D /* VCBaseFrameParser.m in Sources */,
@@ -959,6 +997,7 @@
 				4F93585A217A242F00A9F613 /* VCBaseFrame.m in Sources */,
 				4FD0470F2191DCFA00FFC7D2 /* VCAudioFrame.m in Sources */,
 				4F76FC6C216270E1002E7F0D /* VCH264FrameParser.m in Sources */,
+				4F1913B4220145A300921CAF /* VCFLVReader.m in Sources */,
 				4F6C867D217E2FA500881F72 /* VCBaseEncoder.m in Sources */,
 				4FBCCE2421F3250000E7BF3C /* VCH264HardwareEncoder.m in Sources */,
 				4F76FC6D216270E1002E7F0D /* VCH264FFmpegFrameParserBuffer.m in Sources */,
@@ -980,6 +1019,7 @@
 				4F76FC70216270E1002E7F0D /* VCH264Image+FFmpeg.m in Sources */,
 				4F76FC71216270E1002E7F0D /* VCBaseDecoder.m in Sources */,
 				4F76FC72216270E1002E7F0D /* VCBaseDecoderConfig.m in Sources */,
+				4F1913BC2201466A00921CAF /* VCFLVTag.m in Sources */,
 				4F70254F2195C47600DB56AF /* VCSafeBuffer.m in Sources */,
 				4F6C8681217E2FB600881F72 /* VCBaseEncoderConfig.m in Sources */,
 				4FE2251E2164DF8400103B61 /* VCH264SPSFrame.m in Sources */,

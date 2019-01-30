@@ -24,7 +24,7 @@
 //    VCAnnexBFormatStream *s = [[VCAnnexBFormatStream alloc] initWithData:data];
 //    VCAVCFormatStream *avc = [s toAVCFormatStream];
 //
-    VCAnnexBFormatParser *parser = [[VCAnnexBFormatParser alloc] init];
+//    VCAnnexBFormatParser *parser = [[VCAnnexBFormatParser alloc] init];
 //    [parser appendData:data];
 //
 //    VCAnnexBFormatStream *nextStream = nil;
@@ -33,23 +33,30 @@
 //    }
     
     // File Test
-    NSInputStream *readStream = [[NSInputStream alloc] initWithFileAtPath:@"/Users/cmst0us/Desktop/swift.h264"];
-    [readStream open];
-    
-    while ([readStream hasBytesAvailable]) {
-        uint8_t readBuffer[4096] = {0};
-        NSInteger readLen = [readStream read:readBuffer maxLength:4096];
-        
-        [parser appendData:[NSData dataWithBytes:readBuffer length:readLen]];
-        VCAnnexBFormatStream *next = nil;
-        do {
-            next = [parser next];
-            VCAVCFormatStream *avc = [next toAVCFormatStream];
-            
-        } while (next != nil);
-        
-    }
-    
+//    NSInputStream *readStream = [[NSInputStream alloc] initWithFileAtPath:@"/Users/cmst0us/Desktop/swift.h264"];
+//    [readStream open];
+//
+//    while ([readStream hasBytesAvailable]) {
+//        uint8_t readBuffer[4096] = {0};
+//        NSInteger readLen = [readStream read:readBuffer maxLength:4096];
+//
+//        [parser appendData:[NSData dataWithBytes:readBuffer length:readLen]];
+//        VCAnnexBFormatStream *next = nil;
+//        do {
+//            next = [parser next];
+//            VCAVCFormatStream *avc = [next toAVCFormatStream];
+//
+//        } while (next != nil);
+//
+//    }
+    VCFLVFile *flv = [[VCFLVFile alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/cmst0us/Desktop/test.flv"]];
+    VCFLVTag *tag = nil;
+    do {
+        tag = [flv nextTag];
+        if (tag) {
+            NSLog(@"%@", tag);
+        }
+    } while (tag != nil);
 }
 
 
