@@ -86,7 +86,7 @@ typedef NS_ENUM(NSUInteger, VCAnnexBFormatParserState) {
             }
         } else if (state <= VCAnnexBFormatParserStateFindMoreThan2ZeroAnd1One) {
             // 如果startCode之前无数据，跳过
-            if (!_isFirstStartCode) {
+            if (_isFirstStartCode) {
                 _isFirstStartCode = NO;
                 state = VCAnnexBFormatParserStateInit;
                 _nextFramePosition = _position;
