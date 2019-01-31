@@ -29,6 +29,12 @@
     return self;
 }
 
+- (void)starAsyncRead {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [self startRead];
+    });
+}
+
 - (void)startRead {
     VCFLVTag *nextTag = nil;
     do {

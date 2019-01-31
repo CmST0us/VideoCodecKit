@@ -62,18 +62,17 @@
     
     VCFLVReader *reader = [[VCFLVReader alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/cmst0us/Desktop/test.flv"]];
     reader.delegate = self;
-    [reader startRead];
+    [reader starAsyncRead];
     
 }
 
 - (void)reader:(VCFLVReader *)reader didGetVideoSampleBuffer:(VCSampleBuffer *)sampleBuffer {
     NSLog(@"did get video sample buffer");
-    dispatch_async(_decodeWorkQueue, ^{
-        OSStatus ret = [self.decoder decodeSampleBuffer:sampleBuffer];
-        if (ret == noErr) {
-            
-        }
-    });
+    
+    OSStatus ret = [self.decoder decodeSampleBuffer:sampleBuffer];
+    if (ret == noErr) {
+        
+    }
 }
 
 - (void)reader:(VCFLVReader *)reader didGetVideoFormatDescription:(CMFormatDescriptionRef)formatDescription {

@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<VCFLVReaderDelegate> delegate;
 - (nullable instancetype)initWithURL:(NSURL *)url;
 
+- (void)starAsyncRead;
 - (void)startRead;
 @end
 
