@@ -96,10 +96,10 @@
                 int32_t timestampExt = (int32_t)[videoTag timestampExtended];
                 int32_t timestamp = (int32_t)[videoTag timestamp];
                 timestamp = timestamp | (timestampExt << 24);
-                CMTime dts = CMTimeMake(timestamp, 90000);
+                CMTime dts = CMTimeMake(timestamp, 1000);
                 
                 int32_t compositionTime = (int32_t)[videoTag compositionTime];
-                CMTime pts = CMTimeMake(timestamp + compositionTime, 90000);
+                CMTime pts = CMTimeMake(timestamp + compositionTime, 1000);
                 
                 CMSampleTimingInfo timingInfo;
                 timingInfo.decodeTimeStamp = dts;
@@ -154,7 +154,9 @@
 }
 
 - (void)dealloc {
-    CFRelease(_formatDescription);
-    _formatDescription = NULL;
+    if (_formatDescription) {
+        CFRelease(_formatDescription);
+        _formatDescription = NULL;
+    }
 }
 @end

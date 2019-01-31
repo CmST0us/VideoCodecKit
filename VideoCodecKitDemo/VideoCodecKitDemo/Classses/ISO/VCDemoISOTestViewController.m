@@ -24,6 +24,10 @@
     self.decoder = [[VCH264HardwareDecoder alloc] init];
     self.decoder.delegate = self;
     self.displayLayer = [[AVSampleBufferDisplayLayer alloc] init];
+    CMTimebaseRef timeBase = nil;
+    CMTimebaseCreateWithMasterClock(kCFAllocatorDefault, CMClockGetHostTimeClock(), &timeBase);
+    
+    [self.displayLayer setControlTimebase:timeBase];
     self.displayLayer.frame = self.view.bounds;
     [self.view.layer addSublayer:self.displayLayer];
     
@@ -60,15 +64,13 @@
 //
 //    }
     
-    VCFLVReader *reader = [[VCFLVReader alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/cmst0us/Desktop/test.flv"]];
+    VCFLVReader *reader = [[VCFLVReader alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/cmst0us/Desktop/test_.flv"]];
     reader.delegate = self;
     [reader starAsyncRead];
     
 }
 
 - (void)reader:(VCFLVReader *)reader didGetVideoSampleBuffer:(VCSampleBuffer *)sampleBuffer {
-    NSLog(@"did get video sample buffer");
-    
     OSStatus ret = [self.decoder decodeSampleBuffer:sampleBuffer];
     if (ret == noErr) {
         
@@ -81,10 +83,9 @@
 }
 
 - (void)videoDecoder:(id<VCVideoDecoder>)decoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
-    NSLog(@"get output image");
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.displayLayer enqueueSampleBuffer:sampleBuffer.sampleBuffer];
-    });
+    CMTimeShow(sampleBuffer.presentationTimeStamp);
+    [self.displayLayer enqueueSampleBuffer:sampleBuffer.sampleBuffer];
+    CMTimebaseSetRate(self.displayLayer.controlTimebase, 1.0);
 }
 
 @end
