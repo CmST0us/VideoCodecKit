@@ -6,8 +6,104 @@
 //  Copyright © 2019 eric3u. All rights reserved.
 //
 
+#import <AVFoundation/AVFoundation.h>
+
 #import "VCAACAudioConverter.h"
 
-@implementation VCAACAudioConverter
+@interface VCAACAudioConverter ()
+@property (nonatomic, strong) AVAudioConverter *converter;
+@property (nonatomic, assign) CMFormatDescriptionRef formatDescription;
+@end
 
+@implementation VCAACAudioConverter
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _formatDescription = NULL;
+    }
+    return self;
+}
+
+- (void)dealloc {
+    if (_formatDescription != NULL) {
+        CFRelease(_formatDescription);
+        _formatDescription = NULL;
+    }
+}
+
+- (AVAudioConverter *)converter {
+    if (_converter != nil) {
+        return _converter;
+    }
+    
+    if (_formatDescription == NULL) {
+        return nil;
+    }
+    
+    const AudioStreamBasicDescription *basicDesc = CMAudioFormatDescriptionGetStreamBasicDescription(self.formatDescription);
+    AVAudioFormat *inFormat = [[AVAudioFormat alloc] initWithStreamDescription:basicDesc];
+    _converter = [[AVAudioConverter alloc] initFromFormat:inFormat toFormat:[VCAACAudioConverter outputFormatWithSampleRate:basicDesc->mSampleRate]];
+    return _converter;
+}
+
+- (void)setFormatDescription:(CMFormatDescriptionRef)desc {
+    _formatDescription = CFRetain(desc);
+}
+
+- (void)reset {
+    [self.converter reset];
+}
+
+- (void)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer {
+    char *dataPtr = nil;
+    size_t len = CMBlockBufferGetDataLength(sampleBuffer.dataBuffer);
+    CMBlockBufferGetDataPointer(sampleBuffer.dataBuffer, 0, NULL, NULL, &dataPtr);
+    
+    AudioStreamBasicDescription desc = [sampleBuffer audioStreamBasicDescription];
+    AVAudioFormat *compressedAudioFormat = [[AVAudioFormat alloc] initWithStreamDescription:&desc];
+    
+    AVAudioCompressedBuffer *compressedBuffer =[[AVAudioCompressedBuffer alloc] initWithFormat:compressedAudioFormat packetCapacity:1 maximumPacketSize:len];
+    // reference: https://forums.developer.apple.com/message/189802#189802
+    // 这是一个 AVAudioBuffer 的 bug，SDK已经在iOS 11 引入的 byteLength 修复
+    ((AudioBufferList *)compressedBuffer.audioBufferList)->mBuffers[0].mDataByteSize = (UInt32)len;
+    void *dst = ((AudioBufferList *)compressedBuffer.audioBufferList)->mBuffers[0].mData;
+    memcpy(dst, dataPtr, len);
+    
+    AVAudioPCMBuffer *outputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:[VCAACAudioConverter outputFormatWithSampleRate:compressedAudioFormat.sampleRate] frameCapacity:compressedAudioFormat.sampleRate];
+    
+    // reference: https://forums.developer.apple.com/message/189802#189802
+    // reference: https://codeday.me/bug/20190103/493018.html
+    outputBuffer.frameLength = compressedAudioFormat.sampleRate;
+    
+    NSError *error = nil;
+    
+    AVAudioConverterOutputStatus ret =  [self.converter convertToBuffer:outputBuffer error:&error withInputFromBlock:^AVAudioBuffer * _Nullable(AVAudioPacketCount inNumberOfPackets, AVAudioConverterInputStatus * _Nonnull outStatus) {
+        *outStatus = AVAudioConverterInputStatus_HaveData;
+        return compressedBuffer;
+    }];
+    
+    if (ret == AVAudioConverterInputStatus_EndOfStream) {
+        [self reset];
+    }
+    
+    if (error != nil) {
+        NSLog(@"%@", error);
+    }
+}
+
++ (AVAudioFormat *)outputFormatWithSampleRate:(Float64)sampleRate {
+    AudioStreamBasicDescription outputDesc;
+    outputDesc.mSampleRate = sampleRate;
+    outputDesc.mFormatID = kAudioFormatLinearPCM;
+    outputDesc.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsNonInterleaved;
+    outputDesc.mFramesPerPacket = 1;
+    outputDesc.mChannelsPerFrame = 1;
+    outputDesc.mBytesPerFrame = 2;
+    outputDesc.mBytesPerPacket = 2;
+    outputDesc.mBitsPerChannel = 16;
+    outputDesc.mReserved = 0;
+    
+    AVAudioFormat *outputFormat = [[AVAudioFormat alloc] initWithStreamDescription:&outputDesc];
+    return outputFormat;
+}
 @end

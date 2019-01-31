@@ -66,9 +66,10 @@
 - (CMTime)presentationTimeStamp {
     return CMSampleBufferGetPresentationTimeStamp(_sampleBuffer);
 }
+
 - (AudioStreamBasicDescription)audioStreamBasicDescription {
     CMAudioFormatDescriptionRef audioFormat = CMSampleBufferGetFormatDescription(_sampleBuffer);
-    return CMAudioFormatDescriptionGetStreamBasicDescription(audioFormat);
+    return *CMAudioFormatDescriptionGetStreamBasicDescription(audioFormat);
 }
 
 - (void)dealloc {

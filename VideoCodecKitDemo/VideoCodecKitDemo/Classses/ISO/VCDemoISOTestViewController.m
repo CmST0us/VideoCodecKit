@@ -14,55 +14,26 @@
 }
 @property (nonatomic, strong) VCH264HardwareDecoder *decoder;
 @property (nonatomic, strong) AVSampleBufferDisplayLayer *displayLayer;
+@property (nonatomic, strong) VCAACAudioConverter *converter;
 @end
 
 @implementation VCDemoISOTestViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _decodeWorkQueue = dispatch_queue_create("com.vc.decode", DISPATCH_QUEUE_SERIAL);
+    _decodeWorkQueue = dispatch_queue_create("com.VideoCodecKitDemo.ISOTest.decode", DISPATCH_QUEUE_SERIAL);
     self.decoder = [[VCH264HardwareDecoder alloc] init];
     self.decoder.delegate = self;
     self.displayLayer = [[AVSampleBufferDisplayLayer alloc] init];
+    
+    self.converter = [[VCAACAudioConverter alloc] init];
+    
     CMTimebaseRef timeBase = nil;
     CMTimebaseCreateWithMasterClock(kCFAllocatorDefault, CMClockGetHostTimeClock(), &timeBase);
     
     [self.displayLayer setControlTimebase:timeBase];
     self.displayLayer.frame = self.view.bounds;
     [self.view.layer addSublayer:self.displayLayer];
-    
-//    uint8_t d[] = {
-//        0x00, 0x00, 0x00, 0x01, 0x00, 0x23, 0x00, 0x00, 0x01, 0x65, 0x00, 0x00, 0x00, 0x01, 0x67, 0x00, 0x03
-//    };
-//    NSData *data = [[NSData alloc] initWithBytes:d length:sizeof(d)];
-//    VCAnnexBFormatStream *s = [[VCAnnexBFormatStream alloc] initWithData:data];
-//    VCAVCFormatStream *avc = [s toAVCFormatStream];
-//
-//    VCAnnexBFormatParser *parser = [[VCAnnexBFormatParser alloc] init];
-//    [parser appendData:data];
-//
-//    VCAnnexBFormatStream *nextStream = nil;
-//    while ((nextStream = [parser next]) != nil) {
-//        VCAVCFormatStream *avcS = [nextStream toAVCFormatStream];
-//    }
-    
-    // File Test
-//    NSInputStream *readStream = [[NSInputStream alloc] initWithFileAtPath:@"/Users/cmst0us/Desktop/swift.h264"];
-//    [readStream open];
-//
-//    while ([readStream hasBytesAvailable]) {
-//        uint8_t readBuffer[4096] = {0};
-//        NSInteger readLen = [readStream read:readBuffer maxLength:4096];
-//
-//        [parser appendData:[NSData dataWithBytes:readBuffer length:readLen]];
-//        VCAnnexBFormatStream *next = nil;
-//        do {
-//            next = [parser next];
-//            VCAVCFormatStream *avc = [next toAVCFormatStream];
-//
-//        } while (next != nil);
-//
-//    }
     
     VCFLVReader *reader = [[VCFLVReader alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/cmst0us/Desktop/test_.flv"]];
     reader.delegate = self;
@@ -84,12 +55,13 @@
 
 - (void)reader:(VCFLVReader *)reader didGetAudioSampleBuffer:(VCSampleBuffer *)sampleBuffer {
     CMTime audioTime = sampleBuffer.presentationTimeStamp;
-    
+    [self.converter convertSampleBuffer:sampleBuffer];
 }
 
 - (void)reader:(VCFLVReader *)reader didGetAudioFormatDescription:(CMFormatDescriptionRef)formatDescription {
     NSLog(@"get audio specific config");
     CMTimebaseSetRate(self.displayLayer.controlTimebase, 1.0);
+    [self.converter setFormatDescription:formatDescription];
 }
 
 - (void)videoDecoder:(id<VCVideoDecoder>)decoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {

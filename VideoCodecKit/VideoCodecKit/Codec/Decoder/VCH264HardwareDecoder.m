@@ -45,10 +45,17 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         _attributes = [VCH264HardwareDecoder defaultAttributes];
         _isBaseline = NO;
         _shouldClearDecodeBuffer = NO;
+        _formatDescription = NULL;
     }
     return self;
 }
 
+- (void)dealloc {
+    if (self.formatDescription != NULL) {
+        CFRelease(self.formatDescription);
+        self.formatDescription = NULL;
+    }
+}
 #pragma mark - Getter Setter
 - (void)setFormatDescription:(CMFormatDescriptionRef)formatDescription {
     if (!CMFormatDescriptionEqual(_formatDescription, formatDescription)) {
@@ -56,7 +63,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         // [TODO] 如果没有avcC数据, 则流为Annex-B，掉对应解析器解析。
         // 判断是否为baseline
     }
-    _formatDescription = formatDescription;
+    _formatDescription = CFRetain(formatDescription);
 }
 
 + (NSDictionary *)defaultAttributes {

@@ -146,7 +146,7 @@
 		4FE2251E2164DF8400103B61 /* VCH264SPSFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE2251C2164DF8400103B61 /* VCH264SPSFrame.m */; };
 		4FF9307E22032E7D0037DE2D /* VCAudioSpecificConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF9307C22032E7D0037DE2D /* VCAudioSpecificConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FF9307F22032E7D0037DE2D /* VCAudioSpecificConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9307D22032E7D0037DE2D /* VCAudioSpecificConfig.m */; };
-		4FF93082220344410037DE2D /* VCAACAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF93080220344410037DE2D /* VCAACAudioConverter.h */; };
+		4FF93082220344410037DE2D /* VCAACAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF93080220344410037DE2D /* VCAACAudioConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FF93083220344410037DE2D /* VCAACAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF93081220344410037DE2D /* VCAACAudioConverter.m */; };
 /* End PBXBuildFile section */
 
