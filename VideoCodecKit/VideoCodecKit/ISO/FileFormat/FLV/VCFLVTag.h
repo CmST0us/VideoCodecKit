@@ -68,8 +68,51 @@ typedef NS_ENUM(uint8_t, VCFLVVideoTagAVCPacketType) {
 - (BOOL)isSupportCurrentFrameType;
 @end
 
-@interface VCFLVAudioTag : VCFLVTag
+typedef NS_ENUM(uint8_t, VCFLVAudioTagFormatType) {
+    VCFLVAudioTagFormatTypeLinearPCMPlatformEndian = 0,
+    VCFLVAudioTagFormatTypeADPCM = 1,
+    VCFLVAudioTagFormatTypeMP3 = 2,
+    VCFLVAudioTagFormatTypeLinearPCMLittleEndian = 3,
+    VCFLVAudioTagFormatTypeNellymoser16kHzMono = 4,
+    VCFLVAudioTagFormatTypeNellymoser8kHzMono = 5,
+    VCFLVAudioTagFormatTypeNellymoser = 6,
+    VCFLVAudioTagFormatTypeG711ALaw = 7,
+    VCFLVAudioTagFormatTypeG711MuLaw = 8,
+    VCFLVAudioTagFormatTypeReserved = 9,
+    VCFLVAudioTagFormatTypeAAC = 10,
+    VCFLVAudioTagFormatTypeSpeex = 11,
+    VCFLVAudioTagFormatTypeMP38kHz = 14,
+    VCFLVAudioTagFormatTypeDeviceSpecificSound = 15,
+};
 
+typedef NS_ENUM(uint8_t, VCFLVAudioTagSampleRate) {
+    VCFLVAudioTagSampleRate5k5Hz = 0,
+    VCFLVAudioTagSampleRate11kHz = 1,
+    VCFLVAudioTagSampleRate22kHz = 2,
+    VCFLVAudioTagSampleRate44kHz = 3,
+};
+
+typedef NS_ENUM(uint8_t, VCFLVAudioTagSampleLength) {
+    VCFLVAudioTagSampleLength8Bit = 0,
+    VCFLVAudioTagSampleLength16Bit = 1,
+};
+
+typedef NS_ENUM(uint8_t, VCFLVAudioTagAudioType) {
+    VCFLVAudioTagAudioTypeMono = 0,
+    VCFLVAudioTagAudioTypeStereo = 1,
+};
+
+typedef NS_ENUM(uint8_t, VCFLVAudioTagAACPacketType) {
+    VCFLVAudioTagAACPacketTypeSequenceHeader = 0,
+    VCFLVAudioTagAACPacketTypeRaw = 1,
+};
+
+@interface VCFLVAudioTag : VCFLVTag
+@property (nonatomic, readonly) VCFLVAudioTagFormatType formatType;
+@property (nonatomic, readonly) VCFLVAudioTagSampleRate sampleRate;
+@property (nonatomic, readonly) VCFLVAudioTagSampleLength sampleLength;
+@property (nonatomic, readonly) VCFLVAudioTagAudioType audioType;
+@property (nonatomic, readonly) VCFLVAudioTagAACPacketType AACPacketType;
 @end
 
 @interface VCFLVMetaTag : VCFLVTag

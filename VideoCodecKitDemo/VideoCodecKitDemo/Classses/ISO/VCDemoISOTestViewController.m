@@ -82,10 +82,18 @@
     [self.decoder setFormatDescription:formatDescription];
 }
 
-- (void)videoDecoder:(id<VCVideoDecoder>)decoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
-    CMTimeShow(sampleBuffer.presentationTimeStamp);
-    [self.displayLayer enqueueSampleBuffer:sampleBuffer.sampleBuffer];
+- (void)reader:(VCFLVReader *)reader didGetAudioSampleBuffer:(VCSampleBuffer *)sampleBuffer {
+    CMTime audioTime = sampleBuffer.presentationTimeStamp;
+    
+}
+
+- (void)reader:(VCFLVReader *)reader didGetAudioFormatDescription:(CMFormatDescriptionRef)formatDescription {
+    NSLog(@"get audio specific config");
     CMTimebaseSetRate(self.displayLayer.controlTimebase, 1.0);
+}
+
+- (void)videoDecoder:(id<VCVideoDecoder>)decoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
+    [self.displayLayer enqueueSampleBuffer:sampleBuffer.sampleBuffer];
 }
 
 @end

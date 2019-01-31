@@ -111,7 +111,45 @@
 #pragma mark - VCFLVAudioTag
 
 @implementation VCFLVAudioTag
+- (VCFLVAudioTagFormatType)formatType {
+    VCByteArray *array = [[VCByteArray alloc] initWithData:self.tagData];
+    array.postion = kVCFLVTagHeaderSize;
+    return (VCFLVAudioTagFormatType)([array readUInt8] >> 4);
+}
 
+- (VCFLVAudioTagSampleRate)sampleRate {
+    VCByteArray *array = [[VCByteArray alloc] initWithData:self.tagData];
+    array.postion = kVCFLVTagHeaderSize;
+    return (VCFLVAudioTagSampleRate)(([array readUInt8] >> 2) & 0x03);
+}
+
+- (VCFLVAudioTagSampleLength)sampleLength {
+    VCByteArray *array = [[VCByteArray alloc] initWithData:self.tagData];
+    array.postion = kVCFLVTagHeaderSize;
+    return (VCFLVAudioTagSampleLength)(([array readUInt8] >> 1) & 0x01);
+}
+
+- (VCFLVAudioTagAudioType)audioType {
+    VCByteArray *array = [[VCByteArray alloc] initWithData:self.tagData];
+    array.postion = kVCFLVTagHeaderSize;
+    return (VCFLVAudioTagSampleLength)([array readUInt8] & 0x01);
+}
+
+- (VCFLVAudioTagAACPacketType)AACPacketType {
+    VCByteArray *array = [[VCByteArray alloc] initWithData:self.tagData];
+    array.postion = kVCFLVTagHeaderSize + 1;
+    return (VCFLVAudioTagAACPacketType)[array readUInt8];
+}
+
+- (NSData *)payloadData {
+    NSUInteger offset = kVCFLVTagHeaderSize + kVCFLVAudioTagExternHeaderSize;
+    return [self.tagData subdataWithRange:NSMakeRange(offset, self.tagData.length - offset)];
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"\n[FLV][Audio Tag]:\n\tdataSize:%d\n\tformatType: %d\n\tsampleRate: %d\n\tsampleLength: %d\n\taudioType: %d\n\tAACPacketType: %d\n\ttimestamp: %d", self.dataSize, self.formatType, self.sampleRate, self.sampleLength, self.audioType, self.AACPacketType, self.timestamp];
+}
+            
 @end
 
 #pragma mark - VCFLVMetaTag

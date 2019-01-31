@@ -6,15 +6,19 @@
 //  Copyright © 2019 eric3u. All rights reserved.
 //
 
+#import <AVFoundation/AVFoundation.h>
+
 #import "VCFLVReader.h"
 #import "VCFLVFile.h"
 #import "VCFLVTag.h"
 #import "VCSampleBuffer.h"
 #import "VCAVCConfigurationRecord.h"
+#import "VCAudioSpecificConfig.h"
 
 @interface VCFLVReader ()
 @property (nonatomic, strong) VCFLVFile *file;
-@property (nonatomic, assign) CMFormatDescriptionRef formatDescription;
+@property (nonatomic, assign) CMFormatDescriptionRef videoFormatDescription;
+@property (nonatomic, assign) CMFormatDescriptionRef audioFormatDescription;
 @end
 
 @implementation VCFLVReader
@@ -22,6 +26,8 @@
     self = [super init];
     if (self) {
         _file = [[VCFLVFile alloc] initWithURL:url];
+        _videoFormatDescription = nil;
+        _audioFormatDescription = nil;
         if (_file == nil) {
             return nil;
         }
@@ -55,7 +61,7 @@
                     // can't create video format description
                     break;
                 }
-                _formatDescription = format;
+                _videoFormatDescription = format;
                 if (self.delegate &&
                     [self.delegate respondsToSelector:@selector(reader:didGetVideoFormatDescription:)]) {
                     [self.delegate reader:self didGetVideoFormatDescription:format];
@@ -73,7 +79,7 @@
                        frameType == VCFLVVideoTagFrameTypeInterFrame){
                 // [TODO]: KeyFrame and Inter Frame
                 // Create Block Buffer
-                if (_formatDescription == NULL) continue;
+                if (_videoFormatDescription == NULL) continue;
                 
                 CMBlockBufferRef blockBuffer = nil;
                 NSData *blockData = [videoTag payloadData];
@@ -110,7 +116,7 @@
                 CMSampleBufferRef sampleBuffer = nil;
                 ret = CMSampleBufferCreateReady(kCFAllocatorDefault,
                                                 blockBuffer,
-                                                self.formatDescription,
+                                                self.videoFormatDescription,
                                                 1,
                                                 1,
                                                 &timingInfo,
@@ -130,33 +136,78 @@
             }
             
         } else if ([nextTag isKindOfClass:[VCFLVAudioTag class]]) {
+            VCFLVAudioTag *audioTag= (VCFLVAudioTag *)nextTag;
+            
+            if (audioTag.AACPacketType == VCFLVAudioTagAACPacketTypeSequenceHeader) {
+                // seq
+                VCAudioSpecificConfig *config = [[VCAudioSpecificConfig alloc] initWithData:audioTag.payloadData];
+                CMAudioFormatDescriptionRef audioFormatDesc = nil;
+                OSStatus ret = [config createAudioFormatDescription:&audioFormatDesc];
+                if (ret != noErr) {
+                    break;
+                }
+                _audioFormatDescription = audioFormatDesc;
+                if (self.delegate &&
+                    [self.delegate respondsToSelector:@selector(reader:didGetAudioFormatDescription:)]) {
+                    [self.delegate reader:self didGetAudioFormatDescription:audioFormatDesc];
+                }
+                continue;
+            } else {
+                // raw
+                // create block buffer
+                NSData *payloadData = [audioTag payloadData];
+                
+                CMBlockBufferRef blockBuffer = nil;
+                OSStatus ret = CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault,
+                                                                  (void *)payloadData.bytes, payloadData.length, kCFAllocatorNull, NULL, 0, payloadData.length, 0, &blockBuffer);
+                if (ret != noErr) {
+                    continue;
+                }
+                // create packet description
+                AudioStreamPacketDescription packetDesc;
+                packetDesc.mDataByteSize = (UInt32)payloadData.length;
+                packetDesc.mStartOffset = 0;
+                packetDesc.mVariableFramesInPacket = 0;
+                
+                // create time
+                CMTime audioTime = CMTimeMake(audioTag.timestamp, 1000);
+                
+                // create samplebuffer
+                CMSampleBufferRef audioSampleBuffer = nil;
+                ret = CMAudioSampleBufferCreateReadyWithPacketDescriptions(kCFAllocatorDefault,
+                                                                     blockBuffer,
+                                                                     self.audioFormatDescription,
+                                                                     1,
+                                                                     audioTime,
+                                                                     &packetDesc,
+                                                                     &audioSampleBuffer);
+                if (ret != noErr) {
+                    continue;
+                }
+                
+                VCSampleBuffer *outputSampleBuffer = [[VCSampleBuffer alloc] initWithSampleBuffer:audioSampleBuffer];
+                
+                if (self.delegate &&
+                    [self.delegate respondsToSelector:@selector(reader:didGetAudioSampleBuffer:)]) {
+                    [self.delegate reader:self didGetAudioSampleBuffer:outputSampleBuffer];
+                }
+                CFRelease(blockBuffer);
+            }
             
         } else if ([nextTag isKindOfClass:[VCFLVMetaTag class]]) {
             
         }
     } while (nextTag != nil);
 }
-- (VCSampleBuffer *)nextSampleBuffer {
-    VCFLVTag *tag = [_file nextTag];
-    if (tag == nil) return nil;
-    
-    VCSampleBuffer *sampleBuffer = [[VCSampleBuffer alloc] init];
-    if ([tag isKindOfClass:[VCFLVVideoTag class]]) {
-        // video tag
-        
-    } else if ([tag isKindOfClass:[VCFLVAudioTag class]]) {
-        // audio tag
-    } else {
-        // unsupport tag
-    }
-    
-    return sampleBuffer;
-}
 
 - (void)dealloc {
-    if (_formatDescription) {
-        CFRelease(_formatDescription);
-        _formatDescription = NULL;
+    if (_videoFormatDescription) {
+        CFRelease(_videoFormatDescription);
+        _videoFormatDescription = NULL;
+    }
+    if (_audioFormatDescription) {
+        CFRelease(_audioFormatDescription);
+        _audioFormatDescription = NULL;
     }
 }
 @end

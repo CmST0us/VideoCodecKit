@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) CMFormatDescriptionRef formatDescription;
 @property (nonatomic, readonly) CMTime decodeTimeStamp;
 @property (nonatomic, readonly) CMTime presentationTimeStamp;
+@property (nonatomic, readonly) AudioStreamBasicDescription audioStreamBasicDescription;
 
 - (instancetype)initWithSampleBuffer:(CMSampleBufferRef)aSampleBuffer NS_DESIGNATED_INITIALIZER;
 @end
