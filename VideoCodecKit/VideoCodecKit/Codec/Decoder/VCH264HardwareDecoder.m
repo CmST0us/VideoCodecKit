@@ -33,6 +33,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
                                         CMTime presentationTimeStamp,
                                         CMTime presentationDuration) {
     VCH264HardwareDecoder *decoder = (__bridge VCH264HardwareDecoder *)decompressionOutputRefCon;
+    if (decoder == nil) return;
     [decoder decodeSessionDidOuputWithStatus:status infoFlags:infoFlags imageBuffer:imageBuffer presentationTimeStamp:presentationTimeStamp duration:presentationDuration];
 }
 
