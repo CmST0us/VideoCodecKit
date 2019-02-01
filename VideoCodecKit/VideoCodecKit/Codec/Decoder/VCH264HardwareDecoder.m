@@ -51,9 +51,13 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
 }
 
 - (void)dealloc {
-    if (self.formatDescription != NULL) {
-        CFRelease(self.formatDescription);
-        self.formatDescription = NULL;
+    if (_session != NULL) {
+        VTDecompressionSessionInvalidate(_session);
+    }
+    
+    if (_formatDescription != NULL) {
+        CFRelease(_formatDescription);
+        _formatDescription = NULL;
     }
 }
 #pragma mark - Getter Setter
