@@ -32,6 +32,8 @@
     CMTimebaseCreateWithMasterClock(kCFAllocatorDefault, CMClockGetHostTimeClock(), &timeBase);
     
     [self.displayLayer setControlTimebase:timeBase];
+    CFRelease(timeBase);
+    
     self.displayLayer.frame = self.view.bounds;
     [self.view.layer addSublayer:self.displayLayer];
     
@@ -65,7 +67,7 @@
 }
 
 - (void)videoDecoder:(id<VCVideoDecoder>)decoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
-    [self.displayLayer enqueueSampleBuffer:sampleBuffer.sampleBuffer];
+//    [self.displayLayer enqueueSampleBuffer:sampleBuffer.sampleBuffer];
 }
 
 @end

@@ -51,9 +51,18 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
 }
 
 - (void)dealloc {
-    if (self.formatDescription != NULL) {
-        CFRelease(self.formatDescription);
-        self.formatDescription = NULL;
+
+    if (_session != NULL) {
+        VTDecompressionSessionFinishDelayedFrames(_session);
+        VTDecompressionSessionWaitForAsynchronousFrames(_session);
+        VTDecompressionSessionInvalidate(_session);
+        CFRelease(_session);
+//        _session = NULL;
+    }
+    
+    if (_formatDescription != NULL) {
+        CFRelease(_formatDescription);
+        _formatDescription = NULL;
     }
 }
 #pragma mark - Getter Setter
@@ -93,10 +102,11 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     callbackRecord.decompressionOutputRefCon = (__bridge void * _Nullable)(self);
     callbackRecord.decompressionOutputCallback = decompressionOutputCallback;
     
+    CFDictionaryRef attributes = (__bridge CFDictionaryRef)self.attributes;
     OSStatus ret = VTDecompressionSessionCreate(kCFAllocatorDefault,
                                                 _formatDescription,
                                                 nil,
-                                                (__bridge CFDictionaryRef)self.attributes,
+                                                attributes,
                                                 &callbackRecord,
                                                 &_session);
     if (ret != noErr) {
@@ -129,7 +139,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     timingInfo.presentationTimeStamp = presentationTimeStamp;
     timingInfo.decodeTimeStamp = kCMTimeInvalid;
     
-    CMVideoFormatDescriptionRef videoFormatDescription;
+    CMVideoFormatDescriptionRef videoFormatDescription = NULL;
     ret = CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault,
                                                        imageBuffer,
                                                        &videoFormatDescription);
@@ -146,6 +156,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
                                        videoFormatDescription,
                                        &timingInfo,
                                        &sampleBuffer);
+    CFRelease(videoFormatDescription);
     if (ret != noErr) {
         return;
     }
