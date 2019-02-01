@@ -40,7 +40,7 @@
     basicDescription.mBytesPerFrame = 0;
     basicDescription.mFramesPerPacket = 1024;
     basicDescription.mBytesPerPacket = 0;
-    basicDescription.mChannelsPerFrame = 1;
+    basicDescription.mChannelsPerFrame = self.channels;
     basicDescription.mBitsPerChannel = 0;
     basicDescription.mReserved = 0;
     

@@ -55,29 +55,30 @@
 }
 
 - (void)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer {
-    char *dataPtr = nil;
-    size_t len = CMBlockBufferGetDataLength(sampleBuffer.dataBuffer);
-    CMBlockBufferGetDataPointer(sampleBuffer.dataBuffer, 0, NULL, NULL, &dataPtr);
     
-    AudioStreamBasicDescription desc = [sampleBuffer audioStreamBasicDescription];
-    AVAudioFormat *compressedAudioFormat = [[AVAudioFormat alloc] initWithStreamDescription:&desc];
-    
-    AVAudioCompressedBuffer *compressedBuffer =[[AVAudioCompressedBuffer alloc] initWithFormat:compressedAudioFormat packetCapacity:1 maximumPacketSize:len];
-    // reference: https://forums.developer.apple.com/message/189802#189802
-    // 这是一个 AVAudioBuffer 的 bug，SDK已经在iOS 11 引入的 byteLength 修复
-    ((AudioBufferList *)compressedBuffer.audioBufferList)->mBuffers[0].mDataByteSize = (UInt32)len;
-    void *dst = ((AudioBufferList *)compressedBuffer.audioBufferList)->mBuffers[0].mData;
-    memcpy(dst, dataPtr, len);
-    
-    AVAudioPCMBuffer *outputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:[VCAACAudioConverter outputFormatWithSampleRate:compressedAudioFormat.sampleRate] frameCapacity:compressedAudioFormat.sampleRate];
-    
+    AVAudioPCMBuffer *outputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:[VCAACAudioConverter outputFormatWithSampleRate:sampleBuffer.audioStreamBasicDescription.mSampleRate] frameCapacity:sampleBuffer.audioStreamBasicDescription.mSampleRate];
     // reference: https://forums.developer.apple.com/message/189802#189802
     // reference: https://codeday.me/bug/20190103/493018.html
-    outputBuffer.frameLength = compressedAudioFormat.sampleRate;
+    outputBuffer.frameLength = sampleBuffer.audioStreamBasicDescription.mSampleRate;
     
     NSError *error = nil;
     
     AVAudioConverterOutputStatus ret =  [self.converter convertToBuffer:outputBuffer error:&error withInputFromBlock:^AVAudioBuffer * _Nullable(AVAudioPacketCount inNumberOfPackets, AVAudioConverterInputStatus * _Nonnull outStatus) {
+        char *dataPtr = nil;
+        size_t len = CMBlockBufferGetDataLength(sampleBuffer.dataBuffer);
+        CMBlockBufferGetDataPointer(sampleBuffer.dataBuffer, 0, NULL, NULL, &dataPtr);
+        
+        AudioStreamBasicDescription desc = [sampleBuffer audioStreamBasicDescription];
+        AVAudioFormat *compressedAudioFormat = [[AVAudioFormat alloc] initWithStreamDescription:&desc];
+        
+        AVAudioCompressedBuffer *compressedBuffer =[[AVAudioCompressedBuffer alloc] initWithFormat:compressedAudioFormat packetCapacity:1 maximumPacketSize:len];
+        // reference: https://forums.developer.apple.com/message/189802#189802
+        // 这是一个 AVAudioBuffer 的 bug，SDK已经在iOS 11 引入的 byteLength 修复
+//        ((AudioBufferList *)compressedBuffer.audioBufferList)->mBuffers[0].mDataByteSize = (UInt32)len;
+        void *dst = ((AudioBufferList *)compressedBuffer.audioBufferList)->mBuffers[0].mData;
+        compressedBuffer.byteLength = len;
+        memcpy(dst, dataPtr, len);
+        
         *outStatus = AVAudioConverterInputStatus_HaveData;
         return compressedBuffer;
     }];
@@ -95,7 +96,7 @@
     AudioStreamBasicDescription outputDesc;
     outputDesc.mSampleRate = sampleRate;
     outputDesc.mFormatID = kAudioFormatLinearPCM;
-    outputDesc.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsNonInterleaved;
+    outputDesc.mFormatFlags = kAudioFormatFlagIsSignedInteger;
     outputDesc.mFramesPerPacket = 1;
     outputDesc.mChannelsPerFrame = 1;
     outputDesc.mBytesPerFrame = 2;
