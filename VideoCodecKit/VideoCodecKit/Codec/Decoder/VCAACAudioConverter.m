@@ -118,9 +118,9 @@
     return (UInt32)desc->mSampleRate;
 }
 
-- (void)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer {
+- (OSStatus)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer {
     if (self.formatDescription == NULL) {
-        return;
+        return -1;
     }
     
     UInt32 channels = [self channels];
@@ -134,7 +134,7 @@
                                                                            &_currentAudioBlockBuffer);
     
     if (ret != noErr) {
-        return;
+        return ret;
     }
     
     // get max buffer size
@@ -142,7 +142,7 @@
     UInt32 maxBufferSize = 0;
     ret = AudioConverterGetProperty(self.converter, kAudioConverterPropertyMaximumInputPacketSize, &ioPropertyDataSize, &maxBufferSize);
     if (ret != noErr) {
-        return;
+        return ret;
     }
     
     UInt32 ioOutputDataPacketSize = maxBufferSize;
@@ -161,7 +161,7 @@
                                           outputBufferList,
                                           NULL);
     if (ret != noErr) {
-        return;
+        return ret;
     }
     
     if (_currentAudioBlockBuffer != NULL) {
@@ -169,10 +169,31 @@
         _currentAudioBlockBuffer = NULL;
     }
     
+    AudioStreamBasicDescription pcmASBD = [VCAACAudioConverter outputFormatWithSampleRate:[self sampleRate] channels:[self channels]];
+    AVAudioFormat *pcmFormat = [[AVAudioFormat alloc] initWithStreamDescription:&pcmASBD];
+    AVAudioPCMBuffer *pcmBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:pcmFormat frameCapacity:maxBufferSize];
+    for (int i = 0; i < outputBufferList->mNumberBuffers; ++i) {
+        memcpy(pcmBuffer.int16ChannelData[i], outputBufferList->mBuffers[i].mData, outputBufferList->mBuffers[i].mDataByteSize);
+    }
+    
+    pcmBuffer.frameLength = maxBufferSize;
+    
+    if (self.delegate &&
+        [self.delegate respondsToSelector:@selector(converter:didGetPCMBuffer:presentationTimeStamp:)]) {
+        [self.delegate converter:self didGetPCMBuffer:pcmBuffer presentationTimeStamp:sampleBuffer.presentationTimeStamp];
+    }
+    
     for (int i = 0; i < channels; ++i) {
         free(outputBufferList->mBuffers[i].mData);
     }
+    
     free(outputBufferList);
+    
+    return noErr;
+}
+
+- (void)reset {
+    AudioConverterReset(self.converter);
 }
 
 + (AudioStreamBasicDescription)outputFormatWithSampleRate:(Float64)sampleRate

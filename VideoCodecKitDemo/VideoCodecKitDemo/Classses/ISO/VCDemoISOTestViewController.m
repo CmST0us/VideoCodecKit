@@ -9,7 +9,7 @@
 #import "VCDemoISOTestViewController.h"
 #import <VideoCodecKit/VideoCodecKit.h>
 
-@interface VCDemoISOTestViewController () <VCFLVReaderDelegate, VCVideoDecoderDelegate> {
+@interface VCDemoISOTestViewController () <VCFLVReaderDelegate, VCVideoDecoderDelegate, VCAACAudioConverterDelegate> {
     dispatch_queue_t _decodeWorkQueue;
 }
 @property (nonatomic, strong) VCH264HardwareDecoder *decoder;
@@ -27,7 +27,7 @@
     self.displayLayer = [[AVSampleBufferDisplayLayer alloc] init];
     
     self.converter = [[VCAACAudioConverter alloc] init];
-    
+    self.converter.delegate = self;
     CMTimebaseRef timeBase = nil;
     CMTimebaseCreateWithMasterClock(kCFAllocatorDefault, CMClockGetHostTimeClock(), &timeBase);
     
@@ -68,6 +68,11 @@
 
 - (void)videoDecoder:(id<VCVideoDecoder>)decoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
 //    [self.displayLayer enqueueSampleBuffer:sampleBuffer.sampleBuffer];
+}
+
+- (void)converter:(VCAACAudioConverter *)converter didGetPCMBuffer:(AVAudioPCMBuffer *)pcmBuffer presentationTimeStamp:(CMTime)pts{
+    NSLog(@"get buffer %@", pcmBuffer);
+    CMTimeShow(pts);
 }
 
 @end
