@@ -11,13 +11,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class VCAACAudioConverter;
+@protocol VCAACAudioConverterDelegate <NSObject>
+- (void)converter:(VCAACAudioConverter *)converter didGetPCMBuffer:(AVAudioPCMBuffer *)pcmBuffer presentationTimeStamp:(CMTime)pts;
+@end
+
 @interface VCAACAudioConverter : NSObject
+@property (nonatomic, weak) id<VCAACAudioConverterDelegate> delegate;
 
-
+// Not useful after convert;
 - (void)setFormatDescription:(CMFormatDescriptionRef)desc;
-+ (AVAudioFormat *)outputFormatWithSampleRate:(Float64)sampleRate channels:(UInt32)channels;
++ (AudioStreamBasicDescription)outputFormatWithSampleRate:(Float64)sampleRate
+                                                 channels:(UInt32)channels;
 
-- (void)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer;
+- (OSStatus)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer;
 - (void)reset;
 
 @end
