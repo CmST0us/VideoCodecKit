@@ -42,7 +42,7 @@
     
     const AudioStreamBasicDescription *basicDesc = CMAudioFormatDescriptionGetStreamBasicDescription(self.formatDescription);
     AVAudioFormat *inFormat = [[AVAudioFormat alloc] initWithStreamDescription:basicDesc];
-    _converter = [[AVAudioConverter alloc] initFromFormat:inFormat toFormat:[VCAACAudioConverter outputFormatWithSampleRate:basicDesc->mSampleRate]];
+    _converter = [[AVAudioConverter alloc] initFromFormat:inFormat toFormat:[VCAACAudioConverter outputFormatWithSampleRate:basicDesc->mSampleRate channels:basicDesc->mChannelsPerFrame]];
     return _converter;
 }
 
@@ -55,11 +55,13 @@
 }
 
 - (void)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer {
+    UInt32 channels = sampleBuffer.audioStreamBasicDescription.mChannelsPerFrame;
+    UInt32 sampleRate = sampleBuffer.audioStreamBasicDescription.mSampleRate;
     
-    AVAudioPCMBuffer *outputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:[VCAACAudioConverter outputFormatWithSampleRate:sampleBuffer.audioStreamBasicDescription.mSampleRate] frameCapacity:sampleBuffer.audioStreamBasicDescription.mSampleRate];
+    AVAudioPCMBuffer *outputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:[VCAACAudioConverter outputFormatWithSampleRate:sampleRate channels:channels] frameCapacity:1024 * channels];
     // reference: https://forums.developer.apple.com/message/189802#189802
     // reference: https://codeday.me/bug/20190103/493018.html
-    outputBuffer.frameLength = sampleBuffer.audioStreamBasicDescription.mSampleRate;
+    outputBuffer.frameLength = 1024 * channels;
     
     NSError *error = nil;
     
@@ -74,11 +76,8 @@
         AVAudioCompressedBuffer *compressedBuffer =[[AVAudioCompressedBuffer alloc] initWithFormat:compressedAudioFormat packetCapacity:1 maximumPacketSize:len];
         // reference: https://forums.developer.apple.com/message/189802#189802
         // 这是一个 AVAudioBuffer 的 bug，SDK已经在iOS 11 引入的 byteLength 修复
-//        ((AudioBufferList *)compressedBuffer.audioBufferList)->mBuffers[0].mDataByteSize = (UInt32)len;
-        void *dst = ((AudioBufferList *)compressedBuffer.audioBufferList)->mBuffers[0].mData;
-        compressedBuffer.byteLength = len;
-        memcpy(dst, dataPtr, len);
-        
+        ((AudioBufferList *)compressedBuffer.audioBufferList)->mBuffers[0].mDataByteSize = (UInt32)len;
+        memcpy(compressedBuffer.data, dataPtr, len);
         *outStatus = AVAudioConverterInputStatus_HaveData;
         return compressedBuffer;
     }];
@@ -92,13 +91,13 @@
     }
 }
 
-+ (AVAudioFormat *)outputFormatWithSampleRate:(Float64)sampleRate {
++ (AVAudioFormat *)outputFormatWithSampleRate:(Float64)sampleRate channels:(UInt32)channels {
     AudioStreamBasicDescription outputDesc;
     outputDesc.mSampleRate = sampleRate;
     outputDesc.mFormatID = kAudioFormatLinearPCM;
-    outputDesc.mFormatFlags = kAudioFormatFlagIsSignedInteger;
+    outputDesc.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsNonInterleaved;
     outputDesc.mFramesPerPacket = 1;
-    outputDesc.mChannelsPerFrame = 1;
+    outputDesc.mChannelsPerFrame = channels;
     outputDesc.mBytesPerFrame = 2;
     outputDesc.mBytesPerPacket = 2;
     outputDesc.mBitsPerChannel = 16;

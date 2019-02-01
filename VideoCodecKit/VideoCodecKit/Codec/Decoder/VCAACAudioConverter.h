@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 - (void)setFormatDescription:(CMFormatDescriptionRef)desc;
-+ (AVAudioFormat *)outputFormatWithSampleRate:(Float64)sampleRate;
++ (AVAudioFormat *)outputFormatWithSampleRate:(Float64)sampleRate channels:(UInt32)channels;
 
 - (void)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer;
 - (void)reset;
