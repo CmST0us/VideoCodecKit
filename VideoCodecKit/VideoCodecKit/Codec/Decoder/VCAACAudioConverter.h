@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Not useful after convert;
 - (void)setFormatDescription:(CMFormatDescriptionRef)desc;
+- (AudioStreamBasicDescription)outputFormat;
 + (AudioStreamBasicDescription)outputFormatWithSampleRate:(Float64)sampleRate
                                                  channels:(UInt32)channels;
 

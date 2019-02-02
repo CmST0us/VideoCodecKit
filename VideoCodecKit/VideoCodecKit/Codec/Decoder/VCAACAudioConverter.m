@@ -138,14 +138,9 @@
     }
     
     // get max buffer size
-    UInt32 ioPropertyDataSize = sizeof(UInt32);
-    UInt32 maxBufferSize = 0;
-    ret = AudioConverterGetProperty(self.converter, kAudioConverterPropertyMaximumInputPacketSize, &ioPropertyDataSize, &maxBufferSize);
-    if (ret != noErr) {
-        return ret;
-    }
+    UInt32 maxBufferSize = 1024 * sizeof(Float32);
     
-    UInt32 ioOutputDataPacketSize = maxBufferSize;
+    UInt32 ioOutputDataPacketSize = 1024;
     AudioBufferList *outputBufferList = (AudioBufferList *)malloc(sizeof(AudioBufferList) + channels * sizeof(AudioBuffer));
     outputBufferList->mNumberBuffers = channels;
     for (int i = 0; i < channels; ++i) {
@@ -164,16 +159,11 @@
         return ret;
     }
     
-    if (_currentAudioBlockBuffer != NULL) {
-        CFRelease(_currentAudioBlockBuffer);
-        _currentAudioBlockBuffer = NULL;
-    }
-    
     AudioStreamBasicDescription pcmASBD = [VCAACAudioConverter outputFormatWithSampleRate:[self sampleRate] channels:[self channels]];
     AVAudioFormat *pcmFormat = [[AVAudioFormat alloc] initWithStreamDescription:&pcmASBD];
     AVAudioPCMBuffer *pcmBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:pcmFormat frameCapacity:maxBufferSize];
     for (int i = 0; i < outputBufferList->mNumberBuffers; ++i) {
-        memcpy(pcmBuffer.int16ChannelData[i], outputBufferList->mBuffers[i].mData, outputBufferList->mBuffers[i].mDataByteSize);
+        memcpy(pcmBuffer.floatChannelData[i], outputBufferList->mBuffers[i].mData, outputBufferList->mBuffers[i].mDataByteSize);
     }
     
     pcmBuffer.frameLength = maxBufferSize;
@@ -186,8 +176,12 @@
     for (int i = 0; i < channels; ++i) {
         free(outputBufferList->mBuffers[i].mData);
     }
-    
     free(outputBufferList);
+    
+    if (_currentAudioBlockBuffer != NULL) {
+        CFRelease(_currentAudioBlockBuffer);
+        _currentAudioBlockBuffer = NULL;
+    }
     
     return noErr;
 }
@@ -196,18 +190,24 @@
     AudioConverterReset(self.converter);
 }
 
+- (AudioStreamBasicDescription)outputFormat {
+    return [VCAACAudioConverter outputFormatWithSampleRate:[self sampleRate] channels:[self channels]];
+}
+
 + (AudioStreamBasicDescription)outputFormatWithSampleRate:(Float64)sampleRate
                                      channels:(UInt32)channels {
     AudioStreamBasicDescription outputDesc;
+    // reference: https://developer.apple.com/documentation/avfoundation/avaudioformat
     outputDesc.mSampleRate = sampleRate;
     outputDesc.mFormatID = kAudioFormatLinearPCM;
     // kAudioFormatFlagIsNonInterleaced must be set when output desc is multi channel.
-    outputDesc.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsNonInterleaved;
+    // kAudioFormatFlagsNativeFloatPacked should be set, if use for audio unit.
+    outputDesc.mFormatFlags = kAudioFormatFlagsNativeFloatPacked |kAudioFormatFlagIsNonInterleaved;
     outputDesc.mFramesPerPacket = 1;
     outputDesc.mChannelsPerFrame = channels;
-    outputDesc.mBytesPerFrame = 2;
-    outputDesc.mBytesPerPacket = 2;
-    outputDesc.mBitsPerChannel = 16;
+    outputDesc.mBytesPerFrame = sizeof(Float32);
+    outputDesc.mBytesPerPacket = sizeof(Float32);
+    outputDesc.mBitsPerChannel = 8 * sizeof(Float32);
     outputDesc.mReserved = 0;
     return outputDesc;
 }
