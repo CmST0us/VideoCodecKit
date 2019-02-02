@@ -1,67 +1,27 @@
 # VideoDecoderKit
 
-https://github.com/CmST0us/VideoPreviewer 的重构版
+`Version: 0.9.1`
 
-# How to use
-1. clone ffmpeg ios build script
+此版本重构了0.4版本的接口，去掉了FFmpegy依赖，精简数据模型，帧解析器和编解码器之前统一使用CMSampleBuffer传递。
 
-run `git clone https://gitlab.com/eric3u/FFmpeg-iOS-build-script`
+## Video
+- [x] VideoToolBox H264 硬解码
+- [ ] VideoToolBox H264 硬编码
+- [ ] 重构视频渲染接口
+- [ ] 重构Metal渲染
+- [ ] OpenGL渲染
+## Audio
+- [x] AudioConverter 解码AAC
+- [x] 多声道AAC支持
+- [x] AVAudioEngine 播放PCM数据
+- [ ] AudioConverter 编码PCM
+## Media File
+- [x] FLV 文件解析
+- [ ] MP4 文件解析
+- [ ] TS 文件解析
+## Publish
+- [ ] RTMP协议
+## Player
+- [x] 音视频同步
+- [ ] 缓存队列
 
-2. build fat library
-
-run `./build-ffmpeg.sh lipo` in FFmpeg-iOS-build-script directory
-
-3. copy fat library to Vendor
-
-after finish build fat ffmpeg directory you should copy ffmpeg library and header to vendor directory
-
-4. add `-ObjC` link flag to other link flag
-
-5. add linked Frameworks and Libraries:
-    * AVFoundation.framework
-    * libz
-    * AudioToolbox.framework
-    * CoreMedia.framework
-    * VideoToolbox.framework
-    * libiconv
-    
-
-* or you can just setup 1-3 and run demo app.*
-
-# Feature
-
-- [x] ffmpeg parse h264 raw data
-- [x] ffmpeg decode h264
-- [x] multi-thread decode preview component
-- [x] hardware-decode support
-- [x] metal render
-- [ ] rtmp publish
-- [ ] audio support `WIP` `Next Ver`
-- [x] hardware-encode support
-- [ ] ffmpeg encode support
-- [ ] GPUImage support
-- [x] build as framework
-
-# Release Note
-## 0.4
-- metal render
-- audio frame parser
-- audio demo `WIP`
-- audio interface `WIP`
-
-## 0.3
-- refactor demo app
-- fix encoder release bug
-
-## 0.2
-- support h264 videotoolbox encode
-- add camera capture demo
-- frame reorder bugfix
-- thread sync bugfix
-- API change
-
-## 0.1
-- support h264 videotoolbox decode
-- support h264 ffmpeg decode
-- add multi-thread h264 preview object VCPreviewer
-- build as framework, easy to use
