@@ -9,32 +9,49 @@
 #import "VCDemoListViewController.h"
 #import "VCDemoISOTestViewController.h"
 
-typedef NS_ENUM(NSUInteger, VCDemoListItem) {
-    VCDemoListItemISO,
-    
-    VCDemoListItemCount,
-};
 @interface VCDemoListViewController ()
 
 @end
 
 @implementation VCDemoListViewController
 
+- (NSArray *)testCases {
+    static NSArray *cases = nil;
+    if (cases != nil) return cases;
+    cases = @[
+              @{
+                  @"title":@"FLV播放",
+                  @"class":NSStringFromClass([VCDemoISOTestViewController class]),
+                },
+              ];
+    return cases;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 }
 
-- (IBAction)onDemoItemButtonClick:(UIButton *)sender {
-    NSInteger tag = sender.tag;
-    switch (tag) {
-        case VCDemoListItemISO: {
-            VCDemoISOTestViewController *vc = [[VCDemoISOTestViewController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        default:
-        break;
-    }
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self testCases].count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    NSDictionary *dict = [[self testCases] objectAtIndex:indexPath.row];
+    cell.textLabel.text = dict[@"title"];
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSDictionary *dict = [[self testCases] objectAtIndex:indexPath.row];
+    Class targetClass = NSClassFromString(dict[@"class"]);
+    UIViewController *vc = [(UIViewController *)[targetClass alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end
