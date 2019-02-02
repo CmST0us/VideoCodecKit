@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)reader:(VCFLVReader *)reader didGetVideoSampleBuffer:(VCSampleBuffer *)sampleBuffer;
 - (void)reader:(VCFLVReader *)reader didGetAudioFormatDescription:(CMFormatDescriptionRef)formatDescription;
 - (void)reader:(VCFLVReader *)reader didGetAudioSampleBuffer:(VCSampleBuffer *)sampleBuffer;
+- (void)readerDidReachEOF:(VCFLVReader *)reader;
 @end
 
 @class VCSampleBuffer;

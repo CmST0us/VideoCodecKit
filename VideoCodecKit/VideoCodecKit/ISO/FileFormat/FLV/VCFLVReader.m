@@ -198,6 +198,13 @@
             
         }
     } while (nextTag != nil);
+    
+    
+    if (self.delegate &&
+        [self.delegate respondsToSelector:@selector(readerDidReachEOF:)]) {
+        [self.delegate readerDidReachEOF:self];
+        return;
+    }
 }
 
 - (void)dealloc {

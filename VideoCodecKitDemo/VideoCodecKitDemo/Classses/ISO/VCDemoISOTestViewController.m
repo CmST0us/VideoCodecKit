@@ -15,6 +15,7 @@
 @property (nonatomic, strong) VCH264HardwareDecoder *decoder;
 @property (nonatomic, strong) AVSampleBufferDisplayLayer *displayLayer;
 @property (nonatomic, strong) VCAACAudioConverter *converter;
+@property (nonatomic, strong) VCAudioPCMRender *render;
 @end
 
 @implementation VCDemoISOTestViewController
@@ -37,7 +38,7 @@
     self.displayLayer.frame = self.view.bounds;
     [self.view.layer addSublayer:self.displayLayer];
     
-    VCFLVReader *reader = [[VCFLVReader alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/cmst0us/Desktop/test_.flv"]];
+    VCFLVReader *reader = [[VCFLVReader alloc] initWithURL:[[NSBundle mainBundle] URLForResource:@"test" withExtension:@"flv"]];
     reader.delegate = self;
     [reader starAsyncRead];
     
@@ -56,23 +57,32 @@
 }
 
 - (void)reader:(VCFLVReader *)reader didGetAudioSampleBuffer:(VCSampleBuffer *)sampleBuffer {
-    CMTime audioTime = sampleBuffer.presentationTimeStamp;
     [self.converter convertSampleBuffer:sampleBuffer];
 }
 
 - (void)reader:(VCFLVReader *)reader didGetAudioFormatDescription:(CMFormatDescriptionRef)formatDescription {
     NSLog(@"get audio specific config");
-    CMTimebaseSetRate(self.displayLayer.controlTimebase, 1.0);
     [self.converter setFormatDescription:formatDescription];
+    AudioStreamBasicDescription asbd = [self.converter outputFormat];
+    AVAudioFormat *pcmFormat = [[AVAudioFormat alloc] initWithStreamDescription:&asbd];
+    self.render = [[VCAudioPCMRender alloc] initWithPCMFormat:pcmFormat];
 }
 
-- (void)videoDecoder:(id<VCVideoDecoder>)decoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
-//    [self.displayLayer enqueueSampleBuffer:sampleBuffer.sampleBuffer];
+- (void)readerDidReachEOF:(VCFLVReader *)reader {
+    CMTimebaseSetRate(self.displayLayer.controlTimebase, 1.0);
+    [self.render play];
 }
 
 - (void)converter:(VCAACAudioConverter *)converter didGetPCMBuffer:(AVAudioPCMBuffer *)pcmBuffer presentationTimeStamp:(CMTime)pts{
-    NSLog(@"get buffer %@", pcmBuffer);
+    NSLog(@"format pcm %@", pcmBuffer.format);
     CMTimeShow(pts);
+    [self.render renderPCMBuffer:pcmBuffer withPresentationTimeStamp:pts completionHandler:^{
+        CMTimebaseSetTime(self.displayLayer.controlTimebase, pts);
+    }];
+}
+
+- (void)videoDecoder:(id<VCVideoDecoder>)decoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
+    [self.displayLayer enqueueSampleBuffer:sampleBuffer.sampleBuffer];
 }
 
 @end

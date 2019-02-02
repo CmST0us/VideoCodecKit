@@ -142,6 +142,8 @@
 		4FD0471F21928DF000FFC7D2 /* VCBaseAudioDecoderConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD0471D21928DF000FFC7D2 /* VCBaseAudioDecoderConfig.m */; };
 		4FD0472221928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD0472021928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4FD0472321928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD0472121928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.m */; };
+		4FDF7F1B220511A60019833C /* VCAudioPCMRender.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FDF7F19220511A60019833C /* VCAudioPCMRender.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FDF7F1C220511A60019833C /* VCAudioPCMRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F1A220511A60019833C /* VCAudioPCMRender.m */; };
 		4FE2251D2164DF8400103B61 /* VCH264SPSFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FE2251B2164DF8400103B61 /* VCH264SPSFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FE2251E2164DF8400103B61 /* VCH264SPSFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE2251C2164DF8400103B61 /* VCH264SPSFrame.m */; };
 		4FF9307E22032E7D0037DE2D /* VCAudioSpecificConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF9307C22032E7D0037DE2D /* VCAudioSpecificConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -295,6 +297,8 @@
 		4FD0472021928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAUAACAudioDecoderConfig.h; sourceTree = "<group>"; };
 		4FD0472121928E1500FFC7D2 /* VCAUAACAudioDecoderConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAUAACAudioDecoderConfig.m; sourceTree = "<group>"; };
 		4FD047242192996E00FFC7D2 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		4FDF7F19220511A60019833C /* VCAudioPCMRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAudioPCMRender.h; sourceTree = "<group>"; };
+		4FDF7F1A220511A60019833C /* VCAudioPCMRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAudioPCMRender.m; sourceTree = "<group>"; };
 		4FE2251B2164DF8400103B61 /* VCH264SPSFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264SPSFrame.h; sourceTree = "<group>"; };
 		4FE2251C2164DF8400103B61 /* VCH264SPSFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264SPSFrame.m; sourceTree = "<group>"; };
 		4FF9307C22032E7D0037DE2D /* VCAudioSpecificConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAudioSpecificConfig.h; sourceTree = "<group>"; };
@@ -660,6 +664,8 @@
 			children = (
 				4F7FBEFC21948A0900182A00 /* VCAudioRender.h */,
 				4F7FBEFD21948A0900182A00 /* VCAudioRender.m */,
+				4FDF7F19220511A60019833C /* VCAudioPCMRender.h */,
+				4FDF7F1A220511A60019833C /* VCAudioPCMRender.m */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -892,6 +898,7 @@
 				4F76FC4121626D8E002E7F0D /* VCVideoFPS.h in Headers */,
 				4F6C8680217E2FB600881F72 /* VCBaseEncoderConfig.h in Headers */,
 				4FBCCE3021F325CD00E7BF3C /* VCVideoDecoder.h in Headers */,
+				4FDF7F1B220511A60019833C /* VCAudioPCMRender.h in Headers */,
 				4F1913BF220161FB00921CAF /* VCFLVFile.h in Headers */,
 				4F7FBEFE21948A0900182A00 /* VCAudioRender.h in Headers */,
 				4F76FC5821626DCA002E7F0D /* VCBaseDecoderConfig.h in Headers */,
@@ -999,6 +1006,7 @@
 				4FF93083220344410037DE2D /* VCAACAudioConverter.m in Sources */,
 				4FC12749218A05C8009C239D /* VideoCodecKitTools.m in Sources */,
 				4F76FC63216270E1002E7F0D /* VCSafeQueue.m in Sources */,
+				4FDF7F1C220511A60019833C /* VCAudioPCMRender.m in Sources */,
 				4F76FC64216270E1002E7F0D /* VCSafeObjectQueue.m in Sources */,
 				4F76FC65216270E1002E7F0D /* VCPriorityObjectQueue.m in Sources */,
 				4F76FC66216270E1002E7F0D /* VCHeapPriorityObjectQueue.m in Sources */,

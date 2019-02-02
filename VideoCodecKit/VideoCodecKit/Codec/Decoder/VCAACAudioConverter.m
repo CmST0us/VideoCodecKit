@@ -163,10 +163,12 @@
     AVAudioFormat *pcmFormat = [[AVAudioFormat alloc] initWithStreamDescription:&pcmASBD];
     AVAudioPCMBuffer *pcmBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:pcmFormat frameCapacity:maxBufferSize];
     for (int i = 0; i < outputBufferList->mNumberBuffers; ++i) {
+        // 注意这个ioOutoutDataPacketSize 是转换后实际有效PCM音频大小
+        // 可以将outputBufferList每个buffer大小修改为1024，可以发现转换后的ioOutputDataPacketSize变了；
         memcpy(pcmBuffer.floatChannelData[i], outputBufferList->mBuffers[i].mData, outputBufferList->mBuffers[i].mDataByteSize);
     }
-    
-    pcmBuffer.frameLength = maxBufferSize;
+    // frameLength 为有效PCM数据
+    pcmBuffer.frameLength = ioOutputDataPacketSize;
     
     if (self.delegate &&
         [self.delegate respondsToSelector:@selector(converter:didGetPCMBuffer:presentationTimeStamp:)]) {

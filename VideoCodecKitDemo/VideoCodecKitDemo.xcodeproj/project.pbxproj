@@ -40,6 +40,7 @@
 		4FD047002191818100FFC7D2 /* VCDemoVideoAudioSyncViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD046FF2191818100FFC7D2 /* VCDemoVideoAudioSyncViewController.m */; };
 		4FD047032191819D00FFC7D2 /* VCDemoVideoAudioSyncController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD047022191819D00FFC7D2 /* VCDemoVideoAudioSyncController.m */; };
 		4FD0472B2192C2A900FFC7D2 /* test.aac in Resources */ = {isa = PBXBuildFile; fileRef = 4FD0472A2192C2A900FFC7D2 /* test.aac */; };
+		4FDF7F1E2205240A0019833C /* test.flv in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF7F1D2205240A0019833C /* test.flv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -111,6 +112,7 @@
 		4FD047012191819D00FFC7D2 /* VCDemoVideoAudioSyncController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoVideoAudioSyncController.h; sourceTree = "<group>"; };
 		4FD047022191819D00FFC7D2 /* VCDemoVideoAudioSyncController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoVideoAudioSyncController.m; sourceTree = "<group>"; };
 		4FD0472A2192C2A900FFC7D2 /* test.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.aac; sourceTree = "<group>"; };
+		4FDF7F1D2205240A0019833C /* test.flv */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.flv; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -265,6 +267,7 @@
 		4F9279A721442EDC00F17F9A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4FDF7F1D2205240A0019833C /* test.flv */,
 				4FD0472A2192C2A900FFC7D2 /* test.aac */,
 				4F93584A2169ECC700A9F613 /* test.h264 */,
 				4FBF02262144284B00CA0EC8 /* Assets.xcassets */,
@@ -432,6 +435,7 @@
 				4F927A22214E382D00F17F9A /* Shader.vsh in Resources */,
 				4FBF02252144284A00CA0EC8 /* Main.storyboard in Resources */,
 				4F927A20214E381000F17F9A /* Shader.fsh in Resources */,
+				4FDF7F1E2205240A0019833C /* test.flv in Resources */,
 				4F93584B2169EE2300A9F613 /* test.h264 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
