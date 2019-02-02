@@ -18,6 +18,8 @@
 @property (nonatomic, strong) VCAACAudioConverter *converter;
 @property (nonatomic, strong) VCAudioPCMRender *render;
 @property (nonatomic, strong) VCFLVReader *reader;
+
+@property (nonatomic, assign) CMTime audioTime;
 @end
 
 @implementation VCDemoISOTestViewController
@@ -25,6 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _decodeWorkQueue = dispatch_queue_create("com.VideoCodecKitDemo.ISOTest.decode", DISPATCH_QUEUE_SERIAL);
+    
     self.decoder = [[VCH264HardwareDecoder alloc] init];
     self.decoder.delegate = self;
     self.displayLayer = [[AVSampleBufferDisplayLayer alloc] init];
@@ -51,23 +54,28 @@
     [self.render stop];
 }
 
+#pragma mark - Reader Delegate (Reader Threader)
 - (void)reader:(VCFLVReader *)reader didGetVideoSampleBuffer:(VCSampleBuffer *)sampleBuffer {
-    OSStatus ret = [self.decoder decodeSampleBuffer:sampleBuffer];
-    if (ret == noErr) {
-        
+    CMTime sampleBufferPts = sampleBuffer.presentationTimeStamp;
+    while (_audioTime.flags == kCMTimeFlags_Valid &&
+           sampleBufferPts.value > _audioTime.value + 2 * _audioTime.timescale) {
+        [NSThread sleepForTimeInterval:1];
     }
+    [self.decoder decodeSampleBuffer:sampleBuffer];
+}
+
+- (void)reader:(VCFLVReader *)reader didGetAudioSampleBuffer:(VCSampleBuffer *)sampleBuffer {
+    CMTime sampleBufferPts = sampleBuffer.presentationTimeStamp;
+    while (_audioTime.flags == kCMTimeFlags_Valid &&
+           sampleBufferPts.value > _audioTime.value + 2 * _audioTime.timescale) {
+        [NSThread sleepForTimeInterval:1];
+    }
+    [self.converter convertSampleBuffer:sampleBuffer];
 }
 
 - (void)reader:(VCFLVReader *)reader didGetVideoFormatDescription:(CMFormatDescriptionRef)formatDescription {
     NSLog(@"did get sps pps");
     [self.decoder setFormatDescription:formatDescription];
-}
-
-- (void)reader:(VCFLVReader *)reader didGetAudioSampleBuffer:(VCSampleBuffer *)sampleBuffer {
-    OSStatus ret = [self.converter convertSampleBuffer:sampleBuffer];
-    if (ret != noErr) {
-        NSLog(@"ERROR");
-    }
 }
 
 - (void)reader:(VCFLVReader *)reader didGetAudioFormatDescription:(CMFormatDescriptionRef)formatDescription {
@@ -81,15 +89,20 @@
     
 }
 
+#pragma mark - Converter Delegate (Caller Thread) (Reader Thread)
 - (void)converter:(VCAACAudioConverter *)converter didGetPCMBuffer:(AVAudioPCMBuffer *)pcmBuffer presentationTimeStamp:(CMTime)pts{
     NSLog(@"format pcm %@", pcmBuffer.format);
     CMTimeShow(pts);
+    
+    __weak typeof(self) weakSelf = self;
     [self.render renderPCMBuffer:pcmBuffer withPresentationTimeStamp:pts completionHandler:^{
+        weakSelf.audioTime = pts;
         CMTimebaseSetRate(self.displayLayer.controlTimebase, 1.0);
         CMTimebaseSetTime(self.displayLayer.controlTimebase, pts);
     }];
 }
 
+#pragma mark - Video Decoder Delegate (Decoder Delegate)
 - (void)videoDecoder:(id<VCVideoDecoder>)decoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
     [self.displayLayer enqueueSampleBuffer:sampleBuffer.sampleBuffer];
 }

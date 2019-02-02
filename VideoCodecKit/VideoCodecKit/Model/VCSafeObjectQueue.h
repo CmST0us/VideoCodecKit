@@ -96,5 +96,11 @@
  */
 - (void)wakeupReader;
 
+
+/**
+ 阻塞等待，有空间时返回
+ */
+- (void)waitForCapacity;
+
 @end
 

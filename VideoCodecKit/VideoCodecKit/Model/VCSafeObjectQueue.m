@@ -34,9 +34,6 @@
         
         kVCPerformIfNeedThreadSafe(_condition = [[NSCondition alloc] init]);
         
-//        kVCPerformIfNeedThreadSafe(pthread_mutex_init(&_mutex, NULL));
-//        kVCPerformIfNeedThreadSafe(pthread_cond_init(&_cond, NULL));
-        
         _head = 0;
         _tail = 0;
         _count = 0;
@@ -77,6 +74,7 @@
     if(_tail >= _size) _tail = 0;
     _count++;
     kVCPerformIfNeedThreadSafe([_condition broadcast]);
+    kVCPerformIfNeedThreadSafe([_condition unlock]);
     return YES;
 }
 
@@ -146,4 +144,9 @@
         return NO;
     }
 }
+
+- (void)waitForCapacity {
+    kVCPerformIfNeedThreadSafe([_condition wait]);
+}
+
 @end

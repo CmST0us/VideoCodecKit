@@ -15,6 +15,7 @@ FOUNDATION_EXPORT double VideoCodecKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 
 #import <VideoCodecKit/VCByteArray.h>
+#import <VideoCodecKit/VCSafeObjectQueue.h>
 
 #import <VideoCodecKit/VCAnnexBFormatStream.h>
 #import <VideoCodecKit/VCAnnexBFormatParser.h>
