@@ -207,6 +207,7 @@
     outputDesc.mFormatFlags = kAudioFormatFlagsNativeFloatPacked |kAudioFormatFlagIsNonInterleaved;
     outputDesc.mFramesPerPacket = 1;
     outputDesc.mChannelsPerFrame = channels;
+    // 非交错不用乘通道
     outputDesc.mBytesPerFrame = sizeof(Float32);
     outputDesc.mBytesPerPacket = sizeof(Float32);
     outputDesc.mBitsPerChannel = 8 * sizeof(Float32);

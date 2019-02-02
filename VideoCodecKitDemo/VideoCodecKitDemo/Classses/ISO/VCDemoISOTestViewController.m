@@ -16,6 +16,7 @@
 @property (nonatomic, strong) AVSampleBufferDisplayLayer *displayLayer;
 @property (nonatomic, strong) VCAACAudioConverter *converter;
 @property (nonatomic, strong) VCAudioPCMRender *render;
+@property (nonatomic, strong) VCFLVReader *reader;
 @end
 
 @implementation VCDemoISOTestViewController
@@ -38,9 +39,9 @@
     self.displayLayer.frame = self.view.bounds;
     [self.view.layer addSublayer:self.displayLayer];
     
-    VCFLVReader *reader = [[VCFLVReader alloc] initWithURL:[[NSBundle mainBundle] URLForResource:@"test" withExtension:@"flv"]];
-    reader.delegate = self;
-    [reader starAsyncRead];
+    _reader = [[VCFLVReader alloc] initWithURL:[[NSBundle mainBundle] URLForResource:@"test" withExtension:@"flv"]];
+    _reader.delegate = self;
+    [_reader starAsyncRead];
     
 }
 
@@ -57,7 +58,10 @@
 }
 
 - (void)reader:(VCFLVReader *)reader didGetAudioSampleBuffer:(VCSampleBuffer *)sampleBuffer {
-    [self.converter convertSampleBuffer:sampleBuffer];
+    OSStatus ret = [self.converter convertSampleBuffer:sampleBuffer];
+    if (ret != noErr) {
+        NSLog(@"ERROR");
+    }
 }
 
 - (void)reader:(VCFLVReader *)reader didGetAudioFormatDescription:(CMFormatDescriptionRef)formatDescription {
@@ -66,17 +70,18 @@
     AudioStreamBasicDescription asbd = [self.converter outputFormat];
     AVAudioFormat *pcmFormat = [[AVAudioFormat alloc] initWithStreamDescription:&asbd];
     self.render = [[VCAudioPCMRender alloc] initWithPCMFormat:pcmFormat];
+    [self.render play];
 }
 
 - (void)readerDidReachEOF:(VCFLVReader *)reader {
-    CMTimebaseSetRate(self.displayLayer.controlTimebase, 1.0);
-    [self.render play];
+    
 }
 
 - (void)converter:(VCAACAudioConverter *)converter didGetPCMBuffer:(AVAudioPCMBuffer *)pcmBuffer presentationTimeStamp:(CMTime)pts{
     NSLog(@"format pcm %@", pcmBuffer.format);
     CMTimeShow(pts);
     [self.render renderPCMBuffer:pcmBuffer withPresentationTimeStamp:pts completionHandler:^{
+        CMTimebaseSetRate(self.displayLayer.controlTimebase, 1.0);
         CMTimebaseSetTime(self.displayLayer.controlTimebase, pts);
     }];
 }
