@@ -27,7 +27,7 @@
  @return 队列实例
  */
 - (instancetype)initWithSize:(int)size
-                  threadSafe:(BOOL)isThreadSafe;
+                  threadSafe:(BOOL)isThreadSafe NS_DESIGNATED_INITIALIZER;
 /**
  创建一个线程安全队列
  
@@ -95,6 +95,12 @@
  唤起所有线程
  */
 - (void)wakeupReader;
+
+
+/**
+ 阻塞等待，有空间时返回
+ */
+- (void)waitForCapacity;
 
 @end
 

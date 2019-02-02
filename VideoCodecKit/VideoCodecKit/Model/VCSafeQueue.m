@@ -143,7 +143,7 @@ typedef struct{
     return _size;
 }
 
-- (bool)isFull{
+- (BOOL)isFull{
     if(_count == _size){
         return YES;
     }

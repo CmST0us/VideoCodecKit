@@ -29,7 +29,7 @@
 		4F76FC2F21626BD4002E7F0D /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC2821626BD4002E7F0D /* libavdevice.a */; };
 		4F76FC3021626BD4002E7F0D /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC2921626BD4002E7F0D /* libavcodec.a */; };
 		4F76FC4821626DCA002E7F0D /* VCSafeQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FC1821626AA3002E7F0D /* VCSafeQueue.h */; };
-		4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FC1A21626AA3002E7F0D /* VCSafeObjectQueue.h */; };
+		4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FC1A21626AA3002E7F0D /* VCSafeObjectQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F76FC4A21626DCA002E7F0D /* VCPriorityObjectQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FC1C21626AA3002E7F0D /* VCPriorityObjectQueue.h */; };
 		4F76FC4B21626DCA002E7F0D /* VCHeapPriorityObjectQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FC1E21626AA3002E7F0D /* VCHeapPriorityObjectQueue.h */; };
 		4F76FC5921626DCA002E7F0D /* VCMarco.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBE821626A9C002E7F0D /* VCMarco.h */; settings = {ATTRIBUTES = (Public, ); }; };
