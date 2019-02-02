@@ -2,7 +2,7 @@
 
 `Version: 0.9.1`
 
-此版本重构了0.4版本的接口，去掉了FFmpegy依赖，精简数据模型，帧解析器和编解码器之前统一使用CMSampleBuffer传递。
+此版本重构了0.4版本的接口，去掉了FFmpeg依赖，精简数据模型，帧解析器和编解码器之前统一使用CMSampleBuffer传递。
 
 ## Video
 - [x] VideoToolBox H264 硬解码
