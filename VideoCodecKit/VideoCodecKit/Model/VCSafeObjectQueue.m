@@ -20,11 +20,8 @@
     int _count;
     int _head;
     int _tail;
-    
-    pthread_mutex_t _mutex;
-    pthread_cond_t _cond;
 }
-
+@property (nonatomic, strong) NSCondition *condition;
 @end
 
 @implementation VCSafeObjectQueue
@@ -34,8 +31,11 @@
     if (self) {
         _isThreadSafe = isThreadSafe;
         _shouldWaitWhenPullFailed = YES;
-        kVCPerformIfNeedThreadSafe(pthread_mutex_init(&_mutex, NULL));
-        kVCPerformIfNeedThreadSafe(pthread_cond_init(&_cond, NULL));
+        
+        kVCPerformIfNeedThreadSafe(_condition = [[NSCondition alloc] init]);
+        
+//        kVCPerformIfNeedThreadSafe(pthread_mutex_init(&_mutex, NULL));
+//        kVCPerformIfNeedThreadSafe(pthread_cond_init(&_cond, NULL));
         
         _head = 0;
         _tail = 0;
@@ -53,49 +53,46 @@
     return [self initWithSize:size threadSafe:YES];
 }
 
+- (instancetype)init {
+    return [self initWithSize:10];
+}
+
 - (void)clear{
-    kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
+    kVCPerformIfNeedThreadSafe([_condition lock]);
     _head = 0;
     _tail = 0;
     _count = 0;
     [_node removeAllObjects];
-    kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+    kVCPerformIfNeedThreadSafe([_condition unlock]);
 }
 
 - (BOOL)push:(NSObject *)object {
-    kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
+    kVCPerformIfNeedThreadSafe([_condition lock]);
     if(object == nil || [self isFull]){
-        kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+        kVCPerformIfNeedThreadSafe([_condition unlock]);
         return NO;
     }
     _node[_tail] = object;
     _tail++;
     if(_tail >= _size) _tail = 0;
     _count++;
-    kVCPerformIfNeedThreadSafe(pthread_cond_signal(&_cond));
-    kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+    kVCPerformIfNeedThreadSafe([_condition broadcast]);
     return YES;
 }
 
 - (NSObject *)pull{
-    kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
+    kVCPerformIfNeedThreadSafe([_condition lock]);
     if(_count == 0)
     {
         if (!_shouldWaitWhenPullFailed) {
-            kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+            kVCPerformIfNeedThreadSafe([_condition unlock]);
             return NULL;
         }
         
-        struct timeval tv;
-        gettimeofday(&tv, NULL);
+        kVCPerformIfNeedThreadSafe([_condition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]]);
         
-        struct timespec ts;
-        ts.tv_sec = tv.tv_sec + 1;
-        ts.tv_nsec = tv.tv_usec * 1000;
-        kVCPerformIfNeedThreadSafe(pthread_cond_timedwait(&_cond, &_mutex, &ts));
-        if(_count == 0)
-        {
-            kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+        if(_count == 0) {
+            kVCPerformIfNeedThreadSafe([_condition unlock]);
             return NULL;
         }
     }
@@ -104,42 +101,33 @@
     _head++;
     if(_head>=_size)_head = 0;
     _count--;
-    kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+    kVCPerformIfNeedThreadSafe([_condition unlock]);
     return tmp;
 }
 
 - (NSObject *)fetch {
-    kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
+    kVCPerformIfNeedThreadSafe([_condition lock]);
     if(_count == 0)
     {
         if (!_shouldWaitWhenPullFailed) {
-            kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+            kVCPerformIfNeedThreadSafe([_condition unlock]);
             return NULL;
         }
         
-        struct timeval tv;
-        gettimeofday(&tv, NULL);
-        
-        struct timespec ts;
-        ts.tv_sec = tv.tv_sec + 1;
-        ts.tv_nsec = tv.tv_usec * 1000;
-        kVCPerformIfNeedThreadSafe(pthread_cond_timedwait(&_cond, &_mutex, &ts));
-        if(_count == 0)
-        {
-            kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+        kVCPerformIfNeedThreadSafe([_condition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]]);
+        if(_count == 0) {
+            kVCPerformIfNeedThreadSafe([_condition unlock]);
             return NULL;
         }
     }
     
     NSObject *tmp = [_node objectAtIndex:_head];
-    kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+    kVCPerformIfNeedThreadSafe([_condition unlock]);
     return tmp;
 }
 
 - (void)wakeupReader{
-    kVCPerformIfNeedThreadSafe(pthread_mutex_lock(&_mutex));
-    kVCPerformIfNeedThreadSafe(pthread_cond_signal(&_cond));
-    kVCPerformIfNeedThreadSafe(pthread_mutex_unlock(&_mutex));
+    kVCPerformIfNeedThreadSafe([_condition broadcast]);
 }
 
 - (int)count{
@@ -150,7 +138,7 @@
     return _size;
 }
 
-- (bool)isFull{
+- (BOOL)isFull{
     if(_count == _size){
         return YES;
     }
