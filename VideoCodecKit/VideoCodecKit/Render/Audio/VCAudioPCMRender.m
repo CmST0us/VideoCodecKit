@@ -49,7 +49,7 @@
     [_playerNode pause];
 }
 
-- (void)renderPCMBuffer:(AVAudioPCMBuffer *)pcmBuffer withPresentationTimeStamp:(CMTime)presentationTimeStamp completionHandler:(void (^)())handler {
+- (void)renderPCMBuffer:(AVAudioPCMBuffer *)pcmBuffer withPresentationTimeStamp:(CMTime)presentationTimeStamp completionHandler:(AVAudioNodeCompletionHandler)handler {
     [_playerNode scheduleBuffer:pcmBuffer completionHandler:handler];
 }
 

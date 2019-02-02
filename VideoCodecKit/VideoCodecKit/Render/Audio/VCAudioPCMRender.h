@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VCAudioPCMRender : NSObject
 - (instancetype)initWithPCMFormat:(AVAudioFormat *)format;
-- (void)renderPCMBuffer:(AVAudioPCMBuffer *)pcmBuffer withPresentationTimeStamp:(CMTime)presentationTimeStamp completionHandler:(void (^)())handler;
+- (void)renderPCMBuffer:(AVAudioPCMBuffer *)pcmBuffer withPresentationTimeStamp:(CMTime)presentationTimeStamp completionHandler:(AVAudioNodeCompletionHandler __nullable)handler;
 
 - (void)play;
 - (void)pause;

@@ -6,8 +6,9 @@
 //  Copyright © 2019 eric3u. All rights reserved.
 //
 
-#import "VCDemoISOTestViewController.h"
 #import <VideoCodecKit/VideoCodecKit.h>
+#import "VCDemoISOTestViewController.h"
+
 
 @interface VCDemoISOTestViewController () <VCFLVReaderDelegate, VCVideoDecoderDelegate, VCAACAudioConverterDelegate> {
     dispatch_queue_t _decodeWorkQueue;
@@ -43,6 +44,11 @@
     _reader.delegate = self;
     [_reader starAsyncRead];
     
+}
+
+- (void)onBack:(UIButton *)button {
+    [super onBack:button];
+    [self.render stop];
 }
 
 - (void)reader:(VCFLVReader *)reader didGetVideoSampleBuffer:(VCSampleBuffer *)sampleBuffer {
