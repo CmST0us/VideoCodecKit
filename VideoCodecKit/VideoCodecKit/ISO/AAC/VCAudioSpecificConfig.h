@@ -14,7 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(uint8_t, VCAudioSpecificConfigObjectTypeSampleRateIndex) {
     VCAudioSpecificConfigObjectTypeSampleRateIndex96000 = 0,
     VCAudioSpecificConfigObjectTypeSampleRateIndex88200 = 1,
-    VCAudioSpecificConfigObjectTypeSampleRateIndex64000 = 3,
+    VCAudioSpecificConfigObjectTypeSampleRateIndex64000 = 2,
+    VCAudioSpecificConfigObjectTypeSampleRateIndex48000 = 3,
     VCAudioSpecificConfigObjectTypeSampleRateIndex44100 = 4,
     VCAudioSpecificConfigObjectTypeSampleRateIndex32000 = 5,
     VCAudioSpecificConfigObjectTypeSampleRateIndex24000 = 6,

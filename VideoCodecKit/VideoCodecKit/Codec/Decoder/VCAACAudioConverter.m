@@ -83,7 +83,7 @@
     }
 
     const AudioStreamBasicDescription *sourceStreamBasicDesc = CMAudioFormatDescriptionGetStreamBasicDescription(self.formatDescription);
-    AudioStreamBasicDescription destinationStreamBasicDesc = [VCAACAudioConverter outputFormatWithSampleRate:sourceStreamBasicDesc->mSampleRate channels:sourceStreamBasicDesc->mChannelsPerFrame];
+    const AudioStreamBasicDescription *destinationStreamBasicDesc = [[self outputFormat] streamDescription];
     
     AudioClassDescription hardwareAudioClassDesc;
     hardwareAudioClassDesc.mManufacturer = kAudioDecoderComponentType;
@@ -97,7 +97,7 @@
     
     AudioClassDescription classDescs[] = {hardwareAudioClassDesc, softwareAudioClassDesc};
     // [TODO]: Add Software Codec
-    OSStatus ret = AudioConverterNewSpecific(sourceStreamBasicDesc, &destinationStreamBasicDesc, sizeof(classDescs), classDescs, &_converter);
+    OSStatus ret = AudioConverterNewSpecific(sourceStreamBasicDesc, destinationStreamBasicDesc, sizeof(classDescs), classDescs, &_converter);
     if (ret != noErr) {
         return nil;
     }
@@ -159,9 +159,8 @@
         return ret;
     }
     
-    AudioStreamBasicDescription pcmASBD = [VCAACAudioConverter outputFormatWithSampleRate:[self sampleRate] channels:[self channels]];
-    AVAudioFormat *pcmFormat = [[AVAudioFormat alloc] initWithStreamDescription:&pcmASBD];
-    AVAudioPCMBuffer *pcmBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:pcmFormat frameCapacity:maxBufferSize];
+    // 如果声道数大于2 此方法返回nil
+    AVAudioPCMBuffer *pcmBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:[self outputFormat] frameCapacity:maxBufferSize];
     for (int i = 0; i < outputBufferList->mNumberBuffers; ++i) {
         // 注意这个ioOutoutDataPacketSize 是转换后实际有效PCM音频大小
         // 可以将outputBufferList每个buffer大小修改为1024，可以发现转换后的ioOutputDataPacketSize变了；
@@ -192,26 +191,28 @@
     AudioConverterReset(self.converter);
 }
 
-- (AudioStreamBasicDescription)outputFormat {
+- (AVAudioFormat *)outputFormat {
     return [VCAACAudioConverter outputFormatWithSampleRate:[self sampleRate] channels:[self channels]];
 }
 
-+ (AudioStreamBasicDescription)outputFormatWithSampleRate:(Float64)sampleRate
++ (AVAudioFormat *)outputFormatWithSampleRate:(Float64)sampleRate
                                      channels:(UInt32)channels {
-    AudioStreamBasicDescription outputDesc;
-    // reference: https://developer.apple.com/documentation/avfoundation/avaudioformat
-    outputDesc.mSampleRate = sampleRate;
-    outputDesc.mFormatID = kAudioFormatLinearPCM;
-    // kAudioFormatFlagIsNonInterleaced must be set when output desc is multi channel.
-    // kAudioFormatFlagsNativeFloatPacked should be set, if use for audio unit.
-    outputDesc.mFormatFlags = kAudioFormatFlagsNativeFloatPacked |kAudioFormatFlagIsNonInterleaved;
-    outputDesc.mFramesPerPacket = 1;
-    outputDesc.mChannelsPerFrame = channels;
-    // 非交错不用乘通道
-    outputDesc.mBytesPerFrame = sizeof(Float32);
-    outputDesc.mBytesPerPacket = sizeof(Float32);
-    outputDesc.mBitsPerChannel = 8 * sizeof(Float32);
-    outputDesc.mReserved = 0;
-    return outputDesc;
+    AudioChannelLayoutTag channelLayoutTag = kAudioChannelLayoutTag_Stereo;
+    if (channels == 1) {
+        channelLayoutTag = kAudioChannelLayoutTag_Mono;
+    } else if (channels == 2) {
+        channelLayoutTag = kAudioChannelLayoutTag_Stereo;
+    } else if (channels == 3) {
+        channelLayoutTag = kAudioChannelLayoutTag_AAC_3_0;
+    } else if (channels == 4) {
+        channelLayoutTag = kAudioChannelLayoutTag_AAC_4_0;
+    } else if (channels == 5) {
+        channelLayoutTag = kAudioChannelLayoutTag_AAC_5_0;
+    } else if (channels == 6) {
+        channelLayoutTag = kAudioChannelLayoutTag_AAC_5_1;
+    }
+    AVAudioChannelLayout *layout = [[AVAudioChannelLayout alloc] initWithLayoutTag:channelLayoutTag];
+    AVAudioFormat *format = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatFloat32 sampleRate:sampleRate interleaved:NO channelLayout:layout];
+    return format;
 }
 @end

@@ -132,7 +132,7 @@
 - (VCFLVAudioTagAudioType)audioType {
     VCByteArray *array = [[VCByteArray alloc] initWithData:self.tagData];
     array.postion = kVCFLVTagHeaderSize;
-    return (VCFLVAudioTagSampleLength)([array readUInt8] & 0x01);
+    return (VCFLVAudioTagAudioType)([array readUInt8] & 0x01);
 }
 
 - (VCFLVAudioTagAACPacketType)AACPacketType {

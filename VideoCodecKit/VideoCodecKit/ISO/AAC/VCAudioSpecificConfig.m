@@ -61,11 +61,14 @@
             return 44100;
         case VCAudioSpecificConfigObjectTypeSampleRateIndex64000:
             return 64000;
+        case VCAudioSpecificConfigObjectTypeSampleRateIndex48000:
+            return 48000;
         case VCAudioSpecificConfigObjectTypeSampleRateIndex88200:
             return 88200;
         case VCAudioSpecificConfigObjectTypeSampleRateIndex96000:
             return 96000;
     }
+    return 44100;
 }
 
 - (AudioFormatFlags)formatFlags {

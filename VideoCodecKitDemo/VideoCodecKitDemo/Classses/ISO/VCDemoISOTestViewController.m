@@ -67,9 +67,7 @@
 - (void)reader:(VCFLVReader *)reader didGetAudioFormatDescription:(CMFormatDescriptionRef)formatDescription {
     NSLog(@"get audio specific config");
     [self.converter setFormatDescription:formatDescription];
-    AudioStreamBasicDescription asbd = [self.converter outputFormat];
-    AVAudioFormat *pcmFormat = [[AVAudioFormat alloc] initWithStreamDescription:&asbd];
-    self.render = [[VCAudioPCMRender alloc] initWithPCMFormat:pcmFormat];
+    self.render = [[VCAudioPCMRender alloc] initWithPCMFormat:[self.converter outputFormat]];
     [self.render play];
 }
 
