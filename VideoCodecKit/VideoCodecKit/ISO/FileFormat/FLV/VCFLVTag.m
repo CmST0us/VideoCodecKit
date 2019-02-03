@@ -57,6 +57,13 @@
     return [self.tagData subdataWithRange:NSMakeRange(kVCFLVTagHeaderSize, self.tagData.length - kVCFLVTagHeaderSize)];
 }
 
+- (uint32_t)extendedTimeStamp {
+    int32_t timestampExt = (int32_t)[self timestampExtended];
+    int32_t timestamp = (int32_t)[self timestamp];
+    timestamp = timestamp | (timestampExt << 24);
+    return timestamp;
+}
+
 - (NSString *)description {
     return [NSString stringWithFormat:@"\n[FLV][Tag]:\n\tdataSize: %d\n\ttimestamp: %d", [self dataSize], [self timestamp]];
 }
@@ -101,6 +108,11 @@
         return NO;
     }
     return YES;
+}
+
+- (uint32_t)presentationTimeStamp {
+    int32_t compositionTime = (int32_t)[self compositionTime];
+    return self.extendedTimeStamp + compositionTime;
 }
 
 - (NSString *)description {
