@@ -33,7 +33,7 @@ typedef NS_ENUM(uint8_t, VCFLVTagType) {
 @property (nonatomic, readonly) NSData *payloadData;
 
 - (nullable instancetype)initWithData:(NSData *)data;
-
+- (uint32_t)extendedTimeStamp;
 @end
 
 typedef NS_ENUM(uint8_t, VCFLVVideoTagFrameType) {
@@ -66,6 +66,7 @@ typedef NS_ENUM(uint8_t, VCFLVVideoTagAVCPacketType) {
 @property (nonatomic, readonly) VCFLVVideoTagAVCPacketType AVCPacketType;
 @property (nonatomic, readonly) uint32_t compositionTime;
 - (BOOL)isSupportCurrentFrameType;
+- (uint32_t)presentationTimeStamp;
 @end
 
 typedef NS_ENUM(uint8_t, VCFLVAudioTagFormatType) {

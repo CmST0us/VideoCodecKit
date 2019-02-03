@@ -15,16 +15,14 @@
 
 @interface VCFLVFile ()
 @property (nonatomic, strong) NSFileHandle *fileHandle;
-@property (nonatomic, assign) NSUInteger fileSize;
-@property (nonatomic, assign) NSUInteger currentOffset;
-@property (nonatomic, strong) NSData *headerData;
 @end
 
 @implementation VCFLVFile
 - (instancetype)initWithURL:(NSURL *)fileURL {
     self = [super init];
     if (self) {
-        _currentOffset = 0;
+        _currentFileOffset = 0;
+        _currentTagOffsetInFile = 0;
         NSError *error;
         _fileHandle = [NSFileHandle fileHandleForReadingFromURL:fileURL error:&error];
         if (error && ![self isFLVFile]) {
@@ -34,11 +32,16 @@
         [_fileHandle seekToFileOffset:0];
         
         _headerData = [_fileHandle readDataOfLength:kVCFLVFileHeaderSize];
-        _currentOffset = kVCFLVFileHeaderSize;
+        _currentFileOffset = kVCFLVFileHeaderSize;
         [_fileHandle seekToFileOffset:kVCFLVFileFirstTagOffset];
-        _currentOffset = kVCFLVFileFirstTagOffset;
+        _currentFileOffset = kVCFLVFileFirstTagOffset;
     }
     return self;
+}
+
+- (void)setCurrentFileOffset:(NSUInteger)currentFileOffset {
+    _currentFileOffset = currentFileOffset;
+    [_fileHandle seekToFileOffset:currentFileOffset];
 }
 
 - (BOOL)isFLVFile {
@@ -64,11 +67,12 @@
 }
 
 - (VCFLVTag *)nextTag {
-    if (_currentOffset == _fileSize) {
+    _currentTagOffsetInFile = _currentFileOffset;
+    if (_currentFileOffset == _fileSize) {
         return nil;
     }
     
-    [_fileHandle seekToFileOffset:_currentOffset];
+    [_fileHandle seekToFileOffset:_currentFileOffset];
     
     VCFLVTag *nextTag = nil;
     
@@ -92,9 +96,8 @@
     } else {
         
     }
-    
-    _currentOffset += tagData.length;
-    _currentOffset += 4;
+    _currentFileOffset += tagData.length;
+    _currentFileOffset += 4;
     return nextTag;
 }
 
