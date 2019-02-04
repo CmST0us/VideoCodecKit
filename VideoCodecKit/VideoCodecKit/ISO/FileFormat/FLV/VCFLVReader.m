@@ -42,7 +42,18 @@
     return self;
 }
 
-- (void)reCreateSeekTable {
+- (void)dealloc {
+    if (_videoFormatDescription) {
+        CFRelease(_videoFormatDescription);
+        _videoFormatDescription = NULL;
+    }
+    if (_audioFormatDescription) {
+        CFRelease(_audioFormatDescription);
+        _audioFormatDescription = NULL;
+    }
+}
+
+- (void)createSeekTable {
     VCFLVTag *nextTag = nil;
     NSInteger fileOffset = _file.currentFileOffset;
     NSMutableArray *keyFrameIndexArray = [[NSMutableArray alloc] init];
@@ -85,7 +96,7 @@
     if (_keyFrameIndex != nil) {
         return _keyFrameIndex;
     }
-    [self reCreateSeekTable];
+    [self createSeekTable];
     _keyFrameIndex = [_keyFrameIndex sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         VCFLVVideoKeyFrameIndex *index1 = (VCFLVVideoKeyFrameIndex *)obj1;
         VCFLVVideoKeyFrameIndex *index2 = (VCFLVVideoKeyFrameIndex *)obj2;
@@ -147,23 +158,9 @@
                     // Create Block Buffer
                     if (_videoFormatDescription == NULL) continue;
                     
-                    CMBlockBufferRef blockBuffer = nil;
-                    NSData *blockData = [videoTag payloadData];
-                    const size_t blockDataSizeArray[] = {blockData.length};
-                    OSStatus ret = CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault,
-                                                                      (void *)blockData.bytes,
-                                                                      blockData.length,
-                                                                      kCFAllocatorNull,
-                                                                      NULL,
-                                                                      0,
-                                                                      blockData.length,
-                                                                      0,
-                                                                      &blockBuffer);
-                    if (ret != noErr) {
-                        // skip this tag
-                        continue;
-                    }
-                    
+                    // Create Block Buffer
+                    CMBlockBufferRef blockBuffer = [self createBlockBufferWithData:videoTag.payloadData];
+                    if (blockBuffer == nil) continue;
                     // Create Time
                     CMTime dts = CMTimeMake([videoTag extendedTimeStamp], 1000);
                     CMTime pts = CMTimeMake([videoTag presentationTimeStamp], 1000);
@@ -172,23 +169,13 @@
                     timingInfo.decodeTimeStamp = dts;
                     timingInfo.presentationTimeStamp = pts;
                     timingInfo.duration = kCMTimeInvalid;
-                    // Add Format Description
-                    // Create SampleBuffer
-                    CMSampleBufferRef sampleBuffer = nil;
-                    ret = CMSampleBufferCreateReady(kCFAllocatorDefault,
-                                                    blockBuffer,
-                                                    self.videoFormatDescription,
-                                                    1,
-                                                    1,
-                                                    &timingInfo,
-                                                    1,
-                                                    blockDataSizeArray,
-                                                    &sampleBuffer);
-                    if (ret != noErr) {
-                        continue;
-                    }
                     
-                    VCSampleBuffer *outputSampleBuffer = [[VCSampleBuffer alloc] initWithSampleBuffer:sampleBuffer];
+                    // Create SampleBuffer
+                    VCSampleBuffer *outputSampleBuffer = [self createSampleBufferWithBlockBuffer:blockBuffer
+                                                                                      timingInfo:timingInfo
+                                                                                     description:self.videoFormatDescription];
+                    if (outputSampleBuffer == nil) continue;
+                    
                     if (self.delegate &&
                         [self.delegate respondsToSelector:@selector(reader:didGetVideoSampleBuffer:)]) {
                         [self.delegate reader:self didGetVideoSampleBuffer:outputSampleBuffer];
@@ -217,36 +204,17 @@
                     // raw
                     // create block buffer
                     NSData *payloadData = [audioTag payloadData];
-                    
-                    CMBlockBufferRef blockBuffer = nil;
-                    OSStatus ret = CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault,
-                                                                      (void *)payloadData.bytes, payloadData.length, kCFAllocatorNull, NULL, 0, payloadData.length, 0, &blockBuffer);
-                    if (ret != noErr) {
-                        continue;
-                    }
-                    // create packet description
-                    AudioStreamPacketDescription packetDesc;
-                    packetDesc.mDataByteSize = (UInt32)payloadData.length;
-                    packetDesc.mStartOffset = 0;
-                    packetDesc.mVariableFramesInPacket = 0;
+                    CMBlockBufferRef blockBuffer = [self createBlockBufferWithData:payloadData];
+                    if (blockBuffer == nil) continue;
                     
                     // create time
                     CMTime audioTime = CMTimeMake(audioTag.timestamp, 1000);
-                    
+
                     // create samplebuffer
-                    CMSampleBufferRef audioSampleBuffer = nil;
-                    ret = CMAudioSampleBufferCreateReadyWithPacketDescriptions(kCFAllocatorDefault,
-                                                                               blockBuffer,
-                                                                               self.audioFormatDescription,
-                                                                               1,
-                                                                               audioTime,
-                                                                               &packetDesc,
-                                                                               &audioSampleBuffer);
-                    if (ret != noErr) {
-                        continue;
-                    }
-                    
-                    VCSampleBuffer *outputSampleBuffer = [[VCSampleBuffer alloc] initWithSampleBuffer:audioSampleBuffer];
+                    VCSampleBuffer *outputSampleBuffer = [self createAudioSampleBufferWithBlockBuffer:blockBuffer
+                                                                                            audioTime:audioTime
+                                                                                          description:self.audioFormatDescription];
+                    if (outputSampleBuffer == nil) continue;
                     
                     if (self.delegate &&
                         [self.delegate respondsToSelector:@selector(reader:didGetAudioSampleBuffer:)]) {
@@ -260,14 +228,17 @@
             }
         } while (nextTag != nil &&
                  ![[NSThread currentThread] isCancelled]);
-
-        // [TODO]:
-//        if (self.delegate &&
-//            [self.delegate respondsToSelector:@selector(readerDidReachEOF:)]) {
-//            [self.delegate readerDidReachEOF:self];
-//            return;
-//        }
+        
+        if (self.delegate &&
+            [self.delegate respondsToSelector:@selector(readerDidReachEOF:)]) {
+            [self.delegate readerDidReachEOF:self];
+            return;
+        }
     }
+}
+
+- (void)stopReading {
+    [self.readThread cancel];
 }
 
 - (void)seekToTime:(CMTime)time {
@@ -278,16 +249,68 @@
     _file.currentFileOffset = index.position;
 }
 
-- (void)dealloc {
-    if (_videoFormatDescription) {
-        CFRelease(_videoFormatDescription);
-        _videoFormatDescription = NULL;
+- (CMBlockBufferRef)createBlockBufferWithData:(NSData *)data {
+    CMBlockBufferRef blockBuffer = nil;
+    OSStatus ret = CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault,
+                                                      (void *)data.bytes,
+                                                      data.length,
+                                                      kCFAllocatorNull,
+                                                      NULL,
+                                                      0,
+                                                      data.length,
+                                                      0,
+                                                      &blockBuffer);
+    if (ret != noErr) {
+        // skip this tag
+        return nil;
     }
-    if (_audioFormatDescription) {
-        CFRelease(_audioFormatDescription);
-        _audioFormatDescription = NULL;
-    }
+    return blockBuffer;
 }
+
+- (VCSampleBuffer *)createSampleBufferWithBlockBuffer:(CMBlockBufferRef)blockBuffer
+                                           timingInfo:(CMSampleTimingInfo)timingInfo
+                                          description:(CMFormatDescriptionRef)description {
+    CMSampleBufferRef sampleBuffer = nil;
+    size_t blockDataSizeArray[1] = {CMBlockBufferGetDataLength(blockBuffer)};
+    OSStatus ret = CMSampleBufferCreateReady(kCFAllocatorDefault,
+                                    blockBuffer,
+                                    description,
+                                    1,
+                                    1,
+                                    &timingInfo,
+                                    1,
+                                    blockDataSizeArray,
+                                    &sampleBuffer);
+    if (ret != noErr) {
+        return nil;
+    }
+    return [[VCSampleBuffer alloc] initWithSampleBuffer:sampleBuffer];
+}
+
+
+- (VCSampleBuffer *)createAudioSampleBufferWithBlockBuffer:(CMBlockBufferRef)blockBuffer
+                                                 audioTime:(CMTime)audioTime
+                                               description:(CMFormatDescriptionRef)description {
+    // create packet description
+    AudioStreamPacketDescription packetDesc;
+    packetDesc.mDataByteSize = (UInt32)CMBlockBufferGetDataLength(blockBuffer);
+    packetDesc.mStartOffset = 0;
+    packetDesc.mVariableFramesInPacket = 0;
+    
+    CMSampleBufferRef audioSampleBuffer = nil;
+    OSStatus ret = CMAudioSampleBufferCreateReadyWithPacketDescriptions(kCFAllocatorDefault,
+                                                                        blockBuffer,
+                                                                        self.audioFormatDescription,
+                                                                        1,
+                                                                        audioTime,
+                                                                        &packetDesc,
+                                                                        &audioSampleBuffer);
+    if (ret != noErr) {
+        return nil;
+    }
+    return [[VCSampleBuffer alloc] initWithSampleBuffer:audioSampleBuffer];
+}
+
 @end
 
 @implementation NSArray (VCFLVReaderSeek)

@@ -28,7 +28,7 @@
         if (error && ![self isFLVFile]) {
             return nil;
         }
-        _fileSize = [_fileHandle seekToEndOfFile];
+        _fileSize = (NSUInteger)[_fileHandle seekToEndOfFile];
         [_fileHandle seekToFileOffset:0];
         
         _headerData = [_fileHandle readDataOfLength:kVCFLVFileHeaderSize];

@@ -81,7 +81,7 @@
     
     _reader = [[VCFLVReader alloc] initWithURL:[[NSBundle mainBundle] URLForResource:@"test" withExtension:@"flv"]];
     _reader.delegate = self;
-    [_reader reCreateSeekTable];
+    [_reader createSeekTable];
     [_reader starAsyncReading];
     self.timeSeekSlider.minimumValue = 0;
     self.timeSeekSlider.maximumValue = _reader.duration.value;

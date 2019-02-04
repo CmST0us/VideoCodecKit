@@ -33,16 +33,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL isReading;
 
 @property (nonatomic, readonly) NSArray<VCFLVVideoKeyFrameIndex *> *keyFrameIndex;
-// 必须调用reCreateSeekTable之后才能获取到时长
+// 必须调用createSeekTable之后才能获取到时长
 // [TODO]: 使用meta tag 获取时长
 @property (nonatomic, readonly) CMTime duration;
 
 - (nullable instancetype)initWithURL:(NSURL *)url;
 
-- (void)reCreateSeekTable;
+- (void)createSeekTable;
 
 - (void)starAsyncReading;
 - (void)startReading;
+- (void)stopReading;
 
 - (void)seekToTime:(CMTime)time;
 @end
