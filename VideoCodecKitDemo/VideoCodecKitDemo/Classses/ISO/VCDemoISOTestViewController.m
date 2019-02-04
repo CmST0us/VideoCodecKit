@@ -98,14 +98,16 @@
 - (void)reader:(VCFLVReader *)reader didGetVideoSampleBuffer:(VCSampleBuffer *)sampleBuffer {
     CMTime sampleBufferPts = sampleBuffer.presentationTimeStamp;
     [self.decoder decodeSampleBuffer:sampleBuffer];
+    
+    // [TODO] 通知自旋锁模型？
     while (YES) {
         if (!_playing) {
-            [self.readerConsumeCondition wait];
+            [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3]];
             continue;
         }
         if (_audioTime.flags == kCMTimeFlags_Valid &&
-            sampleBufferPts.value > _audioTime.value + 2 * _audioTime.timescale) {
-            [self.readerConsumeCondition wait];
+            sampleBufferPts.value > _audioTime.value + 5 * _audioTime.timescale) {
+            [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3]];
             continue;
         }
         break;
@@ -117,12 +119,12 @@
     CMTime sampleBufferPts = sampleBuffer.presentationTimeStamp;
     while (YES) {
         if (!_playing) {
-            [self.readerConsumeCondition wait];
+            [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3]];
             continue;
         }
         if (_audioTime.flags == kCMTimeFlags_Valid &&
-            sampleBufferPts.value > _audioTime.value + 2 * _audioTime.timescale) {
-            [self.readerConsumeCondition wait];
+            sampleBufferPts.value > _audioTime.value + 5 * _audioTime.timescale) {
+            [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3]];
             continue;
         }
         break;
@@ -153,7 +155,6 @@
         }
         if (weakSelf.playing) {
             weakSelf.audioTime = pts;
-            [weakSelf.readerConsumeCondition broadcast];
         } else {
             weakSelf.audioTime = CMTimeMake(0, 0);
         }
