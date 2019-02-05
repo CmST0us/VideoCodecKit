@@ -11,8 +11,8 @@
 #import "VCSampleBuffer.h"
 #import "VCH264HardwareEncoder.h"
 
-#define kVCH264HardwareEncoderDefaultWidth 480
-#define kVCH264HardwareEncoderDefaultHeight 640
+#define kVCH264HardwareEncoderDefaultWidth 640
+#define kVCH264HardwareEncoderDefaultHeight 480
 
 @interface VCH264HardwareEncoder ()
 @property (nonatomic, assign) VTCompressionSessionRef session;
