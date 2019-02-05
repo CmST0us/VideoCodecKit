@@ -27,6 +27,9 @@ void compressionOutputCallback(void * CM_NULLABLE outputCallbackRefCon,
                                OSStatus status,
                                VTEncodeInfoFlags infoFlags,
                                CM_NULLABLE CMSampleBufferRef sampleBuffer) {
+    if (status != noErr) {
+        return;
+    }
     VCH264HardwareEncoder *encoder = (__bridge VCH264HardwareEncoder *)outputCallbackRefCon;
     [encoder compressionDidOutputWithSourceFrameRefCon:sourceFrameRefCon status:status infoFlags:infoFlags sampleBuffer:sampleBuffer];
 }

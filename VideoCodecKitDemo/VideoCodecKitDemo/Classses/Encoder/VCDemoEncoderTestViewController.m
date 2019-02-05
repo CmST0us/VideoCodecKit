@@ -31,11 +31,18 @@
     self.reader.delegate = self;
     [self.reader starAsyncReading];
     
+    self.fileWriterStream = [[NSOutputStream alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/cmst0us/Desktop/abc.h264"] append:NO];
+    [self.fileWriterStream open];
 }
 
 - (void)videoEncoder:(id<VCVideoEncoder>)encoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
     NSLog(@"output sampleBuffer");
-    
+    if (sampleBuffer.keyFrame) {
+        NSData *parameterSetData = sampleBuffer.h264ParameterSetData;
+        [self.fileWriterStream write:parameterSetData.bytes maxLength:parameterSetData.length];
+    }
+    NSData *dataBuffer = sampleBuffer.dataBufferData;
+    [self.fileWriterStream write:dataBuffer.bytes maxLength:dataBuffer.length];
 }
 
 - (void)videoEncoder:(id<VCVideoEncoder>)encoder didOutputFormatDescription:(CMFormatDescriptionRef)description {
