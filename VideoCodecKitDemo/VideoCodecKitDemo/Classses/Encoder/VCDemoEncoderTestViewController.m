@@ -41,7 +41,10 @@
         NSData *parameterSetData = sampleBuffer.h264ParameterSetData;
         [self.fileWriterStream write:parameterSetData.bytes maxLength:parameterSetData.length];
     }
+    
     NSData *dataBuffer = sampleBuffer.dataBufferData;
+    VCAVCFormatStream *avcStream = [[VCAVCFormatStream alloc] initWithData:dataBuffer startCodeLength:4];
+    dataBuffer = [avcStream toAnnexBFormatData].data;
     [self.fileWriterStream write:dataBuffer.bytes maxLength:dataBuffer.length];
 }
 

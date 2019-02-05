@@ -88,13 +88,16 @@
 - (NSData *)h264ParameterSetData {
     const uint8_t *outPtr = nil;
     size_t outSize = 0;
+    uint8_t header[] = {0x00, 0x00, 0x00, 0x01};
     NSMutableData *data = [[NSMutableData alloc] init];
     OSStatus ret = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(self.formatDescription, 0, &outPtr, &outSize, NULL, NULL);
     if (ret != noErr) return nil;
-    
+    [data appendBytes:header length:4];
     [data appendBytes:outPtr length:outSize];
+    
     ret = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(self.formatDescription, 1, &outPtr, &outSize, NULL, NULL);
     if (ret != noErr) return nil;
+    [data appendBytes:header length:4];
     [data appendBytes:outPtr length:outSize];
     return data;
 }
