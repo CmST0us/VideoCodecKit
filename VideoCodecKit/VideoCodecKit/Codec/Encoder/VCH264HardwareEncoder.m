@@ -11,6 +11,9 @@
 #import "VCSampleBuffer.h"
 #import "VCH264HardwareEncoder.h"
 
+#define kVCH264HardwareEncoderDefaultWidth 480
+#define kVCH264HardwareEncoderDefaultHeight 640
+
 @interface VCH264HardwareEncoder ()
 @property (nonatomic, assign) VTCompressionSessionRef session;
 @property (nonatomic, assign) CMFormatDescriptionRef formatDescription;
@@ -41,12 +44,26 @@ void compressionOutputCallback(void * CM_NULLABLE outputCallbackRefCon,
     }
 }
 
+- (void)dealloc {
+    if (_session != nil) {
+        VTCompressionSessionInvalidate(_session);
+        CFRelease(_session);
+        _session = nil;
+    }
+    if (_formatDescription != nil) {
+        CFRelease(_formatDescription);
+        _formatDescription = nil;
+    }
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {
         _queue = dispatch_queue_create("com.VideoCodecKit.VCH264HardwareEncoder.queue", DISPATCH_QUEUE_SERIAL);
         self.properties = [VCH264HardwareEncoder defaultProperties];
         self.imageBufferAttributes = [VCH264HardwareEncoder defaultImageBufferAttributes];
+        self.width = kVCH264HardwareEncoderDefaultWidth;
+        self.height = kVCH264HardwareEncoderDefaultHeight;
     }
     return self;
 }
@@ -115,7 +132,9 @@ void compressionOutputCallback(void * CM_NULLABLE outputCallbackRefCon,
 
 - (void)setFormatDescription:(CMFormatDescriptionRef)formatDescription {
     if (CMFormatDescriptionEqual(_formatDescription, formatDescription)) return;
-    CFRelease(_formatDescription);
+    if (_formatDescription != nil) {
+        CFRelease(_formatDescription);
+    }
     _formatDescription = CFRetain(formatDescription);
     if (self.delegate &&
         [self.delegate respondsToSelector:@selector(videoEncoder:didOutputFormatDescription:)]) {
@@ -217,8 +236,19 @@ void compressionOutputCallback(void * CM_NULLABLE outputCallbackRefCon,
     OSStatus ret = VTCompressionSessionCreate(kCFAllocatorDefault, (int32_t)self.width, (int32_t)self.height, kCMVideoCodecType_H264, nil, (__bridge CFDictionaryRef)self.imageBufferAttributes, nil, compressionOutputCallback, (__bridge void*)self, &_session);
     if (ret != noErr) return nil;
     ret = VTSessionSetProperties(_session, (__bridge CFDictionaryRef)self.properties);
-    if (ret != noErr) return nil;
+    if (ret != noErr) {
+        VTCompressionSessionInvalidate(_session);
+        CFRelease(_session);
+        _session = nil;
+        return nil;
+    }
     ret = VTCompressionSessionPrepareToEncodeFrames(_session);
+    if (ret != noErr) {
+        VTCompressionSessionInvalidate(_session);
+        CFRelease(_session);
+        _session = nil;
+        return nil;
+    }
     _shouldInvalidateSession = NO;
     return _session;
 }
@@ -229,4 +259,5 @@ void compressionOutputCallback(void * CM_NULLABLE outputCallbackRefCon,
     return VTCompressionSessionEncodeFrame(self.session, sampleBuffer.imageBuffer, sampleBuffer.presentationTimeStamp, sampleBuffer.duration, nil, (__bridge void *)self, &flags);
     
 }
+
 @end

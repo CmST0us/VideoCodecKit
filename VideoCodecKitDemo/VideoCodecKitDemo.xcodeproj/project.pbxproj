@@ -34,6 +34,7 @@
 		4FBF022D2144284B00CA0EC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF022C2144284B00CA0EC8 /* main.m */; };
 		4FD0472B2192C2A900FFC7D2 /* test.aac in Resources */ = {isa = PBXBuildFile; fileRef = 4FD0472A2192C2A900FFC7D2 /* test.aac */; };
 		4FDF7F1E2205240A0019833C /* test.flv in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF7F1D2205240A0019833C /* test.flv */; };
+		4FDF7F362209381A0019833C /* VCDemoEncoderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F352209381A0019833C /* VCDemoEncoderTestViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -92,6 +93,8 @@
 		4FBF022C2144284B00CA0EC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4FD0472A2192C2A900FFC7D2 /* test.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.aac; sourceTree = "<group>"; };
 		4FDF7F1D2205240A0019833C /* test.flv */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.flv; sourceTree = "<group>"; };
+		4FDF7F342209381A0019833C /* VCDemoEncoderTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoEncoderTestViewController.h; sourceTree = "<group>"; };
+		4FDF7F352209381A0019833C /* VCDemoEncoderTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoEncoderTestViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +167,7 @@
 		4F9279A821442F0800F17F9A /* Classses */ = {
 			isa = PBXGroup;
 			children = (
+				4FDF7F33220937E00019833C /* Encoder */,
 				4FBCCE6721FCD03900E7BF3C /* ISO */,
 				4F0F9513218891E600CB9BAE /* BaseViewController */,
 				4FBF021D2144284A00CA0EC8 /* AppDelegate.h */,
@@ -213,6 +217,15 @@
 				4FBF022B2144284B00CA0EC8 /* Info.plist */,
 			);
 			path = VideoCodecKitDemo;
+			sourceTree = "<group>";
+		};
+		4FDF7F33220937E00019833C /* Encoder */ = {
+			isa = PBXGroup;
+			children = (
+				4FDF7F342209381A0019833C /* VCDemoEncoderTestViewController.h */,
+				4FDF7F352209381A0019833C /* VCDemoEncoderTestViewController.m */,
+			);
+			path = Encoder;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,6 +308,7 @@
 				4F0F951B2188941F00CB9BAE /* VCDemoNavigationController.m in Sources */,
 				4FBCCE6A21FCD08B00E7BF3C /* VCDemoISOTestViewController.m in Sources */,
 				4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */,
+				4FDF7F362209381A0019833C /* VCDemoEncoderTestViewController.m in Sources */,
 				4F0F95212188962C00CB9BAE /* VCDemoBackableViewController.m in Sources */,
 				4FBF022D2144284B00CA0EC8 /* main.m in Sources */,
 				4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */,
