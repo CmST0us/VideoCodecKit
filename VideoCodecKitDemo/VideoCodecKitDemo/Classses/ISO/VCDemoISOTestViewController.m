@@ -11,7 +11,7 @@
 #import "VCDemoISOTestViewController.h"
 
 
-@interface VCDemoISOTestViewController () <VCFLVReaderDelegate, VCVideoDecoderDelegate, VCAACAudioConverterDelegate> {
+@interface VCDemoISOTestViewController () <VCFLVReaderDelegate, VCVideoDecoderDelegate, VCAudioConverterDelegate> {
 }
 @property (nonatomic, assign) BOOL playing;
 @property (nonatomic, assign) BOOL seeking;
@@ -20,7 +20,7 @@
 
 @property (nonatomic, strong) VCH264HardwareDecoder *decoder;
 @property (nonatomic, strong) AVSampleBufferDisplayLayer *displayLayer;
-@property (nonatomic, strong) VCAACAudioConverter *converter;
+@property (nonatomic, strong) VCAudioConverter *converter;
 @property (nonatomic, strong) VCAudioPCMRender *render;
 @property (nonatomic, strong) VCFLVReader *reader;
 
@@ -70,7 +70,7 @@
     self.decoder.delegate = self;
     self.displayLayer = [[AVSampleBufferDisplayLayer alloc] init];
     
-    self.converter = [[VCAACAudioConverter alloc] init];
+    self.converter = [[VCAudioConverter alloc] init];
     self.converter.delegate = self;
     CMTimebaseRef timeBase = nil;
     CMTimebaseCreateWithMasterClock(kCFAllocatorDefault, CMClockGetHostTimeClock(), &timeBase);
@@ -102,12 +102,12 @@
     // [TODO] 通知自旋锁模型？
     while (YES) {
         if (!_playing) {
-            [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3]];
+            [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
             continue;
         }
         if (_audioTime.flags == kCMTimeFlags_Valid &&
-            sampleBufferPts.value > _audioTime.value + 5 * _audioTime.timescale) {
-            [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3]];
+            sampleBufferPts.value > _audioTime.value + 3 * _audioTime.timescale) {
+            [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
             continue;
         }
         break;
@@ -119,12 +119,12 @@
     CMTime sampleBufferPts = sampleBuffer.presentationTimeStamp;
     while (YES) {
         if (!_playing) {
-            [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3]];
+            [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
             continue;
         }
         if (_audioTime.flags == kCMTimeFlags_Valid &&
-            sampleBufferPts.value > _audioTime.value + 5 * _audioTime.timescale) {
-            [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3]];
+            sampleBufferPts.value > _audioTime.value + 3 * _audioTime.timescale) {
+            [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
             continue;
         }
         break;
@@ -136,7 +136,8 @@
 }
 
 - (void)reader:(VCFLVReader *)reader didGetAudioFormatDescription:(CMFormatDescriptionRef)formatDescription {
-    [self.converter setFormatDescription:formatDescription];
+    self.converter.sourceFormat = [VCAudioConverter formatWithCMAudioFormatDescription:formatDescription];
+    self.converter.outputFormat = [VCAudioConverter PCMFormatWithSampleRate:self.converter.sourceFormat.sampleRate channels:self.converter.sourceFormat.channelCount];
     self.render = [[VCAudioPCMRender alloc] initWithPCMFormat:[self.converter outputFormat]];
 }
 
@@ -145,9 +146,10 @@
 }
 
 #pragma mark - Converter Delegate (Caller Thread) (Reader Thread)
-- (void)converter:(VCAACAudioConverter *)converter didGetPCMBuffer:(AVAudioPCMBuffer *)pcmBuffer presentationTimeStamp:(CMTime)pts{
+- (void)converter:(VCAudioConverter *)converter didOutputAudioBuffer:(AVAudioBuffer *)audioBuffer presentationTimeStamp:(CMTime)pts {
+    if (![audioBuffer isKindOfClass:[AVAudioPCMBuffer class]]) return;
     __weak typeof(self) weakSelf = self;
-    [self.render renderPCMBuffer:pcmBuffer withPresentationTimeStamp:pts completionHandler:^{
+    [self.render renderPCMBuffer:(AVAudioPCMBuffer *)audioBuffer withPresentationTimeStamp:pts completionHandler:^{
         if (!weakSelf.seeking) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakSelf.timeSeekSlider.value = pts.value;
