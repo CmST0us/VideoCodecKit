@@ -9,9 +9,15 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class VCSampleBuffer;
 @protocol VCVideoEncoder <NSObject>
+@required
+- (OSStatus)encodeSampleBuffer:(VCSampleBuffer *)sampleBuffer;
+@end
 
+@protocol VCVideoEncoderDelegate <NSObject>
+- (void)videoEncoder:(id<VCVideoEncoder>)encoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer;
+- (void)videoEncoder:(id<VCVideoEncoder>)encoder didOutputFormatDescription:(CMFormatDescriptionRef)description;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -67,9 +67,50 @@
     return CMSampleBufferGetPresentationTimeStamp(_sampleBuffer);
 }
 
+- (BOOL)keyFrame {
+    CFArrayRef attach = CMSampleBufferGetSampleAttachmentsArray(_sampleBuffer, false);
+    if (attach == NULL) {
+        return YES;
+    }
+    CFDictionaryRef dict = CFArrayGetValueAtIndex(attach, 0);
+    if (dict == NULL) {
+        return YES;
+    }
+    BOOL keyFrame = !CFDictionaryContainsKey(dict, kCMSampleAttachmentKey_NotSync);
+    return keyFrame;
+}
+
 - (AudioStreamBasicDescription)audioStreamBasicDescription {
     CMAudioFormatDescriptionRef audioFormat = CMSampleBufferGetFormatDescription(_sampleBuffer);
     return *CMAudioFormatDescriptionGetStreamBasicDescription(audioFormat);
+}
+
+- (NSData *)h264ParameterSetData {
+    const uint8_t *outPtr = nil;
+    size_t outSize = 0;
+    uint8_t header[] = {0x00, 0x00, 0x00, 0x01};
+    NSMutableData *data = [[NSMutableData alloc] init];
+    OSStatus ret = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(self.formatDescription, 0, &outPtr, &outSize, NULL, NULL);
+    if (ret != noErr) return nil;
+    [data appendBytes:header length:4];
+    [data appendBytes:outPtr length:outSize];
+    
+    ret = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(self.formatDescription, 1, &outPtr, &outSize, NULL, NULL);
+    if (ret != noErr) return nil;
+    [data appendBytes:header length:4];
+    [data appendBytes:outPtr length:outSize];
+    return data;
+}
+
+- (NSData *)dataBufferData {
+    char *outPtr = nil;
+    size_t outSize = 0;
+    OSStatus ret = CMBlockBufferGetDataPointer(self.dataBuffer, 0, NULL, &outSize, &outPtr);
+    if (ret != noErr) {
+        return nil;
+    }
+    NSData *data = [[NSData alloc] initWithBytes:(void *)outPtr length:outSize];
+    return data;
 }
 
 - (void)dealloc {
