@@ -56,10 +56,10 @@
 		4FC12749218A05C8009C239D /* VideoCodecKitTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC12747218A05C8009C239D /* VideoCodecKitTools.m */; };
 		4FDF7F1B220511A60019833C /* VCAudioPCMRender.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FDF7F19220511A60019833C /* VCAudioPCMRender.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FDF7F1C220511A60019833C /* VCAudioPCMRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F1A220511A60019833C /* VCAudioPCMRender.m */; };
+		4FDF7F39220B18950019833C /* VCAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FDF7F37220B18950019833C /* VCAudioConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FDF7F3A220B18950019833C /* VCAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F38220B18950019833C /* VCAudioConverter.m */; };
 		4FF9307E22032E7D0037DE2D /* VCAudioSpecificConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF9307C22032E7D0037DE2D /* VCAudioSpecificConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FF9307F22032E7D0037DE2D /* VCAudioSpecificConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9307D22032E7D0037DE2D /* VCAudioSpecificConfig.m */; };
-		4FF93082220344410037DE2D /* VCAACAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF93080220344410037DE2D /* VCAACAudioConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FF93083220344410037DE2D /* VCAACAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF93081220344410037DE2D /* VCAACAudioConverter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -120,10 +120,10 @@
 		4FD047242192996E00FFC7D2 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		4FDF7F19220511A60019833C /* VCAudioPCMRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAudioPCMRender.h; sourceTree = "<group>"; };
 		4FDF7F1A220511A60019833C /* VCAudioPCMRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAudioPCMRender.m; sourceTree = "<group>"; };
+		4FDF7F37220B18950019833C /* VCAudioConverter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAudioConverter.h; sourceTree = "<group>"; };
+		4FDF7F38220B18950019833C /* VCAudioConverter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAudioConverter.m; sourceTree = "<group>"; };
 		4FF9307C22032E7D0037DE2D /* VCAudioSpecificConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAudioSpecificConfig.h; sourceTree = "<group>"; };
 		4FF9307D22032E7D0037DE2D /* VCAudioSpecificConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAudioSpecificConfig.m; sourceTree = "<group>"; };
-		4FF93080220344410037DE2D /* VCAACAudioConverter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAACAudioConverter.h; sourceTree = "<group>"; };
-		4FF93081220344410037DE2D /* VCAACAudioConverter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAACAudioConverter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -256,6 +256,8 @@
 		4FBCCE1521F31FB700E7BF3C /* Codec */ = {
 			isa = PBXGroup;
 			children = (
+				4FDF7F37220B18950019833C /* VCAudioConverter.h */,
+				4FDF7F38220B18950019833C /* VCAudioConverter.m */,
 				4FBCCE1721F31FC700E7BF3C /* Decoder */,
 				4FBCCE1621F31FBF00E7BF3C /* Encoder */,
 			);
@@ -282,8 +284,6 @@
 				4FBCCE1E21F324F000E7BF3C /* VCH264HardwareDecoder.m */,
 				4FBCCE2521F3251400E7BF3C /* VCH264SoftwareDecoder.h */,
 				4FBCCE2621F3251400E7BF3C /* VCH264SoftwareDecoder.m */,
-				4FF93080220344410037DE2D /* VCAACAudioConverter.h */,
-				4FF93081220344410037DE2D /* VCAACAudioConverter.m */,
 			);
 			path = Decoder;
 			sourceTree = "<group>";
@@ -389,7 +389,6 @@
 				4FBCCE3221F325D800E7BF3C /* VCVideoEncoder.h in Headers */,
 				4FBCCE3C21F33E0800E7BF3C /* VCAVCConfigurationRecord.h in Headers */,
 				4FBCCE4121F36DA700E7BF3C /* VCByteArray.h in Headers */,
-				4FF93082220344410037DE2D /* VCAACAudioConverter.h in Headers */,
 				4FBCCE4921F36E4500E7BF3C /* VCAnnexBFormatStream.h in Headers */,
 				4F1913BB2201466A00921CAF /* VCFLVTag.h in Headers */,
 				4F76FC5921626DCA002E7F0D /* VCMarco.h in Headers */,
@@ -400,6 +399,7 @@
 				4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */,
 				4F1913A821FED9C800921CAF /* VCAnnexBFormatParser.h in Headers */,
 				4F1913B3220145A300921CAF /* VCFLVReader.h in Headers */,
+				4FDF7F39220B18950019833C /* VCAudioConverter.h in Headers */,
 				4FBCCE2B21F3252600E7BF3C /* VCH264SoftwareEncoder.h in Headers */,
 				4FBCCE4521F36E3000E7BF3C /* VCAVCFormatStream.h in Headers */,
 				4FF9307E22032E7D0037DE2D /* VCAudioSpecificConfig.h in Headers */,
@@ -475,7 +475,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FF93083220344410037DE2D /* VCAACAudioConverter.m in Sources */,
 				4FC12749218A05C8009C239D /* VideoCodecKitTools.m in Sources */,
 				4FDF7F1C220511A60019833C /* VCAudioPCMRender.m in Sources */,
 				4F76FC64216270E1002E7F0D /* VCSafeObjectQueue.m in Sources */,
@@ -484,6 +483,7 @@
 				4F1913B82201465700921CAF /* VCFLVWriter.m in Sources */,
 				4FF9307F22032E7D0037DE2D /* VCAudioSpecificConfig.m in Sources */,
 				4F1913C0220161FB00921CAF /* VCFLVFile.m in Sources */,
+				4FDF7F3A220B18950019833C /* VCAudioConverter.m in Sources */,
 				4FBCCE1C21F320B700E7BF3C /* VCSampleBuffer.m in Sources */,
 				4FBCCE2021F324F000E7BF3C /* VCH264HardwareDecoder.m in Sources */,
 				4F1913B4220145A300921CAF /* VCFLVReader.m in Sources */,
