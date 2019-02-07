@@ -36,3 +36,4 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 
 #import <VideoCodecKit/VCAudioPCMRender.h>
 
+#import <VideoCodecKit/VCMicRecorder.h>
