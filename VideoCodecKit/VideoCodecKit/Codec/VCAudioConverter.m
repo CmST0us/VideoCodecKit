@@ -18,6 +18,7 @@
 @property (nonatomic, readonly) NSUInteger outputMaxBufferSize;
 @property (nonatomic, readonly) NSUInteger ioOutputDataPacketSize;
 @property (nonatomic, readonly) NSUInteger outputAudioBufferCount;
+@property (nonatomic, readonly) NSUInteger outputNumberChannels;
 @end
 
 @implementation VCAudioConverter
@@ -36,8 +37,15 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
                                          ioData:(AudioBufferList *)ioData
                        outDataPacketDescription:(AudioStreamPacketDescription **)outDataPacketDescription {
     // 可能ioData->mNumberChannel和_currentBufferList.mNumberChannel会不一样, 以ioData为准手动复制
-    memcpy(ioData, _currentBufferList, sizeof(AudioBufferList));
-    
+    memcpy(ioData, _currentBufferList, [self audioBufferListSizeWithChannel:self.outputFormat.channelCount]);
+    // check channel
+    for (int i = 0; i < ioData->mNumberBuffers; i++) {
+        if (ioData->mBuffers[i].mNumberChannels == 0 ||
+            ioData->mBuffers[i].mDataByteSize == 0) {
+            *ioNumberDataPackets = 0;
+            return noErr;
+        }
+    }
     // !!! if decode aac, must set outDataPacketDescription
     if (outDataPacketDescription != NULL) {
         _currentAudioStreamPacketDescription.mStartOffset = 0;
@@ -163,13 +171,23 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
         return self.currentBufferList->mBuffers[0].mDataByteSize;
     }
 }
-
+- (NSUInteger)outputNumberChannels {
+    if (self.outputFormat.streamDescription->mFormatID == kAudioFormatLinearPCM) {
+        return 1;
+    } else {
+        return self.outputFormat.channelCount;
+    }
+}
 - (NSUInteger)ioOutputDataPacketSize {
     if (self.outputFormat.streamDescription->mFormatID == kAudioFormatLinearPCM) {
         return 1024;
     } else {
         return 1;
     }
+}
+
+- (NSUInteger)audioBufferListSizeWithChannel:(NSUInteger)channel {
+    return sizeof(AudioBufferList) + (channel - 1) * sizeof(AudioBuffer);
 }
 
 - (AVAudioBuffer *)createOutputAudioBufferWithAudioBufferList:(AudioBufferList *)audioBufferList
@@ -211,10 +229,10 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
         }
     }
     
-    AudioBufferList *outputBufferList = (AudioBufferList *)malloc(sizeof(AudioBufferList) + self.outputAudioBufferCount * sizeof(AudioBuffer));
+    AudioBufferList *outputBufferList = (AudioBufferList *)malloc([self audioBufferListSizeWithChannel:self.outputFormat.channelCount]);
     outputBufferList->mNumberBuffers = (UInt32)self.outputAudioBufferCount;
     for (int i = 0; i < self.outputAudioBufferCount; ++i) {
-        outputBufferList->mBuffers[i].mNumberChannels = i;
+        outputBufferList->mBuffers[i].mNumberChannels = (UInt32)self.outputNumberChannels;
         outputBufferList->mBuffers[i].mDataByteSize = outputMaxBufferSize;
         outputBufferList->mBuffers[i].mData = malloc(outputMaxBufferSize);
     }
