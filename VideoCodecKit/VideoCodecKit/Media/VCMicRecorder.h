@@ -13,7 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VCMicRecorder : NSObject
 @property (nonatomic, readonly) BOOL recording;
-@property (nonatomic, readonly) AVAudioFormat *outputFormat;
+@property (nonatomic, readonly, nullable) AVAudioFormat *outputFormat;
+
+- (instancetype)initWithOutputFormat:(AVAudioFormat * __nullable)format;
 - (BOOL)startRecoderWithBlock:(AVAudioNodeTapBlock)block;
 - (void)stop;
 @end

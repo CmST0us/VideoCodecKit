@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
                         sourceFormat:(AVAudioFormat *)sourceFormat;
 
 - (OSStatus)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer;
+- (OSStatus)convertAudioBufferList:(AudioBufferList *)audioBufferList
+             presentationTimeStamp:(CMTime)pts;
 - (void)reset;
 
 + (AVAudioFormat *)formatWithCMAudioFormatDescription:(CMAudioFormatDescriptionRef)audioFormatDescription;

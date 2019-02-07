@@ -13,6 +13,8 @@
 @property (nonatomic, strong) VCFLVReader *reader;
 @property (nonatomic, strong) VCH264HardwareDecoder *decoder;
 @property (nonatomic, strong) VCH264HardwareEncoder *encoder;
+@property (nonatomic, strong) VCAudioConverter *converter;
+@property (nonatomic, strong) VCMicRecorder *recorder;
 @property (nonatomic, strong) NSOutputStream *fileWriterStream;
 @end
 
@@ -33,6 +35,17 @@
     
     self.fileWriterStream = [[NSOutputStream alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/cmst0us/Desktop/abc.h264"] append:NO];
     [self.fileWriterStream open];
+    
+    __weak typeof(self) weakSelf = self;
+    // [Bug]: 注意这里需要指定声道为1
+    // 不然会出现AudioBufferList mNumberBuffers = 2, 实际上只有一个通道数据的情况
+    // 如果使用[AVAudioInputNode outputFormat]也会出现这样的情况
+    AVAudioFormat *sourceFormat = [VCAudioConverter PCMFormatWithSampleRate:44100 channels:1];
+    self.recorder = [[VCMicRecorder alloc] initWithOutputFormat:sourceFormat];
+    self.converter = [[VCAudioConverter alloc] initWithOutputFormat:[VCAudioConverter AACFormatWithSampleRate:sourceFormat.sampleRate formatFlags:kMPEG4Object_AAC_LC channels:sourceFormat.channelCount] sourceFormat:sourceFormat];
+    [self.recorder startRecoderWithBlock:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
+        [weakSelf.converter convertAudioBufferList:buffer.mutableAudioBufferList presentationTimeStamp:CMTimeMake(when.sampleTime, when.sampleRate)];
+    }];
 }
 
 - (void)videoEncoder:(id<VCVideoEncoder>)encoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
@@ -65,10 +78,10 @@
 }
 
 - (void)reader:(VCFLVReader *)reader didGetVideoSampleBuffer:(VCSampleBuffer *)sampleBuffer {
-    OSStatus ret = [self.decoder decodeSampleBuffer:sampleBuffer];
-    if (ret != noErr) {
-        return;
-    }
+//    OSStatus ret = [self.decoder decodeSampleBuffer:sampleBuffer];
+//    if (ret != noErr) {
+//        return;
+//    }
 }
 
 - (void)reader:(VCFLVReader *)reader didGetAudioFormatDescription:(CMFormatDescriptionRef)formatDescription {

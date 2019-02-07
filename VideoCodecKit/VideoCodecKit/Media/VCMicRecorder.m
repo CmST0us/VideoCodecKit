@@ -15,20 +15,26 @@
 @end
 
 @implementation VCMicRecorder
-- (instancetype)init {
+
+- (instancetype)initWithOutputFormat:(AVAudioFormat *)format {
     self = [super init];
     if (self) {
         _engine = [[AVAudioEngine alloc] init];
         _recording = NO;
+        _outputFormat = format;
     }
     return self;
+}
+
+- (instancetype)init {
+    return [self initWithOutputFormat:nil];
 }
 
 - (BOOL)startRecoderWithBlock:(AVAudioNodeTapBlock)block {
     if (_recording) return NO;
     
     AVAudioInputNode *input = [self.engine inputNode];
-    [input installTapOnBus:0 bufferSize:4096 format:[input inputFormatForBus:0] block:block];
+    [input installTapOnBus:0 bufferSize:8192 format:_outputFormat block:block];
     NSError *err = nil;
     [self.engine startAndReturnError:&err];
     if (err == nil) {
@@ -43,10 +49,6 @@
     [self.engine stop];
     [self.engine.inputNode removeTapOnBus:0];
     _recording = NO;
-}
-
-- (AVAudioFormat *)outputFormat {
-    return [self.engine.inputNode outputFormatForBus:0];
 }
 
 - (void)dealloc {
