@@ -50,7 +50,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
         _currentAudioStreamPacketDescription.mVariableFramesInPacket = 0;
         *outDataPacketDescription = &_currentAudioStreamPacketDescription;
     }
-    *ioNumberDataPackets = ioData->mBuffers[0].mDataByteSize;
+    *ioNumberDataPackets = 1;
     return noErr;
 }
 
