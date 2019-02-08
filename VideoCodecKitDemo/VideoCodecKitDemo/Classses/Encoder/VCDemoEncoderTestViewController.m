@@ -20,8 +20,8 @@
     [super viewDidLoad];
     
     __weak typeof(self) weakSelf = self;
-    AVAudioFormat *sourceFormat = [VCAudioConverter PCMFormatWithSampleRate:44100 channels:2];
-    self.recorder = [[VCMicRecorder alloc] initWithOutputFormat:sourceFormat];
+    self.recorder = [[VCMicRecorder alloc] init];
+    AVAudioFormat *sourceFormat = self.recorder.outputFormat;
     self.converter = [[VCAudioConverter alloc] initWithOutputFormat:[VCAudioConverter AACFormatWithSampleRate:sourceFormat.sampleRate formatFlags:kMPEG4Object_AAC_LC channels:sourceFormat.channelCount] sourceFormat:sourceFormat];
     self.converter.delegate = self;
     
