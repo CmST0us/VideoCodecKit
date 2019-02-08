@@ -36,9 +36,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
                             ioNumberDataPackets:(UInt32 *)ioNumberDataPackets
                                          ioData:(AudioBufferList *)ioData
                        outDataPacketDescription:(AudioStreamPacketDescription **)outDataPacketDescription {
-    // 可能ioData->mNumberChannel和_currentBufferList.mNumberChannel会不一样, 以ioData为准手动复制
     memcpy(ioData, _currentBufferList, [self audioBufferListSizeWithBufferCount:self.outputFormat.channelCount]);
-    // check channel
     if (_currentBufferList->mBuffers[0].mDataByteSize < *ioNumberDataPackets) {
         *ioNumberDataPackets = 0;
         return noErr;
@@ -62,8 +60,9 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
         
         _converter = nil;
         _currentAudioBlockBuffer = nil;
-        _currentBufferList = malloc(sizeof(AudioBufferList));
-        bzero(_currentBufferList, sizeof(AudioBufferList));
+        NSUInteger bufferListSize = [self audioBufferListSizeWithBufferCount:6];
+        _currentBufferList = malloc(bufferListSize);
+        bzero(_currentBufferList, bufferListSize);
     }
     return self;
 }
@@ -180,7 +179,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
 }
 
 - (NSUInteger)audioBufferListSizeWithBufferCount:(NSUInteger)bufferCount {
-    return sizeof(AudioBufferList) + (bufferCount - 1) * sizeof(AudioBuffer);
+    return sizeof(AudioBufferList) + (bufferCount) * sizeof(AudioBuffer);
 }
 
 - (AVAudioBuffer *)createOutputAudioBufferWithAudioBufferList:(AudioBufferList *)audioBufferList

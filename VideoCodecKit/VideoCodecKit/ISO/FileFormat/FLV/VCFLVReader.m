@@ -43,6 +43,7 @@
 }
 
 - (void)dealloc {
+    [self.readThread cancel];
     if (_videoFormatDescription) {
         CFRelease(_videoFormatDescription);
         _videoFormatDescription = NULL;
