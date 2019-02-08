@@ -37,14 +37,11 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
                                          ioData:(AudioBufferList *)ioData
                        outDataPacketDescription:(AudioStreamPacketDescription **)outDataPacketDescription {
     // 可能ioData->mNumberChannel和_currentBufferList.mNumberChannel会不一样, 以ioData为准手动复制
-    memcpy(ioData, _currentBufferList, [self audioBufferListSizeWithChannel:self.outputFormat.channelCount]);
+    memcpy(ioData, _currentBufferList, [self audioBufferListSizeWithBufferCount:self.outputFormat.channelCount]);
     // check channel
-    for (int i = 0; i < ioData->mNumberBuffers; i++) {
-        if (ioData->mBuffers[i].mNumberChannels == 0 ||
-            ioData->mBuffers[i].mDataByteSize == 0) {
-            *ioNumberDataPackets = 0;
-            return noErr;
-        }
+    if (_currentBufferList->mBuffers[0].mDataByteSize < *ioNumberDataPackets) {
+        *ioNumberDataPackets = 0;
+        return noErr;
     }
     // !!! if decode aac, must set outDataPacketDescription
     if (outDataPacketDescription != NULL) {
@@ -53,11 +50,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
         _currentAudioStreamPacketDescription.mVariableFramesInPacket = 0;
         *outDataPacketDescription = &_currentAudioStreamPacketDescription;
     }
-    if (self.outputFormat.streamDescription->mFormatID == kAudioFormatLinearPCM) {
-        *ioNumberDataPackets = 1;
-    } else {
-        *ioNumberDataPackets = ioData->mBuffers[0].mDataByteSize;
-    }
+    *ioNumberDataPackets = ioData->mBuffers[0].mDataByteSize;
     return noErr;
 }
 
@@ -186,8 +179,8 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
     }
 }
 
-- (NSUInteger)audioBufferListSizeWithChannel:(NSUInteger)channel {
-    return sizeof(AudioBufferList) + (channel - 1) * sizeof(AudioBuffer);
+- (NSUInteger)audioBufferListSizeWithBufferCount:(NSUInteger)bufferCount {
+    return sizeof(AudioBufferList) + (bufferCount - 1) * sizeof(AudioBuffer);
 }
 
 - (AVAudioBuffer *)createOutputAudioBufferWithAudioBufferList:(AudioBufferList *)audioBufferList
@@ -216,7 +209,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
 - (OSStatus)convertAudioBufferList:(AudioBufferList *)audioBufferList
              presentationTimeStamp:(CMTime)pts
                           copyData:(BOOL)shouldCopyData {
-    memcpy(_currentBufferList, audioBufferList, sizeof(AudioBufferList));
+    memcpy(_currentBufferList, audioBufferList, [self audioBufferListSizeWithBufferCount:audioBufferList->mNumberBuffers]);
     UInt32 outputMaxBufferSize = (UInt32)self.outputMaxBufferSize;
     UInt32 ioOutputDataPacketSize = (UInt32)self.ioOutputDataPacketSize;
     
@@ -229,7 +222,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
         }
     }
     
-    AudioBufferList *outputBufferList = (AudioBufferList *)malloc([self audioBufferListSizeWithChannel:self.outputFormat.channelCount]);
+    AudioBufferList *outputBufferList = (AudioBufferList *)malloc([self audioBufferListSizeWithBufferCount:self.outputFormat.channelCount]);
     outputBufferList->mNumberBuffers = (UInt32)self.outputAudioBufferCount;
     for (int i = 0; i < self.outputAudioBufferCount; ++i) {
         outputBufferList->mBuffers[i].mNumberChannels = (UInt32)self.outputNumberChannels;
@@ -249,7 +242,6 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
                 free(_currentBufferList->mBuffers[i].mData);
             }
         }
-        
         return ret;
     }
     

@@ -18,7 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.recorder = [[VCMicRecorder alloc] init];
+    self.recorder = [[VCMicRecorder alloc] initWithOutputFormat:[VCAudioConverter PCMFormatWithSampleRate:44100 channels:2]];
     self.render = [[VCAudioPCMRender alloc] initWithPCMFormat:self.recorder.outputFormat];
     [self.render play];
 }
@@ -26,6 +26,9 @@
 - (void)viewDidAppear:(BOOL)animated {
     __weak typeof(self) weakSelf = self;
     [self.recorder startRecoderWithBlock:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
+        AVAudioFormat *format = buffer.format;
+        AudioStreamBasicDescription *desc = format.streamDescription;
+        AudioBufferList *list = buffer.audioBufferList;
         [weakSelf.render renderPCMBuffer:buffer withPresentationTimeStamp:kCMTimeZero completionHandler:nil];
     }];
 }

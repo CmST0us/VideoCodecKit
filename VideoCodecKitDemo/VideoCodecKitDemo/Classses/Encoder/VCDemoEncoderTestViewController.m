@@ -40,10 +40,15 @@
     // [Bug]: 注意这里需要指定声道为1
     // 不然会出现AudioBufferList mNumberBuffers = 2, 实际上只有一个通道数据的情况
     // 如果使用[AVAudioInputNode outputFormat]也会出现这样的情况
-    AVAudioFormat *sourceFormat = [VCAudioConverter PCMFormatWithSampleRate:44100 channels:1];
+    AVAudioFormat *sourceFormat = [VCAudioConverter PCMFormatWithSampleRate:44100 channels:2];
     self.recorder = [[VCMicRecorder alloc] initWithOutputFormat:sourceFormat];
     self.converter = [[VCAudioConverter alloc] initWithOutputFormat:[VCAudioConverter AACFormatWithSampleRate:sourceFormat.sampleRate formatFlags:kMPEG4Object_AAC_LC channels:sourceFormat.channelCount] sourceFormat:sourceFormat];
     [self.recorder startRecoderWithBlock:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
+        // [TEST CODE]: 看看list->mBuffers[1]和list->mBuffers[0] 是否正确
+        AVAudioFormat *format = buffer.format;
+        AudioStreamBasicDescription *desc = format.streamDescription;
+        AudioBufferList *list = buffer.audioBufferList;
+        
         [weakSelf.converter convertAudioBufferList:buffer.mutableAudioBufferList presentationTimeStamp:CMTimeMake(when.sampleTime, when.sampleRate)];
     }];
 }
