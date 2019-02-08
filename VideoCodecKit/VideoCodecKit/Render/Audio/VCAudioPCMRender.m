@@ -53,4 +53,7 @@
     [_playerNode scheduleBuffer:pcmBuffer completionHandler:handler];
 }
 
+- (void)dealloc {
+    [self.audioEngine stop];
+}
 @end

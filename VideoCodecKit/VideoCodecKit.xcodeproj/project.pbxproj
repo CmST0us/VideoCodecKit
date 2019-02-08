@@ -58,6 +58,8 @@
 		4FDF7F1C220511A60019833C /* VCAudioPCMRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F1A220511A60019833C /* VCAudioPCMRender.m */; };
 		4FDF7F39220B18950019833C /* VCAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FDF7F37220B18950019833C /* VCAudioConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FDF7F3A220B18950019833C /* VCAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F38220B18950019833C /* VCAudioConverter.m */; };
+		4FDF7F3F220BEBB80019833C /* VCMicRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FDF7F3D220BEBB80019833C /* VCMicRecorder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FDF7F40220BEBB80019833C /* VCMicRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F3E220BEBB80019833C /* VCMicRecorder.m */; };
 		4FF9307E22032E7D0037DE2D /* VCAudioSpecificConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF9307C22032E7D0037DE2D /* VCAudioSpecificConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FF9307F22032E7D0037DE2D /* VCAudioSpecificConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9307D22032E7D0037DE2D /* VCAudioSpecificConfig.m */; };
 /* End PBXBuildFile section */
@@ -122,6 +124,8 @@
 		4FDF7F1A220511A60019833C /* VCAudioPCMRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAudioPCMRender.m; sourceTree = "<group>"; };
 		4FDF7F37220B18950019833C /* VCAudioConverter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAudioConverter.h; sourceTree = "<group>"; };
 		4FDF7F38220B18950019833C /* VCAudioConverter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAudioConverter.m; sourceTree = "<group>"; };
+		4FDF7F3D220BEBB80019833C /* VCMicRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCMicRecorder.h; sourceTree = "<group>"; };
+		4FDF7F3E220BEBB80019833C /* VCMicRecorder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCMicRecorder.m; sourceTree = "<group>"; };
 		4FF9307C22032E7D0037DE2D /* VCAudioSpecificConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAudioSpecificConfig.h; sourceTree = "<group>"; };
 		4FF9307D22032E7D0037DE2D /* VCAudioSpecificConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAudioSpecificConfig.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -196,6 +200,7 @@
 		4F76FBD0216269FC002E7F0D /* VideoCodecKit */ = {
 			isa = PBXGroup;
 			children = (
+				4FDF7F3C220BEB8C0019833C /* Media */,
 				4F1913B02201432C00921CAF /* Network */,
 				4FBCCE3E21F36D9900E7BF3C /* Utils */,
 				4FBCCE3521F32EE000E7BF3C /* ISO */,
@@ -365,6 +370,15 @@
 			path = Video;
 			sourceTree = "<group>";
 		};
+		4FDF7F3C220BEB8C0019833C /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				4FDF7F3D220BEBB80019833C /* VCMicRecorder.h */,
+				4FDF7F3E220BEBB80019833C /* VCMicRecorder.m */,
+			);
+			path = Media;
+			sourceTree = "<group>";
+		};
 		4FF9307B22032E570037DE2D /* AAC */ = {
 			isa = PBXGroup;
 			children = (
@@ -395,6 +409,7 @@
 				4FBCCE3021F325CD00E7BF3C /* VCVideoDecoder.h in Headers */,
 				4FDF7F1B220511A60019833C /* VCAudioPCMRender.h in Headers */,
 				4F1913BF220161FB00921CAF /* VCFLVFile.h in Headers */,
+				4FDF7F3F220BEBB80019833C /* VCMicRecorder.h in Headers */,
 				4FBCCE2721F3251400E7BF3C /* VCH264SoftwareDecoder.h in Headers */,
 				4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */,
 				4F1913A821FED9C800921CAF /* VCAnnexBFormatParser.h in Headers */,
@@ -489,6 +504,7 @@
 				4F1913B4220145A300921CAF /* VCFLVReader.m in Sources */,
 				4FBCCE2421F3250000E7BF3C /* VCH264HardwareEncoder.m in Sources */,
 				4F1913A921FED9C800921CAF /* VCAnnexBFormatParser.m in Sources */,
+				4FDF7F40220BEBB80019833C /* VCMicRecorder.m in Sources */,
 				4FBCCE4621F36E3000E7BF3C /* VCAVCFormatStream.m in Sources */,
 				4FBCCE2821F3251400E7BF3C /* VCH264SoftwareDecoder.m in Sources */,
 				4FBCCE4A21F36E4500E7BF3C /* VCAnnexBFormatStream.m in Sources */,

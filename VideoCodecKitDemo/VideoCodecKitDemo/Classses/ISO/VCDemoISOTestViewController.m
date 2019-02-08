@@ -103,11 +103,13 @@
     while (YES) {
         if (!_playing) {
             [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
+            if ([[NSThread currentThread] isCancelled]) break;
             continue;
         }
         if (_audioTime.flags == kCMTimeFlags_Valid &&
             sampleBufferPts.value > _audioTime.value + 3 * _audioTime.timescale) {
             [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
+            if ([[NSThread currentThread] isCancelled]) break;
             continue;
         }
         break;
@@ -120,11 +122,13 @@
     while (YES) {
         if (!_playing) {
             [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
+            if ([[NSThread currentThread] isCancelled]) break;
             continue;
         }
         if (_audioTime.flags == kCMTimeFlags_Valid &&
             sampleBufferPts.value > _audioTime.value + 3 * _audioTime.timescale) {
             [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
+            if ([[NSThread currentThread] isCancelled]) break;
             continue;
         }
         break;

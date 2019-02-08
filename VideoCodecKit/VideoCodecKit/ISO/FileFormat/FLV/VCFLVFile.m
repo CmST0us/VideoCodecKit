@@ -101,4 +101,7 @@
     return nextTag;
 }
 
+- (void)dealloc {
+    [_fileHandle closeFile];
+}
 @end

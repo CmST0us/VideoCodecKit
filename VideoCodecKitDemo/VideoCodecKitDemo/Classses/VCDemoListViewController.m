@@ -9,6 +9,7 @@
 #import "VCDemoListViewController.h"
 #import "VCDemoISOTestViewController.h"
 #import "VCDemoEncoderTestViewController.h"
+#import "VCDemoMicRecorderTestViewController.h"
 @interface VCDemoListViewController ()
 
 @end
@@ -26,6 +27,10 @@
               @{
                   @"title":@"录制为FLV",
                   @"class":NSStringFromClass([VCDemoEncoderTestViewController class]),
+                  },
+              @{
+                  @"title":@"麦克风录音",
+                  @"class":NSStringFromClass([VCDemoMicRecorderTestViewController class]),
                   },
               ];
     return cases;

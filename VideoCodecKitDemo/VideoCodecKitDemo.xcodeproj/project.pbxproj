@@ -35,6 +35,7 @@
 		4FD0472B2192C2A900FFC7D2 /* test.aac in Resources */ = {isa = PBXBuildFile; fileRef = 4FD0472A2192C2A900FFC7D2 /* test.aac */; };
 		4FDF7F1E2205240A0019833C /* test.flv in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF7F1D2205240A0019833C /* test.flv */; };
 		4FDF7F362209381A0019833C /* VCDemoEncoderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F352209381A0019833C /* VCDemoEncoderTestViewController.m */; };
+		4FDF7F47220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F46220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -95,6 +96,8 @@
 		4FDF7F1D2205240A0019833C /* test.flv */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.flv; sourceTree = "<group>"; };
 		4FDF7F342209381A0019833C /* VCDemoEncoderTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoEncoderTestViewController.h; sourceTree = "<group>"; };
 		4FDF7F352209381A0019833C /* VCDemoEncoderTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoEncoderTestViewController.m; sourceTree = "<group>"; };
+		4FDF7F45220BEF4B0019833C /* VCDemoMicRecorderTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoMicRecorderTestViewController.h; sourceTree = "<group>"; };
+		4FDF7F46220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoMicRecorderTestViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +170,7 @@
 		4F9279A821442F0800F17F9A /* Classses */ = {
 			isa = PBXGroup;
 			children = (
+				4FDF7F41220BEEFA0019833C /* MicRecorder */,
 				4FDF7F33220937E00019833C /* Encoder */,
 				4FBCCE6721FCD03900E7BF3C /* ISO */,
 				4F0F9513218891E600CB9BAE /* BaseViewController */,
@@ -228,6 +232,15 @@
 			path = Encoder;
 			sourceTree = "<group>";
 		};
+		4FDF7F41220BEEFA0019833C /* MicRecorder */ = {
+			isa = PBXGroup;
+			children = (
+				4FDF7F45220BEF4B0019833C /* VCDemoMicRecorderTestViewController.h */,
+				4FDF7F46220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m */,
+			);
+			path = MicRecorder;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -261,6 +274,11 @@
 				TargetAttributes = {
 					4FBF02192144284A00CA0EC8 = {
 						CreatedOnToolsVersion = 9.3;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -307,6 +325,7 @@
 			files = (
 				4F0F951B2188941F00CB9BAE /* VCDemoNavigationController.m in Sources */,
 				4FBCCE6A21FCD08B00E7BF3C /* VCDemoISOTestViewController.m in Sources */,
+				4FDF7F47220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m in Sources */,
 				4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */,
 				4FDF7F362209381A0019833C /* VCDemoEncoderTestViewController.m in Sources */,
 				4F0F95212188962C00CB9BAE /* VCDemoBackableViewController.m in Sources */,
