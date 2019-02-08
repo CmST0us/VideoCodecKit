@@ -184,9 +184,8 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
 }
 
 - (AVAudioBuffer *)createOutputAudioBufferWithAudioBufferList:(AudioBufferList *)audioBufferList
-                                               dataPacketSize:(NSUInteger)dataPacketSizse {
+                                               dataPacketSize:(NSUInteger)dataPacketSize {
     if (self.outputFormat.streamDescription->mFormatID == kAudioFormatLinearPCM) {
-        // 如果声道数大于2 此方法返回nil
         AVAudioPCMBuffer *pcmBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:self.outputFormat frameCapacity:(AVAudioFrameCount)self.outputMaxBufferSize];
         for (int i = 0; i < audioBufferList->mNumberBuffers; ++i) {
             // 注意这个ioOutoutDataPacketSize 是转换后实际有效PCM音频大小
@@ -194,15 +193,20 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
             memcpy(pcmBuffer.floatChannelData[i], audioBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mDataByteSize);
         }
         // frameLength 为有效PCM数据
-        pcmBuffer.frameLength = (AVAudioFrameCount)dataPacketSizse;
+        pcmBuffer.frameLength = (AVAudioFrameCount)dataPacketSize;
         return pcmBuffer;
     }
     
     AVAudioCompressedBuffer *compressedBuffer = [[AVAudioCompressedBuffer alloc] initWithFormat:self.outputFormat packetCapacity:1 maximumPacketSize:self.outputMaxBufferSize];
+    // [BUGFIX]: 这是iOS10 AVAudioCompressedBuffer 的bug，需要手动设置
+    AudioBufferList *buffer = (AudioBufferList *)compressedBuffer.audioBufferList;
+    buffer->mNumberBuffers = audioBufferList->mNumberBuffers;
     for (int i = 0; i < audioBufferList->mNumberBuffers; ++i) {
-        memcpy(compressedBuffer.data, audioBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mDataByteSize);
+        buffer->mBuffers[i].mDataByteSize = audioBufferList->mBuffers[i].mDataByteSize;
+        buffer->mBuffers[i].mNumberChannels = audioBufferList->mBuffers[i].mNumberChannels;
+        memcpy(buffer->mBuffers[i].mData, audioBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mDataByteSize);
     }
-    compressedBuffer.packetCount = (AVAudioFrameCount)dataPacketSizse;
+    compressedBuffer.packetCount = (AVAudioPacketCount)dataPacketSize;
     return compressedBuffer;
 }
 

@@ -9,7 +9,7 @@
 #import <VideoCodecKit/VideoCodecKit.h>
 #import "VCDemoEncoderTestViewController.h"
 
-@interface VCDemoEncoderTestViewController () <VCVideoEncoderDelegate, VCVideoDecoderDelegate, VCFLVReaderDelegate>
+@interface VCDemoEncoderTestViewController () <VCVideoEncoderDelegate, VCVideoDecoderDelegate, VCFLVReaderDelegate, VCAudioConverterDelegate>
 @property (nonatomic, strong) VCFLVReader *reader;
 @property (nonatomic, strong) VCH264HardwareDecoder *decoder;
 @property (nonatomic, strong) VCH264HardwareEncoder *encoder;
@@ -43,12 +43,8 @@
     AVAudioFormat *sourceFormat = [VCAudioConverter PCMFormatWithSampleRate:44100 channels:2];
     self.recorder = [[VCMicRecorder alloc] initWithOutputFormat:sourceFormat];
     self.converter = [[VCAudioConverter alloc] initWithOutputFormat:[VCAudioConverter AACFormatWithSampleRate:sourceFormat.sampleRate formatFlags:kMPEG4Object_AAC_LC channels:sourceFormat.channelCount] sourceFormat:sourceFormat];
+    self.converter.delegate = self;
     [self.recorder startRecoderWithBlock:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
-        // [TEST CODE]: 看看list->mBuffers[1]和list->mBuffers[0] 是否正确
-        AVAudioFormat *format = buffer.format;
-        AudioStreamBasicDescription *desc = format.streamDescription;
-        AudioBufferList *list = buffer.audioBufferList;
-        
         [weakSelf.converter convertAudioBufferList:buffer.mutableAudioBufferList presentationTimeStamp:CMTimeMake(when.sampleTime, when.sampleRate)];
     }];
 }
@@ -97,5 +93,8 @@
     [self.decoder setFormatDescription:formatDescription];
 }
 
+- (void)converter:(VCAudioConverter *)converter didOutputAudioBuffer:(AVAudioBuffer *)audioBuffer presentationTimeStamp:(CMTime)pts {
+    NSLog(@"audioBuffer %@", audioBuffer);
+}
 @end
 
