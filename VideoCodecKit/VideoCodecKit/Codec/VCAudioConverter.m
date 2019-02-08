@@ -36,7 +36,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
                             ioNumberDataPackets:(UInt32 *)ioNumberDataPackets
                                          ioData:(AudioBufferList *)ioData
                        outDataPacketDescription:(AudioStreamPacketDescription **)outDataPacketDescription {
-    memcpy(ioData, _currentBufferList, [self audioBufferListSizeWithBufferCount:self.outputFormat.channelCount]);
+    memcpy(ioData, _currentBufferList, [self audioBufferListSizeWithBufferCount:ioData->mNumberBuffers]);
     if (_currentBufferList->mBuffers[0].mDataByteSize < *ioNumberDataPackets) {
         *ioNumberDataPackets = 0;
         return noErr;
@@ -179,7 +179,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
 }
 
 - (NSUInteger)audioBufferListSizeWithBufferCount:(NSUInteger)bufferCount {
-    return sizeof(AudioBufferList) + (bufferCount) * sizeof(AudioBuffer);
+    return sizeof(AudioBufferList) + (bufferCount - 1) * sizeof(AudioBuffer);
 }
 
 - (AVAudioBuffer *)createOutputAudioBufferWithAudioBufferList:(AudioBufferList *)audioBufferList
