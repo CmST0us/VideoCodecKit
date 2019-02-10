@@ -19,13 +19,6 @@
 		4F1913C0220161FB00921CAF /* VCFLVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1913BE220161FB00921CAF /* VCFLVFile.m */; };
 		4F76FBD3216269FC002E7F0D /* VideoCodecKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBD1216269FC002E7F0D /* VideoCodecKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F76FC2121626AA3002E7F0D /* VideoCodecKit.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBDF21626A9C002E7F0D /* VideoCodecKit.pch */; };
-		4F76FC2A21626BD4002E7F0D /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC2321626BD4002E7F0D /* libavfilter.a */; };
-		4F76FC2B21626BD4002E7F0D /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC2421626BD4002E7F0D /* libswscale.a */; };
-		4F76FC2C21626BD4002E7F0D /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC2521626BD4002E7F0D /* libswresample.a */; };
-		4F76FC2D21626BD4002E7F0D /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC2621626BD4002E7F0D /* libavformat.a */; };
-		4F76FC2E21626BD4002E7F0D /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC2721626BD4002E7F0D /* libavutil.a */; };
-		4F76FC2F21626BD4002E7F0D /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC2821626BD4002E7F0D /* libavdevice.a */; };
-		4F76FC3021626BD4002E7F0D /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC2921626BD4002E7F0D /* libavcodec.a */; };
 		4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FC1A21626AA3002E7F0D /* VCSafeObjectQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F76FC5921626DCA002E7F0D /* VCMarco.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBE821626A9C002E7F0D /* VCMarco.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F76FC64216270E1002E7F0D /* VCSafeObjectQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F76FC1B21626AA3002E7F0D /* VCSafeObjectQueue.m */; };
@@ -138,13 +131,6 @@
 				4F7FBEF121946AE000182A00 /* AudioToolbox.framework in Frameworks */,
 				4FC1273E2189DE8A009C239D /* MetalKit.framework in Frameworks */,
 				4FC1273C2189DE5D009C239D /* Metal.framework in Frameworks */,
-				4F76FC2A21626BD4002E7F0D /* libavfilter.a in Frameworks */,
-				4F76FC2B21626BD4002E7F0D /* libswscale.a in Frameworks */,
-				4F76FC2C21626BD4002E7F0D /* libswresample.a in Frameworks */,
-				4F76FC2D21626BD4002E7F0D /* libavformat.a in Frameworks */,
-				4F76FC2E21626BD4002E7F0D /* libavutil.a in Frameworks */,
-				4F76FC2F21626BD4002E7F0D /* libavdevice.a in Frameworks */,
-				4F76FC3021626BD4002E7F0D /* libavcodec.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,7 +557,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -625,7 +611,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -643,7 +629,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/VideoCodecKit/Vendor/framework";
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PREFIX_HEADER = "${PROJECT_DIR}/VideoCodecKit/VideoCodecKit.pch";
 				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/binary/ffmpeg/include";
 				INFOPLIST_FILE = VideoCodecKit/Info.plist;
@@ -654,10 +640,11 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/VideoCodecKit/Vendor/binary/ffmpeg/lib";
-				MACH_O_TYPE = staticlib;
+				LIBRARY_SEARCH_PATHS = "";
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eric3u.VideoCodecKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -674,7 +661,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/VideoCodecKit/Vendor/framework";
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PREFIX_HEADER = "${PROJECT_DIR}/VideoCodecKit/VideoCodecKit.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
 				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/binary/ffmpeg/include";
@@ -686,10 +673,11 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/VideoCodecKit/Vendor/binary/ffmpeg/lib";
-				MACH_O_TYPE = staticlib;
+				LIBRARY_SEARCH_PATHS = "";
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eric3u.VideoCodecKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -96,12 +96,15 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
     const AudioStreamBasicDescription *sourceDesc = self.sourceFormat.streamDescription;
     const AudioStreamBasicDescription *outputDesc = self.outputFormat.streamDescription;
     
+#if TARGET_OS_IOS
     AudioClassDescription hardwareClassDesc = [self converterClassDescriptionWithManufacturer:kAppleHardwareAudioCodecManufacturer];
     AudioClassDescription softwareClassDesc = [self converterClassDescriptionWithManufacturer:kAppleSoftwareAudioCodecManufacturer];
-    
+
     AudioClassDescription classDescs[] = {hardwareClassDesc, softwareClassDesc};
-    
     OSStatus ret = AudioConverterNewSpecific(sourceDesc, outputDesc, sizeof(classDescs), classDescs, &_converter);
+#else
+    OSStatus ret = AudioConverterNew(sourceDesc, outputDesc, &_converter);
+#endif
     if (ret != noErr) {
         return nil;
     }

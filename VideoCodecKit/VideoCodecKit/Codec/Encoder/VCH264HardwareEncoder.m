@@ -221,7 +221,7 @@ void compressionOutputCallback(void * CM_NULLABLE outputCallbackRefCon,
 #if TARGET_OS_IOS
              (id)kCVPixelBufferOpenGLESCompatibilityKey: [NSNumber numberWithBool:YES],
 #else
-             (id)kCVPixelBufferOpenGLCompatibilityKey: [NSNumber numberWithBool:YES];
+             (id)kCVPixelBufferOpenGLCompatibilityKey: [NSNumber numberWithBool:YES],
 #endif
              };
 }
