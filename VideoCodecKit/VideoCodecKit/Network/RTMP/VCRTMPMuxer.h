@@ -1,8 +1,8 @@
 //
-//  VCRTMPChunkBasicHeader.h
+//  VCRTMPMuxer.h
 //  VideoCodecKit
 //
-//  Created by CmST0us on 2019/2/3.
+//  Created by CmST0us on 2019/2/12.
 //  Copyright © 2019 eric3u. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface VCRTMPChunkBasicHeader : NSObject
+@interface VCRTMPMuxer : NSObject
 
 @end
 
