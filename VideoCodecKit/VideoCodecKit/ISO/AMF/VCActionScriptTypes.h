@@ -21,11 +21,13 @@ NS_ASSUME_NONNULL_BEGIN
 // seealso: 2.2 Number Type
 @interface VCActionScriptNumber: VCActionScriptType
 @property (nonatomic, strong) NSNumber *value;
++ (instancetype)asTypeWithNumber:(NSNumber *)aNumber;
 @end
 
 // seealso: 2.3 Boolean Type
 @interface VCActionScriptBool: VCActionScriptType
 @property (nonatomic, assign) BOOL value;
++ (instancetype)asTypeWithBool:(BOOL)aBool;
 @end
 
 // seealso: 2.4 String Type
@@ -34,11 +36,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, getter=isLongString, readonly) BOOL longString;
 - (BOOL)isLongString;
 + (instancetype)emptyString;
++ (instancetype)asTypeWithString:(NSString *)aString;
 @end
 
 // seealso: 2.5 Object Type
 @interface VCActionScriptObject: VCActionScriptType
 @property (nonatomic, strong) NSMutableDictionary<NSString *, VCActionScriptType *> *value;
++ (instancetype)asTypeWithDictionary:(NSDictionary *)aDict;
 @end
 
 // seealso: 2.7 Null Type
@@ -54,6 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 // seealso: 2.10 ECMA Array Type
 @interface VCActionScriptECMAArray: VCActionScriptType
 @property (nonatomic, strong) NSMutableArray<VCActionScriptObject *> *value;
++ (instancetype)asTypeWithArray:(NSArray<VCActionScriptObject *> *)aArray;
 @end
 
 // seealso: 2.11 Object End Type
@@ -64,17 +69,21 @@ NS_ASSUME_NONNULL_BEGIN
 // sesalso: 2.12 Strict Array Type
 @interface VCActionScriptStrictArray: VCActionScriptType
 @property (nonatomic, strong) NSMutableArray<VCActionScriptType *> *value;
++ (instancetype)asTypeWithArray:(NSArray<VCActionScriptType *> *)aArray;
 @end
 
 // seealso: 2.13 Date Type
 @interface VCActionScriptDate: VCActionScriptType
 @property (nonatomic, strong) NSDate *value;
 @property (nonatomic, assign) int16_t timeZone;
++ (instancetype)asTypeWithDate:(NSDate *)aDate
+                      timeZone:(int16_t)timeZone;
 @end
 
 // seealso: 2.17 XML Document Type
 @interface VCActionScriptXMLDocument: VCActionScriptType
 @property (nonatomic, copy) NSString *value;
++ (instancetype)asTypeWithString:(NSString *)aString;
 @end
 
 

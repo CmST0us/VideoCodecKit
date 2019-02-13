@@ -42,7 +42,6 @@ typedef NS_ENUM(uint8_t, VCAMF0TypeMarker) {
 - (VCAMF0Serialization *)serialize:(VCActionScriptType *)type;
 #pragma mark - Deserialize Method
 - (VCActionScriptType *)deserialize;
-- (VCAMF0TypeMarker)nextDataType;
 
 @end
 

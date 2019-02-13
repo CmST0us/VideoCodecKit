@@ -45,25 +45,28 @@
             return [VCActionScriptType deserializeStrictArrayFromByteArray:byteArray];
         case VCAMF0TypeMarkerDate:
             return [VCActionScriptType deserializeDateFromByteArray:byteArray];
-        default:
-            return NSAssert(NO, "Unsupported Type Marker");
+        case VCAMF0TypeMarkerMovieClip:
+        case VCAMF0TypeMarkerReference:
+        case VCAMF0TypeMarkerUnsupported:
+        case VCAMF0TypeMarkerRecordset:
+        case VCAMF0TypeMarkerXmlDocument:
+        case VCAMF0TypeMarkerTypedObject:
+        case VCAMF0TypeMarkerAvmplusObject:
+            NSAssert(NO, @"Unsupported Type Marker");
     }
-    
+    NSAssert(NO, @"Unsupported Type Marker");
+    return nil;
 }
 
 + (VCActionScriptNumber *)deserializeNumberFromByteArray:(VCByteArray *)byteArray {
     double value = [byteArray readDouble];
     NSNumber *number = [NSNumber numberWithDouble:value];
-    VCActionScriptNumber *obj = [[VCActionScriptNumber alloc] init];
-    obj.value = number;
-    return obj;
+    return [VCActionScriptNumber asTypeWithNumber:number];
 }
 
 + (VCActionScriptBool *)deserializeBoolFromByteArray:(VCByteArray *)byteArray {
     BOOL value = [byteArray readUInt8];
-    VCActionScriptBool *obj = [[VCActionScriptBool alloc] init];
-    obj.value = value == 0 ? NO : YES;
-    return obj;
+    return [VCActionScriptBool asTypeWithBool:value == 0 ? NO : YES];
 }
 
 + (VCActionScriptString *)deserializeStringFromArray:(VCByteArray *)byteArray
@@ -73,9 +76,7 @@
         return [VCActionScriptString emptyString];
     }
     NSString *value = [byteArray readUTF8Bytes:len];
-    VCActionScriptString *obj = [[VCActionScriptString alloc] init];
-    obj.value = value;
-    return obj;
+    return [VCActionScriptString asTypeWithString:value];
 }
 
 + (VCActionScriptObject *)deserializeObjectFromByteArray:(VCByteArray *)byteArray {
@@ -93,9 +94,7 @@
         [dict setObject:value forKey:keyString];
     } while (keyString != nil &&
              keyString.length > 0);
-    VCActionScriptObject *obj = [[VCActionScriptObject alloc] init];
-    obj.value = dict;
-    return obj;
+    return [VCActionScriptObject asTypeWithDictionary:dict];
 }
 
 + (VCActionScriptNull *)deserializeNullFromByteArray:(VCByteArray *)byteArray {
@@ -113,9 +112,7 @@
         VCActionScriptObject *object = [VCActionScriptType deserializeObjectFromByteArray:byteArray];
         [arr addObject:object];
     }
-    VCActionScriptECMAArray *obj = [[VCActionScriptECMAArray alloc] init];
-    obj.value = arr;
-    return obj;
+    return [VCActionScriptECMAArray asTypeWithArray:arr];
 }
 
 + (VCActionScriptObjectEnd *)deserializeObjectEndFromByteArray:(VCByteArray *)byteArray {
@@ -129,26 +126,19 @@
         VCActionScriptType *type = [VCActionScriptType deserializeFromByteArray:byteArray];
         [arr addObject:type];
     }
-    VCActionScriptStrictArray *obj = [[VCActionScriptStrictArray alloc] init];
-    obj.value = arr;
-    return obj;
+    return [VCActionScriptStrictArray asTypeWithArray:arr];
 }
 
 + (VCActionScriptDate *)deserializeDateFromByteArray:(VCByteArray *)byteArray {
     double timestamp = [byteArray readDouble];
     int16_t timeZone = [byteArray readInt16];
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp / 1000];
-    VCActionScriptDate *obj = [[VCActionScriptDate alloc] init];
-    obj.value = date;
-    obj.timeZone = timeZone;
-    return obj;
+    return [VCActionScriptDate asTypeWithDate:date timeZone:timeZone];
 }
 
 + (VCActionScriptXMLDocument *)deserializeXMLDocumentFromByteArray:(VCByteArray *)byteArray {
     NSString *str = [VCActionScriptType deserializeStringFromArray:byteArray isLongString:YES].value;
-    VCActionScriptXMLDocument *obj = [[VCActionScriptXMLDocument alloc] init];
-    obj.value = str;
-    return obj;
+    return [VCActionScriptXMLDocument asTypeWithString:str];
 }
 
 - (void)serializeTypeMarkToArrayByte:(VCByteArray *)byteArray {
@@ -181,6 +171,12 @@
         writer.writeDouble(self.value.doubleValue);
     }];
 }
+
++ (instancetype)asTypeWithNumber:(NSNumber *)aNumber {
+    VCActionScriptNumber *v = [[VCActionScriptNumber alloc] init];
+    v.value = aNumber;
+    return v;
+}
 @end
 
 #pragma mark - Bool
@@ -192,6 +188,12 @@
     [byteArray writing:^(VCByteArrayWriter * _Nonnull writer) {
         writer.writeUInt8(self.value ? 1 : 0);
     }];
+}
+
++ (instancetype)asTypeWithBool:(BOOL)aBool {
+    VCActionScriptBool *v = [[VCActionScriptBool alloc] init];
+    v.value = aBool;
+    return v;
 }
 @end
 
@@ -222,7 +224,7 @@
         }
         NSData *data = [self.value dataUsingEncoding:NSUTF8StringEncoding];
         if ([self isLongString]) {
-            writer.writeUInt32(data.length).writeBytes(data);
+            writer.writeUInt32((uint32_t)data.length).writeBytes(data);
         } else {
             writer.writeUInt16(data.length).writeBytes(data);
         }
@@ -233,6 +235,11 @@
     return [[VCActionScriptString alloc] init];
 }
 
++ (instancetype)asTypeWithString:(NSString *)aString {
+    VCActionScriptString *str = [[VCActionScriptString alloc] init];
+    str.value = aString;
+    return str;
+}
 @end
 
 #pragma mark - Object
@@ -253,7 +260,7 @@
     for (NSString *key in [self.value allKeys]) {
         VCActionScriptType *value = self.value[key];
         VCActionScriptString *str = [[VCActionScriptString alloc] init];
-        str.value = keys;
+        str.value = key;
         [str serializeToArrayByte:byteArray];
         [value serializeTypeMarkToArrayByte:byteArray];
     }
@@ -261,6 +268,11 @@
     [[VCActionScriptObjectEnd objectEnd] serializeTypeMarkToArrayByte:byteArray];
 }
 
++ (instancetype)asTypeWithDictionary:(NSDictionary *)aDict {
+    VCActionScriptObject *v = [[VCActionScriptObject alloc] init];
+    v.value = [[NSMutableDictionary alloc] initWithDictionary:aDict];
+    return v;
+}
 @end
 
 #pragma mark - Null
@@ -270,7 +282,7 @@
 }
 
 + (instancetype)null {
-    [[VCActionScriptNull alloc] init];
+    return [[VCActionScriptNull alloc] init];
 }
 @end
 
@@ -280,7 +292,7 @@
     return VCAMF0TypeMarkerUndefined;
 }
 + (instancetype)undefined {
-    [[VCActionScriptUndefined alloc] init];
+    return [[VCActionScriptUndefined alloc] init];
 }
 @end
 
@@ -291,18 +303,24 @@
         return _value;
     }
     _value = [[NSMutableArray alloc] init];
+    return _value;
 }
 - (uint8_t)type {
     return VCAMF0TypeMarkerEcmaArray;
 }
 
 - (void)serializeToArrayByte:(VCByteArray *)byteArray {
-    [byteArray writeUInt32:self.value.count];
+    [byteArray writeUInt32:(uint32_t)self.value.count];
     for (VCActionScriptObject *obj in self.value) {
         [obj serializeToArrayByte:byteArray];
     }
 }
 
++ (instancetype)asTypeWithArray:(NSArray<VCActionScriptObject *> *)aArray {
+    VCActionScriptECMAArray *v = [[VCActionScriptECMAArray alloc] init];
+    v.value = [[NSMutableArray alloc] initWithArray:aArray];
+    return v;
+}
 @end
 
 #pragma mark - Object End
@@ -322,17 +340,24 @@
         return _value;
     }
     _value = [[NSMutableArray alloc] init];
+    return _value;
 }
 - (uint8_t)type {
     return VCAMF0TypeMarkerStrictArray;
 }
 
 - (void)serializeToArrayByte:(VCByteArray *)byteArray {
-    [byteArray writeUInt32:self.value.count];
+    [byteArray writeUInt32:(uint32_t)self.value.count];
     for (VCActionScriptType *obj in self.value) {
         [obj serializeTypeMarkToArrayByte:byteArray];
         [obj serializeToArrayByte:byteArray];
     }
+}
+
++ (instancetype)asTypeWithArray:(NSArray<VCActionScriptType *> *)aArray {
+    VCActionScriptStrictArray *v = [[VCActionScriptStrictArray alloc] init];
+    v.value = [[NSMutableArray alloc] initWithArray:aArray];
+    return v;
 }
 @end
 
@@ -348,6 +373,12 @@
     }];
 }
 
++ (instancetype)asTypeWithDate:(NSDate *)aDate timeZone:(int16_t)timeZone {
+    VCActionScriptDate *v = [[VCActionScriptDate alloc] init];
+    v.value = aDate;
+    v.timeZone = timeZone;
+    return v;
+}
 @end
 
 #pragma mark - XML Document
@@ -359,7 +390,13 @@
 - (void)serializeToArrayByte:(VCByteArray *)byteArray {
     [byteArray writing:^(VCByteArrayWriter * _Nonnull writer) {
         NSData *data = [self.value dataUsingEncoding:NSUTF8StringEncoding];
-        writer.writeUInt32(data.length).writeBytes(data);
-    }]
+        writer.writeUInt32((uint32_t)data.length).writeBytes(data);
+    }];
+}
+
++ (instancetype)asTypeWithString:(NSString *)aString {
+    VCActionScriptXMLDocument *v = [[VCActionScriptXMLDocument alloc] init];
+    v.value = aString;
+    return v;
 }
 @end
