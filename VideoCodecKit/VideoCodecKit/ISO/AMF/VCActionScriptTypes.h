@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)null;
 @end
 
-@implementation NSNull (VCActionScriptNull)
+@interface NSNull (VCActionScriptNull)
 + (VCActionScriptNull *)asNull;
 @end
 
