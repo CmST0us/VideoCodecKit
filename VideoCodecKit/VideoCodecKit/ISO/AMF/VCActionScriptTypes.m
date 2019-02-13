@@ -46,7 +46,7 @@
         case VCAMF0TypeMarkerDate:
             return [VCActionScriptType deserializeDateFromByteArray:byteArray];
         default:
-            return [VCActionScriptUndefined undefined];
+            return NSAssert(NO, "Unsupported Type Marker");
     }
     
 }
@@ -144,8 +144,19 @@
     return obj;
 }
 
++ (VCActionScriptXMLDocument *)deserializeXMLDocumentFromByteArray:(VCByteArray *)byteArray {
+    NSString *str = [VCActionScriptType deserializeStringFromArray:byteArray isLongString:YES].value;
+    VCActionScriptXMLDocument *obj = [[VCActionScriptXMLDocument alloc] init];
+    obj.value = str;
+    return obj;
+}
+
+- (void)serializeTypeMarkToArrayByte:(VCByteArray *)byteArray {
+    [byteArray writeUInt8:self.type];
+}
+
 - (void)serializeToArrayByte:(VCByteArray *)byteArray {
-    [byteArray writeUInt8:VCAMF0TypeMarkerUndefined];
+    
 }
 
 @end
@@ -153,8 +164,22 @@
 
 #pragma mark - Number
 @implementation VCActionScriptNumber
+- (NSNumber *)value {
+    if (_value != nil) {
+        return _value;
+    }
+    _value = @(0);
+    return _value;
+}
+
 - (uint8_t)type {
     return VCAMF0TypeMarkerNumber;
+}
+
+- (void)serializeToArrayByte:(VCByteArray *)byteArray {
+    [byteArray writing:^(VCByteArrayWriter * _Nonnull writer) {
+        writer.writeDouble(self.value.doubleValue);
+    }];
 }
 @end
 
@@ -162,6 +187,11 @@
 @implementation VCActionScriptBool
 - (uint8_t)type {
     return VCAMF0TypeMarkerBoolean;
+}
+- (void)serializeToArrayByte:(VCByteArray *)byteArray {
+    [byteArray writing:^(VCByteArrayWriter * _Nonnull writer) {
+        writer.writeUInt8(self.value ? 1 : 0);
+    }];
 }
 @end
 
@@ -184,6 +214,21 @@
     return NO;
 }
 
+- (void)serializeToArrayByte:(VCByteArray *)byteArray {
+    [byteArray writing:^(VCByteArrayWriter * _Nonnull writer) {
+        if (self.value.length == 0) {
+            writer.writeUInt16(0);
+            return;
+        }
+        NSData *data = [self.value dataUsingEncoding:NSUTF8StringEncoding];
+        if ([self isLongString]) {
+            writer.writeUInt32(data.length).writeBytes(data);
+        } else {
+            writer.writeUInt16(data.length).writeBytes(data);
+        }
+    }];
+}
+
 + (instancetype)emptyString {
     return [[VCActionScriptString alloc] init];
 }
@@ -195,6 +240,7 @@
 - (uint8_t)type {
     return VCAMF0TypeMarkerObject;
 }
+
 - (NSMutableDictionary<NSString *,VCActionScriptType *> *)value {
     if (_value != nil) {
         return _value;
@@ -202,6 +248,19 @@
     _value = [[NSMutableDictionary alloc] initWithCapacity:1];
     return _value;
 }
+
+- (void)serializeToArrayByte:(VCByteArray *)byteArray {
+    for (NSString *key in [self.value allKeys]) {
+        VCActionScriptType *value = self.value[key];
+        VCActionScriptString *str = [[VCActionScriptString alloc] init];
+        str.value = keys;
+        [str serializeToArrayByte:byteArray];
+        [value serializeTypeMarkToArrayByte:byteArray];
+    }
+    [[VCActionScriptString emptyString] serializeToArrayByte:byteArray];
+    [[VCActionScriptObjectEnd objectEnd] serializeTypeMarkToArrayByte:byteArray];
+}
+
 @end
 
 #pragma mark - Null
@@ -236,6 +295,14 @@
 - (uint8_t)type {
     return VCAMF0TypeMarkerEcmaArray;
 }
+
+- (void)serializeToArrayByte:(VCByteArray *)byteArray {
+    [byteArray writeUInt32:self.value.count];
+    for (VCActionScriptObject *obj in self.value) {
+        [obj serializeToArrayByte:byteArray];
+    }
+}
+
 @end
 
 #pragma mark - Object End
@@ -259,6 +326,14 @@
 - (uint8_t)type {
     return VCAMF0TypeMarkerStrictArray;
 }
+
+- (void)serializeToArrayByte:(VCByteArray *)byteArray {
+    [byteArray writeUInt32:self.value.count];
+    for (VCActionScriptType *obj in self.value) {
+        [obj serializeTypeMarkToArrayByte:byteArray];
+        [obj serializeToArrayByte:byteArray];
+    }
+}
 @end
 
 #pragma mark - Date
@@ -266,11 +341,25 @@
 - (uint8_t)type {
     return VCAMF0TypeMarkerDate;
 }
+
+- (void)serializeToArrayByte:(VCByteArray *)byteArray {
+    [byteArray writing:^(VCByteArrayWriter * _Nonnull writer) {
+        writer.writeDouble([self.value timeIntervalSince1970] * 1000).writeInt16(self.timeZone);
+    }];
+}
+
 @end
 
 #pragma mark - XML Document
 @implementation VCActionScriptXMLDocument
 - (uint8_t)type {
     return VCAMF0TypeMarkerXmlDocument;
+}
+
+- (void)serializeToArrayByte:(VCByteArray *)byteArray {
+    [byteArray writing:^(VCByteArrayWriter * _Nonnull writer) {
+        NSData *data = [self.value dataUsingEncoding:NSUTF8StringEncoding];
+        writer.writeUInt32(data.length).writeBytes(data);
+    }]
 }
 @end

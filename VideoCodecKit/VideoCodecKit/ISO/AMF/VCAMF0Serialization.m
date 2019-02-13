@@ -25,6 +25,7 @@
 }
 
 - (VCAMF0Serialization *)serialize:(VCActionScriptType *)type {
+    [type serializeTypeMarkToArrayByte:self.array];
     [type serializeToArrayByte:self.array];
     return self;
 }

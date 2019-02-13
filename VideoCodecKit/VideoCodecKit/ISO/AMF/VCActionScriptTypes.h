@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface VCActionScriptType: NSObject
 @property (nonatomic, readonly) uint8_t type;
 + (instancetype)deserializeFromByteArray:(VCByteArray *)byteArray;
+- (void)serializeTypeMarkToArrayByte:(VCByteArray *)byteArray;
 - (void)serializeToArrayByte:(VCByteArray *)byteArray;
 - (id)value;
 @end
@@ -71,8 +72,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) int16_t timeZone;
 @end
 
+// seealso: 2.17 XML Document Type
 @interface VCActionScriptXMLDocument: VCActionScriptType
-
+@property (nonatomic, copy) NSString *value;
 @end
 
 
