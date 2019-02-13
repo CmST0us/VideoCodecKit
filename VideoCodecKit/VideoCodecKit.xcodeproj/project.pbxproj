@@ -33,10 +33,12 @@
 		4F23D30A2211DCB20076DBEF /* VCRTMPMuxer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D3082211DCB20076DBEF /* VCRTMPMuxer.m */; };
 		4F23D30D2211DCC90076DBEF /* VCRTMPDemuxer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D30B2211DCC90076DBEF /* VCRTMPDemuxer.h */; };
 		4F23D30E2211DCC90076DBEF /* VCRTMPDemuxer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D30C2211DCC90076DBEF /* VCRTMPDemuxer.m */; };
-		4F23D3122211DD1F0076DBEF /* VCAMF0Serialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D3102211DD1F0076DBEF /* VCAMF0Serialization.h */; };
+		4F23D3122211DD1F0076DBEF /* VCAMF0Serialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D3102211DD1F0076DBEF /* VCAMF0Serialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F23D3132211DD1F0076DBEF /* VCAMF0Serialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D3112211DD1F0076DBEF /* VCAMF0Serialization.m */; };
-		4F23D3162211DD290076DBEF /* VCAMF3Serialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D3142211DD290076DBEF /* VCAMF3Serialization.h */; };
+		4F23D3162211DD290076DBEF /* VCAMF3Serialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D3142211DD290076DBEF /* VCAMF3Serialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F23D3172211DD290076DBEF /* VCAMF3Serialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D3152211DD290076DBEF /* VCAMF3Serialization.m */; };
+		4F50881F2212A35F008FB553 /* VCActionScriptTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F50881D2212A35F008FB553 /* VCActionScriptTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F5088202212A35F008FB553 /* VCActionScriptTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F50881E2212A35F008FB553 /* VCActionScriptTypes.m */; };
 		4F76FBD3216269FC002E7F0D /* VideoCodecKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBD1216269FC002E7F0D /* VideoCodecKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F76FC2121626AA3002E7F0D /* VideoCodecKit.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBDF21626A9C002E7F0D /* VideoCodecKit.pch */; };
 		4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FC1A21626AA3002E7F0D /* VCSafeObjectQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -108,6 +110,8 @@
 		4F23D3112211DD1F0076DBEF /* VCAMF0Serialization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAMF0Serialization.m; sourceTree = "<group>"; };
 		4F23D3142211DD290076DBEF /* VCAMF3Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAMF3Serialization.h; sourceTree = "<group>"; };
 		4F23D3152211DD290076DBEF /* VCAMF3Serialization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAMF3Serialization.m; sourceTree = "<group>"; };
+		4F50881D2212A35F008FB553 /* VCActionScriptTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCActionScriptTypes.h; sourceTree = "<group>"; };
+		4F50881E2212A35F008FB553 /* VCActionScriptTypes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCActionScriptTypes.m; sourceTree = "<group>"; };
 		4F76FBCE216269FC002E7F0D /* VideoCodecKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VideoCodecKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F76FBD1216269FC002E7F0D /* VideoCodecKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCodecKit.h; sourceTree = "<group>"; };
 		4F76FBD2216269FC002E7F0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -245,6 +249,8 @@
 				4F23D3112211DD1F0076DBEF /* VCAMF0Serialization.m */,
 				4F23D3142211DD290076DBEF /* VCAMF3Serialization.h */,
 				4F23D3152211DD290076DBEF /* VCAMF3Serialization.m */,
+				4F50881D2212A35F008FB553 /* VCActionScriptTypes.h */,
+				4F50881E2212A35F008FB553 /* VCActionScriptTypes.m */,
 			);
 			path = AMF;
 			sourceTree = "<group>";
@@ -485,6 +491,7 @@
 				4F23D3092211DCB20076DBEF /* VCRTMPMuxer.h in Headers */,
 				4F1913BF220161FB00921CAF /* VCFLVFile.h in Headers */,
 				4FDF7F3F220BEBB80019833C /* VCMicRecorder.h in Headers */,
+				4F50881F2212A35F008FB553 /* VCActionScriptTypes.h in Headers */,
 				4FBCCE2721F3251400E7BF3C /* VCH264SoftwareDecoder.h in Headers */,
 				4F23D3162211DD290076DBEF /* VCAMF3Serialization.h in Headers */,
 				4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */,
@@ -584,6 +591,7 @@
 				4FDF7F3A220B18950019833C /* VCAudioConverter.m in Sources */,
 				4FBCCE1C21F320B700E7BF3C /* VCSampleBuffer.m in Sources */,
 				4FBCCE2021F324F000E7BF3C /* VCH264HardwareDecoder.m in Sources */,
+				4F5088202212A35F008FB553 /* VCActionScriptTypes.m in Sources */,
 				4F1913B4220145A300921CAF /* VCFLVReader.m in Sources */,
 				4FBCCE2421F3250000E7BF3C /* VCH264HardwareEncoder.m in Sources */,
 				4F23D2EB2211C90D0076DBEF /* VCRTMPSession.m in Sources */,
