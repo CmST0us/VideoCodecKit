@@ -37,6 +37,7 @@
 		4FDF7F1E2205240A0019833C /* test.flv in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF7F1D2205240A0019833C /* test.flv */; };
 		4FDF7F362209381A0019833C /* VCDemoEncoderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F352209381A0019833C /* VCDemoEncoderTestViewController.m */; };
 		4FDF7F47220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F46220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m */; };
+		4FECFBE922142CAC0003A35C /* VCDemoAMFTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FECFBE822142CAC0003A35C /* VCDemoAMFTestViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -101,6 +102,8 @@
 		4FDF7F352209381A0019833C /* VCDemoEncoderTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoEncoderTestViewController.m; sourceTree = "<group>"; };
 		4FDF7F45220BEF4B0019833C /* VCDemoMicRecorderTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoMicRecorderTestViewController.h; sourceTree = "<group>"; };
 		4FDF7F46220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoMicRecorderTestViewController.m; sourceTree = "<group>"; };
+		4FECFBE722142CAC0003A35C /* VCDemoAMFTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoAMFTestViewController.h; sourceTree = "<group>"; };
+		4FECFBE822142CAC0003A35C /* VCDemoAMFTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoAMFTestViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +176,7 @@
 		4F9279A821442F0800F17F9A /* Classses */ = {
 			isa = PBXGroup;
 			children = (
+				4FECFBE622142C920003A35C /* AMF */,
 				4FD32AAC220DD51F00C391E8 /* FLVAudioPlay */,
 				4FDF7F41220BEEFA0019833C /* MicRecorder */,
 				4FDF7F33220937E00019833C /* Encoder */,
@@ -252,6 +256,15 @@
 				4FDF7F46220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m */,
 			);
 			path = MicRecorder;
+			sourceTree = "<group>";
+		};
+		4FECFBE622142C920003A35C /* AMF */ = {
+			isa = PBXGroup;
+			children = (
+				4FECFBE722142CAC0003A35C /* VCDemoAMFTestViewController.h */,
+				4FECFBE822142CAC0003A35C /* VCDemoAMFTestViewController.m */,
+			);
+			path = AMF;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -341,6 +354,7 @@
 				4FDF7F47220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m in Sources */,
 				4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */,
 				4FD32AAF220DD54A00C391E8 /* VCDemoFLVAudioPlayTestViewController.m in Sources */,
+				4FECFBE922142CAC0003A35C /* VCDemoAMFTestViewController.m in Sources */,
 				4FDF7F362209381A0019833C /* VCDemoEncoderTestViewController.m in Sources */,
 				4F0F95212188962C00CB9BAE /* VCDemoBackableViewController.m in Sources */,
 				4FBF022D2144284B00CA0EC8 /* main.m in Sources */,

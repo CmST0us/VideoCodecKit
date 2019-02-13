@@ -16,6 +16,10 @@
 
 @implementation VCAMF0Serialization
 
+- (instancetype)init {
+    return [self initWithData:[NSData data]];
+}
+
 - (instancetype)initWithData:(NSData *)data {
     self = [super init];
     if (self) {
@@ -34,4 +38,11 @@
     return [VCActionScriptType deserializeFromByteArray:self.array];
 }
 
+- (NSInteger)position {
+    return self.array.postion;
+}
+
+- (void)setPosition:(NSInteger)position {
+    self.array.postion = position;
+}
 @end

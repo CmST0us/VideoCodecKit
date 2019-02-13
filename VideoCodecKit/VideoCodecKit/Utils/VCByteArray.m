@@ -397,6 +397,7 @@
     if (s == NULL) {
         @throw [VCByteArrayException parseException];
     }
+    _postion += subData.length;
     return s;
 }
 

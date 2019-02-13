@@ -11,6 +11,7 @@
 #import "VCDemoEncoderTestViewController.h"
 #import "VCDemoMicRecorderTestViewController.h"
 #import "VCDemoFLVAudioPlayTestViewController.h"
+#import "VCDemoAMFTestViewController.h"
 
 @interface VCDemoListViewController ()
 
@@ -38,6 +39,10 @@
                   @"title":@"FLV音频播放，立体声测试",
                   @"class":NSStringFromClass([VCDemoFLVAudioPlayTestViewController class]),
                   },
+              @{
+                  @"title":@"AMF测试",
+                  @"class":NSStringFromClass([VCDemoAMFTestViewController class]),
+                  }
               ];
     return cases;
 }

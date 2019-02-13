@@ -280,6 +280,7 @@
         str.value = key;
         [str serializeToArrayByte:byteArray];
         [value serializeTypeMarkToArrayByte:byteArray];
+        [value serializeToArrayByte:byteArray];
     }
     [[VCActionScriptString emptyString] serializeToArrayByte:byteArray];
     [[VCActionScriptObjectEnd objectEnd] serializeTypeMarkToArrayByte:byteArray];
