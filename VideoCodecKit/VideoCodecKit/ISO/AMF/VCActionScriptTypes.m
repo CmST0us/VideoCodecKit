@@ -179,6 +179,12 @@
 }
 @end
 
+@implementation NSNumber (VCActionScriptNumber)
+- (VCActionScriptNumber *)asNumber {
+    return [VCActionScriptNumber asTypeWithNumber:self];
+}
+@end
+
 #pragma mark - Bool
 @implementation VCActionScriptBool
 - (uint8_t)type {
@@ -194,6 +200,12 @@
     VCActionScriptBool *v = [[VCActionScriptBool alloc] init];
     v.value = aBool;
     return v;
+}
+@end
+
+@implementation NSNumber (VCActionScriptBool)
+- (VCActionScriptBool *)asBool {
+    return [VCActionScriptBool asTypeWithBool:self.boolValue];
 }
 @end
 
@@ -242,6 +254,11 @@
 }
 @end
 
+@implementation NSString (VCActionScriptString)
+- (VCActionScriptString *)asString {
+    return [VCActionScriptString asTypeWithString:self];
+}
+@end
 #pragma mark - Object
 @implementation VCActionScriptObject
 - (uint8_t)type {
@@ -283,6 +300,12 @@
 
 + (instancetype)null {
     return [[VCActionScriptNull alloc] init];
+}
+@end
+
+@implementation NSNull (VCActionScriptNull)
++ (VCActionScriptNull *)asNull {
+    return [VCActionScriptNull null];
 }
 @end
 

@@ -24,10 +24,18 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)asTypeWithNumber:(NSNumber *)aNumber;
 @end
 
+@interface NSNumber (VCActionScriptNumber)
+- (VCActionScriptNumber *)asNumber;
+@end
+
 // seealso: 2.3 Boolean Type
 @interface VCActionScriptBool: VCActionScriptType
 @property (nonatomic, assign) BOOL value;
 + (instancetype)asTypeWithBool:(BOOL)aBool;
+@end
+
+@interface NSNumber (VCActionScriptBool)
+- (VCActionScriptBool *)asBool;
 @end
 
 // seealso: 2.4 String Type
@@ -39,6 +47,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)asTypeWithString:(NSString *)aString;
 @end
 
+@interface NSString (VCActionScriptString)
+- (VCActionScriptString *)asString;
+@end
+
 // seealso: 2.5 Object Type
 @interface VCActionScriptObject: VCActionScriptType
 @property (nonatomic, strong) NSMutableDictionary<NSString *, VCActionScriptType *> *value;
@@ -48,6 +60,10 @@ NS_ASSUME_NONNULL_BEGIN
 // seealso: 2.7 Null Type
 @interface VCActionScriptNull: VCActionScriptType
 + (instancetype)null;
+@end
+
+@implementation NSNull (VCActionScriptNull)
++ (VCActionScriptNull *)asNull;
 @end
 
 // seealso: 2.8 Undefined Type
