@@ -23,7 +23,7 @@
 		4F23D2F52211DB510076DBEF /* VCRTMPChunk.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D2F32211DB510076DBEF /* VCRTMPChunk.m */; };
 		4F23D2F82211DB700076DBEF /* VCRTMPMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D2F62211DB700076DBEF /* VCRTMPMessage.h */; };
 		4F23D2F92211DB700076DBEF /* VCRTMPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D2F72211DB700076DBEF /* VCRTMPMessage.m */; };
-		4F23D2FC2211DBBD0076DBEF /* VCTCPSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D2FA2211DBBD0076DBEF /* VCTCPSocket.h */; };
+		4F23D2FC2211DBBD0076DBEF /* VCTCPSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D2FA2211DBBD0076DBEF /* VCTCPSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F23D2FD2211DBBD0076DBEF /* VCTCPSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D2FB2211DBBD0076DBEF /* VCTCPSocket.m */; };
 		4F23D3012211DC050076DBEF /* VCRTMPHandshake.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D2FF2211DC050076DBEF /* VCRTMPHandshake.h */; };
 		4F23D3022211DC050076DBEF /* VCRTMPHandshake.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D3002211DC050076DBEF /* VCRTMPHandshake.m */; };
@@ -215,10 +215,6 @@
 		4F23D2E12211C8FE0076DBEF /* RTMP */ = {
 			isa = PBXGroup;
 			children = (
-				4F23D2E72211C90D0076DBEF /* VCRTMPSession.h */,
-				4F23D2E32211C90D0076DBEF /* VCRTMPSession.m */,
-				4F23D3032211DC470076DBEF /* VCRTMPSocket.h */,
-				4F23D3042211DC470076DBEF /* VCRTMPSocket.m */,
 				4F23D2F22211DB510076DBEF /* VCRTMPChunk.h */,
 				4F23D2F32211DB510076DBEF /* VCRTMPChunk.m */,
 				4F23D2F62211DB700076DBEF /* VCRTMPMessage.h */,
@@ -229,6 +225,10 @@
 				4F23D3082211DCB20076DBEF /* VCRTMPMuxer.m */,
 				4F23D30B2211DCC90076DBEF /* VCRTMPDemuxer.h */,
 				4F23D30C2211DCC90076DBEF /* VCRTMPDemuxer.m */,
+				4F23D2E72211C90D0076DBEF /* VCRTMPSession.h */,
+				4F23D2E32211C90D0076DBEF /* VCRTMPSession.m */,
+				4F23D3032211DC470076DBEF /* VCRTMPSocket.h */,
+				4F23D3042211DC470076DBEF /* VCRTMPSocket.m */,
 			);
 			path = RTMP;
 			sourceTree = "<group>";

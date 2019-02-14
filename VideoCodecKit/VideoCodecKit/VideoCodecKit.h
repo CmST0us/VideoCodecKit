@@ -39,6 +39,9 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCActionScriptTypes.h>
 
 #pragma mark - Network
+#pragma mark TCP Socket
+#import <VideoCodecKit/VCTCPSocket.h>
+
 #pragma mark RTMP
 
 #pragma mark - Codec
