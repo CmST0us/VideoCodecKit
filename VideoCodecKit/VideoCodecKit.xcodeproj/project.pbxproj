@@ -39,6 +39,8 @@
 		4F23D3172211DD290076DBEF /* VCAMF3Serialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D3152211DD290076DBEF /* VCAMF3Serialization.m */; };
 		4F50881F2212A35F008FB553 /* VCActionScriptTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F50881D2212A35F008FB553 /* VCActionScriptTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F5088202212A35F008FB553 /* VCActionScriptTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F50881E2212A35F008FB553 /* VCActionScriptTypes.m */; };
+		4F6420492215EE27000FB2EC /* VCSafeBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6420472215EE27000FB2EC /* VCSafeBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F64204A2215EE27000FB2EC /* VCSafeBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6420482215EE27000FB2EC /* VCSafeBuffer.m */; };
 		4F76FBD3216269FC002E7F0D /* VideoCodecKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBD1216269FC002E7F0D /* VideoCodecKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F76FC2121626AA3002E7F0D /* VideoCodecKit.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBDF21626A9C002E7F0D /* VideoCodecKit.pch */; };
 		4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FC1A21626AA3002E7F0D /* VCSafeObjectQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -112,6 +114,8 @@
 		4F23D3152211DD290076DBEF /* VCAMF3Serialization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAMF3Serialization.m; sourceTree = "<group>"; };
 		4F50881D2212A35F008FB553 /* VCActionScriptTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCActionScriptTypes.h; sourceTree = "<group>"; };
 		4F50881E2212A35F008FB553 /* VCActionScriptTypes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCActionScriptTypes.m; sourceTree = "<group>"; };
+		4F6420472215EE27000FB2EC /* VCSafeBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VCSafeBuffer.h; sourceTree = "<group>"; };
+		4F6420482215EE27000FB2EC /* VCSafeBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VCSafeBuffer.m; sourceTree = "<group>"; };
 		4F76FBCE216269FC002E7F0D /* VideoCodecKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VideoCodecKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F76FBD1216269FC002E7F0D /* VideoCodecKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCodecKit.h; sourceTree = "<group>"; };
 		4F76FBD2216269FC002E7F0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -371,6 +375,8 @@
 		4FBCCE1821F3208100E7BF3C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4F6420472215EE27000FB2EC /* VCSafeBuffer.h */,
+				4F6420482215EE27000FB2EC /* VCSafeBuffer.m */,
 				4F76FC1A21626AA3002E7F0D /* VCSafeObjectQueue.h */,
 				4F76FC1B21626AA3002E7F0D /* VCSafeObjectQueue.m */,
 				4FBCCE1921F320B700E7BF3C /* VCSampleBuffer.h */,
@@ -493,6 +499,7 @@
 				4FDF7F3F220BEBB80019833C /* VCMicRecorder.h in Headers */,
 				4F50881F2212A35F008FB553 /* VCActionScriptTypes.h in Headers */,
 				4FBCCE2721F3251400E7BF3C /* VCH264SoftwareDecoder.h in Headers */,
+				4F6420492215EE27000FB2EC /* VCSafeBuffer.h in Headers */,
 				4F23D3162211DD290076DBEF /* VCAMF3Serialization.h in Headers */,
 				4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */,
 				4F23D3052211DC470076DBEF /* VCRTMPSocket.h in Headers */,
@@ -604,6 +611,7 @@
 				4FBCCE4621F36E3000E7BF3C /* VCAVCFormatStream.m in Sources */,
 				4FBCCE2821F3251400E7BF3C /* VCH264SoftwareDecoder.m in Sources */,
 				4FBCCE4A21F36E4500E7BF3C /* VCAnnexBFormatStream.m in Sources */,
+				4F64204A2215EE27000FB2EC /* VCSafeBuffer.m in Sources */,
 				4F23D3172211DD290076DBEF /* VCAMF3Serialization.m in Sources */,
 				4FBCCE2C21F3252600E7BF3C /* VCH264SoftwareEncoder.m in Sources */,
 				4F1913BC2201466A00921CAF /* VCFLVTag.m in Sources */,

@@ -10,10 +10,11 @@
 #import "VCTCPSocket.h"
 #import "VCRTMPHandshake.h"
 
+#define kVCRTMPSocketDefaultTimeout (15)
 @interface VCRTMPSocket ()<VCTCPSocketDelegate>
 @property (nonatomic, strong) VCTCPSocket *socket;
 @property (nonatomic, strong) VCRTMPHandshake *handshake;
-
+@property (nonatomic, strong) NSTimer *timeoutTimer;
 @property (nonatomic, assign) BOOL connected;
 @end
 
@@ -23,6 +24,7 @@
     self = [super init];
     if (self) {
         _connected = NO;
+        _timeout = kVCRTMPSocketDefaultTimeout;
     }
     return self;
 }
@@ -38,11 +40,19 @@
 
 - (void)connectHost:(NSString *)host withPort:(NSInteger)port {
     [self.socket connectWithHost:host port:port];
+    self.timeoutTimer = [NSTimer scheduledTimerWithTimeInterval:self.timeout repeats:NO block:^(NSTimer * _Nonnull timer) {
+        if (!self.connected &&
+            self.delegate &&
+            [self.delegate respondsToSelector:@selector(rtmpSocketConnectedTimeout:)]) {
+            [self.delegate rtmpSocketConnectedTimeout:self];
+        }
+    }];
 }
 
 - (void)writeData:(NSData *)data {
     [self.socket writeData:data];
 }
+
 
 - (NSData *)readData {
     return [self.socket readData];
@@ -52,14 +62,29 @@
     [self.socket close];
 }
 
+- (void)finishConnect {
+    [self.timeoutTimer invalidate];
+    self.timeoutTimer = nil;
+}
+
 - (void)startHandshake {
     __weak typeof(self) weakSelf = self;
     self.handshake = [VCRTMPHandshake handshakeForSocket:self];
     [self.handshake startHandshakeWithBlock:^(VCRTMPHandshake * _Nonnull handshake, BOOL isSuccess, NSError * _Nonnull error) {
         if (isSuccess && error == nil) {
             weakSelf.connected = YES;
+            [weakSelf finishConnect];
+            if (weakSelf.delegate &&
+                [weakSelf.delegate respondsToSelector:@selector(rtmpSocketDidConnected:)]) {
+                [weakSelf.delegate rtmpSocketDidConnected:weakSelf];
+            }
         } else {
             weakSelf.connected = NO;
+            [weakSelf finishConnect];
+            if (weakSelf.delegate &&
+                [weakSelf.delegate respondsToSelector:@selector(rtmpSocketErrorOccurred:)]) {
+                [weakSelf.delegate rtmpSocketErrorOccurred:weakSelf];
+            }
         }
     }];
 }

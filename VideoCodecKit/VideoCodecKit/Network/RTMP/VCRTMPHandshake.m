@@ -9,11 +9,12 @@
 #import "VCRTMPHandshake.h"
 #import "VCRTMPSocket.h"
 #import "VCByteArray.h"
+#import "VCSafeBuffer.h"
 
 #define kVCRTMPHandshakeProtocolVersion (3)
 
 @interface VCRTMPHandshake ()<VCTCPSocketDelegate>
-@property (nonatomic, strong) VCByteArray *buffer;
+@property (nonatomic, strong) VCSafeBuffer *buffer;
 
 @property (nonatomic, weak) VCRTMPSocket *rtmpSocket;
 @property (nonatomic, copy) VCRTMPHandshakeBlock handler;
@@ -28,7 +29,7 @@
         _state = VCRTMPHandshakeStateUninitialized;
         _version = kVCRTMPHandshakeProtocolVersion;
         _handler = nil;
-        _buffer = [[VCByteArray alloc] init];
+        _buffer = [[VCSafeBuffer alloc] init];
     }
     return self;
 }
@@ -72,7 +73,7 @@
 - (NSData *)makeC2PacketWithS1Packet:(NSData *)s1 {
     VCByteArray *array = [[VCByteArray alloc] init];
     [array writing:^(VCByteArrayWriter * _Nonnull writer) {
-        writer.writeBytes([s1 subdataWithRange:NSMakeRange(0, 4)]).writeInt32([[NSDate date] timeIntervalSince1970]);
+        writer.writeBytes([s1 subdataWithRange:NSMakeRange(0, 4)]).writeInt32([[NSDate date] timeIntervalSince1970] - self.timestamp);
         writer.writeBytes([s1 subdataWithRange:NSMakeRange(8, 1528)]);
     }];
     return array.data;
@@ -92,14 +93,17 @@
 
 - (void)continueSendAck {
     // recv S0 S1
-    NSData *s0s1 = [self.buffer readBytes:1537];
+    NSInteger len = 1537;
+    NSData *s0s1 = [self.buffer pull:&len];
     self.state = VCRTMPHandshakeStateAckSending;
     [self.rtmpSocket writeData:[self makeC2PacketWithS0S1Packet:s0s1]];
     self.state = VCRTMPHandshakeStateAckSent;
 }
 
 - (void)makeHandshakeDone {
-    NSData *s2 = [self.buffer readBytes:1536];
+    // recv S2
+    NSInteger len = 1536;
+    NSData *s2 = [self.buffer pull:&len];
     self.state = VCRTMPHandshakeStateHandshakeDone;
     self.rtmpSocket.socket.delegate = self.socketDelegate;
     self.handler(self, YES, nil);
@@ -124,14 +128,14 @@
 }
 
 - (void)tcpSocketHasByteAvailable:(VCTCPSocket *)socket {
-    [self.buffer writeBytes:[self.rtmpSocket readData]];
+    [self.buffer push:[[VCSafeBufferNode alloc] initWithData:[self.rtmpSocket readData]]];
     switch (self.state) {
         case VCRTMPHandshakeStateVersionSent:
-            if (self.buffer.length >= 1537) {
+            if (self.buffer.count >= 1537) {
                 [self continueSendAck];
             }
         case VCRTMPHandshakeStateAckSent:
-            if (self.buffer.length >= 1536) {
+            if (self.buffer.count >= 1536) {
                 [self makeHandshakeDone];
             }
         default:

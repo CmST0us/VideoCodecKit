@@ -77,7 +77,6 @@
 }
 
 - (void)finishConnect {
-    self.connected = YES;
     [self.timeoutTimer invalidate];
     self.timeoutTimer = nil;
 }
@@ -163,6 +162,7 @@
                 self.inputStream.streamStatus == NSStreamStatusOpen &&
                 self.outputStream.streamStatus == NSStreamStatusOpen) {
                 if (aStream == self.inputStream) {
+                    self.connected = YES;
                     [self finishConnect];
                     if (self.delegate &&
                         [self.delegate respondsToSelector:@selector(tcpSocketDidConnected:)]) {
@@ -184,6 +184,7 @@
         case NSStreamEventHasSpaceAvailable:
             break;
         case NSStreamEventErrorOccurred: {
+            self.connected = NO;
             [self finishConnect];
             if (aStream == self.inputStream) {
                 if (self.delegate &&

@@ -9,7 +9,7 @@
 #import <VideoCodecKit/VideoCodecKit.h>
 #import "VCDemoRTMPHandshakeTestViewController.h"
 
-@interface VCDemoRTMPHandshakeTestViewController ()
+@interface VCDemoRTMPHandshakeTestViewController () <VCRTMPSocketDelegate>
 @property (nonatomic, strong) VCRTMPSocket *socket;
 @end
 
@@ -19,5 +19,19 @@
     
     self.socket = [[VCRTMPSocket alloc] init];
     [self.socket connectHost:@"js.live-send.acg.tv" withPort:1935];
+    self.socket.delegate = self;
 }
+
+- (void)rtmpSocketDidConnected:(VCRTMPSocket *)rtmpSocket {
+    NSLog(@"CONNECT");
+}
+
+- (void)rtmpSocketConnectedTimeout:(VCRTMPSocket *)rtmpSocket {
+    NSLog(@"TIMEOUT");
+}
+
+- (void)rtmpSocketErrorOccurred:(VCRTMPSocket *)rtmpSocket {
+    NSLog(@"ERROR");
+}
+
 @end

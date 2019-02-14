@@ -18,6 +18,7 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #pragma mark - Utils
 #import <VideoCodecKit/VCByteArray.h>
 #import <VideoCodecKit/VCSafeObjectQueue.h>
+#import <VideoCodecKit/VCSafeBuffer.h>
 
 #pragma mark - Format
 #pragma mark AnnexB
