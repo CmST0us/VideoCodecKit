@@ -145,6 +145,16 @@
     return data;
 }
 
+- (NSInteger)byteAvaliable {
+    NSUInteger len = 0;
+    uint8_t *buffer = nil;
+    BOOL ret = [self.inputStream getBuffer:&buffer length:&len];
+    if (!ret) {
+        return 0;
+    }
+    return len;
+}
+
 - (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode {
     switch (eventCode) {
         case NSStreamEventOpenCompleted: {

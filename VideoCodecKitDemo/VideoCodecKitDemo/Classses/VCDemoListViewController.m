@@ -13,7 +13,7 @@
 #import "VCDemoFLVAudioPlayTestViewController.h"
 #import "VCDemoAMFTestViewController.h"
 #import "VCDemoTCPSocketTestViewController.h"
-
+#import "VCDemoRTMPHandshakeTestViewController.h"
 @interface VCDemoListViewController ()
 
 @end
@@ -47,6 +47,10 @@
               @{
                   @"title": @"TCPSocket 测试",
                   @"class": NSStringFromClass([VCDemoTCPSocketTestViewController class]),
+                  },
+              @{
+                  @"title": @"RTMP握手",
+                  @"class": NSStringFromClass([VCDemoRTMPHandshakeTestViewController class]),
                   }
               ];
     return cases;

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VCTCPSocket.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,12 +24,27 @@ typedef NS_ENUM(NSUInteger, VCRTMPHandshakeState) {
 };
 
 @class VCRTMPHandshake;
-typedef void(^VCRTMPHandshakeBlock)(VCRTMPHandshake *handshake, BOOL isSuccess, NSError *error);
+typedef void(^VCRTMPHandshakeBlock)(VCRTMPHandshake *handshake, BOOL isSuccess, NSError * _Nullable  error);
 
-@interface VCRTMPHandshake : NSObject {
+@class VCRTMPSocket;
+@interface VCRTMPHandshake : NSObject<VCTCPSocketDelegate> {
     BOOL _isError;
 }
 @property (nonatomic, assign) VCRTMPHandshakeState state;
+
+#pragma mark - RTMP Handshake Property
+@property (nonatomic, assign) uint8_t version;
+@property (nonatomic, assign) int32_t timestamp;
+
+
+/**
+ 默认初始化方法
+
+ @param socket 需要握手的套接字
+ @return handshake实例
+ */
+
++ (instancetype)handshakeForSocket:(VCRTMPSocket *)socket;
 
 - (void)startHandshakeWithBlock:(VCRTMPHandshakeBlock)block;
 #pragma mark - State Trans Method;

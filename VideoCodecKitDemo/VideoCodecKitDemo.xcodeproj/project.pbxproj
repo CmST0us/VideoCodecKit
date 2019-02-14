@@ -14,6 +14,7 @@
 		4F0F9524218899E500CB9BAE /* Masonry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0F9522218899E500CB9BAE /* Masonry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */; };
 		4F2853C52215B1820041DAAE /* VCDemoTCPSocketTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2853C42215B1820041DAAE /* VCDemoTCPSocketTestViewController.m */; };
+		4F6420462215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6420452215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m */; };
 		4F76FC5B21626ED5002E7F0D /* KVSig.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; };
 		4F76FC5C21626ED5002E7F0D /* KVSig.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F76FC7521627512002E7F0D /* VideoCodecKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; };
@@ -69,6 +70,8 @@
 		4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoListViewController.m; sourceTree = "<group>"; };
 		4F2853C32215B1820041DAAE /* VCDemoTCPSocketTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoTCPSocketTestViewController.h; sourceTree = "<group>"; };
 		4F2853C42215B1820041DAAE /* VCDemoTCPSocketTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoTCPSocketTestViewController.m; sourceTree = "<group>"; };
+		4F6420442215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoRTMPHandshakeTestViewController.h; sourceTree = "<group>"; };
+		4F6420452215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoRTMPHandshakeTestViewController.m; sourceTree = "<group>"; };
 		4F76FC5A21626ED5002E7F0D /* KVSig.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KVSig.framework; path = VideoCodecKitDemo/KVSig.framework; sourceTree = "<group>"; };
 		4F76FC7421627512002E7F0D /* VideoCodecKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoCodecKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F92799921442E1700F17F9A /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavdevice.a; sourceTree = "<group>"; };
@@ -151,6 +154,15 @@
 			path = TCPSocket;
 			sourceTree = "<group>";
 		};
+		4F6420432215E494000FB2EC /* RTMPHandshake */ = {
+			isa = PBXGroup;
+			children = (
+				4F6420442215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.h */,
+				4F6420452215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m */,
+			);
+			path = RTMPHandshake;
+			sourceTree = "<group>";
+		};
 		4F92799821442E1700F17F9A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,6 +200,7 @@
 		4F9279A821442F0800F17F9A /* Classses */ = {
 			isa = PBXGroup;
 			children = (
+				4F6420432215E494000FB2EC /* RTMPHandshake */,
 				4F2853C22215B16E0041DAAE /* TCPSocket */,
 				4FECFBE622142C920003A35C /* AMF */,
 				4FD32AAC220DD51F00C391E8 /* FLVAudioPlay */,
@@ -372,6 +385,7 @@
 				4F2853C52215B1820041DAAE /* VCDemoTCPSocketTestViewController.m in Sources */,
 				4F0F95212188962C00CB9BAE /* VCDemoBackableViewController.m in Sources */,
 				4FBF022D2144284B00CA0EC8 /* main.m in Sources */,
+				4F6420462215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m in Sources */,
 				4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */,
 				4F0F951E218894FC00CB9BAE /* VCDemoViewController.m in Sources */,
 			);

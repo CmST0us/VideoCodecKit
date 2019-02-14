@@ -7,10 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VCTCPSocket.h"
 
 NS_ASSUME_NONNULL_BEGIN
+@protocol VCRTMPSocketDelegate <NSObject>
 
-@interface VCRTMPSocket : NSObject
+@end
+
+@interface VCRTMPSocket : NSObject<VCTCPComm>
+@property (nonatomic, readonly) BOOL connected;
+
+- (void)connectHost:(NSString *)host
+           withPort:(NSInteger)port;
+
+- (void)close;
+
+- (void)writeData:(NSData *)data;
+- (NSData *)readData;
 
 @end
 

@@ -11,6 +11,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class VCTCPSocket;
+
+/**
+ 所有使用VCTCPSocket的子类应继承此接口
+ 对此socket的读写请使用 使用此socket的对象 的读写方法
+ */
+@protocol VCTCPComm <NSObject>
+- (VCTCPSocket *)socket;
+@end
+
 @protocol VCTCPSocketDelegate <NSObject>
 - (void)tcpSocketConnectTimeout:(VCTCPSocket *)socket;
 - (void)tcpSocketDidConnected:(VCTCPSocket *)socket;
@@ -30,6 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) NSInputStream *inputStream;
 @property (nonatomic, strong, nullable) NSOutputStream *outputStream;
+
+@property (nonatomic, readonly) NSInteger byteAvaliable;
 
 - (void)connectWithHost:(NSString *)host
                    port:(NSUInteger)port;
