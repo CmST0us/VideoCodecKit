@@ -12,6 +12,7 @@
 #import "VCDemoMicRecorderTestViewController.h"
 #import "VCDemoFLVAudioPlayTestViewController.h"
 #import "VCDemoAMFTestViewController.h"
+#import "VCDemoTCPSocketTestViewController.h"
 
 @interface VCDemoListViewController ()
 
@@ -24,24 +25,28 @@
     if (cases != nil) return cases;
     cases = @[
               @{
-                  @"title":@"FLV播放",
-                  @"class":NSStringFromClass([VCDemoISOTestViewController class]),
+                  @"title": @"FLV播放",
+                  @"class": NSStringFromClass([VCDemoISOTestViewController class]),
                 },
               @{
-                  @"title":@"录制为FLV",
-                  @"class":NSStringFromClass([VCDemoEncoderTestViewController class]),
+                  @"title": @"录制为FLV",
+                  @"class": NSStringFromClass([VCDemoEncoderTestViewController class]),
                   },
               @{
-                  @"title":@"麦克风录音",
-                  @"class":NSStringFromClass([VCDemoMicRecorderTestViewController class]),
+                  @"title": @"麦克风录音",
+                  @"class": NSStringFromClass([VCDemoMicRecorderTestViewController class]),
                   },
               @{
-                  @"title":@"FLV音频播放，立体声测试",
-                  @"class":NSStringFromClass([VCDemoFLVAudioPlayTestViewController class]),
+                  @"title": @"FLV音频播放，立体声测试",
+                  @"class": NSStringFromClass([VCDemoFLVAudioPlayTestViewController class]),
                   },
               @{
-                  @"title":@"AMF测试",
-                  @"class":NSStringFromClass([VCDemoAMFTestViewController class]),
+                  @"title": @"AMF测试",
+                  @"class": NSStringFromClass([VCDemoAMFTestViewController class]),
+                  },
+              @{
+                  @"title": @"TCPSocket 测试",
+                  @"class": NSStringFromClass([VCDemoTCPSocketTestViewController class]),
                   }
               ];
     return cases;

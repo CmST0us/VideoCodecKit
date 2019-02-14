@@ -15,9 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)tcpSocketConnectTimeout:(VCTCPSocket *)socket;
 - (void)tcpSocketDidConnected:(VCTCPSocket *)socket;
 - (void)tcpSocketHasByteAvailable:(VCTCPSocket *)socket;
-- (void)tcpSocketOpenCompleted:(VCTCPSocket *)socket;
 - (void)tcpSocketErrorOccurred:(VCTCPSocket *)socket;
-- (void)tcpSocketEncountered:(VCTCPSocket *)socket;
+- (void)tcpSocketEndcountered:(VCTCPSocket *)socket;
 @end
 
 @interface VCTCPSocket : NSObject
@@ -25,7 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<VCTCPSocketDelegate> delegate;
 
 @property (nonatomic, assign) BOOL connected;
+
 @property (nonatomic, assign) NSTimeInterval timeout;
+@property (nonatomic, assign) NSInteger inputBufferWindowSize;
 
 @property (nonatomic, strong, nullable) NSInputStream *inputStream;
 @property (nonatomic, strong, nullable) NSOutputStream *outputStream;
@@ -35,6 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)close;
 
+- (void)writeData:(NSData *)data;
+- (nullable NSData *)readData;
 @end
 
 NS_ASSUME_NONNULL_END
