@@ -14,6 +14,8 @@
 #import "VCDemoAMFTestViewController.h"
 #import "VCDemoTCPSocketTestViewController.h"
 #import "VCDemoRTMPHandshakeTestViewController.h"
+#import "VCDemoRTMPFormatTestViewController.h"
+
 @interface VCDemoListViewController ()
 
 @end
@@ -51,6 +53,10 @@
               @{
                   @"title": @"RTMP握手",
                   @"class": NSStringFromClass([VCDemoRTMPHandshakeTestViewController class]),
+                  },
+              @{
+                  @"title": @"RTMP 数据包",
+                  @"class": NSStringFromClass([VCDemoRTMPFormatTestViewController class]),
                   }
               ];
     return cases;
