@@ -101,13 +101,13 @@
     
     // [TODO] 通知自旋锁模型？
     while (YES) {
-        if (!_playing) {
+        if (!self.playing) {
             [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
             if ([[NSThread currentThread] isCancelled]) break;
             continue;
         }
-        if (_audioTime.flags == kCMTimeFlags_Valid &&
-            sampleBufferPts.value > _audioTime.value + 3 * _audioTime.timescale) {
+        if (self.audioTime.flags == kCMTimeFlags_Valid &&
+            sampleBufferPts.value > self.audioTime.value + 3 * self.audioTime.timescale) {
             [self.readerConsumeCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
             if ([[NSThread currentThread] isCancelled]) break;
             continue;
