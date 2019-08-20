@@ -135,7 +135,8 @@
                     VCAVCConfigurationRecord *record = [[VCAVCConfigurationRecord alloc] initWithData:videoTag.payloadData];
                     CMFormatDescriptionRef format = nil;
                     OSStatus ret = [record createFormatDescription:&format];
-                    if (ret != noErr) {
+                    if (ret != noErr ||
+                        format == nil) {
                         // can't create video format description
                         break;
                     }
