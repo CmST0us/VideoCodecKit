@@ -47,6 +47,7 @@
                 [_pictureParameterSets addObject:pictureParameterSetNALUnit];
             }
             
+            // 有些文件并不符合规范....
             if (_AVCProfileIndication == 100 ||
                 _AVCProfileIndication == 110 ||
                 _AVCProfileIndication == 122 ||
@@ -64,6 +65,10 @@
             }
             
         } @catch (NSException *exception) {
+            if (_sequenceParameterSets.count > 0 ||
+                _pictureParameterSets.count > 0) {
+                return self;
+            }
             return nil;
         }
     }
