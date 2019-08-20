@@ -7,68 +7,66 @@
 //
 
 #import "VCDemoListViewController.h"
-#import "VCDemoDecodeSBDLViewController.h"
-#import "VCDemoCameraCaptureEncodeViewController.h"
-#import "VCDemoMetalRenderViewController.h"
-#import "VCDemoVideoAudioSyncViewController.h"
+#import "VCDemoISOTestViewController.h"
+#import "VCDemoEncoderTestViewController.h"
+#import "VCDemoMicRecorderTestViewController.h"
+#import "VCDemoFLVAudioPlayTestViewController.h"
 
-typedef NS_ENUM(NSUInteger, VCDemoListItem) {
-    VCDemoListItemCameraCaptureEncode = 0,
-    VCDemoListItemH264Decode,
-    VCDemoListItemMetalRender,
-    VCDemoListItemVideoAudioSync,
-    
-    VCDemoListItemCount,
-};
 @interface VCDemoListViewController ()
 
 @end
 
 @implementation VCDemoListViewController
 
+- (NSArray *)testCases {
+    static NSArray *cases = nil;
+    if (cases != nil) return cases;
+    cases = @[
+              @{
+                  @"title":@"FLV播放",
+                  @"class":NSStringFromClass([VCDemoISOTestViewController class]),
+                },
+              @{
+                  @"title":@"录制为FLV",
+                  @"class":NSStringFromClass([VCDemoEncoderTestViewController class]),
+                  },
+              @{
+                  @"title":@"麦克风录音",
+                  @"class":NSStringFromClass([VCDemoMicRecorderTestViewController class]),
+                  },
+              @{
+                  @"title":@"FLV音频播放，立体声测试",
+                  @"class":NSStringFromClass([VCDemoFLVAudioPlayTestViewController class]),
+                  },
+              ];
+    return cases;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 }
 
-- (IBAction)onDemoItemButtonClick:(UIButton *)sender {
-    NSInteger tag = sender.tag;
-    switch (tag) {
-        case VCDemoListItemCameraCaptureEncode: {
-            VCDemoCameraCaptureEncodeViewController *vc = [[VCDemoCameraCaptureEncodeViewController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-        break;
-        
-        case VCDemoListItemH264Decode: {
-            VCDemoDecodeSBDLViewController *vc = [[VCDemoDecodeSBDLViewController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-        break;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
 
-        case VCDemoListItemMetalRender: {
-#if (TARGET_IPHONE_SIMULATOR)
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"不支持" message:@"模拟器不支持Metal" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
-            [alert addAction:cancelAction];
-            [self presentViewController:alert animated:YES completion:nil];
-#else
-            VCDemoMetalRenderViewController *vc = [[VCDemoMetalRenderViewController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
-#endif
-        }
-        break;
-            
-        case VCDemoListItemVideoAudioSync: {
-            VCDemoVideoAudioSyncViewController *vc = [[VCDemoVideoAudioSyncViewController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            
-        break;
-            
-            
-        default:
-        break;
-    }
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self testCases].count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    NSDictionary *dict = [[self testCases] objectAtIndex:indexPath.row];
+    cell.textLabel.text = dict[@"title"];
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSDictionary *dict = [[self testCases] objectAtIndex:indexPath.row];
+    Class targetClass = NSClassFromString(dict[@"class"]);
+    UIViewController *vc = [(UIViewController *)[targetClass alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end
