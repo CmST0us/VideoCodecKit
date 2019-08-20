@@ -33,12 +33,30 @@
             return nil;
         }
         
+        [self bindData];
     }
     return self;
 }
 
+- (void)bindData {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAudioRouteChange:) name:AVAudioSessionRouteChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAudioRouteChange:) name:AVAudioSessionInterruptionNotification object:nil];
+}
+
+- (void)handleAudioRouteChange:(NSNotification *)aNotification {
+    NSLog(@"Route Change %@", aNotification);
+    [self.audioEngine stop];
+    [self.playerNode stop];
+}
+
 - (void)play {
-    [_playerNode play];
+    if (!self.audioEngine.isRunning) {
+        [self.audioEngine startAndReturnError:nil];
+    }
+    
+    if (!self.playerNode.isPlaying) {
+        [_playerNode play];
+    }
 }
 
 - (void)stop {
@@ -55,5 +73,6 @@
 
 - (void)dealloc {
     [self.audioEngine stop];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 @end
