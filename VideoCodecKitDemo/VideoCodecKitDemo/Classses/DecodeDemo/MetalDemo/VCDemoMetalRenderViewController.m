@@ -15,12 +15,14 @@
     dispatch_queue_t _captureQueue;
 }
 @property (nonatomic, strong) VCMetalRender *render;
+@property (nonatomic, assign) CFAbsoluteTime lastTime;
 @end
 
 @implementation VCDemoMetalRenderViewController
 
 - (void)customInit {
     [super customInit];
+    _lastTime = 0;
     self.render = [[VCMetalRender alloc] init];
 }
 
@@ -70,7 +72,7 @@
     
     
     self.captureDeviceOutput = [[AVCaptureVideoDataOutput alloc] init];
-    [self.captureDeviceOutput setAlwaysDiscardsLateVideoFrames:YES];
+//    [self.captureDeviceOutput setAlwaysDiscardsLateVideoFrames:NO];
     [self.captureDeviceOutput setVideoSettings:@{
                                                  (id)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)
                                                  }];
@@ -153,9 +155,18 @@
 }
 
 - (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+    CFAbsoluteTime offset = currentTime - self.lastTime;
+    if (offset >= 1.f / 30.f) {
+        NSLog(@"[Output] timeout: %f", offset);
+    } else {
+        NSLog(@"[Ouput] ok: %f", offset);
+    }
+    self.lastTime = currentTime;
+    
     CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     VCYUV420PImage *image = [[VCYUV420PImage alloc] initWithPixelBuffer:pixelBuffer];
-    // 注意这个会持有pixelBuffer,导致sampleBuffer 重用出问题
+//     注意这个会持有pixelBuffer,导致sampleBuffer 重用出问题
     [self.render render:image];
 }
 @end
