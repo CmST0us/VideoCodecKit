@@ -23,8 +23,11 @@
 @property (nonatomic, strong) id<MTLBuffer> converMatrix;
 @property (nonatomic, strong) id<MTLBuffer> vertics;
 @property (nonatomic, assign) NSInteger numberOfVertics;
-@property (nonatomic, strong) VCBaseImage *renderImage;
+//@property (nonatomic, strong) VCBaseImage *renderImage;
 @property (nonatomic, assign) CVMetalTextureCacheRef textureCache;
+@property (nonatomic, strong) id<MTLTexture> currentImageYTexture;
+@property (nonatomic, strong) id<MTLTexture> currentImageUVTexture;
+@property (nonatomic, assign) CFAbsoluteTime lastUploadTime;
 
 @end
 
@@ -32,6 +35,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
+        _lastUploadTime = 0;
         self.mtkView = [[MTKView alloc] init];
         self.mtkView.device = MTLCreateSystemDefaultDevice();;
         self.mtkView.delegate = self;
@@ -100,8 +104,7 @@
     self.converMatrix = [self.mtkView.device newBufferWithBytes:&converMatrix length:sizeof(VCMetalConverMatrix) options:MTLResourceStorageModeShared];
 }
 
-- (BOOL)setupTextureWithEncoder:(id<MTLRenderCommandEncoder>)encoder
-                          image:(VCYUV420PImage *)image {
+- (BOOL)setupTextureWithImage:(VCYUV420PImage *)image {
     // [TODO] 直接用 YUV 裸数据生成贴图
     id<MTLTexture> textureY = nil;
     id<MTLTexture> textureUV = nil;
@@ -137,8 +140,8 @@
     }
     
     if (textureY != nil && textureUV != nil) {
-        [encoder setFragmentTexture:textureY atIndex:0];
-        [encoder setFragmentTexture:textureUV atIndex:1];
+        self.currentImageYTexture = textureY;
+        self.currentImageUVTexture = textureUV;
     }
     return YES;
 }
@@ -152,26 +155,17 @@
 - (void)drawInMTKView:(MTKView *)view {
     id<MTLCommandBuffer> commandBuffer = [self.commandQueue commandBuffer];
     MTLRenderPassDescriptor *renderPassDescription = view.currentRenderPassDescriptor;
-    VCYUV420PImage *image = (VCYUV420PImage *)self.renderImage;
-    if (renderPassDescription == nil
-        || image == nil
-        || [image isKindOfClass:[VCYUV420PImage class]] == NO) {
-        // commit 会算入帧率
-        [commandBuffer commit];
-        return;
-    };
+    
     renderPassDescription.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 0.5, 0.5, 1.0f);
     id<MTLRenderCommandEncoder> renderEncoder = [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescription];
     [renderEncoder setViewport:(MTLViewport){0.0, 0.0, self.viewportSize.x, self.viewportSize.y, -1.0, 1.0}];
     [renderEncoder setRenderPipelineState:self.pipelineState]; // 设置渲染管道
     [renderEncoder setVertexBuffer:self.vertics offset:0 atIndex:0];
     // texture
-    if (![self setupTextureWithEncoder:renderEncoder image:image]) {
-        [renderEncoder endEncoding];
-        [commandBuffer commit];
-        return;
-    }
+    
     [renderEncoder setFragmentBuffer:self.converMatrix offset:0 atIndex:0];
+    [renderEncoder setFragmentTexture:self.currentImageYTexture atIndex:0];
+    [renderEncoder setFragmentTexture:self.currentImageUVTexture atIndex:1];
     [renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:self.numberOfVertics]; // 绘制三角形
     [renderEncoder endEncoding];
     [commandBuffer presentDrawable:view.currentDrawable];
@@ -193,7 +187,14 @@
 - (void)render:(id)object {
     if (object != nil) {
         // 断言渲染速度比喂数据快，如果渲染慢也没必要把时间消耗在过期的帧上了，直接显示最新的就行了
-        self.renderImage = object;
+        CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+        CFAbsoluteTime offset = currentTime - self.lastUploadTime;
+        if (offset >= 1.f / 30.f) {
+            NSLog(@"[Timeout]: offset %f", offset);
+        }
+        self.lastUploadTime = currentTime;
+        
+        [self setupTextureWithImage:object];
     }
 }
 
