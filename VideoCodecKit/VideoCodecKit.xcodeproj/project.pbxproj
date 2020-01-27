@@ -27,6 +27,8 @@
 		4F9173D223D966D00065D31D /* VCH265HardwareDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173D023D966D00065D31D /* VCH265HardwareDecoder.m */; };
 		4F9173D423DED84D0065D31D /* VCAssetReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9173D323DED84D0065D31D /* VCAssetReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F9173D623DED8CE0065D31D /* VCAssetReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173D523DED8CE0065D31D /* VCAssetReader.m */; };
+		4F9173D923DEDBDC0065D31D /* VCMP4Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9173D723DEDBDC0065D31D /* VCMP4Reader.h */; };
+		4F9173DA23DEDBDC0065D31D /* VCMP4Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173D823DEDBDC0065D31D /* VCMP4Reader.m */; };
 		4FBCCE1B21F320B700E7BF3C /* VCSampleBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FBCCE1921F320B700E7BF3C /* VCSampleBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FBCCE1C21F320B700E7BF3C /* VCSampleBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBCCE1A21F320B700E7BF3C /* VCSampleBuffer.m */; };
 		4FBCCE1F21F324F000E7BF3C /* VCH264HardwareDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FBCCE1D21F324F000E7BF3C /* VCH264HardwareDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -96,6 +98,8 @@
 		4F9173D023D966D00065D31D /* VCH265HardwareDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH265HardwareDecoder.m; sourceTree = "<group>"; };
 		4F9173D323DED84D0065D31D /* VCAssetReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCAssetReader.h; sourceTree = "<group>"; };
 		4F9173D523DED8CE0065D31D /* VCAssetReader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCAssetReader.m; sourceTree = "<group>"; };
+		4F9173D723DEDBDC0065D31D /* VCMP4Reader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCMP4Reader.h; sourceTree = "<group>"; };
+		4F9173D823DEDBDC0065D31D /* VCMP4Reader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCMP4Reader.m; sourceTree = "<group>"; };
 		4FBCCE1921F320B700E7BF3C /* VCSampleBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCSampleBuffer.h; sourceTree = "<group>"; };
 		4FBCCE1A21F320B700E7BF3C /* VCSampleBuffer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCSampleBuffer.m; sourceTree = "<group>"; };
 		4FBCCE1D21F324F000E7BF3C /* VCH264HardwareDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264HardwareDecoder.h; sourceTree = "<group>"; };
@@ -350,6 +354,8 @@
 		4FBCCE6321FCA87700E7BF3C /* MP4 */ = {
 			isa = PBXGroup;
 			children = (
+				4F9173D723DEDBDC0065D31D /* VCMP4Reader.h */,
+				4F9173D823DEDBDC0065D31D /* VCMP4Reader.m */,
 			);
 			path = MP4;
 			sourceTree = "<group>";
@@ -413,6 +419,7 @@
 				4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */,
 				4F1913A821FED9C800921CAF /* VCAnnexBFormatParser.h in Headers */,
 				4F1913B3220145A300921CAF /* VCFLVReader.h in Headers */,
+				4F9173D923DEDBDC0065D31D /* VCMP4Reader.h in Headers */,
 				4FDF7F39220B18950019833C /* VCAudioConverter.h in Headers */,
 				4F9173D423DED84D0065D31D /* VCAssetReader.h in Headers */,
 				4FBCCE2B21F3252600E7BF3C /* VCH264SoftwareEncoder.h in Headers */,
@@ -504,6 +511,7 @@
 				4FBCCE2021F324F000E7BF3C /* VCH264HardwareDecoder.m in Sources */,
 				4F1913B4220145A300921CAF /* VCFLVReader.m in Sources */,
 				4FBCCE2421F3250000E7BF3C /* VCH264HardwareEncoder.m in Sources */,
+				4F9173DA23DEDBDC0065D31D /* VCMP4Reader.m in Sources */,
 				4F9173D623DED8CE0065D31D /* VCAssetReader.m in Sources */,
 				4F1913A921FED9C800921CAF /* VCAnnexBFormatParser.m in Sources */,
 				4FDF7F40220BEBB80019833C /* VCMicRecorder.m in Sources */,

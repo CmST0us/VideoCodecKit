@@ -10,6 +10,15 @@
 
 @implementation VCAssetReader
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _audioFormatDescription = NULL;
+        _videoFormatDescription = NULL;
+    }
+    return self;
+}
+
 - (VCSampleBuffer *)nextSampleBuffer {
     return nil;
 }
