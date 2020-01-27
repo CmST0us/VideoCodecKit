@@ -8,28 +8,18 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreMedia/CoreMedia.h>
+#import "VCAssetReader.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @class VCFLVReader;
-@class VCSampleBuffer;
 
 @interface VCFLVVideoKeyFrameIndex : NSObject
 @property (nonatomic, assign) NSUInteger position;
 @property (nonatomic, assign) CMTime presentationTime;
 @end
 
-@protocol VCFLVReaderDelegate <NSObject>
-- (void)reader:(VCFLVReader *)reader didGetVideoFormatDescription:(CMFormatDescriptionRef)formatDescription;
-- (void)reader:(VCFLVReader *)reader didGetVideoSampleBuffer:(VCSampleBuffer *)sampleBuffer;
-- (void)reader:(VCFLVReader *)reader didGetAudioFormatDescription:(CMFormatDescriptionRef)formatDescription;
-- (void)reader:(VCFLVReader *)reader didGetAudioSampleBuffer:(VCSampleBuffer *)sampleBuffer;
-- (void)readerDidReachEOF:(VCFLVReader *)reader;
-@end
+@interface VCFLVReader : VCAssetReader
 
-@class VCSampleBuffer;
-@interface VCFLVReader : NSObject
-
-@property (nonatomic, weak) id<VCFLVReaderDelegate> delegate;
 @property (nonatomic, readonly) BOOL isReading;
 
 @property (nonatomic, readonly) NSArray<VCFLVVideoKeyFrameIndex *> *keyFrameIndex;
