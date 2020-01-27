@@ -26,10 +26,9 @@
             AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
             AVAssetTrack *audioTrack = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
             
-            _assetReader = [[AVAssetReader alloc] initWithAsset:asset error:&error];
+            _assetReader = [[AVAssetReader alloc] initWithAsset:asset error:&err];
             if (error != nil||
                 _assetReader == nil) {
-                err = error;
                 break;
             }
             
