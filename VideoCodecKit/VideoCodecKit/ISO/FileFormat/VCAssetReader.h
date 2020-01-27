@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 @protected
     CMFormatDescriptionRef _videoFormatDescription;
     CMFormatDescriptionRef _audioFormatDescription;
+    NSMutableArray<VCSampleBuffer *> *_sampleBufferQueue;
+    NSCondition *_sampleBufferQueueLock;
 }
 
 @property (nonatomic, weak) id<VCAssetReaderDelegate> delegate;
@@ -34,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) CMFormatDescriptionRef audioFormatDescription;
 
 - (nullable VCSampleBuffer *)nextSampleBuffer;
+- (void)next;
 
 @end
 

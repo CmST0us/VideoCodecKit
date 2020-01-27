@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSDictionary *)defaultAttributes;
 
 - (OSStatus)decodeSampleBuffer:(VCSampleBuffer *)sampleBuffer;
-- (void)cleat;
+- (void)clear;
 
 @end
 

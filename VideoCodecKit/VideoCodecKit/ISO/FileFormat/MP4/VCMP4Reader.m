@@ -51,6 +51,7 @@
             return self;
         }
     }
+    return nil;
 }
 
 @end

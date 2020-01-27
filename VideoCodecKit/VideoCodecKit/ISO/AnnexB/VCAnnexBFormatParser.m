@@ -9,7 +9,7 @@
 #import "VCAnnexBFormatParser.h"
 #import "VCAnnexBFormatStream.h"
 
-#define kVCAnnexBFormatParserDefaultBufferCapacity 4096
+#define kVCAnnexBFormatParserDefaultBufferCapacity (40960)
 
 //                            +-----+
 //                            |     |

@@ -196,7 +196,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
     }
     // [TODO] kVTDecodeFrame_EnableTemporalProcessing 判断是否需要加
     VTDecodeFrameFlags flags = kVTDecodeFrame_EnableAsynchronousDecompression;
-    return VTDecompressionSessionDecodeFrame(self.session, sampleBuffer.sampleBuffer, flags, nil, nil);
+     return VTDecompressionSessionDecodeFrame(self.session, sampleBuffer.sampleBuffer, flags, nil, nil);
 }
 
 - (void)clear {

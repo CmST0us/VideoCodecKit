@@ -15,12 +15,23 @@
     if (self) {
         _audioFormatDescription = NULL;
         _videoFormatDescription = NULL;
+        _sampleBufferQueueLock = [[NSCondition alloc] init];
     }
     return self;
 }
 
 - (VCSampleBuffer *)nextSampleBuffer {
-    return nil;
+    [_sampleBufferQueueLock lock];
+    if (![_sampleBufferQueueLock waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:30]]){
+        return nil;
+    }
+    VCSampleBuffer *buf = [_sampleBufferQueue firstObject];
+    [_sampleBufferQueue removeObjectAtIndex:0];
+    [_sampleBufferQueueLock unlock];
+    return buf;
 }
 
+- (void)next {
+    
+}
 @end
