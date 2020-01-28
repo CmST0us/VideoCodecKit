@@ -13,8 +13,6 @@
 		4F0F9523218899E500CB9BAE /* Masonry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0F9522218899E500CB9BAE /* Masonry.framework */; };
 		4F0F9524218899E500CB9BAE /* Masonry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0F9522218899E500CB9BAE /* Masonry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */; };
-		4F76FC5B21626ED5002E7F0D /* KVSig.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; };
-		4F76FC5C21626ED5002E7F0D /* KVSig.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F76FC7521627512002E7F0D /* VideoCodecKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; };
 		4F76FC7621627512002E7F0D /* VideoCodecKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F9173F123DF21D20065D31D /* VCRawH264DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173F023DF21D20065D31D /* VCRawH264DemoViewController.m */; };
@@ -50,7 +48,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				4F76FC7621627512002E7F0D /* VideoCodecKit.framework in Embed Frameworks */,
-				4F76FC5C21626ED5002E7F0D /* KVSig.framework in Embed Frameworks */,
 				4F0F9524218899E500CB9BAE /* Masonry.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -68,7 +65,6 @@
 		4F0F9522218899E500CB9BAE /* Masonry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Masonry.framework; path = VideoCodecKitDemo/Masonry.framework; sourceTree = "<group>"; };
 		4F0F95362188BCB100CB9BAE /* VCDemoListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoListViewController.h; sourceTree = "<group>"; };
 		4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoListViewController.m; sourceTree = "<group>"; };
-		4F76FC5A21626ED5002E7F0D /* KVSig.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KVSig.framework; path = VideoCodecKitDemo/KVSig.framework; sourceTree = "<group>"; };
 		4F76FC7421627512002E7F0D /* VideoCodecKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoCodecKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F9173EF23DF21D20065D31D /* VCRawH264DemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCRawH264DemoViewController.h; sourceTree = "<group>"; };
 		4F9173F023DF21D20065D31D /* VCRawH264DemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCRawH264DemoViewController.m; sourceTree = "<group>"; };
@@ -124,7 +120,6 @@
 				4F0F9523218899E500CB9BAE /* Masonry.framework in Frameworks */,
 				4F9279EA21451A7600F17F9A /* VideoToolbox.framework in Frameworks */,
 				4F9279D72145180800F17F9A /* libiconv.tbd in Frameworks */,
-				4F76FC5B21626ED5002E7F0D /* KVSig.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,7 +225,6 @@
 			children = (
 				4F0F9522218899E500CB9BAE /* Masonry.framework */,
 				4F76FC7421627512002E7F0D /* VideoCodecKit.framework */,
-				4F76FC5A21626ED5002E7F0D /* KVSig.framework */,
 				4FBF021C2144284A00CA0EC8 /* VideoCodecKitDemo */,
 				4FBF021B2144284A00CA0EC8 /* Products */,
 				4F92799821442E1700F17F9A /* Frameworks */,
