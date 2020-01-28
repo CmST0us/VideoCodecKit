@@ -9,6 +9,11 @@
 #import "VCAVCFormatStream.h"
 #import "VCAnnexBFormatStream.h"
 #import "VCByteArray.h"
+#import "VCH264NALU.h"
+
+@interface VCAVCFormatStream ()
+@property (nonatomic, copy) NSArray<VCH264NALU *> *nalus;
+@end
 
 @implementation VCAVCFormatStream
 - (instancetype)initWithData:(NSData *)aData
@@ -45,4 +50,32 @@
     }
 }
 
+- (NSArray *)nalus {
+    if (_nalus) {
+        return _nalus;
+    }
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    VCByteArray *array = [[VCByteArray alloc] initWithData:_data];
+    @try {
+        do {
+            uint32_t len = 0;
+            if (self.startCodeLength == 4) {
+                len = [array readUInt32];
+            } else if (self.startCodeLength == 3) {
+                len = [array readUInt24];
+            }
+            NSData *naluData = [array readBytes:len];
+            id naluObj = [[self.naluClass alloc] initWithData:naluData];
+            if (naluObj) {
+                [arr addObject:naluObj];
+            }
+            
+        } while (array.bytesAvailable > 0);
+    } @catch (NSException *exception) {
+        _nalus = arr;
+        return _nalus;
+    }
+    _nalus = arr;
+    return _nalus;
+}
 @end

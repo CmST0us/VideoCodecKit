@@ -23,16 +23,23 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCAVCFormatStream.h>
 #import <VideoCodecKit/VCAVCConfigurationRecord.h>
 #import <VideoCodecKit/VCAudioSpecificConfig.h>
+#import <VideoCodecKit/VCH264NALU.h>
+
+#import <VideoCodecKit/VCAssetReader.h>
 
 #import <VideoCodecKit/VCFLVReader.h>
 #import <VideoCodecKit/VCFLVWriter.h>
 #import <VideoCodecKit/VCFLVTag.h>
 #import <VideoCodecKit/VCFLVFile.h>
 
+#import <VideoCodecKit/VCRawH264Reader.h>
+#import <VideoCodecKit/VCRawH265Reader.h>
+
 #import <VideoCodecKit/VCVideoDecoder.h>
 #import <VideoCodecKit/VCVideoEncoder.h>
 #import <VideoCodecKit/VCH264HardwareEncoder.h>
 #import <VideoCodecKit/VCH264HardwareDecoder.h>
+#import <VideoCodecKit/VCH265HardwareDecoder.h>
 #import <VideoCodecKit/VCAudioConverter.h>
 
 #import <VideoCodecKit/VCAudioPCMRender.h>

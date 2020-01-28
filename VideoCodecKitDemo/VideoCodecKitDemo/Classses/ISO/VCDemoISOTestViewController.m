@@ -11,7 +11,7 @@
 #import "VCDemoISOTestViewController.h"
 
 
-@interface VCDemoISOTestViewController () <VCFLVReaderDelegate, VCVideoDecoderDelegate, VCAudioConverterDelegate> {
+@interface VCDemoISOTestViewController () <VCAssetReaderDelegate, VCVideoDecoderDelegate, VCAudioConverterDelegate> {
 }
 @property (nonatomic, assign) BOOL playing;
 @property (nonatomic, assign) BOOL seeking;

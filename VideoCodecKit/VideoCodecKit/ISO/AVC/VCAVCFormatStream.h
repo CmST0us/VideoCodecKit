@@ -23,6 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 // should be 4 or 3
 @property (nonatomic, readonly) NSUInteger startCodeLength;
 
+@property (nonatomic, readonly) NSArray *nalus;
+@property (nonatomic, assign) Class naluClass;
+
 - (instancetype)initWithData:(NSData *)aData
              startCodeLength:(NSUInteger)startCodeLength;
 

@@ -34,7 +34,7 @@ typedef NS_ENUM(uint8_t, VCAudioSpecificConfigObjectTypeSampleRateIndex) {
 @property (nonatomic, readonly) BOOL isExtension;
 
 - (instancetype)initWithData:(NSData *)data;
-- (OSStatus)createAudioFormatDescription:(CMFormatDescriptionRef *)outputDescription;
+- (OSStatus)createAudioFormatDescription:(CMFormatDescriptionRef _Nullable * _Nullable)outputDescription;
 
 @end
 

@@ -8,7 +8,7 @@
 #import <VideoCodecKit/VideoCodecKit.h>
 #import "VCDemoFLVAudioPlayTestViewController.h"
 
-@interface VCDemoFLVAudioPlayTestViewController () <VCFLVReaderDelegate, VCAudioConverterDelegate> {
+@interface VCDemoFLVAudioPlayTestViewController () <VCAssetReaderDelegate, VCAudioConverterDelegate> {
 }
 @property (nonatomic, assign) BOOL playing;
 @property (nonatomic, assign) BOOL seeking;

@@ -33,6 +33,9 @@
 }
 
 - (OSStatus)createAudioFormatDescription:(CMFormatDescriptionRef *)outputDescription {
+    if (outputDescription == NULL) {
+        return -1;
+    }
     AudioStreamBasicDescription basicDescription;
     basicDescription.mFormatID = kAudioFormatMPEG4AAC;
     basicDescription.mSampleRate = self.sampleRate;

@@ -1,27 +1,26 @@
 //
-//  VCH264HardwareDecoder.m
+//  VCH265HardwareDecoder.m
 //  VideoCodecKit
 //
-//  Created by CmST0us on 2019/1/19.
-//  Copyright © 2019 eric3u. All rights reserved.
+//  Created by CmST0us on 2020/1/23.
+//  Copyright © 2020 eric3u. All rights reserved.
 //
 
 #import <VideoToolbox/VideoToolbox.h>
-#import "VCH264HardwareDecoder.h"
+#import "VCH265HardwareDecoder.h"
 
-#define kVCH264HardwareDecoderMinGOPCount (3)
+#define kVCH265HardwareDecoderMinGOPCount (3)
 
-@interface VCH264HardwareDecoder ()
+@interface VCH265HardwareDecoder ()
 @property (nonatomic, strong) NSMutableArray<VCSampleBuffer *> *decodeBuffer;
-
 @property (nonatomic) CMFormatDescriptionRef formatDescription;
 @property (nonatomic) VTDecompressionSessionRef session;
 
-@property (nonatomic, readonly) BOOL isBaseline;
+@property (nonatomic, assign) BOOL isBaseline;
 @property (nonatomic, assign) BOOL shouldClearDecodeBuffer;
 @end
 
-@implementation VCH264HardwareDecoder
+@implementation VCH265HardwareDecoder
 @synthesize session = _session;
 
 #pragma mark - Callback
@@ -32,7 +31,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
                                         CVImageBufferRef imageBuffer,
                                         CMTime presentationTimeStamp,
                                         CMTime presentationDuration) {
-    VCH264HardwareDecoder *decoder = (__bridge VCH264HardwareDecoder *)decompressionOutputRefCon;
+    VCH265HardwareDecoder *decoder = (__bridge VCH265HardwareDecoder *)decompressionOutputRefCon;
     if (decoder == nil) return;
     [decoder decodeSessionDidOuputWithStatus:status infoFlags:infoFlags imageBuffer:imageBuffer presentationTimeStamp:presentationTimeStamp duration:presentationDuration];
 }
@@ -41,10 +40,9 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _decodeBuffer = [NSMutableArray arrayWithCapacity:kVCH264HardwareDecoderMinGOPCount];
-        _attributes = [VCH264HardwareDecoder defaultAttributes];
-        _isBaseline = NO;
-        _shouldClearDecodeBuffer = NO;
+        _decodeBuffer = [NSMutableArray arrayWithCapacity:kVCH265HardwareDecoderMinGOPCount];
+        _attributes = [VCH265HardwareDecoder defaultAttributes];
+        
         _formatDescription = NULL;
     }
     return self;
@@ -82,6 +80,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
              (NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange),
              (NSString *)kCVPixelBufferIOSurfacePropertiesKey: @{},
              (NSString *)kCVPixelBufferOpenGLCompatibilityKey: @(YES),
+             (NSString *)kCVPixelBufferMetalCompatibilityKey: @(YES)
 #else
              (NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange),
              (NSString *)kCVPixelBufferIOSurfacePropertiesKey: @{},
@@ -177,7 +176,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         [self.decodeBuffer sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             return CMTimeCompare([obj1 presentationTimeStamp], [obj2 presentationTimeStamp]) <= 0;
         }];
-        if (self.decodeBuffer.count >= kVCH264HardwareDecoderMinGOPCount) {
+        if (self.decodeBuffer.count >= kVCH265HardwareDecoderMinGOPCount) {
             if (self.delegate && [self.delegate respondsToSelector:@selector(videoDecoder:didOutputSampleBuffer:)]) {
                 [self.delegate videoDecoder:self didOutputSampleBuffer:self.decodeBuffer[0]];
             }
@@ -196,12 +195,13 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         return kVTInvalidSessionErr;
     }
     // [TODO] kVTDecodeFrame_EnableTemporalProcessing 判断是否需要加
-    VTDecodeFrameFlags flags = 0;
+    VTDecodeFrameFlags flags = kVTDecodeFrame_EnableAsynchronousDecompression;
     return VTDecompressionSessionDecodeFrame(self.session, sampleBuffer.sampleBuffer, flags, nil, nil);
 }
 
 - (void)clear {
     _shouldClearDecodeBuffer = YES;
 }
+
 
 @end

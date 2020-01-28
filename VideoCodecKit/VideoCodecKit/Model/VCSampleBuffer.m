@@ -8,29 +8,21 @@
 
 #import "VCSampleBuffer.h"
 
+@interface VCSampleBuffer ()
+@property (nonatomic, assign) BOOL shouldFreeWhenDone;
+@end
+
 @implementation VCSampleBuffer
 
-- (instancetype)init {
-    CMSampleBufferRef sampleBuffer = nil;
-    CMSampleBufferCreate(kCFAllocatorDefault,
-                         nil,
-                         false,
-                         nil,
-                         nil,
-                         nil,
-                         0,
-                         0,
-                         nil,
-                         0,
-                         nil,
-                         &sampleBuffer);
-    return [self initWithSampleBuffer:sampleBuffer];
+- (instancetype)initWithSampleBuffer:(CMSampleBufferRef)aSampleBuffer {
+    return [self initWithSampleBuffer:aSampleBuffer freeWhenDone:YES];
 }
 
-- (instancetype)initWithSampleBuffer:(CMSampleBufferRef)aSampleBuffer {
+- (instancetype)initWithSampleBuffer:(CMSampleBufferRef)aSampleBuffer freeWhenDone:(BOOL)shouldFreeWhenDone {
     self = [super init];
     if (self) {
         _sampleBuffer = aSampleBuffer;
+        _shouldFreeWhenDone = shouldFreeWhenDone;
     }
     return self;
 }
@@ -114,7 +106,11 @@
 }
 
 - (void)dealloc {
-    CFRelease(_sampleBuffer);
+    if (_sampleBuffer &&
+        _shouldFreeWhenDone) {
+        CFRelease(_sampleBuffer);
+        _sampleBuffer = NULL;
+    }
 }
 
 @end

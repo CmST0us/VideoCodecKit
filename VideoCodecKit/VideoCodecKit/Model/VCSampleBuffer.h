@@ -24,7 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL keyFrame;
 @property (nonatomic, readonly) AudioStreamBasicDescription audioStreamBasicDescription;
 
-- (instancetype)initWithSampleBuffer:(CMSampleBufferRef)aSampleBuffer NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithSampleBuffer:(CMSampleBufferRef)aSampleBuffer;
+- (instancetype)initWithSampleBuffer:(CMSampleBufferRef)aSampleBuffer freeWhenDone:(BOOL)shouldFreeWhenDone NS_DESIGNATED_INITIALIZER;
+
 - (nullable NSData *)h264ParameterSetData;
 - (nullable NSData *)dataBufferData;
 
