@@ -31,7 +31,7 @@
 }
 
 - (NSData *)warpAVCStartCode {
-    uint32_t len = CFSwapInt32HostToBig(self.data.length);
+    uint32_t len = CFSwapInt32HostToBig((uint32_t)self.data.length);
     NSMutableData *data = [[NSMutableData alloc] initWithCapacity:4 + self.data.length];
     [data appendBytes:&len length:4];
     [data appendData:self.data];

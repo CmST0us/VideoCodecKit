@@ -86,20 +86,14 @@
             NSData *readData = [[NSData alloc] initWithBytesNoCopy:self.inputStreamReadBuffer length:readLen freeWhenDone:NO];
             [self.annexBFormatParser appendData:readData];
             VCAnnexBFormatStream *annexBFormatFrame = [self.annexBFormatParser next];
-            if (annexBFormatFrame == nil) {
-                [self doReading];
-                return;
-            }
             
             while (annexBFormatFrame != nil) {
                 VCAVCFormatStream *avcFormatFrame = [annexBFormatFrame toAVCFormatStream];
                 [[avcFormatFrame nalus] enumerateObjectsUsingBlock:^(VCH264NALU * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     if (obj.type == VCH264NALUTypePicParameterSet) {
                         self.ppsData = obj.data;
-                        [self doReading];
                     } else if (obj.type == VCH264NALUTypeSeqParameterSet) {
                         self.spsData = obj.data;
-                        [self doReading];
                     } else if (obj.type == VCH264NALUTypeSliceIDR ||
                                obj.type == VCH264NALUTypeSliceData) {
                         /// 一般来说NALU排序是SPS PPS IDR
@@ -111,6 +105,8 @@
                                 }
                             }
                         }
+                        
+                        NSLog(@"nalu: %@", obj);
                         NSData *data = [obj warpAVCStartCode];
                         CMBlockBufferRef blockBuffer = [self createBlockBufferWithData:data];
                         CMSampleTimingInfo timingInfo;
@@ -120,21 +116,21 @@
                         VCSampleBuffer *sampleBuffer = [self createSampleBufferWithBlockBuffer:blockBuffer
                                                                                     timingInfo:timingInfo description:self.videoFormatDescription];
                         CFRelease(blockBuffer);
+                        
                         if (self.delegate &&
                             [self.delegate respondsToSelector:@selector(reader:didGetVideoSampleBuffer:)]) {
                             [self.delegate reader:self didGetVideoSampleBuffer:sampleBuffer];
                         }
+                        
                         self.frameCount += 1;
                     }
                 }];
                 annexBFormatFrame = [self.annexBFormatParser next];
             }
+            
+            [self doReading];
         }
     });
-}
-
-- (void)next {
-    [self doReading];
 }
 
 - (void)stopReading {

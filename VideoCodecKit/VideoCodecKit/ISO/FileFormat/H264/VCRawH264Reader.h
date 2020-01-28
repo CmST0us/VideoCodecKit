@@ -14,8 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface VCRawH264Reader : VCAssetReader
 
 - (instancetype)initWithURL:(NSURL *)fileURL;
-- (void)startReading;
-- (void)stopReading;
 
 @end
 

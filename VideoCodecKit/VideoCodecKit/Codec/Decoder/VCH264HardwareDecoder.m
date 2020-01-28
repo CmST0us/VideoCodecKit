@@ -195,8 +195,8 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         return kVTInvalidSessionErr;
     }
     // [TODO] kVTDecodeFrame_EnableTemporalProcessing 判断是否需要加
-    VTDecodeFrameFlags flags = kVTDecodeFrame_EnableAsynchronousDecompression;
-     return VTDecompressionSessionDecodeFrame(self.session, sampleBuffer.sampleBuffer, flags, nil, nil);
+    VTDecodeFrameFlags flags = 0;
+    return VTDecompressionSessionDecodeFrame(self.session, sampleBuffer.sampleBuffer, flags, nil, nil);
 }
 
 - (void)clear {
