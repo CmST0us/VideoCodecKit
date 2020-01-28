@@ -722,6 +722,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MACH_O_TYPE = mh_dylib;
+				MARKETING_VERSION = 0.9.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eric3u.VideoCodecKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
@@ -755,6 +756,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MACH_O_TYPE = mh_dylib;
+				MARKETING_VERSION = 0.9.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eric3u.VideoCodecKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;

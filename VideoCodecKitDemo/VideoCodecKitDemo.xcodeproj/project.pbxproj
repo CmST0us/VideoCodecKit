@@ -531,6 +531,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.9.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.eric3u.VideoCodecKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -556,6 +557,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.9.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.eric3u.VideoCodecKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
