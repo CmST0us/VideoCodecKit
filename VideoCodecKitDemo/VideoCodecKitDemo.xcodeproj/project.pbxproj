@@ -18,6 +18,7 @@
 		4F76FC7521627512002E7F0D /* VideoCodecKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; };
 		4F76FC7621627512002E7F0D /* VideoCodecKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F9173F123DF21D20065D31D /* VCRawH264DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173F023DF21D20065D31D /* VCRawH264DemoViewController.m */; };
+		4F9173FD23E031A30065D31D /* VCRawH265DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173FC23E031A30065D31D /* VCRawH265DemoViewController.m */; };
 		4F9279D72145180800F17F9A /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9279D62145180700F17F9A /* libiconv.tbd */; };
 		4F9279EA21451A7600F17F9A /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9279E921451A7500F17F9A /* VideoToolbox.framework */; };
 		4F9279EC21451A8100F17F9A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9279EB21451A8100F17F9A /* CoreMedia.framework */; };
@@ -70,6 +71,8 @@
 		4F76FC7421627512002E7F0D /* VideoCodecKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoCodecKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F9173EF23DF21D20065D31D /* VCRawH264DemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCRawH264DemoViewController.h; sourceTree = "<group>"; };
 		4F9173F023DF21D20065D31D /* VCRawH264DemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCRawH264DemoViewController.m; sourceTree = "<group>"; };
+		4F9173FB23E031A30065D31D /* VCRawH265DemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VCRawH265DemoViewController.h; sourceTree = "<group>"; };
+		4F9173FC23E031A30065D31D /* VCRawH265DemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VCRawH265DemoViewController.m; sourceTree = "<group>"; };
 		4F92799921442E1700F17F9A /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavdevice.a; sourceTree = "<group>"; };
 		4F92799A21442E1700F17F9A /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libswscale.a; sourceTree = "<group>"; };
 		4F92799B21442E1700F17F9A /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavfilter.a; sourceTree = "<group>"; };
@@ -148,6 +151,15 @@
 			path = RawH264;
 			sourceTree = "<group>";
 		};
+		4F9173FA23E0317D0065D31D /* RawH265 */ = {
+			isa = PBXGroup;
+			children = (
+				4F9173FB23E031A30065D31D /* VCRawH265DemoViewController.h */,
+				4F9173FC23E031A30065D31D /* VCRawH265DemoViewController.m */,
+			);
+			path = RawH265;
+			sourceTree = "<group>";
+		};
 		4F92799821442E1700F17F9A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,6 +197,7 @@
 		4F9279A821442F0800F17F9A /* Classses */ = {
 			isa = PBXGroup;
 			children = (
+				4F9173FA23E0317D0065D31D /* RawH265 */,
 				4F9173EE23DF21BE0065D31D /* RawH264 */,
 				4FD32AAC220DD51F00C391E8 /* FLVAudioPlay */,
 				4FDF7F41220BEEFA0019833C /* MicRecorder */,
@@ -353,6 +366,7 @@
 				4F9173F123DF21D20065D31D /* VCRawH264DemoViewController.m in Sources */,
 				4FBCCE6A21FCD08B00E7BF3C /* VCDemoISOTestViewController.m in Sources */,
 				4FDF7F47220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m in Sources */,
+				4F9173FD23E031A30065D31D /* VCRawH265DemoViewController.m in Sources */,
 				4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */,
 				4FD32AAF220DD54A00C391E8 /* VCDemoFLVAudioPlayTestViewController.m in Sources */,
 				4FDF7F362209381A0019833C /* VCDemoEncoderTestViewController.m in Sources */,
