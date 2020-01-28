@@ -93,32 +93,28 @@
                 avcFormatFrame.naluClass = [VCH265NALU class];
                 [[avcFormatFrame nalus] enumerateObjectsUsingBlock:^(VCH265NALU * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     VCH265NALUType naluType = obj.type;
+                    NSLog(@"nalu: %@", obj);
                     if (naluType == VCH265NALUTypePPS) {
                         self.ppsData = obj.data;
-                        if ([self createFormatDescription]) {
-                            if (self.delegate &&
-                                [self.delegate respondsToSelector:@selector(reader:didGetVideoFormatDescription:)]) {
-                                [self.delegate reader:self didGetVideoFormatDescription:self.videoFormatDescription];
-                            }
-                        }
                     } else if (naluType == VCH265NALUTypeSPS) {
                         self.spsData = obj.data;
-                        if ([self createFormatDescription]) {
-                            if (self.delegate &&
-                                [self.delegate respondsToSelector:@selector(reader:didGetVideoFormatDescription:)]) {
-                                [self.delegate reader:self didGetVideoFormatDescription:self.videoFormatDescription];
-                            }
-                        }
                     } else if (naluType == VCH265NALUTypeVPS) {
                         self.vpsData = obj.data;
-                        if ([self createFormatDescription]) {
-                            if (self.delegate &&
-                                [self.delegate respondsToSelector:@selector(reader:didGetVideoFormatDescription:)]) {
-                                [self.delegate reader:self didGetVideoFormatDescription:self.videoFormatDescription];
+                    } else if (naluType == VCH265NALUTypeSEI) {
+                        
+                    } else if (naluType == VCH265NALUTypeSliceN ||
+                               naluType == VCH265NALUTypeIDR ||
+                               naluType == VCH265NALUTypeSliceR ||
+                               naluType == VCH265NALUTypeCRA){
+                        if (naluType == VCH265NALUTypeIDR ||
+                            naluType == VCH265NALUTypeCRA) {
+                            if ([self createFormatDescription]) {
+                                if (self.delegate &&
+                                    [self.delegate respondsToSelector:@selector(reader:didGetVideoFormatDescription:)]) {
+                                    [self.delegate reader:self didGetVideoFormatDescription:self.videoFormatDescription];
+                                }
                             }
                         }
-                    } else {
-                        NSLog(@"nalu: %@", obj);
                         NSData *data = [obj warpAVCStartCode];
                         CMBlockBufferRef blockBuffer = [self createBlockBufferWithData:data];
                         CMSampleTimingInfo timingInfo;

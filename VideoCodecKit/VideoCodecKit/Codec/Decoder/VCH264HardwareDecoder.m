@@ -71,8 +71,9 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         // [TODO] 编写解析器解析额外的avcC数据
         // [TODO] 如果没有avcC数据, 则流为Annex-B，掉对应解析器解析。
         // 判断是否为baseline
+        self.session = nil;
+        _formatDescription = CFRetain(formatDescription);
     }
-    _formatDescription = CFRetain(formatDescription);
 }
 
 + (NSDictionary *)defaultAttributes {

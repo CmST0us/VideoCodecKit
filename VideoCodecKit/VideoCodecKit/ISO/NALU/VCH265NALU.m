@@ -46,8 +46,12 @@
     return data;
 }
 
-- (NSString *)description { 
-    return [NSString stringWithFormat:@"NALU Type: %@", [VCH265NALU NALUTypeDescription][@(self.type)] ? : @(self.type)];
+- (NSString *)description {
+    NSString *s = [VCH265NALU NALUTypeDescription][@(self.type)];
+    if (s == nil) {
+        s = [NSString stringWithFormat:@"%@", @(self.type)];
+    }
+    return [NSString stringWithFormat:@"NALU Type: %@", s];
 }
 
 + (NSDictionary<NSNumber *, NSString *> *)NALUTypeDescription {
@@ -57,6 +61,11 @@
             @(VCH265NALUTypeVPS): @"VPS",
             @(VCH265NALUTypeSPS): @"SPS",
             @(VCH265NALUTypePPS): @"PPS",
+            @(VCH265NALUTypeSEI): @"SEI",
+            @(VCH265NALUTypeIDR): @"IDR",
+            @(VCH265NALUTypeSliceN): @"SliceN",
+            @(VCH265NALUTypeSliceR): @"SliceR",
+            @(VCH265NALUTypeCRA): @"CRA"
         };
     }
     return description;

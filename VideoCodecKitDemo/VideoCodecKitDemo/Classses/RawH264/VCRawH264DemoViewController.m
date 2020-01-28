@@ -44,6 +44,7 @@
 
 - (void)reader:(VCAssetReader *)reader didGetVideoSampleBuffer:(VCSampleBuffer *)sampleBuffer {
     [self.decoder decodeSampleBuffer:sampleBuffer];
+    [NSThread sleepForTimeInterval:0.03];
 }
 
 - (void)reader:(VCAssetReader *)reader didGetVideoFormatDescription:(CMFormatDescriptionRef)formatDescription {
