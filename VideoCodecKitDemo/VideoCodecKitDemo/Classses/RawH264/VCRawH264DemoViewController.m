@@ -11,8 +11,8 @@
 
 
 @interface VCRawH264DemoViewController () <VCAssetReaderDelegate, VCVideoDecoderDelegate>
-@property (nonatomic, strong) VCRawH264Reader *reader;
-@property (nonatomic, strong) VCH264HardwareDecoder *decoder;
+@property (nonatomic, strong) VCRawH265Reader *reader;
+@property (nonatomic, strong) VCH265HardwareDecoder *decoder;
 @property (nonatomic, strong) AVSampleBufferDisplayLayer *displayLayer;
 @end
 
@@ -21,12 +21,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    NSURL *file = [[NSBundle mainBundle] URLForResource:@"sss" withExtension:@"h264"];
-    self.reader = [[VCRawH264Reader alloc] initWithURL:file];
+    NSURL *file = [[NSBundle mainBundle] URLForResource:@"sss" withExtension:@"h265"];
+    self.reader = [[VCRawH265Reader alloc] initWithURL:file];
     self.reader.delegate = self;
     [self.reader startReading];
     
-    self.decoder = [[VCH264HardwareDecoder alloc] init];
+    self.decoder = [[VCH265HardwareDecoder alloc] init];
     self.decoder.delegate = self;
     
     self.displayLayer = [[AVSampleBufferDisplayLayer alloc] init];

@@ -50,7 +50,7 @@
     }
 }
 
-- (NSArray<VCH264NALU *> *)nalus {
+- (NSArray *)nalus {
     if (_nalus) {
         return _nalus;
     }
@@ -65,8 +65,11 @@
                 len = [array readUInt24];
             }
             NSData *naluData = [array readBytes:len];
-            VCH264NALU *h264NALU = [[VCH264NALU alloc] initWithData:naluData];
-            [arr addObject:h264NALU];
+            id naluObj = [[self.naluClass alloc] initWithData:naluData];
+            if (naluObj) {
+                [arr addObject:naluObj];
+            }
+            
         } while (array.bytesAvailable > 0);
     } @catch (NSException *exception) {
         _nalus = arr;

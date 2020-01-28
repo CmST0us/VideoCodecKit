@@ -89,6 +89,7 @@
             
             while (annexBFormatFrame != nil) {
                 VCAVCFormatStream *avcFormatFrame = [annexBFormatFrame toAVCFormatStream];
+                avcFormatFrame.naluClass = [VCH264NALU class];
                 [[avcFormatFrame nalus] enumerateObjectsUsingBlock:^(VCH264NALU * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     if (obj.type == VCH264NALUTypePicParameterSet) {
                         self.ppsData = obj.data;

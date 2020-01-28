@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSDictionary *attributes;
 
 + (NSDictionary *)defaultAttributes;
+- (void)setFormatDescription:(CMFormatDescriptionRef)formatDescription;
 
 - (OSStatus)decodeSampleBuffer:(VCSampleBuffer *)sampleBuffer;
 - (void)clear;

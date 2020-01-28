@@ -23,7 +23,7 @@
 		4F76FC5921626DCA002E7F0D /* VCMarco.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBE821626A9C002E7F0D /* VCMarco.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F76FC64216270E1002E7F0D /* VCSafeObjectQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F76FC1B21626AA3002E7F0D /* VCSafeObjectQueue.m */; };
 		4F7FBEF121946AE000182A00 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC3521626C4C002E7F0D /* AudioToolbox.framework */; };
-		4F9173D123D966D00065D31D /* VCH265HardwareDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9173CF23D966D00065D31D /* VCH265HardwareDecoder.h */; };
+		4F9173D123D966D00065D31D /* VCH265HardwareDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9173CF23D966D00065D31D /* VCH265HardwareDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F9173D223D966D00065D31D /* VCH265HardwareDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173D023D966D00065D31D /* VCH265HardwareDecoder.m */; };
 		4F9173D423DED84D0065D31D /* VCAssetReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9173D323DED84D0065D31D /* VCAssetReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F9173D623DED8CE0065D31D /* VCAssetReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173D523DED8CE0065D31D /* VCAssetReader.m */; };
@@ -35,6 +35,8 @@
 		4F9173E823DF18B00065D31D /* VCRawH265Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173E623DF18B00065D31D /* VCRawH265Reader.m */; };
 		4F9173EC23DF1E0B0065D31D /* VCH264NALU.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9173EA23DF1E0B0065D31D /* VCH264NALU.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F9173ED23DF1E0B0065D31D /* VCH264NALU.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173EB23DF1E0B0065D31D /* VCH264NALU.m */; };
+		4F9173F823E01B0F0065D31D /* VCH265NALU.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9173F623E01B0F0065D31D /* VCH265NALU.h */; };
+		4F9173F923E01B0F0065D31D /* VCH265NALU.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173F723E01B0F0065D31D /* VCH265NALU.m */; };
 		4FBCCE1B21F320B700E7BF3C /* VCSampleBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FBCCE1921F320B700E7BF3C /* VCSampleBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FBCCE1C21F320B700E7BF3C /* VCSampleBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBCCE1A21F320B700E7BF3C /* VCSampleBuffer.m */; };
 		4FBCCE1F21F324F000E7BF3C /* VCH264HardwareDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FBCCE1D21F324F000E7BF3C /* VCH264HardwareDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -112,6 +114,8 @@
 		4F9173E623DF18B00065D31D /* VCRawH265Reader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCRawH265Reader.m; sourceTree = "<group>"; };
 		4F9173EA23DF1E0B0065D31D /* VCH264NALU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264NALU.h; sourceTree = "<group>"; };
 		4F9173EB23DF1E0B0065D31D /* VCH264NALU.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH264NALU.m; sourceTree = "<group>"; };
+		4F9173F623E01B0F0065D31D /* VCH265NALU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH265NALU.h; sourceTree = "<group>"; };
+		4F9173F723E01B0F0065D31D /* VCH265NALU.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCH265NALU.m; sourceTree = "<group>"; };
 		4FBCCE1921F320B700E7BF3C /* VCSampleBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCSampleBuffer.h; sourceTree = "<group>"; };
 		4FBCCE1A21F320B700E7BF3C /* VCSampleBuffer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCSampleBuffer.m; sourceTree = "<group>"; };
 		4FBCCE1D21F324F000E7BF3C /* VCH264HardwareDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCH264HardwareDecoder.h; sourceTree = "<group>"; };
@@ -291,6 +295,8 @@
 			children = (
 				4F9173EA23DF1E0B0065D31D /* VCH264NALU.h */,
 				4F9173EB23DF1E0B0065D31D /* VCH264NALU.m */,
+				4F9173F623E01B0F0065D31D /* VCH265NALU.h */,
+				4F9173F723E01B0F0065D31D /* VCH265NALU.m */,
 			);
 			path = NALU;
 			sourceTree = "<group>";
@@ -457,6 +463,7 @@
 				4FDF7F1B220511A60019833C /* VCAudioPCMRender.h in Headers */,
 				4F1913BF220161FB00921CAF /* VCFLVFile.h in Headers */,
 				4FDF7F3F220BEBB80019833C /* VCMicRecorder.h in Headers */,
+				4F9173F823E01B0F0065D31D /* VCH265NALU.h in Headers */,
 				4F9173E323DF18A10065D31D /* VCRawH264Reader.h in Headers */,
 				4FBCCE2721F3251400E7BF3C /* VCH264SoftwareDecoder.h in Headers */,
 				4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */,
@@ -561,6 +568,7 @@
 				4F9173DA23DEDBDC0065D31D /* VCMP4Reader.m in Sources */,
 				4F9173D623DED8CE0065D31D /* VCAssetReader.m in Sources */,
 				4F1913A921FED9C800921CAF /* VCAnnexBFormatParser.m in Sources */,
+				4F9173F923E01B0F0065D31D /* VCH265NALU.m in Sources */,
 				4FDF7F40220BEBB80019833C /* VCMicRecorder.m in Sources */,
 				4F9173ED23DF1E0B0065D31D /* VCH264NALU.m in Sources */,
 				4FBCCE4621F36E3000E7BF3C /* VCAVCFormatStream.m in Sources */,
@@ -706,7 +714,7 @@
 				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/binary/ffmpeg/include";
 				INFOPLIST_FILE = VideoCodecKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -739,7 +747,7 @@
 				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/VideoCodecKit/Vendor/binary/ffmpeg/include";
 				INFOPLIST_FILE = VideoCodecKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

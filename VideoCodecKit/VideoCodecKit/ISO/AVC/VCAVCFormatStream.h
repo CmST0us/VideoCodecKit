@@ -17,14 +17,14 @@ NS_ASSUME_NONNULL_BEGIN
 // 00 00 01 xx xx xx
 // ------------------------------------------------------
 @class VCAnnexBFormatStream;
-@class VCH264NALU;
 @interface VCAVCFormatStream : NSObject
 
 @property (nonatomic, readonly) NSData *data;
 // should be 4 or 3
 @property (nonatomic, readonly) NSUInteger startCodeLength;
 
-@property (nonatomic, readonly) NSArray<VCH264NALU *> *nalus;
+@property (nonatomic, readonly) NSArray *nalus;
+@property (nonatomic, assign) Class naluClass;
 
 - (instancetype)initWithData:(NSData *)aData
              startCodeLength:(NSUInteger)startCodeLength;
