@@ -8,14 +8,16 @@
 
 #import "VCRTMPMessage.h"
 
+#define kVCRTMPMessageDefaultStreamID (10)
+
 @implementation VCRTMPMessage
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _timestamp = 0;
+        _timestamp = [[NSDate date] timeIntervalSince1970];
         _messageLength = 0;
         _messageTypeID = 0;
-        _messageStreamID = 0;
+        _messageStreamID = kVCRTMPMessageDefaultStreamID;
     }
     return self;
 }

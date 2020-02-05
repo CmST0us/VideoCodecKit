@@ -20,8 +20,6 @@
     // Override point for customization after application launch.    
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
-    NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:@"https://www.bilibili.com"]];
-    data = nil;
     return YES;
 }
 

@@ -13,7 +13,7 @@
 @implementation VCRTMPChunk
 
 - (instancetype)initWithType:(VCRTMPChunkMessageHeaderType)type
-               chunkStreamID:(NSUInteger)chunkStreamID
+               chunkStreamID:(VCRTMPChunkStreamID)chunkStreamID
                      message:(VCRTMPMessage *)message {
     self = [super init];
     if (self) {
@@ -59,6 +59,11 @@
         return 4;
     }
     return 0;
+}
+
+- (void)setChunkData:(NSData *)chunkData {
+    _chunkData = chunkData;
+    self.message.messageLength = (uint32_t)chunkData.length;
 }
 
 - (NSData *)makeBasicHeader {
@@ -110,7 +115,8 @@
         }
         
         // Type 0
-        [array writeUInt32:self.message.messageStreamID];
+        uint32_t swapStreamID = CFSwapInt32HostToLittle(self.message.messageStreamID);
+        [array writeUInt32:swapStreamID];
         if (self.message.timestamp >= 0xFFFFFF) {
             [array writeUInt32:self.message.timestamp];
         }
@@ -122,6 +128,13 @@
     NSMutableData *data = [[NSMutableData alloc] init];
     [data appendData:[self makeBasicHeader]];
     [data appendData:[self makeMessageHeaderWithExtendedTimestamp]];
+    return data;
+}
+
+- (NSData *)makeChunk {
+    NSMutableData *data = [[NSMutableData alloc] init];
+    [data appendData:[self makeChunkHeader]];
+    [data appendData:self.chunkData];
     return data;
 }
 

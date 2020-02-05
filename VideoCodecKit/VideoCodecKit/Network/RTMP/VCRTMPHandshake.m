@@ -7,9 +7,11 @@
 //
 
 #import "VCRTMPHandshake.h"
-#import "VCRTMPSocket.h"
+#import "VCRTMPNetConnection.h"
 #import "VCByteArray.h"
 #import "VCSafeBuffer.h"
+#import "VCRTMPChunk.h"
+#import "VCRTMPMessage.h"
 
 #define kVCRTMPHandshakeProtocolVersion (3)
 
@@ -225,6 +227,25 @@ NSErrorDomain const VCRTMPHandshakeErrorDomain = @"VCRTMPHandshakeErrorDomain";
     }
 }
 
+#pragma mark - Finish Handshake
+- (void)setChunkSize:(uint32_t)size withCompletion:(dispatch_block_t)block {
+    VCByteArray *arr = [[VCByteArray alloc] init];
+    size = MIN(size, 0x7FFFFFFF);
+    [arr writeUInt32:size];
+    VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
+    message.messageTypeID = VCRTMPMessageTypeSetChunkSize;
+    VCRTMPChunk *chunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType0 chunkStreamID:VCRTMPChunkStreamIDControl message:message];
+    chunk.chunkData = arr.data;
+    [self.socket writeData:[chunk makeChunk]];
+}
+
+- (VCRTMPNetConnection *)makeNetConnection {
+    if (!kVCAllowState(@[@(VCRTMPHandshakeStateHandshakeDone)], @(self.state))) {
+        return nil;
+    }
+    return [VCRTMPNetConnection netConnectionForSocket:self.socket];
+}
+
 #pragma mark - TCP Socket Delegate
 - (void)tcpSocketEndcountered:(VCTCPSocket *)socket {
     [self handleHandshakeErrorWithCode:VCRTMPHandshakeErrorCodeConnectReset];
@@ -239,6 +260,15 @@ NSErrorDomain const VCRTMPHandshakeErrorDomain = @"VCRTMPHandshakeErrorDomain";
 }
 
 - (void)tcpSocketHasByteAvailable:(VCTCPSocket *)socket {
+    NSArray * const allow = @[
+        @(VCRTMPHandshakeStateUninitialized),
+        @(VCRTMPHandshakeStateVersionSent),
+        @(VCRTMPHandshakeStateAckSent)
+    ];
+    if (!kVCAllowState(allow, @(self.state))) {
+        return;
+    }
+    
     while ([self.socket byteAvaliable]) {
         [self.buffer push:[[VCSafeBufferNode alloc] initWithData:[self.socket readData]]];
     }

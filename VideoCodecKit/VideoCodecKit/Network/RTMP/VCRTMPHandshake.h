@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, VCRTMPHandshakeState) {
 @class VCRTMPHandshake;
 typedef void(^VCRTMPHandshakeBlock)(VCRTMPHandshake *handshake, BOOL isSuccess, NSError * _Nullable  error);
 
-@class VCRTMPSocket;
+@class VCRTMPNetConnection;
 @interface VCRTMPHandshake : NSObject
 @property (nonatomic, readonly) VCRTMPHandshakeState state;
 
@@ -49,6 +49,8 @@ typedef void(^VCRTMPHandshakeBlock)(VCRTMPHandshake *handshake, BOOL isSuccess, 
 
 - (void)startHandshakeWithBlock:(VCRTMPHandshakeBlock)block;
 
+- (void)setChunkSize:(uint32_t)size withCompletion:(dispatch_block_t)block;
+- (nullable VCRTMPNetConnection *)makeNetConnection;
 @end
 
 NS_ASSUME_NONNULL_END
