@@ -9,7 +9,7 @@
 #import <VideoToolbox/VideoToolbox.h>
 #import "VCH264HardwareDecoder.h"
 
-#define kVCH264HardwareDecoderMinGOPCount 3
+#define kVCH264HardwareDecoderMinGOPCount (3)
 
 @interface VCH264HardwareDecoder ()
 @property (nonatomic, strong) NSMutableArray<VCSampleBuffer *> *decodeBuffer;
@@ -71,8 +71,9 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         // [TODO] 编写解析器解析额外的avcC数据
         // [TODO] 如果没有avcC数据, 则流为Annex-B，掉对应解析器解析。
         // 判断是否为baseline
+        self.session = nil;
+        _formatDescription = CFRetain(formatDescription);
     }
-    _formatDescription = CFRetain(formatDescription);
 }
 
 + (NSDictionary *)defaultAttributes {
@@ -195,7 +196,7 @@ static void decompressionOutputCallback(void *decompressionOutputRefCon,
         return kVTInvalidSessionErr;
     }
     // [TODO] kVTDecodeFrame_EnableTemporalProcessing 判断是否需要加
-    VTDecodeFrameFlags flags = kVTDecodeFrame_EnableAsynchronousDecompression;
+    VTDecodeFrameFlags flags = 0;
     return VTDecompressionSessionDecodeFrame(self.session, sampleBuffer.sampleBuffer, flags, nil, nil);
 }
 

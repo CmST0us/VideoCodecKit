@@ -21,6 +21,12 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCSafeBuffer.h>
 
 #pragma mark - Format
+#pragma mark NALU
+#import <VideoCodecKit/VCH264NALU.h>
+#pragma mark Asset
+#import <VideoCodecKit/VCAssetReader.h>
+#import <VideoCodecKit/VCRawH264Reader.h>
+#import <VideoCodecKit/VCRawH265Reader.h>
 #pragma mark AnnexB
 #import <VideoCodecKit/VCAnnexBFormatStream.h>
 #import <VideoCodecKit/VCAnnexBFormatParser.h>
@@ -42,7 +48,6 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #pragma mark - Network
 #pragma mark TCP Socket
 #import <VideoCodecKit/VCTCPSocket.h>
-
 #pragma mark RTMP
 #import <VideoCodecKit/VCRTMPChunk.h>
 #import <VideoCodecKit/VCRTMPMessage.h>
@@ -55,6 +60,7 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCVideoEncoder.h>
 #import <VideoCodecKit/VCH264HardwareEncoder.h>
 #import <VideoCodecKit/VCH264HardwareDecoder.h>
+#import <VideoCodecKit/VCH265HardwareDecoder.h>
 #import <VideoCodecKit/VCAudioConverter.h>
 
 #pragma mark - Render

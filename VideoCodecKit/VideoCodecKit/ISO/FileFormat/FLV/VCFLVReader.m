@@ -20,9 +20,6 @@
 
 @interface VCFLVReader ()
 @property (nonatomic, strong) VCFLVFile *file;
-@property (nonatomic, assign) CMFormatDescriptionRef videoFormatDescription;
-@property (nonatomic, assign) CMFormatDescriptionRef audioFormatDescription;
-
 @property (nonatomic, strong) NSThread *readThread;
 @end
 
