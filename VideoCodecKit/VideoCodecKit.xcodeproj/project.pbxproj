@@ -59,7 +59,7 @@
 		4F9173E823DF18B00065D31D /* VCRawH265Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173E623DF18B00065D31D /* VCRawH265Reader.m */; };
 		4F9173EC23DF1E0B0065D31D /* VCH264NALU.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9173EA23DF1E0B0065D31D /* VCH264NALU.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F9173ED23DF1E0B0065D31D /* VCH264NALU.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173EB23DF1E0B0065D31D /* VCH264NALU.m */; };
-		4F9173F823E01B0F0065D31D /* VCH265NALU.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9173F623E01B0F0065D31D /* VCH265NALU.h */; };
+		4F9173F823E01B0F0065D31D /* VCH265NALU.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9173F623E01B0F0065D31D /* VCH265NALU.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F9173F923E01B0F0065D31D /* VCH265NALU.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173F723E01B0F0065D31D /* VCH265NALU.m */; };
 		4FBCCE1B21F320B700E7BF3C /* VCSampleBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FBCCE1921F320B700E7BF3C /* VCSampleBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FBCCE1C21F320B700E7BF3C /* VCSampleBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBCCE1A21F320B700E7BF3C /* VCSampleBuffer.m */; };

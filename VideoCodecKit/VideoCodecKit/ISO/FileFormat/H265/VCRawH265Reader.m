@@ -67,6 +67,7 @@
 }
 
 - (void)dealloc {
+    [self stopReading];
     if (_videoFormatDescription) {
         CFRelease(_videoFormatDescription);
         _videoFormatDescription = NULL;
@@ -92,6 +93,11 @@
                 VCAVCFormatStream *avcFormatFrame = [annexBFormatFrame toAVCFormatStream];
                 avcFormatFrame.naluClass = [VCH265NALU class];
                 [[avcFormatFrame nalus] enumerateObjectsUsingBlock:^(VCH265NALU * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (!self.isReading) {
+                        *stop = YES;
+                        return;
+                    }
+                    
                     VCH265NALUType naluType = obj.type;
                     NSLog(@"nalu: %@", obj);
                     if (naluType == VCH265NALUTypePPS) {

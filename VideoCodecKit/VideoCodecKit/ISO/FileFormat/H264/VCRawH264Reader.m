@@ -66,6 +66,7 @@
 }
 
 - (void)dealloc {
+    [self stopReading];
     if (_videoFormatDescription) {
         CFRelease(_videoFormatDescription);
         _videoFormatDescription = NULL;
@@ -91,6 +92,11 @@
                 VCAVCFormatStream *avcFormatFrame = [annexBFormatFrame toAVCFormatStream];
                 avcFormatFrame.naluClass = [VCH264NALU class];
                 [[avcFormatFrame nalus] enumerateObjectsUsingBlock:^(VCH264NALU * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (!self.isReading) {
+                        *stop = YES;
+                        return;
+                    }
+                    
                     if (obj.type == VCH264NALUTypePicParameterSet) {
                         self.ppsData = obj.data;
                     } else if (obj.type == VCH264NALUTypeSeqParameterSet) {
@@ -106,8 +112,6 @@
                                 }
                             }
                         }
-                        
-                        NSLog(@"nalu: %@", obj);
                         NSData *data = [obj warpAVCStartCode];
                         CMBlockBufferRef blockBuffer = [self createBlockBufferWithData:data];
                         CMSampleTimingInfo timingInfo;

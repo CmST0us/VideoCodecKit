@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithData:(NSData *)data;
 
 - (NSInteger)naluLength;
-- (OSStatus)createFormatDescription:(CMVideoFormatDescriptionRef *)outFormatDescription;
+- (OSStatus)createFormatDescription:(CMVideoFormatDescriptionRef _Nullable * _Nonnull)outFormatDescription;
 
 @end
 

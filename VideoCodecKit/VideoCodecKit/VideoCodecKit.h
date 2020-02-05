@@ -23,6 +23,7 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #pragma mark - Format
 #pragma mark NALU
 #import <VideoCodecKit/VCH264NALU.h>
+#import <VideoCodecKit/VCH265NALU.h>
 #pragma mark Asset
 #import <VideoCodecKit/VCAssetReader.h>
 #import <VideoCodecKit/VCRawH264Reader.h>
