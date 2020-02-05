@@ -12,6 +12,7 @@
 @implementation VCDemoAMFTestViewController
 
 - (void)viewDidLoad {
+    [super viewDidLoad];
     NSDictionary *dict = @{
                            @"tcUrl": @"rtmp://localhost:1935/live".asString,
                            @"flashVer": @"FMLE/3.0 (compatible; FMSc/1.0)".asString,

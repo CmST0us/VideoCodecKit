@@ -30,6 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VCTCPSocket : NSObject
 
+@property (nonatomic, readonly) NSString *host;
+@property (nonatomic, readonly) NSInteger port;
+
 @property (nonatomic, weak) id<VCTCPSocketDelegate> delegate;
 
 @property (nonatomic, assign) BOOL connected;
@@ -42,8 +45,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSInteger byteAvaliable;
 
-- (void)connectWithHost:(NSString *)host
-                   port:(NSUInteger)port;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithHost:(NSString *)host
+                        port:(NSInteger)port NS_DESIGNATED_INITIALIZER;
+
+- (void)connect;
 
 - (void)close;
 

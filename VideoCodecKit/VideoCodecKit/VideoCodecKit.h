@@ -54,7 +54,6 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCRTMPMessage.h>
 #import <VideoCodecKit/VCRTMPHandshake.h>
 #import <VideoCodecKit/VCRTMPMuxer.h>
-#import <VideoCodecKit/VCRTMPSocket.h>
 
 #pragma mark - Codec
 #import <VideoCodecKit/VCVideoDecoder.h>

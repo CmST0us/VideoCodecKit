@@ -16,8 +16,6 @@
 		4F2853C52215B1820041DAAE /* VCDemoTCPSocketTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2853C42215B1820041DAAE /* VCDemoTCPSocketTestViewController.m */; };
 		4F6420462215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6420452215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m */; };
 		4F64204E22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F64204D22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.m */; };
-		4F76FC5B21626ED5002E7F0D /* KVSig.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; };
-		4F76FC5C21626ED5002E7F0D /* KVSig.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC5A21626ED5002E7F0D /* KVSig.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F76FC7521627512002E7F0D /* VideoCodecKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; };
 		4F76FC7621627512002E7F0D /* VideoCodecKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F9173F123DF21D20065D31D /* VCRawH264DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173F023DF21D20065D31D /* VCRawH264DemoViewController.m */; };
@@ -77,7 +75,6 @@
 		4F6420452215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoRTMPHandshakeTestViewController.m; sourceTree = "<group>"; };
 		4F64204C22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoRTMPFormatTestViewController.h; sourceTree = "<group>"; };
 		4F64204D22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoRTMPFormatTestViewController.m; sourceTree = "<group>"; };
-		4F76FC5A21626ED5002E7F0D /* KVSig.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KVSig.framework; path = VideoCodecKitDemo/KVSig.framework; sourceTree = "<group>"; };
 		4F76FC7421627512002E7F0D /* VideoCodecKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoCodecKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F9173EF23DF21D20065D31D /* VCRawH264DemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCRawH264DemoViewController.h; sourceTree = "<group>"; };
 		4F9173F023DF21D20065D31D /* VCRawH264DemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCRawH264DemoViewController.m; sourceTree = "<group>"; };

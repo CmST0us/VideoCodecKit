@@ -27,8 +27,6 @@
 		4F23D2FD2211DBBD0076DBEF /* VCTCPSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D2FB2211DBBD0076DBEF /* VCTCPSocket.m */; };
 		4F23D3012211DC050076DBEF /* VCRTMPHandshake.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D2FF2211DC050076DBEF /* VCRTMPHandshake.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F23D3022211DC050076DBEF /* VCRTMPHandshake.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D3002211DC050076DBEF /* VCRTMPHandshake.m */; };
-		4F23D3052211DC470076DBEF /* VCRTMPSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D3032211DC470076DBEF /* VCRTMPSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4F23D3062211DC470076DBEF /* VCRTMPSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D3042211DC470076DBEF /* VCRTMPSocket.m */; };
 		4F23D3092211DCB20076DBEF /* VCRTMPMuxer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D3072211DCB20076DBEF /* VCRTMPMuxer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F23D30A2211DCB20076DBEF /* VCRTMPMuxer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F23D3082211DCB20076DBEF /* VCRTMPMuxer.m */; };
 		4F23D30D2211DCC90076DBEF /* VCRTMPDemuxer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F23D30B2211DCC90076DBEF /* VCRTMPDemuxer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -251,8 +249,6 @@
 				4F23D2F32211DB510076DBEF /* VCRTMPChunk.m */,
 				4F23D2F62211DB700076DBEF /* VCRTMPMessage.h */,
 				4F23D2F72211DB700076DBEF /* VCRTMPMessage.m */,
-				4F23D2FF2211DC050076DBEF /* VCRTMPHandshake.h */,
-				4F23D3002211DC050076DBEF /* VCRTMPHandshake.m */,
 				4F23D3072211DCB20076DBEF /* VCRTMPMuxer.h */,
 				4F23D3082211DCB20076DBEF /* VCRTMPMuxer.m */,
 				4F23D30B2211DCC90076DBEF /* VCRTMPDemuxer.h */,
@@ -261,6 +257,8 @@
 				4F23D2E32211C90D0076DBEF /* VCRTMPSession.m */,
 				4F23D3032211DC470076DBEF /* VCRTMPSocket.h */,
 				4F23D3042211DC470076DBEF /* VCRTMPSocket.m */,
+				4F23D2FF2211DC050076DBEF /* VCRTMPHandshake.h */,
+				4F23D3002211DC050076DBEF /* VCRTMPHandshake.m */,
 			);
 			path = RTMP;
 			sourceTree = "<group>";
@@ -571,7 +569,6 @@
 				4F6420492215EE27000FB2EC /* VCSafeBuffer.h in Headers */,
 				4F23D3162211DD290076DBEF /* VCAMF3Serialization.h in Headers */,
 				4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */,
-				4F23D3052211DC470076DBEF /* VCRTMPSocket.h in Headers */,
 				4F23D2F42211DB510076DBEF /* VCRTMPChunk.h in Headers */,
 				4F1913A821FED9C800921CAF /* VCAnnexBFormatParser.h in Headers */,
 				4F1913B3220145A300921CAF /* VCFLVReader.h in Headers */,
@@ -686,7 +683,6 @@
 				4F9173F923E01B0F0065D31D /* VCH265NALU.m in Sources */,
 				4FDF7F40220BEBB80019833C /* VCMicRecorder.m in Sources */,
 				4F23D2F92211DB700076DBEF /* VCRTMPMessage.m in Sources */,
-				4F23D3062211DC470076DBEF /* VCRTMPSocket.m in Sources */,
 				4F23D2FD2211DBBD0076DBEF /* VCTCPSocket.m in Sources */,
 				4F23D3132211DD1F0076DBEF /* VCAMF0Serialization.m in Sources */,
 				4F9173ED23DF1E0B0065D31D /* VCH264NALU.m in Sources */,

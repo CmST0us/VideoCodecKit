@@ -16,9 +16,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.socket = [[VCTCPSocket alloc] init];
+    self.socket = [[VCTCPSocket alloc] initWithHost:@"127.0.0.1" port:12002];
     self.socket.delegate = self;
-    [self.socket connectWithHost:@"127.0.0.1" port:12002];
+    [self.socket connect];
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
         if (self.socket.connected) {
             [self.socket writeData:[@"Hello\n" dataUsingEncoding:NSUTF8StringEncoding]];

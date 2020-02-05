@@ -9,10 +9,14 @@
 #ifndef VCMarco_h
 #define VCMarco_h
 
-#pragma tools
+#pragma mark - State Machine Tools
+#define kVCAllowState(allow, current) [allow containsObject:current]
+
+#pragma mark - String Tools
 #define DECLARE_CONST_STRING(str) extern NSString const * str
 #define CONST_STRING(str) NSString * str = @#str
 
+#pragma mark - Value Define
 #define kVC720P (1280 * 720)
 #define kVC1080P (1920 * 1080)
 #define kVC480P (720 * 480)

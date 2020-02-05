@@ -9,29 +9,23 @@
 #import <VideoCodecKit/VideoCodecKit.h>
 #import "VCDemoRTMPHandshakeTestViewController.h"
 
-@interface VCDemoRTMPHandshakeTestViewController () <VCRTMPSocketDelegate>
-@property (nonatomic, strong) VCRTMPSocket *socket;
+@interface VCDemoRTMPHandshakeTestViewController ()
+@property (nonatomic, strong) VCTCPSocket *socket;
+@property (nonatomic, strong) VCRTMPHandshake *handshake;
 @end
 
 @implementation VCDemoRTMPHandshakeTestViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.socket = [[VCRTMPSocket alloc] init];
-    [self.socket connectHost:@"js.live-send.acg.tv" withPort:1935];
-    self.socket.delegate = self;
-}
-
-- (void)rtmpSocketDidConnected:(VCRTMPSocket *)rtmpSocket {
-    NSLog(@"CONNECT");
-}
-
-- (void)rtmpSocketConnectedTimeout:(VCRTMPSocket *)rtmpSocket {
-    NSLog(@"TIMEOUT");
-}
-
-- (void)rtmpSocketErrorOccurred:(VCRTMPSocket *)rtmpSocket {
-    NSLog(@"ERROR");
+    self.socket = [[VCTCPSocket alloc] initWithHost:@"127.0.0.1" port:1935];
+    self.handshake = [VCRTMPHandshake handshakeForSocket:self.socket];
+    [self.handshake startHandshakeWithBlock:^(VCRTMPHandshake * _Nonnull handshake, BOOL isSuccess, NSError * _Nullable error) {
+        if (isSuccess) {
+            NSLog(@"握手成功");
+        } else {
+            NSLog(@"握手失败: %@", error);
+        }
+    }];
 }
 
 @end

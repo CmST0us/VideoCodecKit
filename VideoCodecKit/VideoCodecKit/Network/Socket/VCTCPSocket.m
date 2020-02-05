@@ -11,17 +11,20 @@
 #define kVCTCPSocketDefaultTimeout (15)
 #define kVCTCPSocketDefaultBufferWindowSize (UINT16_MAX)
 @interface VCTCPSocket () <NSStreamDelegate>
+@property (nonatomic, copy) NSString *host;
+@property (nonatomic, assign) NSInteger port;
 @property (nonatomic, strong) NSTimer *timeoutTimer;
 @property (nonatomic, assign) uint8_t *inputBuffer;
 @property (nonatomic, strong) dispatch_queue_t inputQueue;
 @property (nonatomic, strong) dispatch_queue_t outputQueue;
 @property (nonatomic, strong) NSRunLoop *runloop;
+@property (nonatomic, strong) NSThread *runloopThread;
 @end
 
 @implementation VCTCPSocket
 @synthesize inputBufferWindowSize = _inputBufferWindowSize;
 
-- (instancetype)init {
+- (instancetype)initWithHost:(NSString *)host port:(NSInteger)port {
     self = [super init];
     if (self) {
         _inputQueue = dispatch_queue_create("com.VideoCodecKit.VCTCPSocket.inputQueue", DISPATCH_QUEUE_SERIAL);
@@ -31,6 +34,8 @@
         _runloop = nil;
         _inputBufferWindowSize = kVCTCPSocketDefaultBufferWindowSize;
         _inputBuffer = nil;
+        _host = host;
+        _port = port;
     }
     return self;
 }
@@ -58,13 +63,13 @@
     }
 }
 
-- (void)connectWithHost:(NSString *)host port:(NSUInteger)port {
+- (void)connect {
     dispatch_async(self.inputQueue, ^{
         CFReadStreamRef readStream = nil;
         CFWriteStreamRef writeStream = nil;
         CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault,
-                                           (__bridge CFStringRef)host,
-                                           (UInt32)port,
+                                           (__bridge CFStringRef)self.host,
+                                           (UInt32)self.port,
                                            &readStream,
                                            &writeStream);
         if (readStream != nil && writeStream != nil) {
@@ -84,26 +89,37 @@
 - (void)setupConnection {
     self.inputStream.delegate = self;
     self.outputStream.delegate = self;
-    self.runloop = [NSRunLoop currentRunLoop];
     
-    [self.inputStream scheduleInRunLoop:self.runloop forMode:NSDefaultRunLoopMode];
-    [self.outputStream scheduleInRunLoop:self.runloop forMode:NSDefaultRunLoopMode];
+    self.runloopThread = [[NSThread alloc] initWithTarget:self selector:@selector(runloopThreadMain) object:nil];
+    [self.runloopThread start];
+}
 
-    [self.inputStream open];
-    [self.outputStream open];
-    
-    if (self.timeout > 0) {
-        self.timeoutTimer = [NSTimer scheduledTimerWithTimeInterval:self.timeout repeats:NO block:^(NSTimer * _Nonnull timer) {
-            if (!self.connected &&
-                self.delegate &&
-                [self.delegate respondsToSelector:@selector(tcpSocketConnectTimeout:)]) {
-                [self.delegate tcpSocketConnectTimeout:self];
-            }
-        }];
+- (void)runloopThreadMain {
+    @autoreleasepool {
+        self.runloop = [NSRunLoop currentRunLoop];
+        
+        [self.inputStream scheduleInRunLoop:self.runloop forMode:NSDefaultRunLoopMode];
+        [self.outputStream scheduleInRunLoop:self.runloop forMode:NSDefaultRunLoopMode];
+
+        [self.inputStream open];
+        [self.outputStream open];
+        
+        if (self.timeout > 0) {
+            self.timeoutTimer = [NSTimer scheduledTimerWithTimeInterval:self.timeout repeats:NO block:^(NSTimer * _Nonnull timer) {
+                if (!self.connected &&
+                    self.delegate &&
+                    [self.delegate respondsToSelector:@selector(tcpSocketConnectTimeout:)]) {
+                    [self.delegate tcpSocketConnectTimeout:self];
+                }
+            }];
+        }
+        
+        while (![NSThread currentThread].isCancelled) {
+            [self.runloop runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+        
+        self.connected = NO;
     }
-    
-    [self.runloop run];
-    self.connected = NO;
 }
 
 - (void)close {
@@ -111,6 +127,10 @@
         if (self.runloop == nil) {
             return;
         }
+        if (self.runloopThread) {
+            [self.runloopThread cancel];
+        }
+        
         [self.inputStream close];
         [self.inputStream removeFromRunLoop:self.runloop forMode:NSDefaultRunLoopMode];
         self.inputStream.delegate = nil;
@@ -145,13 +165,7 @@
 }
 
 - (NSInteger)byteAvaliable {
-    NSUInteger len = 0;
-    uint8_t *buffer = nil;
-    BOOL ret = [self.inputStream getBuffer:&buffer length:&len];
-    if (!ret) {
-        return 0;
-    }
-    return len;
+    return self.inputStream.hasBytesAvailable;
 }
 
 - (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode {
@@ -186,6 +200,7 @@
         case NSStreamEventErrorOccurred: {
             self.connected = NO;
             [self finishConnect];
+            [self close];
             if (aStream == self.inputStream) {
                 if (self.delegate &&
                     [self.delegate respondsToSelector:@selector(tcpSocketErrorOccurred:)]) {
@@ -195,6 +210,9 @@
         }
             break;
         case NSStreamEventEndEncountered: {
+            self.connected = NO;
+            [self finishConnect];
+            [self close];
             if (aStream == self.inputStream) {
                 if (self.delegate &&
                     [self.delegate respondsToSelector:@selector(tcpSocketEndcountered:)]) {
