@@ -85,14 +85,11 @@ NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorD
 }
 
 - (void)tcpSocketHasByteAvailable:(VCTCPSocket *)socket {
-    while ([self.socket byteAvaliable]) {
-        NSData *recvData = [self.socket readData];
-        if (recvData.length == 0) {
-            [self tcpSocketEndcountered:socket];
-            return;
+    while ([socket.inputStream hasBytesAvailable]) {
+        VCRTMPChunk *chunk = [[VCRTMPChunk alloc] initWithInputStream:socket.inputStream];
+        if ([chunk readChunk]) {
+            NSLog(@"收到chunk");
         }
-        
-        [self.buffer push:[[VCSafeBufferNode alloc] initWithData:recvData]];
     }
     [self handleNetConnectionPacket];
 }

@@ -10,6 +10,13 @@
 #import "VCRTMPChunk.h"
 #import "VCRTMPMessage.h"
 
+#define kVCRTMPChunkHeaderMaxSize (18)
+
+@interface VCRTMPChunk ()
+@property (nonatomic, strong) NSInputStream *inputStream;
+@property (nonatomic, assign) uint8_t *inputStreamReadBuffer;
+@end
+
 @implementation VCRTMPChunk
 
 - (instancetype)initWithType:(VCRTMPChunkMessageHeaderType)type
@@ -17,9 +24,9 @@
                      message:(VCRTMPMessage *)message {
     self = [super init];
     if (self) {
-        self.messageHeaderType = type;
-        self.chunkStreamID = chunkStreamID;
-        self.message = message;
+        _messageHeaderType = type;
+        _chunkStreamID = chunkStreamID;
+        _message = message;
     }
     return self;
 }
@@ -30,6 +37,22 @@
         
     }
     return self;
+}
+
+- (instancetype)initWithInputStream:(NSInputStream *)inputStream {
+    self = [super init];
+    if (self) {
+        _inputStream = inputStream;
+        _inputStreamReadBuffer = malloc(kVCRTMPChunkHeaderMaxSize);
+    }
+    return self;
+}
+
+- (void)dealloc {
+    if (_inputStreamReadBuffer) {
+        free(_inputStreamReadBuffer);
+        _inputStreamReadBuffer = NULL;
+    }
 }
 
 - (NSInteger)basicHeaderSize {
@@ -63,7 +86,9 @@
 
 - (void)setChunkData:(NSData *)chunkData {
     _chunkData = chunkData;
-    self.message.messageLength = (uint32_t)chunkData.length;
+    if (self.message) {
+        self.message.messageLength = (uint32_t)chunkData.length;
+    }
 }
 
 - (NSData *)makeBasicHeader {
@@ -77,7 +102,7 @@
         header[1] = (self.chunkStreamID - 64) & 0xFF;
         return [[NSData alloc] initWithBytes:header length:basicHeaderLen];
     } else {
-        header[0] = (self.messageHeaderType << 6) | 0x01;
+        header[0] = (self.messageHeaderType << 6) | 0x3F;
         NSInteger rawChunkStreamID = CFSwapInt16HostToLittle(self.chunkStreamID - 64);
         memcpy(header + 1, &rawChunkStreamID, 2);
         return [[NSData alloc] initWithBytes:header length:basicHeaderLen];
@@ -136,6 +161,98 @@
     [data appendData:[self makeChunkHeader]];
     [data appendData:self.chunkData];
     return data;
+}
+
+#pragma mark - Decode Chunk
+- (BOOL)readChunk {
+    if (self.inputStream == nil) {
+        return NO;
+    }
+    
+    /// Read Format
+    NSInteger readLen = [self.inputStream read:self.inputStreamReadBuffer maxLength:1];
+    if (readLen != 1) {
+        return NO;
+    }
+    uint8_t format = (self.inputStreamReadBuffer[0] >> 6) & 0x03;
+    uint32_t csid = self.inputStreamReadBuffer[0] & 0x3F;
+    self.messageHeaderType = format;
+    if (csid == 0) {
+        readLen = [self.inputStream read:self.inputStreamReadBuffer maxLength:1];
+        if (readLen != 1) {
+            return NO;
+        }
+        csid = self.inputStreamReadBuffer[0] + 64;
+        self.chunkStreamID = csid;
+    } else if (csid == 0x3F) {
+        readLen = [self.inputStream read:self.inputStreamReadBuffer maxLength:2];
+        if (readLen != 2) {
+            return NO;
+        }
+        uint8_t secondByte = self.inputStreamReadBuffer[0];
+        uint8_t thirdByte = self.inputStreamReadBuffer[1];
+        csid = (thirdByte * 256) + (secondByte + 64);
+        self.chunkStreamID = csid;
+    } else {
+        self.chunkStreamID = csid;
+    }
+    
+    if (self.messageHeaderType == VCRTMPChunkMessageHeaderType3) {
+        if (self.chunkDataDefaultSize > 0) {
+            void *buffer = malloc(self.chunkDataDefaultSize);
+            readLen = [self.inputStream read:buffer maxLength:self.chunkDataDefaultSize];
+            if (readLen > 0) {
+                NSData *data = [[NSData alloc] initWithBytesNoCopy:buffer length:readLen];
+                self.chunkData = data;
+            }
+        }
+    } else {
+        VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
+        self.message = message;
+        do {
+            NSInteger messageHeaderSize = [self messageHeaderSize];
+            readLen = [self.inputStream read:self.inputStreamReadBuffer maxLength:messageHeaderSize];
+            if (readLen != messageHeaderSize) {
+                return NO;
+            }
+            NSData *data = [[NSData alloc] initWithBytes:self.inputStreamReadBuffer length:readLen];
+            VCByteArray *arr = [[VCByteArray alloc] initWithData:data];
+            message.timestamp = [arr readUInt24];
+            
+            if (self.messageHeaderType == VCRTMPChunkMessageHeaderType2) {
+                break;
+            }
+            
+            message.messageLength = [arr readUInt24];
+            message.messageTypeID = [arr readUInt8];
+            
+            if (self.messageHeaderType == VCRTMPChunkMessageHeaderType1) {
+                break;
+            }
+            message.messageStreamID = CFSwapInt32LittleToHost([arr readUInt32]);
+        } while (0);
+        
+        NSInteger externTimestampSize = [self extendedTimestampSize];
+        if (externTimestampSize > 0) {
+            readLen = [self.inputStream read:self.inputStreamReadBuffer maxLength:4];
+            if (readLen != 4) {
+                return NO;
+            }
+            uint32_t *p = (uint32_t *)self.inputStreamReadBuffer;
+            self.message.timestamp = CFSwapInt32BigToHost(*p);
+        }
+        
+        if (message.messageLength > 0) {
+            void *buffer = malloc(message.messageLength);
+            readLen = [self.inputStream read:buffer maxLength:message.messageLength];
+            if (readLen != message.messageLength) {
+                return NO;
+            }
+            NSData *data = [[NSData alloc] initWithBytesNoCopy:buffer length:readLen];
+            self.chunkData = data;
+        }
+    }
+    return YES;
 }
 
 @end

@@ -50,20 +50,24 @@ typedef NS_ENUM(uint8_t, VCRTMPChunkMessageHeaderType) {
  */
 @property (nonatomic, assign) VCRTMPChunkStreamID chunkStreamID;
 @property (nonatomic, assign) VCRTMPChunkMessageHeaderType messageHeaderType;
-@property (nonatomic, strong) VCRTMPMessage *message;
-@property (nonatomic, strong) NSData *chunkData;
+@property (nonatomic, strong, nullable) VCRTMPMessage *message;
+@property (nonatomic, strong, nullable) NSData *chunkData;
+
+@property (nonatomic, assign) NSInteger chunkDataDefaultSize;
 
 - (instancetype)initWithType:(VCRTMPChunkMessageHeaderType)type
                chunkStreamID:(VCRTMPChunkStreamID)chunkStreamID
                      message:(VCRTMPMessage *)message;
 
 - (instancetype)initWithData:(NSData *)data;
+- (instancetype)initWithInputStream:(NSInputStream *)inputStream;
 
 - (NSData *)makeBasicHeader;
 - (NSData *)makeMessageHeaderWithExtendedTimestamp;
 - (NSData *)makeChunkHeader;
-
 - (NSData *)makeChunk;
+
+- (BOOL)readChunk;
 @end
 
 NS_ASSUME_NONNULL_END
