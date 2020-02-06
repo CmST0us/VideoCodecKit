@@ -149,6 +149,11 @@
     
 }
 
+- (void)serializeWithTypeMarkToArrayByte:(VCByteArray *)byteArray {
+    [self serializeTypeMarkToArrayByte:byteArray];
+    [self serializeToArrayByte:byteArray];
+}
+
 @end
 
 

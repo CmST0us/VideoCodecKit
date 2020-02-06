@@ -35,7 +35,7 @@
 - (void)handleHandshakeSuccess {
     self.netConnection = [self.handshake makeNetConnection];
     NSDictionary *parm = @{
-        @"app": @"VideoCodecKit::RTMP".asString,
+        @"app": @"stream".asString,
         @"tcUrl": @"rtmp://127.0.0.1/stream".asString,
         @"flashVer": @"FMLE/3.0 (compatible; FMSc/1.0)".asString,
         @"swfUrl": NSNull.asNull,

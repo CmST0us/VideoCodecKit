@@ -39,21 +39,18 @@ NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorD
 
 - (void)connecWithParam:(NSDictionary *)param {
     VCRTMPChunk *chunk = [self makeConnectChunkWithParam:param];
-    [self.socket writeData:[chunk makeChunk]];
+    NSData *data = [chunk makeChunk];
+    [self.socket writeData:data];
 }
 
 #pragma mark - RTMP Message
 - (VCRTMPChunk *)makeConnectChunkWithParam:(NSDictionary *)parm {
     VCByteArray *arr = [[VCByteArray alloc] init];
     VCActionScriptObject *commandObj = [VCActionScriptObject asTypeWithDictionary:parm];
-    VCActionScriptObject *obj = [[VCActionScriptObject alloc] init];
-    obj.value = @{
-        @"CommandName": @"connect".asString,
-        @"TransactionID": @(1).asNumber,
-        @"CommandObject": commandObj,
-    }.mutableCopy;
     
-    [obj serializeToArrayByte:arr];
+    [@"connect".asString serializeWithTypeMarkToArrayByte:arr];
+    [@(1).asNumber serializeWithTypeMarkToArrayByte:arr];
+    [commandObj serializeWithTypeMarkToArrayByte:arr];
 
     NSData *data = arr.data;
     VCRTMPMessage *message = [[VCRTMPMessage alloc] init];

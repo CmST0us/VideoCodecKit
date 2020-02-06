@@ -184,9 +184,7 @@
 
 - (void)writeDouble:(double)value {
     CFSwappedFloat64 swappedDouble = CFConvertDoubleHostToSwapped(value);
-    uint64_t v = swappedDouble.v;
-    uint64_t sv = CFSwapInt64HostToBig(v);
-    NSData *writeData = [[NSData alloc] initWithBytes:&sv length:kVCByteArraySizeOfDouble];
+    NSData *writeData = [[NSData alloc] initWithBytes:&swappedDouble.v length:kVCByteArraySizeOfDouble];
     [self writeBytes:writeData];
 }
 

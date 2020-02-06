@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 
 // seealso: 5.3.1.1.  Chunk Basic Header
-typedef NS_ENUM(NSUInteger, VCRTMPChunkStreamID) {
+typedef NS_ENUM(uint32_t, VCRTMPChunkStreamID) {
     VCRTMPChunkStreamIDControl = 0x02,
     VCRTMPChunkStreamIDCommand = 0x03,
     VCRTMPChunkStreamIDAudio = 0x04,

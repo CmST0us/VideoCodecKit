@@ -14,7 +14,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _timestamp = [[NSDate date] timeIntervalSince1970];
+        _timestamp = 0;
         _messageLength = 0;
         _messageTypeID = 0;
         _messageStreamID = kVCRTMPMessageDefaultStreamID;
