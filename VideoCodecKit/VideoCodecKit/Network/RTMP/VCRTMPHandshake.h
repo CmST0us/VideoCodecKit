@@ -30,7 +30,8 @@ typedef NS_ENUM(NSUInteger, VCRTMPHandshakeState) {
 };
 
 @class VCRTMPHandshake;
-typedef void(^VCRTMPHandshakeBlock)(VCRTMPHandshake *handshake, BOOL isSuccess, NSError * _Nullable  error);
+@class VCRTMPSession;
+typedef void(^VCRTMPHandshakeBlock)(VCRTMPHandshake *handshake, VCRTMPSession * _Nullable session, BOOL isSuccess, NSError * _Nullable  error);
 
 @class VCRTMPNetConnection;
 @interface VCRTMPHandshake : NSObject

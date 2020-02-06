@@ -12,6 +12,7 @@
 @interface VCDemoRTMPHandshakeTestViewController ()
 @property (nonatomic, strong) VCTCPSocket *socket;
 @property (nonatomic, strong) VCRTMPHandshake *handshake;
+@property (nonatomic, strong) VCRTMPSession *session;
 @property (nonatomic, strong) VCRTMPNetConnection *netConnection;
 @end
 
@@ -21,10 +22,10 @@
     self.socket = [[VCTCPSocket alloc] initWithHost:@"127.0.0.1" port:1935];
     self.handshake = [VCRTMPHandshake handshakeForSocket:self.socket];
     __weak typeof(self) weakSelf = self;
-    [self.handshake startHandshakeWithBlock:^(VCRTMPHandshake * _Nonnull handshake, BOOL isSuccess, NSError * _Nullable error) {
+    
+    [self.handshake startHandshakeWithBlock:^(VCRTMPHandshake * _Nonnull handshake, VCRTMPSession * _Nullable session, BOOL isSuccess, NSError * _Nullable error) {
         if (isSuccess) {
-            NSLog(@"握手成功");
-            [handshake setChunkSize:4096 withCompletion:nil];
+            weakSelf.session = session;
             [weakSelf handleHandshakeSuccess];
         } else {
             NSLog(@"握手失败: %@", error);
@@ -33,7 +34,8 @@
 }
 
 - (void)handleHandshakeSuccess {
-    self.netConnection = [self.handshake makeNetConnection];
+    [self.session setChunkSize:4096];
+    self.netConnection = [self.session makeNetConnection];
     NSDictionary *parm = @{
         @"app": @"stream".asString,
         @"tcUrl": @"rtmp://127.0.0.1/stream".asString,

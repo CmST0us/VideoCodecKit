@@ -216,7 +216,7 @@
 }
 
 + (instancetype)makeSetPeerBandwidth:(uint32_t)ackWindowSize
-                           limitType:(uint8_t)limitType {
+                           limitType:(VCRTMPChunkSetPeerBandwidthLimitType)limitType {
     VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
     message.messageTypeID = VCRTMPMessageTypeSetPeerBandwidth;
     VCRTMPChunk *chunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType0 chunkStreamID:VCRTMPChunkStreamIDControl message:message];

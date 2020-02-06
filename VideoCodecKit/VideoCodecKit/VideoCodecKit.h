@@ -54,6 +54,7 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCRTMPChunkStreamSpliter.h>
 #import <VideoCodecKit/VCRTMPMessage.h>
 #import <VideoCodecKit/VCRTMPHandshake.h>
+#import <VideoCodecKit/VCRTMPSession.h>
 #import <VideoCodecKit/VCRTMPNetConnection.h>
 #import <VideoCodecKit/VCRTMPCommandMessageCommand.h>
 #import <VideoCodecKit/VCRTMPMuxer.h>

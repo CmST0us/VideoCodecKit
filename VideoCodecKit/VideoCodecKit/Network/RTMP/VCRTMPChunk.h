@@ -68,6 +68,12 @@ typedef NS_ENUM(uint8_t, VCRTMPChunkMessageHeaderType) {
 
 @end
 
+typedef NS_ENUM(uint8_t, VCRTMPChunkSetPeerBandwidthLimitType) {
+    VCRTMPChunkSetPeerBandwidthLimitTypeHard,
+    VCRTMPChunkSetPeerBandwidthLimitTypeSoft,
+    VCRTMPChunkSetPeerBandwidthLimitTypeDynamic,
+};
+
 @interface VCRTMPChunk (ProtocolControlMessage)
 + (instancetype)makeSetChunkSize:(uint32_t)size;
 - (uint32_t)setChunkSizeValue;
@@ -82,7 +88,7 @@ typedef NS_ENUM(uint8_t, VCRTMPChunkMessageHeaderType) {
 - (uint32_t)windowAcknowledgementSizeValue;
 
 + (instancetype)makeSetPeerBandwidth:(uint32_t)ackWindowSize
-                           limitType:(uint8_t)limitType;
+                           limitType:(VCRTMPChunkSetPeerBandwidthLimitType)limitType;
 - (uint32_t)setPeerBandwidthValue;
 - (uint8_t)limitTypeValue;
 @end

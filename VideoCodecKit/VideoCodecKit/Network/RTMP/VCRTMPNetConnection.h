@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "VCTCPSocket.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class VCRTMPSession;
 extern NSErrorDomain const VCRTMPNetConnectionErrorDomain;
 typedef NS_ENUM(NSUInteger, VCRTMPNetConnectionErrorCode) {
     VCRTMPNetConnectionErrorCodeUnknow = -2000,
@@ -20,7 +20,7 @@ typedef NS_ENUM(NSUInteger, VCRTMPNetConnectionErrorCode) {
 
 @interface VCRTMPNetConnection : NSObject
 
-+ (instancetype)netConnectionForSocket:(VCTCPSocket *)socket;
++ (instancetype)netConnectionForSession:(VCRTMPSession *)session;
 
 - (void)connecWithParam:(NSDictionary *)param;
 @end

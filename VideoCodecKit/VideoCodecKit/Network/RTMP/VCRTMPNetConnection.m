@@ -7,31 +7,28 @@
 //
 
 #import "VCRTMPNetConnection.h"
-#import "VCRTMPCommandMessageCommand.h"
-#import "VCRTMPChunk.h"
-#import "VCRTMPMessage.h"
-#import "VCAMF0Serialization.h"
-#import "VCByteArray.h"
+#import "VCRTMPSession.h"
+#import "VCRTMPSession_Private.h"
 #import "VCRTMPChunkStreamSpliter.h"
+#import "VCRTMPCommandMessageCommand.h"
 
 NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorDomain";
 
-@interface VCRTMPNetConnection () <VCRTMPChunkStreamSpliterDelegate>
-@property (nonatomic, strong) VCRTMPChunkStreamSpliter *spliter;
+@interface VCRTMPNetConnection ()
+@property (nonatomic, weak) VCRTMPSession *session;
 @end
 
 @implementation VCRTMPNetConnection
 
-+ (instancetype)netConnectionForSocket:(VCTCPSocket *)socket {
++ (instancetype)netConnectionForSession:(VCRTMPSession *)session {
     VCRTMPNetConnection *connection = [[VCRTMPNetConnection alloc] init];
-    connection.spliter = [VCRTMPChunkStreamSpliter spliterForSocket:socket];
-    connection.spliter.delegate = connection;
+    connection.session = session;
     return connection;
 }
 
 - (void)connecWithParam:(NSDictionary *)param {
     VCRTMPChunk *chunk = [self makeConnectChunkWithParam:param];
-    [self.spliter writeFrame:chunk];
+    [self.session.spliter writeFrame:chunk];
 }
 
 #pragma mark - RTMP Message
@@ -40,34 +37,8 @@ NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorD
     command.commandName = @"connect";
     command.transactionID = @(1);
     command.commandObject = parm;
-    
     VCRTMPChunk *chunk = [VCRTMPChunk makeNetConnectionCommand:command];
     return chunk;
-}
-
-#pragma mark - Net Connection
-- (void)spliter:(VCRTMPChunkStreamSpliter *)spliter didReceiveFrame:(VCRTMPChunk *)chunk {
-    NSLog(@"收到%@", chunk);
-    if (chunk.message.messageTypeID == VCRTMPMessageTypeWindowAcknowledgement) {
-        NSInteger s = [chunk windowAcknowledgementSizeValue];
-        NSLog(@"Window Acknowledgement Size: %d", s);
-    } else if (chunk.message.messageTypeID == VCRTMPMessageTypeSetPeerBandwidth) {
-        NSInteger s = [chunk setPeerBandwidthValue];
-        NSLog(@"Set Peer Bandwidth: %d", s);
-    } else if (chunk.message.messageTypeID == VCRTMPMessageTypeSetChunkSize) {
-        NSInteger s = [chunk setChunkSizeValue];
-        NSLog(@"Set Chunk Size: %d", s);
-    } else if (chunk.message.messageTypeID == VCRTMPMessageTypeAMF0Command) {
-        NSLog(@"Command: %@", [VCRTMPCommandMessageCommandFactory commandWithType:chunk.commandTypeValue data:chunk.chunkData]);
-    }
-}
-
-- (void)spliterConnectionDidEnd {
-    NSLog(@"end");
-}
-
-- (void)spliter:(VCRTMPChunkStreamSpliter *)spliter connectionHasError:(NSError *)error {
-    NSLog(@"error: %@", error);
 }
 
 @end

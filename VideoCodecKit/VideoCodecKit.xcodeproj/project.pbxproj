@@ -43,6 +43,9 @@
 		4F685A9C23EC0988009D5625 /* VCRTMPChunkStreamSpliter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F685A9A23EC0988009D5625 /* VCRTMPChunkStreamSpliter.m */; };
 		4F685A9F23EC350F009D5625 /* VCRTMPCommandMessageCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F685A9D23EC350F009D5625 /* VCRTMPCommandMessageCommand.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F685AA023EC350F009D5625 /* VCRTMPCommandMessageCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F685A9E23EC350F009D5625 /* VCRTMPCommandMessageCommand.m */; };
+		4F685AA223EC692D009D5625 /* VCRTMPSession_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F685AA123EC692B009D5625 /* VCRTMPSession_Private.h */; };
+		4F685AA923EC69D3009D5625 /* VCRTMPSession+ProtocolControlMessageHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F685AA723EC69D3009D5625 /* VCRTMPSession+ProtocolControlMessageHandler.h */; };
+		4F685AAA23EC69D3009D5625 /* VCRTMPSession+ProtocolControlMessageHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F685AA823EC69D3009D5625 /* VCRTMPSession+ProtocolControlMessageHandler.m */; };
 		4F76FBD3216269FC002E7F0D /* VideoCodecKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBD1216269FC002E7F0D /* VideoCodecKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F76FC2121626AA3002E7F0D /* VideoCodecKit.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FBDF21626A9C002E7F0D /* VideoCodecKit.pch */; };
 		4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F76FC1A21626AA3002E7F0D /* VCSafeObjectQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -138,6 +141,9 @@
 		4F685A9A23EC0988009D5625 /* VCRTMPChunkStreamSpliter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCRTMPChunkStreamSpliter.m; sourceTree = "<group>"; };
 		4F685A9D23EC350F009D5625 /* VCRTMPCommandMessageCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCRTMPCommandMessageCommand.h; sourceTree = "<group>"; };
 		4F685A9E23EC350F009D5625 /* VCRTMPCommandMessageCommand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCRTMPCommandMessageCommand.m; sourceTree = "<group>"; };
+		4F685AA123EC692B009D5625 /* VCRTMPSession_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCRTMPSession_Private.h; sourceTree = "<group>"; };
+		4F685AA723EC69D3009D5625 /* VCRTMPSession+ProtocolControlMessageHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VCRTMPSession+ProtocolControlMessageHandler.h"; sourceTree = "<group>"; };
+		4F685AA823EC69D3009D5625 /* VCRTMPSession+ProtocolControlMessageHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "VCRTMPSession+ProtocolControlMessageHandler.m"; sourceTree = "<group>"; };
 		4F76FBCE216269FC002E7F0D /* VideoCodecKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VideoCodecKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F76FBD1216269FC002E7F0D /* VideoCodecKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCodecKit.h; sourceTree = "<group>"; };
 		4F76FBD2216269FC002E7F0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -269,6 +275,9 @@
 				4F23D30C2211DCC90076DBEF /* VCRTMPDemuxer.m */,
 				4F23D2E72211C90D0076DBEF /* VCRTMPSession.h */,
 				4F23D2E32211C90D0076DBEF /* VCRTMPSession.m */,
+				4F685AA123EC692B009D5625 /* VCRTMPSession_Private.h */,
+				4F685AA723EC69D3009D5625 /* VCRTMPSession+ProtocolControlMessageHandler.h */,
+				4F685AA823EC69D3009D5625 /* VCRTMPSession+ProtocolControlMessageHandler.m */,
 				4F23D3032211DC470076DBEF /* VCRTMPSocket.h */,
 				4F23D3042211DC470076DBEF /* VCRTMPSocket.m */,
 				4F23D2FF2211DC050076DBEF /* VCRTMPHandshake.h */,
@@ -563,6 +572,7 @@
 				4F76FBD3216269FC002E7F0D /* VideoCodecKit.h in Headers */,
 				4F23D2F82211DB700076DBEF /* VCRTMPMessage.h in Headers */,
 				4F23D2FC2211DBBD0076DBEF /* VCTCPSocket.h in Headers */,
+				4F685AA923EC69D3009D5625 /* VCRTMPSession+ProtocolControlMessageHandler.h in Headers */,
 				4FC12748218A05C8009C239D /* VideoCodecKitTools.h in Headers */,
 				4F9173D123D966D00065D31D /* VCH265HardwareDecoder.h in Headers */,
 				4F685A9F23EC350F009D5625 /* VCRTMPCommandMessageCommand.h in Headers */,
@@ -597,6 +607,7 @@
 				4F9173D423DED84D0065D31D /* VCAssetReader.h in Headers */,
 				4FDBA29F23EB0099003F40F1 /* VCRTMPNetConnection.h in Headers */,
 				4FBCCE2B21F3252600E7BF3C /* VCH264SoftwareEncoder.h in Headers */,
+				4F685AA223EC692D009D5625 /* VCRTMPSession_Private.h in Headers */,
 				4FBCCE4521F36E3000E7BF3C /* VCAVCFormatStream.h in Headers */,
 				4F23D2EF2211C90D0076DBEF /* VCRTMPSession.h in Headers */,
 				4F23D30D2211DCC90076DBEF /* VCRTMPDemuxer.h in Headers */,
@@ -716,6 +727,7 @@
 				4F64204A2215EE27000FB2EC /* VCSafeBuffer.m in Sources */,
 				4F23D3172211DD290076DBEF /* VCAMF3Serialization.m in Sources */,
 				4FBCCE2C21F3252600E7BF3C /* VCH264SoftwareEncoder.m in Sources */,
+				4F685AAA23EC69D3009D5625 /* VCRTMPSession+ProtocolControlMessageHandler.m in Sources */,
 				4F1913BC2201466A00921CAF /* VCFLVTag.m in Sources */,
 				4F23D2F52211DB510076DBEF /* VCRTMPChunk.m in Sources */,
 			);
