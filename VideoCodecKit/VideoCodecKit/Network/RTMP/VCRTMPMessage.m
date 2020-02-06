@@ -21,4 +21,8 @@
     }
     return self;
 }
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"{messageTypeID: %d, messageStreamID: %d}", self.messageTypeID, self.messageStreamID];
+}
 @end

@@ -37,7 +37,9 @@ typedef NS_ENUM(uint8_t, VCAMF0TypeMarker) {
 
 @class VCActionScriptType;
 @interface VCAMF0Serialization : NSObject
+
 @property (nonatomic, assign) NSInteger position;
+@property (nonatomic, readonly) NSData *serializedData;
 
 - (instancetype)initWithData:(NSData *)data;
 

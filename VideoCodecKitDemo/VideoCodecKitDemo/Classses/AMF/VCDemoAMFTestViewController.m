@@ -23,14 +23,12 @@
         @"videoCodecs": @(0x0080).asNumber,
         @"objectEncodeing": @(0).asNumber,
     };
-    VCByteArray *arr = [[VCByteArray alloc] init];
-    VCActionScriptObject *commandObj = [VCActionScriptObject asTypeWithDictionary:parm];
-    
-    [@"connect".asString serializeWithTypeMarkToArrayByte:arr];
-    [@(1).asNumber serializeWithTypeMarkToArrayByte:arr];
-    [commandObj serializeWithTypeMarkToArrayByte:arr];
+    VCRTMPNetConnectionCommandConnect *command = [[VCRTMPNetConnectionCommandConnect alloc] init];
+    command.commandName = @"connect";
+    command.transactionID = @(1);
+    command.commandObject = parm;
 
-    NSData *data = arr.data;
+    NSData *data = command.serialize;
     NSLog(@"\nChunkData: %@",data.debugDescription);
     
     VCRTMPMessage *message = [[VCRTMPMessage alloc] init];

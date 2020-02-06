@@ -340,7 +340,7 @@
     }
     uint8_t *ptr = (uint8_t *)[_mutableData bytes];
     uint64_t *p = (uint64_t *)(ptr + _postion);
-    uint64_t v = CFSwapInt64BigToHost(*p);
+    uint64_t v = *p;
     
     CFSwappedFloat64 swappedDouble;
     swappedDouble.v = v;
@@ -356,7 +356,7 @@
     }
     uint8_t *ptr = (uint8_t *)[_mutableData bytes];
     uint32_t *p = (uint32_t *)(ptr + _postion);
-    uint32_t v = CFSwapInt32BigToHost(*p);
+    uint32_t v = *p;
     
     CFSwappedFloat32 swappedFloat;
     swappedFloat.v = v;

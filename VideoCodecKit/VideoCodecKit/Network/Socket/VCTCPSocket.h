@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)tcpSocketConnectTimeout:(VCTCPSocket *)socket;
 - (void)tcpSocketDidConnected:(VCTCPSocket *)socket;
 - (void)tcpSocketHasByteAvailable:(VCTCPSocket *)socket;
-- (void)tcpSocketErrorOccurred:(VCTCPSocket *)socket;
+- (void)tcpSocketErrorOccurred:(VCTCPSocket *)socket stream:(NSStream *)stream;
 - (void)tcpSocketEndcountered:(VCTCPSocket *)socket;
 @end
 

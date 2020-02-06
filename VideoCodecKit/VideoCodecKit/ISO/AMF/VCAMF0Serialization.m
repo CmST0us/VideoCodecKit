@@ -45,4 +45,8 @@
 - (void)setPosition:(NSInteger)position {
     self.array.postion = position;
 }
+
+- (NSData *)serializedData {
+    return self.array.data;
+}
 @end

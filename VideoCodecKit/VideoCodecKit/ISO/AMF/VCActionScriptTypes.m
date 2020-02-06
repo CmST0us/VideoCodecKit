@@ -149,11 +149,9 @@
     
 }
 
-- (void)serializeWithTypeMarkToArrayByte:(VCByteArray *)byteArray {
-    [self serializeTypeMarkToArrayByte:byteArray];
-    [self serializeToArrayByte:byteArray];
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%@", self.value];
 }
-
 @end
 
 

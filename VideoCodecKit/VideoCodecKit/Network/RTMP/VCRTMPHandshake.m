@@ -251,7 +251,7 @@ NSErrorDomain const VCRTMPHandshakeErrorDomain = @"VCRTMPHandshakeErrorDomain";
     [self handleHandshakeErrorWithCode:VCRTMPHandshakeErrorCodeConnectReset];
 }
 
-- (void)tcpSocketErrorOccurred:(VCTCPSocket *)socket {
+- (void)tcpSocketErrorOccurred:(VCTCPSocket *)socket stream:(nonnull NSStream *)stream {
     [self handleHandshakeErrorWithCode:VCRTMPHandshakeErrorCodeConnectError];
 }
 

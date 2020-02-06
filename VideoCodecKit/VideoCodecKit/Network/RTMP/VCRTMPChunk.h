@@ -53,21 +53,38 @@ typedef NS_ENUM(uint8_t, VCRTMPChunkMessageHeaderType) {
 @property (nonatomic, strong, nullable) VCRTMPMessage *message;
 @property (nonatomic, strong, nullable) NSData *chunkData;
 
-@property (nonatomic, assign) NSInteger chunkDataDefaultSize;
-
 - (instancetype)initWithType:(VCRTMPChunkMessageHeaderType)type
                chunkStreamID:(VCRTMPChunkStreamID)chunkStreamID
                      message:(VCRTMPMessage *)message;
 
-- (instancetype)initWithData:(NSData *)data;
-- (instancetype)initWithInputStream:(NSInputStream *)inputStream;
+- (NSInteger)basicHeaderSize;
+- (NSInteger)messageHeaderSize;
+- (NSInteger)extendedTimestampSize;
 
 - (NSData *)makeBasicHeader;
 - (NSData *)makeMessageHeaderWithExtendedTimestamp;
 - (NSData *)makeChunkHeader;
 - (NSData *)makeChunk;
 
-- (BOOL)readChunk;
+@end
+
+@interface VCRTMPChunk (ProtocolControlMessage)
++ (instancetype)makeSetChunkSize:(uint32_t)size;
+- (uint32_t)setChunkSizeValue;
+
++ (instancetype)makeAbortMessage:(uint32_t)chunkStreamID;
+- (uint32_t)abortMessageValue;
+
++ (instancetype)makeAcknowledgement:(uint32_t)seq;
+- (uint32_t)acknowledgementValue;
+
++ (instancetype)makeWindowAcknowledgementSize:(uint32_t)windowSize;
+- (uint32_t)windowAcknowledgementSizeValue;
+
++ (instancetype)makeSetPeerBandwidth:(uint32_t)ackWindowSize
+                           limitType:(uint8_t)limitType;
+- (uint32_t)setPeerBandwidthValue;
+- (uint8_t)limitTypeValue;
 @end
 
 NS_ASSUME_NONNULL_END

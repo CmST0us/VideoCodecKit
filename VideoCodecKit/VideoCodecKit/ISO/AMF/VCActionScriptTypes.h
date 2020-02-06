@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)deserializeFromByteArray:(VCByteArray *)byteArray;
 - (void)serializeTypeMarkToArrayByte:(VCByteArray *)byteArray;
 - (void)serializeToArrayByte:(VCByteArray *)byteArray;
-- (void)serializeWithTypeMarkToArrayByte:(VCByteArray *)byteArray;
 - (id)value;
 @end
 

@@ -201,11 +201,9 @@
             self.connected = NO;
             [self finishConnect];
             [self close];
-            if (aStream == self.inputStream) {
-                if (self.delegate &&
-                    [self.delegate respondsToSelector:@selector(tcpSocketErrorOccurred:)]) {
-                    [self.delegate tcpSocketErrorOccurred:self];
-                }
+            if (self.delegate &&
+                [self.delegate respondsToSelector:@selector(tcpSocketErrorOccurred:stream:)]) {
+                [self.delegate tcpSocketErrorOccurred:self stream:aStream];
             }
         }
             break;
