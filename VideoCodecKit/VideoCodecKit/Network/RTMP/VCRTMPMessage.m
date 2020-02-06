@@ -22,6 +22,14 @@
     return self;
 }
 
+- (instancetype)copyWithZone:(nullable NSZone *)zone {
+    VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
+    message.timestamp = self.timestamp;
+    message.messageLength = self.messageLength;
+    message.messageTypeID = self.messageTypeID;
+    message.messageStreamID = self.messageStreamID;
+    return message;
+}
 - (NSString *)description {
     return [NSString stringWithFormat:@"{messageTypeID: %d, messageStreamID: %d}", self.messageTypeID, self.messageStreamID];
 }

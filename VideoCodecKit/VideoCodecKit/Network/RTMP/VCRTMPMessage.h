@@ -32,7 +32,7 @@ typedef NS_ENUM(uint8_t, VCRTMPMessageType) {
     
     VCRTMPMessageTypeUnknow = 0xFF,
 };
-@interface VCRTMPMessage : NSObject
+@interface VCRTMPMessage : NSObject<NSCopying>
 @property (nonatomic, assign) uint32_t timestamp;
 @property (nonatomic, assign) uint32_t messageLength;
 @property (nonatomic, assign) VCRTMPMessageType messageTypeID;

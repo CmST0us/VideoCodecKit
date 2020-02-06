@@ -37,6 +37,7 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
 - (void)setChunkSize:(uint32_t)size {
     VCRTMPChunk *chunk = [VCRTMPChunk makeSetChunkSize:size];
     [self.channel writeFrame:chunk];
+    self.channel.localChunkSize = size;
 }
 
 - (void)abortMessage:(uint32_t)streamID {

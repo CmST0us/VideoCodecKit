@@ -119,6 +119,13 @@
     };
 }
 
+- (VCByteArrayWriter * _Nonnull (^)(uint32_t))writeUInt32Little {
+    return ^(uint32_t value) {
+        [self.target writeUInt32Little:value];
+        return self;
+    };
+}
+
 @end
 
 @interface VCByteArray ()
@@ -242,6 +249,12 @@
     [self writeBytes:data];
 }
 
+- (void)writeUInt32Little:(uint32_t)value {
+    int32_t v = CFSwapInt32HostToLittle(value);
+    NSData *data = [[NSData alloc] initWithBytes:&v length:kVCByteArraySizeOfInt32];
+    [self writeBytes:data];
+}
+
 - (int8_t)readInt8 {
     if (self.bytesAvailable < kVCByteArraySizeOfInt8) {
         @throw [VCByteArrayException eofException];
@@ -329,6 +342,18 @@
     uint8_t *ptr = (uint8_t *)[_mutableData bytes];
     uint32_t *p = (uint32_t *)(ptr + _postion);
     uint32_t v = CFSwapInt32BigToHost(*p);
+    
+    _postion += kVCByteArraySizeOfInt32;
+    return v;
+}
+
+- (uint32_t)readUInt32Little {
+    if (self.bytesAvailable < kVCByteArraySizeOfInt32) {
+        @throw [VCByteArrayException eofException];
+    }
+    uint8_t *ptr = (uint8_t *)[_mutableData bytes];
+    uint32_t *p = (uint32_t *)(ptr + _postion);
+    uint32_t v = CFSwapInt32LittleToHost(*p);
     
     _postion += kVCByteArraySizeOfInt32;
     return v;

@@ -114,8 +114,7 @@
         }
         
         // Type 0
-        uint32_t swapStreamID = CFSwapInt32HostToLittle(self.message.messageStreamID);
-        [array writeUInt32:swapStreamID];
+        [array writeUInt32Little:self.message.messageStreamID];
         if (self.message.timestamp >= 0xFFFFFF) {
             [array writeUInt32:self.message.timestamp];
         }

@@ -12,10 +12,14 @@
 #import "VCRTMPChunk.h"
 #import "VCRTMPMessage.h"
 
+#define kVCRTMPChunkChannelDefaultChunkSize (128)
+
 @interface VCRTMPChunkChannel () <VCTCPSocketDelegate>
 @property (nonatomic, strong) VCTCPSocket *socket;
 
 @property (nonatomic, strong) NSData *lastData;
+@property (nonatomic, strong) VCRTMPChunk *lastSendChunk;
+@property (nonatomic, strong) VCRTMPChunk *lastReadChunk;
 @end
 
 @implementation VCRTMPChunkChannel
@@ -24,6 +28,7 @@
     self = [super init];
     if (self) {
         _lastData = [NSData data];
+        _localChunkSize = kVCRTMPChunkChannelDefaultChunkSize;
     }
     return self;
 }
@@ -72,8 +77,8 @@
             
             /// Read Message Header
             if (chunk.messageHeaderType == VCRTMPChunkMessageHeaderType3) {
-                if (self.chunkDataDefaultSize > 0) {
-                    chunk.chunkData = [array readBytes:self.chunkDataDefaultSize];
+                if (self.lastReadChunk.message.messageLength > 0) {
+                    chunk.chunkData = [array readBytes:self.lastReadChunk.message.messageLength];
                 }
             } else {
                 VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
@@ -91,7 +96,7 @@
                     if (chunk.messageHeaderType == VCRTMPChunkMessageHeaderType1) {
                         break;
                     }
-                    message.messageStreamID = CFSwapInt32LittleToHost([array readUInt32]);
+                    message.messageStreamID = [array readUInt32Little];
                 } while (0);
                 
                 NSInteger externTimestampSize = [chunk extendedTimestampSize];
@@ -110,6 +115,7 @@
             break;
         }
         
+        self.lastReadChunk = chunk;
         if (self.delegate &&
             [self.delegate respondsToSelector:@selector(channel:didReceiveFrame:)]) {
             [self.delegate channel:self didReceiveFrame:chunk];
@@ -118,7 +124,69 @@
 }
 
 - (void)writeFrame:(VCRTMPChunk *)chunk {
-    [self.socket writeData:[chunk makeChunk]];
+    NSMutableData *sendData = [[NSMutableData alloc] init];
+    __block VCRTMPChunk *lastChunk = chunk;
+    [[self splitChunk:chunk] enumerateObjectsUsingBlock:^(VCRTMPChunk * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [sendData appendData:[obj makeChunk]];
+        lastChunk = obj;
+    }];
+    self.lastSendChunk = lastChunk;
+    [self.socket writeData:sendData];
+}
+
+#pragma mark - Split Chunk
+- (NSArray<VCRTMPChunk *> *)splitChunk:(VCRTMPChunk *)chunk {
+    NSInteger chunkSize = self.localChunkSize;
+    NSInteger chunkDataSize = chunk.message.messageLength;
+    NSInteger splitChunkCount = chunkDataSize / chunkSize;
+    NSInteger lastSplitChunkDataSize = chunkDataSize % chunkSize;
+    
+    if (splitChunkCount == 0) {
+        [self modifyChunkMessageType:chunk
+                   withLastSendChunk:self.lastSendChunk];
+        return @[chunk];
+    }
+    
+    NSMutableArray<VCRTMPChunk *> *chunks = [[NSMutableArray alloc] init];
+    VCRTMPChunk *lastChunk = self.lastSendChunk;
+    VCByteArray *array = [[VCByteArray alloc] initWithData:chunk.chunkData];
+    for (NSInteger i = 0; i < splitChunkCount; ++i) {
+        NSData *splitData = [array readBytes:chunkSize];
+        VCRTMPChunk *splitChunk = [[VCRTMPChunk alloc] initWithType:lastChunk ? lastChunk.messageHeaderType : chunk.messageHeaderType
+                                                      chunkStreamID:lastChunk ? lastChunk.chunkStreamID : chunk.chunkStreamID
+                                                            message:lastChunk ? [lastChunk.message copy] : [chunk.message copy]];
+        splitChunk.chunkData = splitData;
+        [self modifyChunkMessageType:splitChunk
+                   withLastSendChunk:lastChunk];
+        [chunks addObject:splitChunk];
+        lastChunk = splitChunk;
+    }
+    NSData *splitData = [array readBytes:lastSplitChunkDataSize];
+    VCRTMPChunk *splitChunk = [[VCRTMPChunk alloc] initWithType:lastChunk.messageHeaderType
+                                                  chunkStreamID:lastChunk.chunkStreamID
+                                                        message:[lastChunk.message copy]];
+    splitChunk.chunkData = splitData;
+    [self modifyChunkMessageType:splitChunk
+               withLastSendChunk:lastChunk];
+    [chunks addObject:splitChunk];
+    return chunks;
+}
+
+- (void)modifyChunkMessageType:(VCRTMPChunk *)aChunk withLastSendChunk:(VCRTMPChunk *)lastSendChunk {
+    // TODO: Timestamp delta
+    VCRTMPChunkMessageHeaderType newMessageType = aChunk.messageHeaderType;
+    if (lastSendChunk &&
+        lastSendChunk.message.messageStreamID == aChunk.message.messageStreamID) {
+        newMessageType = VCRTMPChunkMessageHeaderType1;
+        if (lastSendChunk.message.messageLength == aChunk.message.messageLength &&
+            lastSendChunk.message.messageTypeID == aChunk.message.messageTypeID) {
+            newMessageType = VCRTMPChunkMessageHeaderType2;
+            if (lastSendChunk.message.timestamp == aChunk.message.timestamp) {
+                newMessageType = VCRTMPChunkMessageHeaderType3;
+            }
+        }
+    }
+    aChunk.messageHeaderType = newMessageType;
 }
 
 #pragma mark - #pragma mark - TCP Delegate

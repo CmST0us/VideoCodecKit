@@ -21,7 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VCRTMPChunkChannel : NSObject
 
-@property (nonatomic, assign) NSInteger chunkDataDefaultSize;
+@property (nonatomic, assign) NSInteger localChunkSize;
+@property (nonatomic, assign) NSInteger remoteChunkSize;
 @property (nonatomic, weak) id<VCRTMPChunkChannelDelegate> delegate;
 
 + (instancetype)channelForSocket:(VCTCPSocket *)socket;
