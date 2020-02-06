@@ -7,7 +7,7 @@
 //
 
 #import "VCRTMPSession.h"
-#import "VCRTMPChunkStreamSpliter.h"
-@interface VCRTMPSession () <VCRTMPChunkStreamSpliterDelegate>
-@property (nonatomic, strong) VCRTMPChunkStreamSpliter *spliter;
+#import "VCRTMPChunkChannel.h"
+@interface VCRTMPSession () <VCRTMPChunkChannelDelegate>
+@property (nonatomic, strong) VCRTMPChunkChannel *channel;
 @end

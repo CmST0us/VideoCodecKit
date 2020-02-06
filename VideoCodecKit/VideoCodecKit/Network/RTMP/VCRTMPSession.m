@@ -9,7 +9,7 @@
 #import "VCRTMPSession.h"
 #import "VCRTMPSession_Private.h"
 #import "VCRTMPSession+ProtocolControlMessageHandler.h"
-#import "VCRTMPChunkStreamSpliter.h"
+#import "VCRTMPChunkChannel.h"
 #import "VCTCPSocket.h"
 #import "VCRTMPMessage.h"
 #import "VCRTMPCommandMessageCommand.h"
@@ -21,9 +21,9 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
 
 + (instancetype)sessionForSocket:(VCTCPSocket *)socket {
     VCRTMPSession *session = [[VCRTMPSession alloc] init];
-    VCRTMPChunkStreamSpliter *spliter = [VCRTMPChunkStreamSpliter spliterForSocket:socket];
-    session.spliter = spliter;
-    session.spliter.delegate = session;
+    VCRTMPChunkChannel *channel = [VCRTMPChunkChannel channelForSocket:socket];
+    session.channel = channel;
+    session.channel.delegate = session;
     return session;
 }
 
@@ -36,17 +36,17 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
 #pragma mark - Protocol Control Message
 - (void)setChunkSize:(uint32_t)size {
     VCRTMPChunk *chunk = [VCRTMPChunk makeSetChunkSize:size];
-    [self.spliter writeFrame:chunk];
+    [self.channel writeFrame:chunk];
 }
 
 - (void)abortMessage:(uint32_t)streamID {
     VCRTMPChunk *chunk = [VCRTMPChunk makeAbortMessage:streamID];
-    [self.spliter writeFrame:chunk];
+    [self.channel writeFrame:chunk];
 }
 
 - (void)setPeerBandwidth:(uint32_t)bandwidth limitType:(VCRTMPChunkSetPeerBandwidthLimitType)limitType {
     VCRTMPChunk *chunk = [VCRTMPChunk makeSetPeerBandwidth:bandwidth limitType:limitType];
-    [self.spliter writeFrame:chunk];
+    [self.channel writeFrame:chunk];
 }
 
 #pragma mark - Handle Protocol Control Message
@@ -65,7 +65,7 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
 }
 
 #pragma mark - Chunk Packet
-- (void)spliter:(VCRTMPChunkStreamSpliter *)spliter didReceiveFrame:(VCRTMPChunk *)chunk {
+- (void)channel:(VCRTMPChunkChannel *)channel didReceiveFrame:(VCRTMPChunk *)chunk {
     NSLog(@"收到%@", chunk);
     NSString *handler = [[self class] protocolControlMessageHandlerMap][@(chunk.message.messageTypeID)];
     if (handler) {
@@ -80,11 +80,11 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
     }
 }
 
-- (void)spliterConnectionDidEnd {
+- (void)channelConnectionDidEnd {
     NSLog(@"end");
 }
 
-- (void)spliter:(VCRTMPChunkStreamSpliter *)spliter connectionHasError:(NSError *)error {
+- (void)channel:(VCRTMPChunkChannel *)channel connectionHasError:(NSError *)error {
     NSLog(@"error: %@", error);
 }
 

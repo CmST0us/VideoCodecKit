@@ -9,7 +9,7 @@
 #import "VCRTMPNetConnection.h"
 #import "VCRTMPSession.h"
 #import "VCRTMPSession_Private.h"
-#import "VCRTMPChunkStreamSpliter.h"
+#import "VCRTMPChunkChannel.h"
 #import "VCRTMPCommandMessageCommand.h"
 
 NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorDomain";
@@ -28,7 +28,7 @@ NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorD
 
 - (void)connecWithParam:(NSDictionary *)param {
     VCRTMPChunk *chunk = [self makeConnectChunkWithParam:param];
-    [self.session.spliter writeFrame:chunk];
+    [self.session.channel writeFrame:chunk];
 }
 
 #pragma mark - RTMP Message

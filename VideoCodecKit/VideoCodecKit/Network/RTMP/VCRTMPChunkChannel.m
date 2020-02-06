@@ -1,24 +1,24 @@
 //
-//  VCRTMPChunkStreamSpliter.m
+//  VCRTMPChunkChannel.m
 //  VideoCodecKit
 //
 //  Created by CmST0us on 2020/2/6.
 //  Copyright © 2020 eric3u. All rights reserved.
 //
 
-#import "VCRTMPChunkStreamSpliter.h"
+#import "VCRTMPChunkChannel.h"
 #import "VCTCPSocket.h"
 #import "VCByteArray.h"
 #import "VCRTMPChunk.h"
 #import "VCRTMPMessage.h"
 
-@interface VCRTMPChunkStreamSpliter () <VCTCPSocketDelegate>
+@interface VCRTMPChunkChannel () <VCTCPSocketDelegate>
 @property (nonatomic, strong) VCTCPSocket *socket;
 
 @property (nonatomic, strong) NSData *lastData;
 @end
 
-@implementation VCRTMPChunkStreamSpliter
+@implementation VCRTMPChunkChannel
 
 - (instancetype)init {
     self = [super init];
@@ -28,11 +28,11 @@
     return self;
 }
 
-+ (instancetype)spliterForSocket:(VCTCPSocket *)socket {
-    VCRTMPChunkStreamSpliter *spliter = [[VCRTMPChunkStreamSpliter alloc] init];
-    spliter.socket = socket;
-    spliter.socket.delegate = spliter;
-    return spliter;
++ (instancetype)channelForSocket:(VCTCPSocket *)socket {
+    VCRTMPChunkChannel *channel = [[VCRTMPChunkChannel alloc] init];
+    channel.socket = socket;
+    channel.socket.delegate = channel;
+    return channel;
 }
 
 - (dispatch_block_t)makeByteArrayPositionRecoveryBlock:(VCByteArray *)arr {
@@ -111,8 +111,8 @@
         }
         
         if (self.delegate &&
-            [self.delegate respondsToSelector:@selector(spliter:didReceiveFrame:)]) {
-            [self.delegate spliter:self didReceiveFrame:chunk];
+            [self.delegate respondsToSelector:@selector(channel:didReceiveFrame:)]) {
+            [self.delegate channel:self didReceiveFrame:chunk];
         }
     }
 }
@@ -124,15 +124,15 @@
 #pragma mark - #pragma mark - TCP Delegate
 - (void)tcpSocketEndcountered:(VCTCPSocket *)socket {
     if (self.delegate &&
-        [self.delegate respondsToSelector:@selector(spliterConnectionDidEnd)]) {
-        [self.delegate spliterConnectionDidEnd];
+        [self.delegate respondsToSelector:@selector(channelConnectionDidEnd)]) {
+        [self.delegate channelConnectionDidEnd];
     }
 }
 
 - (void)tcpSocketErrorOccurred:(VCTCPSocket *)socket stream:(nonnull NSStream *)stream{
     if (self.delegate &&
-        [self.delegate respondsToSelector:@selector(spliter:connectionHasError:)]) {
-        [self.delegate spliter:self connectionHasError:stream.streamError];
+        [self.delegate respondsToSelector:@selector(channel:connectionHasError:)]) {
+        [self.delegate channel:self connectionHasError:stream.streamError];
     }
 }
 
@@ -151,8 +151,8 @@
         [self handleRecvData:recvData];
     } else {
         if (self.delegate &&
-            [self.delegate respondsToSelector:@selector(spliterConnectionDidEnd)]) {
-            [self.delegate spliterConnectionDidEnd];
+            [self.delegate respondsToSelector:@selector(channelConnectionDidEnd)]) {
+            [self.delegate channelConnectionDidEnd];
         }
         [self.socket close];
     }

@@ -51,7 +51,6 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCTCPSocket.h>
 #pragma mark RTMP
 #import <VideoCodecKit/VCRTMPChunk.h>
-#import <VideoCodecKit/VCRTMPChunkStreamSpliter.h>
 #import <VideoCodecKit/VCRTMPMessage.h>
 #import <VideoCodecKit/VCRTMPHandshake.h>
 #import <VideoCodecKit/VCRTMPSession.h>
