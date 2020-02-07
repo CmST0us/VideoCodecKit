@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)resetRecvByteCount;
 - (void)resetSendByteCount;
+- (void)useCurrntAcknowlegmentWindowSizeAsBandwidth;
 
 @end
 

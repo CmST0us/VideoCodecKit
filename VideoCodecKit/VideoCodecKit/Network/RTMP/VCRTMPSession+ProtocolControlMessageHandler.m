@@ -20,11 +20,29 @@
 }
 
 - (void)handleSetPeerBandwidthValue:(VCRTMPChunk *)chunk {
-    NSInteger s = [chunk setPeerBandwidthValue];
+    uint32_t s = (uint32_t)[chunk setPeerBandwidthValue];
+    VCRTMPChunkSetPeerBandwidthLimitType limitType = [chunk limitTypeValue];
     NSLog(@"[RTMP][CHANNEL] Set Peer Bandwidth: %ld", (long)s);
-    self.channel.bandwidth = s;
-    if (s != self.channel.acknowlegmentWindowSize) {
-        [self respondWindowAcknowledgmentWithSize:s];
+    
+    __weak typeof(self) weakSelf = self;
+    void (^setBandwidthBlock)(uint32_t size) = ^(uint32_t size) {
+        if (weakSelf.channel.acknowlegmentWindowSize != size) {
+            [weakSelf respondWindowAcknowledgmentWithSize:size];
+        }
+        weakSelf.channel.acknowlegmentWindowSize = size;
+        [weakSelf.channel useCurrntAcknowlegmentWindowSizeAsBandwidth];
+    };
+    
+    if (limitType == VCRTMPChunkSetPeerBandwidthLimitTypeHard) {
+        setBandwidthBlock(s);
+    } else if (limitType == VCRTMPChunkSetPeerBandwidthLimitTypeSoft ||
+               limitType == VCRTMPChunkSetPeerBandwidthLimitTypeDynamic) {
+        if (self.channel.bandwidth == 0) {
+            setBandwidthBlock(s);
+        } else {
+            uint32_t minBandwidth = MIN((uint32_t)self.channel.bandwidth, s);
+            setBandwidthBlock(minBandwidth);
+        }
     }
 }
 

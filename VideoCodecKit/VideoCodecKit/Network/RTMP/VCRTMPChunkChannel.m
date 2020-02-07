@@ -140,10 +140,6 @@
     
     /// 判断 Ack Window Size
     if (self.acknowlegmentWindowSize > 0) {
-        /// 判断是否需要ACK重置
-        if (self.totalSendByte > self.acknowlegmentWindowSize) {
-            return;
-        }
         /// TODO: 确认带宽
         if (self.totalSendByte > self.bandwidth) {
             return;
@@ -161,6 +157,10 @@
 
 - (void)resetSendByteCount {
     self.totalSendByte = 0;
+}
+
+- (void)useCurrntAcknowlegmentWindowSizeAsBandwidth {
+    self.bandwidth = self.acknowlegmentWindowSize;
 }
 
 #pragma mark - Split Chunk

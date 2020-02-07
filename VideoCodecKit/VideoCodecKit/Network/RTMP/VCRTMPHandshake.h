@@ -47,11 +47,8 @@ typedef void(^VCRTMPHandshakeBlock)(VCRTMPHandshake *handshake, VCRTMPSession * 
  @return handshake实例
  */
 + (instancetype)handshakeForSocket:(VCTCPSocket *)socket;
-
 - (void)startHandshakeWithBlock:(VCRTMPHandshakeBlock)block;
 
-- (void)setChunkSize:(uint32_t)size withCompletion:(dispatch_block_t)block;
-- (nullable VCRTMPNetConnection *)makeNetConnection;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -89,7 +89,7 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
 
 - (void)channelNeedAck:(VCRTMPChunkChannel *)channel {
     NSLog(@"[RTMP][CHANNLE] Need ACK");
-    [self.channel writeFrame:[VCRTMPChunk makeAcknowledgement:self.channel.totalRecvByte]];
+    [self.channel writeFrame:[VCRTMPChunk makeAcknowledgement:(uint32_t)self.channel.totalRecvByte]];
 }
 
 - (void)channelConnectionDidEnd {
