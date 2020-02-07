@@ -11,10 +11,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface VCRTMPSession (ProtocolControlMessageHandler)
-- (void)handleMessageTypeWindowAcknowledgement:(VCRTMPChunk *)chunk;
+- (void)handleWindowAcknowledgementSize:(VCRTMPChunk *)chunk;
 - (void)handleSetPeerBandwidthValue:(VCRTMPChunk *)chunk;
 - (void)handleSetChunkSize:(VCRTMPChunk *)chunk;
-- (void)handleAMF0Command:(VCRTMPChunk *)chunk;
+- (void)handleAcknowledgement:(VCRTMPChunk *)chunk;
 @end
 
 NS_ASSUME_NONNULL_END

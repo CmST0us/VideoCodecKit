@@ -46,6 +46,11 @@
         @"videoCodecs": @(0x0080).asNumber,
         @"objectEncodeing": @(0).asNumber,
     };
-    [self.netConnection connecWithParam:parm];
+    [self.netConnection connecWithParam:parm completion:^(VCRTMPCommandMessageResponse * _Nullable response, BOOL isSuccess) {
+        if (isSuccess) {
+            VCRTMPNetConnectionCommandConnectResult *result = (VCRTMPNetConnectionCommandConnectResult *)response;
+            NSLog(@"[RTMP][NetConnection] Success: %@, %@", result.information, result.properties);
+        }
+    }];
 }
 @end

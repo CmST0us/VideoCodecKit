@@ -18,6 +18,9 @@
     }
     return self;
 }
+- (NSData *)chunkData {
+    return _data;
+}
 - (void)serializeToByteArray:(VCByteArray *)byteArray {
     [byteArray writeBytes:[self serialize]];
 }
@@ -57,6 +60,29 @@
 
 @end
 
+NSString * const VCRTMPCommandMessageResponseSuccess = @"_result";
+NSString * const VCRTMPCommandMessageResponseError = @"_error";
+@implementation VCRTMPCommandMessageResponse
+- (NSData *)serialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] init];
+    if (self.response) {
+        [serialization serialize:self.response.asString];
+    }
+    if (self.transactionID) {
+        [serialization serialize:self.transactionID.asNumber];
+    } 
+    return serialization.serializedData;
+}
+
+- (void)deserialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] initWithData:_data];
+    self.response = [serialization deserialize].value;
+    self.transactionID = [serialization deserialize].value;
+}
+@end
+@implementation VCRTMPCommandMessageTask
+@end
+
 @implementation VCRTMPChunk (CommandMessageComand)
 + (instancetype)makeNetConnectionCommand:(VCRTMPCommandMessageCommand *)command {
     VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
@@ -67,6 +93,11 @@
 }
 - (NSString *)commandTypeValue {
     VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] initWithData:self.chunkData];
+    return [serialization deserialize].value;
+}
+- (NSNumber *)transactionIDValue {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] initWithData:self.chunkData];
+    [serialization deserialize];
     return [serialization deserialize].value;
 }
 @end
@@ -103,8 +134,8 @@
 @implementation VCRTMPNetConnectionCommandConnectResult
 - (NSData *)serialize {
     VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] init];
-    if (self.commandName) {
-        [serialization serialize:self.commandName.asString];
+    if (self.response) {
+        [serialization serialize:self.response.asString];
     }
     if (self.transactionID) {
         [serialization serialize:self.transactionID.asNumber];
@@ -122,7 +153,7 @@
 
 - (void)deserialize {
     VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] initWithData:_data];
-    self.commandName = [serialization deserialize].value;
+    self.response = [serialization deserialize].value;
     self.transactionID = [serialization deserialize].value;
     self.properties = [serialization deserialize].value;
     self.information = [serialization deserialize].value;

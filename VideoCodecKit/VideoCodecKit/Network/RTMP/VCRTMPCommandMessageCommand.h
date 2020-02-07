@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSData *_data;
 }
 - (instancetype)initWithData:(NSData *)data;
+- (NSData *)chunkData;
 - (void)serializeToByteArray:(VCByteArray *)byteArray;
 - (NSData *)serialize;
 - (void)deserialize;
@@ -28,10 +29,26 @@ NS_ASSUME_NONNULL_BEGIN
                                                      data:(NSData *)data;
 @end
 
+@class VCRTMPCommandMessageResponse;
+typedef void(^VCRTMPCommandMessageResponseBlock)(VCRTMPCommandMessageResponse * _Nullable response, BOOL isSuccess);
+@interface VCRTMPCommandMessageTask : NSObject
+@property (nonatomic, weak) id observer;
+@property (nonatomic, assign) SEL handler;
+@property (nonatomic, assign) NSUInteger transactionID;
+@end
+
 @class VCRTMPCommandMessageCommand;
 @interface VCRTMPChunk (CommandMessageComand)
 + (instancetype)makeNetConnectionCommand:(VCRTMPCommandMessageCommand *)command;
 - (NSString *)commandTypeValue;
+- (NSNumber *)transactionIDValue;
+@end
+
+extern NSString * const VCRTMPCommandMessageResponseSuccess;
+extern NSString * const VCRTMPCommandMessageResponseError;
+@interface VCRTMPCommandMessageResponse : VCRTMPCommandMessageCommand
+@property (nonatomic, copy, nullable) NSString *response;
+@property (nonatomic, strong, nullable) NSNumber *transactionID;
 @end
 
 @interface VCRTMPNetConnectionCommandConnect : VCRTMPCommandMessageCommand
@@ -41,9 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *optionalUserArguments;
 @end
 
-@interface VCRTMPNetConnectionCommandConnectResult : VCRTMPCommandMessageCommand
-@property (nonatomic, copy, nullable) NSString *commandName;
-@property (nonatomic, strong, nullable) NSNumber *transactionID;
+@interface VCRTMPNetConnectionCommandConnectResult : VCRTMPCommandMessageResponse
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *properties;
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *information;
 @end

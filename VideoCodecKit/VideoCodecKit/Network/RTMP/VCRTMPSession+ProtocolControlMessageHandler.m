@@ -13,7 +13,7 @@
 #import "VCRTMPMessage.h"
 
 @implementation VCRTMPSession (ProtocolControlMessageHandler)
-- (void)handleMessageTypeWindowAcknowledgement:(VCRTMPChunk *)chunk {
+- (void)handleWindowAcknowledgementSize:(VCRTMPChunk *)chunk {
     NSInteger s = [chunk windowAcknowledgementSizeValue];
     NSLog(@"[RTMP][CHANNEL] Window Acknowledgement Size: %ld", (long)s);
     self.channel.acknowlegmentWindowSize = s;
@@ -50,10 +50,6 @@
     NSInteger s = [chunk setChunkSizeValue];
     NSLog(@"[RTMP][CHANNEL] Set Chunk Size: %ld", (long)s);
     self.channel.remoteChunkSize = s;
-}
-
-- (void)handleAMF0Command:(VCRTMPChunk *)chunk {
-    NSLog(@"[RTMP][CHANNEL] Command: %@", [VCRTMPCommandMessageCommandFactory commandWithType:chunk.commandTypeValue data:chunk.chunkData]);
 }
 
 - (void)handleAcknowledgement:(VCRTMPChunk *)chunk {

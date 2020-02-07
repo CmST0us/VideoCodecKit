@@ -7,16 +7,15 @@
 //
 
 #import "VCRTMPNetConnection.h"
+#import "VCRTMPNetConnection_Private.h"
 #import "VCRTMPSession.h"
 #import "VCRTMPSession_Private.h"
+#import "VCRTMPSession+CommandMessageHandler.h"
+
 #import "VCRTMPChunkChannel.h"
 #import "VCRTMPCommandMessageCommand.h"
 
 NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorDomain";
-
-@interface VCRTMPNetConnection ()
-@property (nonatomic, weak) VCRTMPSession *session;
-@end
 
 @implementation VCRTMPNetConnection
 
@@ -26,19 +25,31 @@ NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorD
     return connection;
 }
 
-- (void)connecWithParam:(NSDictionary *)param {
-    VCRTMPChunk *chunk = [self makeConnectChunkWithParam:param];
+- (void)connecWithParam:(NSDictionary *)param completion:(VCRTMPCommandMessageResponseBlock)block {
+    self.resultBlock = block;
+    
+    VCRTMPNetConnectionCommandConnect *command = [[VCRTMPNetConnectionCommandConnect alloc] init];
+    command.commandName = @"connect";
+    command.transactionID = @([self.session nextTransactionID]);
+    command.commandObject = param;
+    VCRTMPChunk *chunk = [VCRTMPChunk makeNetConnectionCommand:command];
+    [self.session registerTransactionID:command.transactionID.unsignedIntegerValue
+                               observer:self
+                                handler:@selector(handleConnectionResult:)];
     [self.session.channel writeFrame:chunk];
 }
 
-#pragma mark - RTMP Message
-- (VCRTMPChunk *)makeConnectChunkWithParam:(NSDictionary *)parm {
-    VCRTMPNetConnectionCommandConnect *command = [[VCRTMPNetConnectionCommandConnect alloc] init];
-    command.commandName = @"connect";
-    command.transactionID = @(1);
-    command.commandObject = parm;
-    VCRTMPChunk *chunk = [VCRTMPChunk makeNetConnectionCommand:command];
-    return chunk;
+#pragma mark - Handle Message
+- (void)handleConnectionResult:(VCRTMPCommandMessageResponse *)result {
+    BOOL success = NO;
+    if ([result.response isEqualToString:VCRTMPCommandMessageResponseSuccess]) {
+        success = YES;
+        result = [[VCRTMPNetConnectionCommandConnectResult alloc] initWithData:result.chunkData];
+        [result deserialize];
+    }
+    if (self.resultBlock) {
+        self.resultBlock(result, success);
+    }
 }
 
 @end

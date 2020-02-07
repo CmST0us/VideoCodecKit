@@ -8,6 +8,20 @@
 
 #import "VCRTMPSession.h"
 #import "VCRTMPChunkChannel.h"
+
+@class VCRTMPCommandMessageTask;
 @interface VCRTMPSession () <VCRTMPChunkChannelDelegate>
+
+@property (nonatomic, assign) NSUInteger transactionIDCounter;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber *, VCRTMPCommandMessageTask *> *commandMessageTasks;
+
 @property (nonatomic, strong) VCRTMPChunkChannel *channel;
+@property (nonatomic, strong) VCRTMPNetConnection *netConnection;
+
+- (NSUInteger)nextTransactionID;
+
+- (void)respondWindowAcknowledgmentWithSize:(uint32_t)size;
+
++ (NSDictionary<NSNumber *, NSString *> *)protocolControlMessageHandlerMap;
++ (NSDictionary<NSString *, NSString *> *)commandMessageHandlerMap;
 @end

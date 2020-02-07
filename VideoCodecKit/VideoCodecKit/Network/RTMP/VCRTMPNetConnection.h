@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "VCRTMPCommandMessageCommand.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @class VCRTMPSession;
@@ -22,7 +22,7 @@ typedef NS_ENUM(NSUInteger, VCRTMPNetConnectionErrorCode) {
 
 + (instancetype)netConnectionForSession:(VCRTMPSession *)session;
 
-- (void)connecWithParam:(NSDictionary *)param;
+- (void)connecWithParam:(NSDictionary *)param completion:(VCRTMPCommandMessageResponseBlock)block;
 @end
 
 NS_ASSUME_NONNULL_END

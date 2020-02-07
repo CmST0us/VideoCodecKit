@@ -9,6 +9,7 @@
 #import "VCRTMPSession.h"
 #import "VCRTMPSession_Private.h"
 #import "VCRTMPSession+ProtocolControlMessageHandler.h"
+#import "VCRTMPSession+CommandMessageHandler.h"
 #import "VCRTMPChunkChannel.h"
 #import "VCTCPSocket.h"
 #import "VCRTMPMessage.h"
@@ -19,6 +20,15 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
 
 @implementation VCRTMPSession
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _transactionIDCounter = 1;
+        _commandMessageTasks = [[NSMutableDictionary alloc] init];
+    }
+    return self;
+}
+
 + (instancetype)sessionForSocket:(VCTCPSocket *)socket {
     VCRTMPSession *session = [[VCRTMPSession alloc] init];
     VCRTMPChunkChannel *channel = [VCRTMPChunkChannel channelForSocket:socket];
@@ -27,9 +37,14 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
     return session;
 }
 
+- (NSUInteger)nextTransactionID {
+    return self.transactionIDCounter;
+}
+
 #pragma mark - Net Connection
 - (VCRTMPNetConnection *)makeNetConnection {
     VCRTMPNetConnection *netConnection = [VCRTMPNetConnection netConnectionForSession:self];
+    self.netConnection = netConnection;
     return netConnection;
 }
 
@@ -56,17 +71,30 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
 }
 
 #pragma mark - Handle Protocol Control Message
-+ (NSDictionary *)protocolControlMessageHandlerMap {
++ (NSDictionary<NSNumber *, NSString *> *)protocolControlMessageHandlerMap {
     static NSDictionary *map = nil;
     if (map != nil) {
         return map;
     }
     map = @{
-        @(VCRTMPMessageTypeWindowAcknowledgement): @"handleMessageTypeWindowAcknowledgement:",
-        @(VCRTMPMessageTypeSetPeerBandwidth): @"handleSetPeerBandwidthValue:",
-        @(VCRTMPMessageTypeSetChunkSize): @"handleSetChunkSize:",
-        @(VCRTMPMessageTypeAMF0Command): @"handleAMF0Command:",
-        @(VCRTMPMessageTypeAcknowledgement): @"handleAcknowledgement:"
+        @(VCRTMPMessageTypeWindowAcknowledgement): NSStringFromSelector(@selector(handleWindowAcknowledgementSize:)),
+        @(VCRTMPMessageTypeSetPeerBandwidth): NSStringFromSelector(@selector(handleSetPeerBandwidthValue:)),
+        @(VCRTMPMessageTypeSetChunkSize): NSStringFromSelector(@selector(handleSetChunkSize:)),
+        @(VCRTMPMessageTypeAMF0Command): NSStringFromSelector(@selector(handleAMF0Command:)),
+        @(VCRTMPMessageTypeAcknowledgement): NSStringFromSelector(@selector(handleAcknowledgement:)),
+    };
+    return map;
+}
+
+#pragma mark - Handle Command Message
++ (NSDictionary<NSString *, NSString *> *)commandMessageHandlerMap {
+    static NSDictionary *map = nil;
+    if (map != nil) {
+        return map;
+    }
+    map = @{
+        @"_result": NSStringFromSelector(@selector(handleCommandMessageResponse:)),
+        @"_error": NSStringFromSelector(@selector(handleCommandMessageResponse:)),
     };
     return map;
 }
