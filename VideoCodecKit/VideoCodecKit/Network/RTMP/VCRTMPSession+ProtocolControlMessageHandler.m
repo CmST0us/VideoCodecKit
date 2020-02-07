@@ -22,6 +22,10 @@
 - (void)handleSetPeerBandwidthValue:(VCRTMPChunk *)chunk {
     NSInteger s = [chunk setPeerBandwidthValue];
     NSLog(@"[RTMP][CHANNEL] Set Peer Bandwidth: %ld", (long)s);
+    self.channel.bandwidth = s;
+    if (s != self.channel.acknowlegmentWindowSize) {
+        [self respondWindowAcknowledgmentWithSize:s];
+    }
 }
 
 - (void)handleSetChunkSize:(VCRTMPChunk *)chunk {

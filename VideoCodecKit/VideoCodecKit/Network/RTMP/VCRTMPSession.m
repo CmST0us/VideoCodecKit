@@ -50,6 +50,11 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
     [self.channel writeFrame:chunk];
 }
 
+- (void)respondWindowAcknowledgmentWithSize:(uint32_t)size {
+    VCRTMPChunk *chunk = [VCRTMPChunk makeWindowAcknowledgementSize:size];
+    [self.channel writeFrame:chunk];
+}
+
 #pragma mark - Handle Protocol Control Message
 + (NSDictionary *)protocolControlMessageHandlerMap {
     static NSDictionary *map = nil;

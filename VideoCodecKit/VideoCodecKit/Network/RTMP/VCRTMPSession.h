@@ -23,6 +23,7 @@ typedef NS_ENUM(NSUInteger, VCRTMPSessionErrorCode) {
 - (void)setChunkSize:(uint32_t)size;
 - (void)setPeerBandwidth:(uint32_t)bandwidth limitType:(VCRTMPChunkSetPeerBandwidthLimitType)limitType;
 - (void)abortMessage:(uint32_t)chunkStreamID;
+- (void)respondWindowAcknowledgmentWithSize:(uint32_t)size;
 
 - (VCRTMPNetConnection *)makeNetConnection;
 @end

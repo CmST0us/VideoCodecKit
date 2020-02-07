@@ -144,6 +144,10 @@
         if (self.totalSendByte > self.acknowlegmentWindowSize) {
             return;
         }
+        /// TODO: 确认带宽
+        if (self.totalSendByte > self.bandwidth) {
+            return;
+        }
         self.totalSendByte += sendData.length;
     }
     

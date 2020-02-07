@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSUInteger localChunkSize;
 @property (nonatomic, assign) NSUInteger remoteChunkSize;
 @property (nonatomic, assign) NSUInteger acknowlegmentWindowSize;
+@property (nonatomic, assign) NSUInteger bandwidth;
+
 @property (nonatomic, weak) id<VCRTMPChunkChannelDelegate> delegate;
 
 + (instancetype)channelForSocket:(VCTCPSocket *)socket;
