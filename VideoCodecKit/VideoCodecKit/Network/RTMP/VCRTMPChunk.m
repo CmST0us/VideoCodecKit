@@ -146,6 +146,7 @@
 + (instancetype)makeSetChunkSize:(uint32_t)size {
     VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
     message.messageTypeID = VCRTMPMessageTypeSetChunkSize;
+    message.messageStreamID = 0;
     VCRTMPChunk *chunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType0 chunkStreamID:VCRTMPChunkStreamIDControl message:message];
     VCByteArray *arr = [[VCByteArray alloc] init];
     [arr writeUInt32:size];
@@ -163,6 +164,7 @@
 + (instancetype)makeAbortMessage:(uint32_t)chunkStreamID {
     VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
     message.messageTypeID = VCRTMPMessageTypeAbortMessage;
+    message.messageStreamID = 0;
     VCRTMPChunk *chunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType0 chunkStreamID:VCRTMPChunkStreamIDControl message:message];
     VCByteArray *arr = [[VCByteArray alloc] init];
     [arr writeUInt32:chunkStreamID];
@@ -181,6 +183,7 @@
 + (instancetype)makeAcknowledgement:(uint32_t)seq {
     VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
     message.messageTypeID = VCRTMPMessageTypeAcknowledgement;
+    message.messageStreamID = 0;
     VCRTMPChunk *chunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType0 chunkStreamID:VCRTMPChunkStreamIDControl message:message];
     VCByteArray *arr = [[VCByteArray alloc] init];
     [arr writeUInt32:seq];
@@ -199,6 +202,7 @@
 + (instancetype)makeWindowAcknowledgementSize:(uint32_t)windowSize {
     VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
     message.messageTypeID = VCRTMPMessageTypeWindowAcknowledgement;
+    message.messageStreamID = 0;
     VCRTMPChunk *chunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType0 chunkStreamID:VCRTMPChunkStreamIDControl message:message];
     VCByteArray *arr = [[VCByteArray alloc] init];
     [arr writeUInt32:windowSize];
@@ -218,6 +222,7 @@
                            limitType:(VCRTMPChunkSetPeerBandwidthLimitType)limitType {
     VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
     message.messageTypeID = VCRTMPMessageTypeSetPeerBandwidth;
+    message.messageStreamID = 0;
     VCRTMPChunk *chunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType0 chunkStreamID:VCRTMPChunkStreamIDControl message:message];
     VCByteArray *arr = [[VCByteArray alloc] init];
     [arr writeUInt32:ackWindowSize];

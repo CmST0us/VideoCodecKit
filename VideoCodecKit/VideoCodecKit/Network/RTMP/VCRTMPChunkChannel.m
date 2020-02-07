@@ -21,6 +21,9 @@
 /// 指的是未拆包的Chunk
 @property (nonatomic, strong) VCRTMPChunk *lastSendChunk;
 @property (nonatomic, strong) VCRTMPChunk *lastReadChunk;
+
+@property (nonatomic, assign) NSUInteger totalRecvByte;
+@property (nonatomic, assign) NSUInteger totalSendByte;
 @end
 
 @implementation VCRTMPChunkChannel
@@ -30,6 +33,9 @@
     if (self) {
         _lastData = [NSData data];
         _localChunkSize = kVCRTMPChunkChannelDefaultChunkSize;
+        _acknowlegmentWindowSize = 0;
+        _totalRecvByte = 0;
+        _totalSendByte = 0;
     }
     return self;
 }
@@ -131,8 +137,26 @@
         [sendData appendData:[obj makeChunk]];
         lastChunk = obj;
     }];
+    
+    /// 判断 Ack Window Size
+    if (self.acknowlegmentWindowSize > 0) {
+        /// 判断是否需要ACK重置
+        if (self.totalSendByte > self.acknowlegmentWindowSize) {
+            return;
+        }
+        self.totalSendByte += sendData.length;
+    }
+    
     [self.socket writeData:sendData];
     self.lastSendChunk = chunk;
+}
+
+- (void)resetRecvByteCount {
+    self.totalRecvByte = 0;
+}
+
+- (void)resetSendByteCount {
+    self.totalSendByte = 0;
 }
 
 #pragma mark - Split Chunk
@@ -239,6 +263,16 @@
     if (recvData &&
         recvData.length > 0) {
         [self handleRecvData:recvData];
+        
+        self.totalRecvByte += recvData.length;
+        if (self.acknowlegmentWindowSize > 0 &&
+            self.totalRecvByte >= self.acknowlegmentWindowSize) {
+            if (self.delegate &&
+                [self.delegate respondsToSelector:@selector(channelNeedAck:)]) {
+                [self.delegate channelNeedAck:self];
+            }
+            [self resetRecvByteCount];
+        }
     } else {
         if (self.delegate &&
             [self.delegate respondsToSelector:@selector(channelConnectionDidEnd)]) {

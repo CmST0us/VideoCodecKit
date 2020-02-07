@@ -8,7 +8,7 @@
 
 #import "VCRTMPMessage.h"
 
-#define kVCRTMPMessageDefaultStreamID (10)
+#define kVCRTMPMessageDefaultStreamID (0)
 
 @implementation VCRTMPMessage
 - (instancetype)init {

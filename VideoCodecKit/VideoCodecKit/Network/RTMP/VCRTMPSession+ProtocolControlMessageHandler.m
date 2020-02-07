@@ -15,21 +15,29 @@
 @implementation VCRTMPSession (ProtocolControlMessageHandler)
 - (void)handleMessageTypeWindowAcknowledgement:(VCRTMPChunk *)chunk {
     NSInteger s = [chunk windowAcknowledgementSizeValue];
-    NSLog(@"[RTMP][PROTOCOL_CONTROL] Window Acknowledgement Size: %ld", (long)s);
+    NSLog(@"[RTMP][CHANNEL] Window Acknowledgement Size: %ld", (long)s);
+    self.channel.acknowlegmentWindowSize = s;
 }
 
 - (void)handleSetPeerBandwidthValue:(VCRTMPChunk *)chunk {
     NSInteger s = [chunk setPeerBandwidthValue];
-    NSLog(@"[RTMP][PROTOCOL_CONTROL] Set Peer Bandwidth: %ld", (long)s);
+    NSLog(@"[RTMP][CHANNEL] Set Peer Bandwidth: %ld", (long)s);
 }
 
 - (void)handleSetChunkSize:(VCRTMPChunk *)chunk {
     NSInteger s = [chunk setChunkSizeValue];
-    NSLog(@"[RTMP][PROTOCOL_CONTROL] Set Chunk Size: %ld", (long)s);
+    NSLog(@"[RTMP][CHANNEL] Set Chunk Size: %ld", (long)s);
     self.channel.remoteChunkSize = s;
 }
 
 - (void)handleAMF0Command:(VCRTMPChunk *)chunk {
-    NSLog(@"[RTMP][AMF0Command] Command: %@", [VCRTMPCommandMessageCommandFactory commandWithType:chunk.commandTypeValue data:chunk.chunkData]);
+    NSLog(@"[RTMP][CHANNEL] Command: %@", [VCRTMPCommandMessageCommandFactory commandWithType:chunk.commandTypeValue data:chunk.chunkData]);
 }
+
+- (void)handleAcknowledgement:(VCRTMPChunk *)chunk {
+    NSInteger s = [chunk acknowledgementValue];
+    NSLog(@"[RTMP][CHANNEL] Ack: %ld", (long)s);
+    [self.channel resetSendByteCount];
+}
+
 @end

@@ -40,8 +40,8 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
     self.channel.localChunkSize = size;
 }
 
-- (void)abortMessage:(uint32_t)streamID {
-    VCRTMPChunk *chunk = [VCRTMPChunk makeAbortMessage:streamID];
+- (void)abortMessage:(uint32_t)chunkStreamID {
+    VCRTMPChunk *chunk = [VCRTMPChunk makeAbortMessage:chunkStreamID];
     [self.channel writeFrame:chunk];
 }
 
@@ -60,14 +60,15 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
         @(VCRTMPMessageTypeWindowAcknowledgement): @"handleMessageTypeWindowAcknowledgement:",
         @(VCRTMPMessageTypeSetPeerBandwidth): @"handleSetPeerBandwidthValue:",
         @(VCRTMPMessageTypeSetChunkSize): @"handleSetChunkSize:",
-        @(VCRTMPMessageTypeAMF0Command): @"handleAMF0Command:"
+        @(VCRTMPMessageTypeAMF0Command): @"handleAMF0Command:",
+        @(VCRTMPMessageTypeAcknowledgement): @"handleAcknowledgement:"
     };
     return map;
 }
 
 #pragma mark - Chunk Packet
 - (void)channel:(VCRTMPChunkChannel *)channel didReceiveFrame:(VCRTMPChunk *)chunk {
-    NSLog(@"收到%@", chunk);
+    NSLog(@"[RTMP][CHANNEL] 收到%@", chunk);
     NSString *handler = [[self class] protocolControlMessageHandlerMap][@(chunk.message.messageTypeID)];
     if (handler) {
         SEL selector = NSSelectorFromString(handler);
@@ -81,12 +82,17 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
     }
 }
 
+- (void)channelNeedAck:(VCRTMPChunkChannel *)channel {
+    NSLog(@"[RTMP][CHANNLE] Need ACK");
+    [self.channel writeFrame:[VCRTMPChunk makeAcknowledgement:self.channel.totalRecvByte]];
+}
+
 - (void)channelConnectionDidEnd {
-    NSLog(@"end");
+    NSLog(@"[RTMP][CHANNEL] End");
 }
 
 - (void)channel:(VCRTMPChunkChannel *)channel connectionHasError:(NSError *)error {
-    NSLog(@"error: %@", error);
+    NSLog(@"[RTMP][CHANNEL] Error: %@", error);
 }
 
 @end
