@@ -34,7 +34,7 @@
 }
 
 - (void)handleHandshakeSuccess {
-    [self.session setChunkSize:4096];
+//    [self.session setChunkSize:4096];
     self.netConnection = [self.session makeNetConnection];
     NSDictionary *parm = @{
         @"app": @"stream".asString,
