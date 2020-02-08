@@ -67,10 +67,16 @@ NSString * const VCRTMPCommandMessageResponseError = @"_error";
     VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] init];
     if (self.response) {
         [serialization serialize:self.response.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
     }
+    
     if (self.transactionID) {
         [serialization serialize:self.transactionID.asNumber];
-    } 
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
     return serialization.serializedData;
 }
 
@@ -104,22 +110,39 @@ NSString * const VCRTMPCommandMessageResponseError = @"_error";
 
 #pragma mark - Net Connection Command Connect
 @implementation VCRTMPNetConnectionCommandConnect
++ (instancetype)command {
+    VCRTMPNetConnectionCommandConnect *command = [[VCRTMPNetConnectionCommandConnect alloc] init];
+    command.commandName = @"connect";
+    return command;
+}
 - (NSData *)serialize {
     VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] init];
     if (self.commandName) {
         [serialization serialize:self.commandName.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
     }
+    
     if (self.transactionID) {
         [serialization serialize:self.transactionID.asNumber];
+    } else {
+        [serialization serialize:[NSNull asNull]];
     }
+    
     if (self.commandObject) {
         VCActionScriptObject *commandObj = [VCActionScriptObject asTypeWithDictionary:self.commandObject];
         [serialization serialize:commandObj];
+    } else {
+        [serialization serialize:[NSNull asNull]];
     }
+    
     if (self.optionalUserArguments) {
         VCActionScriptObject *opt = [VCActionScriptObject asTypeWithDictionary:self.optionalUserArguments];
         [serialization serialize:opt];
+    } else {
+        [serialization serialize:[NSNull asNull]];
     }
+    
     return serialization.serializedData;
 }
 - (void)deserialize {
@@ -132,22 +155,39 @@ NSString * const VCRTMPCommandMessageResponseError = @"_error";
 @end
 
 @implementation VCRTMPNetConnectionCommandConnectResult
++ (instancetype)command {
+    VCRTMPNetConnectionCommandConnectResult *command = [[VCRTMPNetConnectionCommandConnectResult alloc] init];
+    command.response = @"_result";
+    return command;
+}
 - (NSData *)serialize {
     VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] init];
     if (self.response) {
         [serialization serialize:self.response.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
     }
+    
     if (self.transactionID) {
         [serialization serialize:self.transactionID.asNumber];
+    } else {
+        [serialization serialize:[NSNull asNull]];
     }
+    
     if (self.properties) {
         VCActionScriptObject *commandObj = [VCActionScriptObject asTypeWithDictionary:self.properties];
         [serialization serialize:commandObj];
+    } else {
+        [serialization serialize:[NSNull asNull]];
     }
+    
     if (self.information) {
         VCActionScriptObject *opt = [VCActionScriptObject asTypeWithDictionary:self.information];
         [serialization serialize:opt];
+    } else {
+        [serialization serialize:[NSNull asNull]];
     }
+    
     return serialization.serializedData;
 }
 
@@ -160,3 +200,170 @@ NSString * const VCRTMPCommandMessageResponseError = @"_error";
 }
 @end
 
+#pragma mark - Net Connection Command FCPublish
+@implementation VCRTMPNetConnectionCommandFCPublish
++ (instancetype)command {
+    VCRTMPNetConnectionCommandFCPublish *command = [[VCRTMPNetConnectionCommandFCPublish alloc] init];
+    command.commandName = @"FCPublish";
+    return command;
+}
+- (NSData *)serialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] init];
+    if (self.commandName) {
+        [serialization serialize:self.commandName.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.transactionID) {
+        [serialization serialize:self.transactionID.asNumber];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.commandObject) {
+        VCActionScriptObject *commandObj = [VCActionScriptObject asTypeWithDictionary:self.commandObject];
+        [serialization serialize:commandObj];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.streamName) {
+        [serialization serialize:self.streamName.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    return serialization.serializedData;
+}
+- (void)deserialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] initWithData:_data];
+    self.commandName = [serialization deserialize].value;
+    self.transactionID = [serialization deserialize].value;
+    self.commandObject = [serialization deserialize].value;
+    self.streamName = [serialization deserialize].value;
+}
+@end
+
+#pragma mark - Net Connection Command Create Stream
+@implementation VCRTMPNetConnectionCommandCreateStream
++ (instancetype)command {
+    VCRTMPNetConnectionCommandCreateStream *command = [[VCRTMPNetConnectionCommandCreateStream alloc] init];
+    command.commandName = @"createStream";
+    return command;
+}
+- (NSData *)serialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] init];
+    if (self.commandName) {
+        [serialization serialize:self.commandName.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.transactionID) {
+        [serialization serialize:self.transactionID.asNumber];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.commandObject) {
+        VCActionScriptObject *commandObj = [VCActionScriptObject asTypeWithDictionary:self.commandObject];
+        [serialization serialize:commandObj];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    return serialization.serializedData;
+}
+- (void)deserialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] initWithData:_data];
+    self.commandName = [serialization deserialize].value;
+    self.transactionID = [serialization deserialize].value;
+    self.commandObject = [serialization deserialize].value;
+}
+@end
+
+@implementation VCRTMPNetConnectionCommandCreateStreamResult
++ (instancetype)command {
+    VCRTMPNetConnectionCommandCreateStreamResult *command = [[VCRTMPNetConnectionCommandCreateStreamResult alloc] init];
+    command.response = @"_result";
+    return command;
+}
+- (NSData *)serialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] init];
+    if (self.response) {
+        [serialization serialize:self.response.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.transactionID) {
+        [serialization serialize:self.transactionID.asNumber];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.commandObject) {
+        VCActionScriptObject *commandObj = [VCActionScriptObject asTypeWithDictionary:self.commandObject];
+        [serialization serialize:commandObj];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.streamID) {
+        [serialization serialize:self.streamID.asNumber];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    return serialization.serializedData;
+}
+
+- (void)deserialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] initWithData:_data];
+    self.response = [serialization deserialize].value;
+    self.transactionID = [serialization deserialize].value;
+    self.commandObject = [serialization deserialize].value;
+    self.streamID = [serialization deserialize].value;
+}
+@end
+
+#pragma mark - Net Connection Command Release Stream
+
+@implementation VCRTMPNetConnectionCommandReleaseStream
++ (instancetype)command {
+    VCRTMPNetConnectionCommandReleaseStream *command = [[VCRTMPNetConnectionCommandReleaseStream alloc] init];
+    command.commandName = @"releaseStream";
+    return command;
+}
+- (NSData *)serialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] init];
+    if (self.commandName) {
+        [serialization serialize:self.commandName.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.transactionID) {
+        [serialization serialize:self.transactionID.asNumber];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    [serialization serialize:[NSNull asNull]];
+    if (self.streamName) {
+        [serialization serialize:self.streamName.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    return serialization.serializedData;
+}
+- (void)deserialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] initWithData:_data];
+    self.commandName = [serialization deserialize].value;
+    self.transactionID = [serialization deserialize].value;
+    self.commandObject = [serialization deserialize].value;
+    self.streamName = [serialization deserialize].value;
+}
+@end

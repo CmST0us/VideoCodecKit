@@ -38,7 +38,7 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
 }
 
 - (NSUInteger)nextTransactionID {
-    return self.transactionIDCounter;
+    return ++self.transactionIDCounter;
 }
 
 #pragma mark - Net Connection

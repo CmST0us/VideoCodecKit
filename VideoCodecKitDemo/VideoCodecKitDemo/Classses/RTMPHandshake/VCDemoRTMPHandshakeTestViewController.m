@@ -34,7 +34,7 @@
 }
 
 - (void)handleHandshakeSuccess {
-//    [self.session setChunkSize:4096];
+    __weak typeof(self) weakSelf = self;
     self.netConnection = [self.session makeNetConnection];
     NSDictionary *parm = @{
         @"app": @"stream".asString,
@@ -50,6 +50,18 @@
         if (isSuccess) {
             VCRTMPNetConnectionCommandConnectResult *result = (VCRTMPNetConnectionCommandConnectResult *)response;
             NSLog(@"[RTMP][NetConnection] Success: %@, %@", result.information, result.properties);
+            [weakSelf handleNetConnectionSuccess];
+        }
+    }];
+}
+
+- (void)handleNetConnectionSuccess {
+    __weak typeof(self) weakSelf = self;
+    [self.netConnection releaseStream:@"12345"];
+    [self.netConnection createStream:@"12345" completion:^(VCRTMPCommandMessageResponse * _Nullable response, BOOL isSuccess) {
+        if (isSuccess) {
+            NSLog(@"[RTMP][NetConnection][CreateStream] Success");
+            [weakSelf.session setChunkSize:4096];
         }
     }];
 }

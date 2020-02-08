@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protected
     NSData *_data;
 }
++ (instancetype)command;
 - (instancetype)initWithData:(NSData *)data;
 - (NSData *)chunkData;
 - (void)serializeToByteArray:(VCByteArray *)byteArray;
@@ -61,6 +62,31 @@ extern NSString * const VCRTMPCommandMessageResponseError;
 @interface VCRTMPNetConnectionCommandConnectResult : VCRTMPCommandMessageResponse
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *properties;
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *information;
+@end
+
+@interface VCRTMPNetConnectionCommandFCPublish : VCRTMPCommandMessageCommand
+@property (nonatomic, copy, nullable) NSString *commandName;
+@property (nonatomic, strong, nullable) NSNumber *transactionID;
+@property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptObject *> *commandObject;
+@property (nonatomic, strong, nullable) NSString *streamName;
+@end
+
+@interface VCRTMPNetConnectionCommandCreateStream : VCRTMPCommandMessageCommand
+@property (nonatomic, copy, nullable) NSString *commandName;
+@property (nonatomic, strong, nullable) NSNumber *transactionID;
+@property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptObject *> *commandObject;
+@end
+
+@interface VCRTMPNetConnectionCommandCreateStreamResult : VCRTMPCommandMessageResponse
+@property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *commandObject;
+@property (nonatomic, strong, nullable) NSNumber *streamID;
+@end
+
+@interface VCRTMPNetConnectionCommandReleaseStream : VCRTMPCommandMessageCommand
+@property (nonatomic, copy, nullable) NSString *commandName;
+@property (nonatomic, strong, nullable) NSNumber *transactionID;
+@property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *commandObject;
+@property (nonatomic, copy, nullable) NSString *streamName;
 @end
 
 NS_ASSUME_NONNULL_END

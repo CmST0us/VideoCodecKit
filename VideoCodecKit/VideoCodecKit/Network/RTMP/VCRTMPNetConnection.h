@@ -23,6 +23,9 @@ typedef NS_ENUM(NSUInteger, VCRTMPNetConnectionErrorCode) {
 + (instancetype)netConnectionForSession:(VCRTMPSession *)session;
 
 - (void)connecWithParam:(NSDictionary *)param completion:(VCRTMPCommandMessageResponseBlock)block;
+- (void)releaseStream:(NSString *)streamName;
+- (void)createStream:(NSString *)streamName completion:(VCRTMPCommandMessageResponseBlock)block;
+
 @end
 
 NS_ASSUME_NONNULL_END
