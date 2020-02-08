@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)handleAMF0Command:(VCRTMPChunk *)chunk;
 
 - (void)handleCommandMessageResponse:(VCRTMPChunk *)chunk;
+
+- (void)handleNetStreamPublishOnStatus:(VCRTMPChunk *)chunk;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -18,6 +18,7 @@ typedef NS_ENUM(NSUInteger, VCRTMPNetConnectionErrorCode) {
     VCRTMPNetConnectionErrorCodeConnectError = -2002,
 };
 
+@class VCRTMPNetStream;
 @interface VCRTMPNetConnection : NSObject
 
 + (instancetype)netConnectionForSession:(VCRTMPSession *)session;
@@ -26,6 +27,8 @@ typedef NS_ENUM(NSUInteger, VCRTMPNetConnectionErrorCode) {
 - (void)releaseStream:(NSString *)streamName;
 - (void)createStream:(NSString *)streamName completion:(VCRTMPCommandMessageResponseBlock)block;
 
+- (VCRTMPNetStream *)makeNetStreamWithStreamName:(NSString *)streamName
+                                        streamID:(uint32_t)streamID;
 @end
 
 NS_ASSUME_NONNULL_END

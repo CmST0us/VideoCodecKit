@@ -63,4 +63,7 @@
     [self removeTransactionIDTask:transactionID];
 }
 
+- (void)handleNetStreamPublishOnStatus:(VCRTMPChunk *)chunk {
+    NSInteger messageStreamID = chunk.message.messageStreamID;
+}
 @end

@@ -52,11 +52,11 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #pragma mark RTMP
 #import <VideoCodecKit/VCRTMPChunk.h>
 #import <VideoCodecKit/VCRTMPMessage.h>
+#import <VideoCodecKit/VCRTMPCommandMessageCommand.h>
 #import <VideoCodecKit/VCRTMPHandshake.h>
 #import <VideoCodecKit/VCRTMPSession.h>
 #import <VideoCodecKit/VCRTMPNetConnection.h>
-#import <VideoCodecKit/VCRTMPCommandMessageCommand.h>
-#import <VideoCodecKit/VCRTMPMuxer.h>
+#import <VideoCodecKit/VCRTMPNetStream.h>
 
 #pragma mark - Codec
 #import <VideoCodecKit/VCVideoDecoder.h>

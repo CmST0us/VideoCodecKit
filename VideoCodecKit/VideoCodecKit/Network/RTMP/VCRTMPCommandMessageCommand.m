@@ -97,6 +97,15 @@ NSString * const VCRTMPCommandMessageResponseError = @"_error";
     chunk.chunkData = [command serialize];
     return chunk;
 }
+
++ (instancetype)makeNetStreamCommand:(VCRTMPCommandMessageCommand *)command {
+    VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
+    message.messageTypeID = VCRTMPMessageTypeAMF0Command;
+    VCRTMPChunk *chunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType0 chunkStreamID:VCRTMPChunkStreamIDCommand message:message];
+    chunk.chunkData = [command serialize];
+    return chunk;
+}
+
 - (NSString *)commandTypeValue {
     VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] initWithData:self.chunkData];
     return [serialization deserialize].value;
@@ -365,5 +374,60 @@ NSString * const VCRTMPCommandMessageResponseError = @"_error";
     self.transactionID = [serialization deserialize].value;
     self.commandObject = [serialization deserialize].value;
     self.streamName = [serialization deserialize].value;
+}
+@end
+
+#pragma mark - Net Stream Command Publish
+NSString * const VCRTMPNetStreamCommandPublishTypeLive = @"live";
+NSString * const VCRTMPNetStreamCommandPublishTypeRecord = @"record";
+NSString * const VCRTMPNetStreamCommandPublishTypeAppend = @"append";
+@implementation VCRTMPNetStreamCommandPublish
++ (instancetype)command {
+    VCRTMPNetStreamCommandPublish *command = [[VCRTMPNetStreamCommandPublish alloc] init];
+    command.commandName = @"publish";
+    return command;
+}
+- (NSData *)serialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] init];
+    if (self.commandName) {
+        [serialization serialize:self.commandName.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.transactionID) {
+        [serialization serialize:self.transactionID.asNumber];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.commandObject) {
+        VCActionScriptObject *commandObj = [VCActionScriptObject asTypeWithDictionary:self.commandObject];
+        [serialization serialize:commandObj];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.publishingName) {
+        [serialization serialize:self.publishingName.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.publishingType) {
+        [serialization serialize:self.publishingType.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    return serialization.serializedData;
+}
+- (void)deserialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] initWithData:_data];
+    self.commandName = [serialization deserialize].value;
+    self.transactionID = [serialization deserialize].value;
+    self.commandObject = [serialization deserialize].value;
+    self.publishingName = [serialization deserialize].value;
+    self.publishingType = [serialization deserialize].value;
 }
 @end

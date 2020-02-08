@@ -41,6 +41,7 @@ typedef void(^VCRTMPCommandMessageResponseBlock)(VCRTMPCommandMessageResponse * 
 @class VCRTMPCommandMessageCommand;
 @interface VCRTMPChunk (CommandMessageComand)
 + (instancetype)makeNetConnectionCommand:(VCRTMPCommandMessageCommand *)command;
++ (instancetype)makeNetStreamCommand:(VCRTMPCommandMessageCommand *)command;
 - (NSString *)commandTypeValue;
 - (NSNumber *)transactionIDValue;
 @end
@@ -51,6 +52,8 @@ extern NSString * const VCRTMPCommandMessageResponseError;
 @property (nonatomic, copy, nullable) NSString *response;
 @property (nonatomic, strong, nullable) NSNumber *transactionID;
 @end
+
+#pragma mark - Net Connection Command
 
 @interface VCRTMPNetConnectionCommandConnect : VCRTMPCommandMessageCommand
 @property (nonatomic, copy, nullable) NSString *commandName;
@@ -87,6 +90,18 @@ extern NSString * const VCRTMPCommandMessageResponseError;
 @property (nonatomic, strong, nullable) NSNumber *transactionID;
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *commandObject;
 @property (nonatomic, copy, nullable) NSString *streamName;
+@end
+
+#pragma mark - Net Stream Command
+extern NSString * const VCRTMPNetStreamCommandPublishTypeLive;
+extern NSString * const VCRTMPNetStreamCommandPublishTypeRecord;
+extern NSString * const VCRTMPNetStreamCommandPublishTypeAppend;
+@interface VCRTMPNetStreamCommandPublish : VCRTMPCommandMessageCommand
+@property (nonatomic, copy, nullable) NSString *commandName;
+@property (nonatomic, strong, nullable) NSNumber *transactionID;
+@property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *commandObject;
+@property (nonatomic, copy, nullable) NSString *publishingName;
+@property (nonatomic, copy, nullable) NSString *publishingType;
 @end
 
 NS_ASSUME_NONNULL_END

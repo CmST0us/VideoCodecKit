@@ -95,6 +95,7 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
     map = @{
         @"_result": NSStringFromSelector(@selector(handleCommandMessageResponse:)),
         @"_error": NSStringFromSelector(@selector(handleCommandMessageResponse:)),
+        @"onStatus": NSStringFromSelector(@selector(handleNetStreamPublishOnStatus:)),
     };
     return map;
 }

@@ -10,8 +10,10 @@
 #import "VCRTMPCommandMessageCommand.h"
 
 @interface VCRTMPNetConnection ()
-@property (nonatomic, copy) VCRTMPCommandMessageResponseBlock resultBlock;
+@property (nonatomic, copy) VCRTMPCommandMessageResponseBlock responseBlock;
 @property (nonatomic, weak) VCRTMPSession *session;
-
+@property (nonatomic, strong) NSMutableDictionary<NSString *, VCRTMPNetStream *> *netStreams;
 - (void)handleConnectionResult:(VCRTMPCommandMessageResponse *)result;
+
+- (void)removeNetStreamWithStreamName:(NSString *)streamName;
 @end

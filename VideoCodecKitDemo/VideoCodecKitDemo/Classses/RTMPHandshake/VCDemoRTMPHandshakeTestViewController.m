@@ -14,6 +14,7 @@
 @property (nonatomic, strong) VCRTMPHandshake *handshake;
 @property (nonatomic, strong) VCRTMPSession *session;
 @property (nonatomic, strong) VCRTMPNetConnection *netConnection;
+@property (nonatomic, strong) VCRTMPNetStream *netStream;
 @end
 
 @implementation VCDemoRTMPHandshakeTestViewController
@@ -62,6 +63,11 @@
         if (isSuccess) {
             NSLog(@"[RTMP][NetConnection][CreateStream] Success");
             [weakSelf.session setChunkSize:4096];
+            VCRTMPNetConnectionCommandCreateStreamResult *result = (VCRTMPNetConnectionCommandCreateStreamResult *)response;
+            weakSelf.netStream = [weakSelf.netConnection makeNetStreamWithStreamName:@"12345" streamID:(uint32_t)result.streamID.unsignedIntegerValue];
+            [weakSelf.netStream publishWithCompletion:^(VCRTMPCommandMessageResponse * _Nullable response, BOOL isSuccess) {
+                NSLog(@"publish");
+            }];
         }
     }];
 }

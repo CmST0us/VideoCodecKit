@@ -11,13 +11,21 @@
 #import "VCRTMPSession.h"
 #import "VCRTMPSession_Private.h"
 #import "VCRTMPSession+CommandMessageHandler.h"
-
+#import "VCRTMPNetStream.h"
 #import "VCRTMPChunkChannel.h"
 #import "VCRTMPCommandMessageCommand.h"
 
 NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorDomain";
 
 @implementation VCRTMPNetConnection
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _netStreams = [[NSMutableDictionary alloc] init];
+    }
+    return self;
+}
 
 + (instancetype)netConnectionForSession:(VCRTMPSession *)session {
     VCRTMPNetConnection *connection = [[VCRTMPNetConnection alloc] init];
@@ -26,7 +34,7 @@ NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorD
 }
 
 - (void)connecWithParam:(NSDictionary *)param completion:(VCRTMPCommandMessageResponseBlock)block {
-    self.resultBlock = block;
+    self.responseBlock = block;
     
     VCRTMPNetConnectionCommandConnect *command = [VCRTMPNetConnectionCommandConnect command];
     command.transactionID = @([self.session nextTransactionID]);
@@ -47,7 +55,7 @@ NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorD
 }
 
 - (void)createStream:(NSString *)streamName completion:(VCRTMPCommandMessageResponseBlock)block {
-    self.resultBlock = block;
+    self.responseBlock = block;
     
     VCRTMPNetConnectionCommandFCPublish *publish = [VCRTMPNetConnectionCommandFCPublish command];
     publish.transactionID = @([self.session nextTransactionID]);
@@ -64,6 +72,20 @@ NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorD
     [self.session.channel writeFrame:createStreamChunk];
 }
 
+#pragma mark - Net Stream
+- (VCRTMPNetStream *)makeNetStreamWithStreamName:(NSString *)streamName
+                           streamID:(uint32_t)streamID {
+    VCRTMPNetStream *stream = [VCRTMPNetStream netStreamWithName:streamName
+                                                        streamID:streamID
+                                                forNetConnection:self];
+    [self.netStreams setObject:stream forKey:streamName];
+    return stream;
+}
+
+- (void)removeNetStreamWithStreamName:(NSString *)streamName {
+    [self.netStreams removeObjectForKey:streamName];
+}
+
 #pragma mark - Handle Message
 - (void)handleConnectionResult:(VCRTMPCommandMessageResponse *)result {
     BOOL success = NO;
@@ -72,8 +94,8 @@ NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorD
         result = [[VCRTMPNetConnectionCommandConnectResult alloc] initWithData:result.chunkData];
         [result deserialize];
     }
-    if (self.resultBlock) {
-        self.resultBlock(result, success);
+    if (self.responseBlock) {
+        self.responseBlock(result, success);
     }
 }
 
@@ -84,8 +106,8 @@ NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorD
         result = [[VCRTMPNetConnectionCommandCreateStreamResult alloc] initWithData:result.chunkData];
         [result deserialize];
     }
-    if (self.resultBlock) {
-        self.resultBlock(result, success);
+    if (self.responseBlock) {
+        self.responseBlock(result, success);
     }
 }
 
