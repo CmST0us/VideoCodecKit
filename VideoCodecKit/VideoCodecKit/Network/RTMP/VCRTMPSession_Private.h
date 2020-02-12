@@ -9,11 +9,24 @@
 #import "VCRTMPSession.h"
 #import "VCRTMPChunkChannel.h"
 
-@class VCRTMPCommandMessageTask;
+
+@interface VCRTMPCommandMessageTask : NSObject
+@property (nonatomic, weak) id observer;
+@property (nonatomic, assign) SEL handler;
+@property (nonatomic, assign) NSUInteger transactionID;
+@end
+
+@interface VCRTMPNetStreamMessageTask : NSObject
+@property (nonatomic, weak) id observer;
+@property (nonatomic, assign) SEL handler;
+@property (nonatomic, assign) NSUInteger messageStreamID;
+@end
+
 @interface VCRTMPSession () <VCRTMPChunkChannelDelegate>
 
 @property (nonatomic, assign) NSUInteger transactionIDCounter;
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, VCRTMPCommandMessageTask *> *commandMessageTasks;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber *, VCRTMPNetStreamMessageTask *> *netStreamMessageTasks;
 
 @property (nonatomic, strong) VCRTMPChunkChannel *channel;
 @property (nonatomic, strong) VCRTMPNetConnection *netConnection;

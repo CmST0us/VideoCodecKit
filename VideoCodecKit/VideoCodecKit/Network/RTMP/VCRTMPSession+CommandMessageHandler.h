@@ -18,11 +18,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)removeTransactionIDTask:(NSUInteger)transactionID;
 
+- (void)registerMessageStreamID:(NSUInteger)messageStreamID
+                       observer:(NSObject *)observer
+                        handler:(SEL)handler;
+
+- (void)removeMessageStreamIDTask:(NSUInteger)messageStreamID;
+
 - (void)handleAMF0Command:(VCRTMPChunk *)chunk;
 
 - (void)handleCommandMessageResponse:(VCRTMPChunk *)chunk;
 
-- (void)handleNetStreamPublishOnStatus:(VCRTMPChunk *)chunk;
+- (void)handleNetStreamMessage:(VCRTMPChunk *)chunk;
 @end
 
 NS_ASSUME_NONNULL_END

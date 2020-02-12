@@ -25,6 +25,7 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
     if (self) {
         _transactionIDCounter = 1;
         _commandMessageTasks = [[NSMutableDictionary alloc] init];
+        _netStreamMessageTasks = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -95,7 +96,7 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
     map = @{
         @"_result": NSStringFromSelector(@selector(handleCommandMessageResponse:)),
         @"_error": NSStringFromSelector(@selector(handleCommandMessageResponse:)),
-        @"onStatus": NSStringFromSelector(@selector(handleNetStreamPublishOnStatus:)),
+        @"onStatus": NSStringFromSelector(@selector(handleNetStreamMessage:)),
     };
     return map;
 }
@@ -129,4 +130,9 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
     NSLog(@"[RTMP][CHANNEL] Error: %@", error);
 }
 
+@end
+
+@implementation VCRTMPCommandMessageTask
+@end
+@implementation VCRTMPNetStreamMessageTask
 @end

@@ -29,6 +29,20 @@
     [self.commandMessageTasks removeObjectForKey:@(transactionID)];
 }
 
+- (void)registerMessageStreamID:(NSUInteger)messageStreamID
+                       observer:(NSObject *)observer
+                        handler:(SEL)handler {
+    VCRTMPNetStreamMessageTask *task = [[VCRTMPNetStreamMessageTask alloc] init];
+    task.messageStreamID = messageStreamID;
+    task.observer = observer;
+    task.handler = handler;
+    [self.netStreamMessageTasks setObject:task forKey:@(messageStreamID)];
+}
+
+- (void)removeMessageStreamIDTask:(NSUInteger)messageStreamID {
+    [self.netStreamMessageTasks removeObjectForKey:@(messageStreamID)];
+}
+
 - (void)handleAMF0Command:(VCRTMPChunk *)chunk {
     NSString *commandType = chunk.commandTypeValue;
     NSLog(@"[RTMP][CHANNEL] Command: %@", commandType);
@@ -63,7 +77,21 @@
     [self removeTransactionIDTask:transactionID];
 }
 
-- (void)handleNetStreamPublishOnStatus:(VCRTMPChunk *)chunk {
-    NSInteger messageStreamID = chunk.message.messageStreamID;
+- (void)handleNetStreamMessage:(VCRTMPChunk *)chunk {
+    VCRTMPNetStreamMessageTask *task = [self.netStreamMessageTasks objectForKey:@(chunk.message.messageStreamID)];
+    if (task &&
+        task.observer &&
+        task.handler) {
+        if ([task.observer respondsToSelector:task.handler]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            [task.observer performSelector:task.handler withObject:chunk];
+#pragma clang diagnostic pop
+        }
+    } else {
+        if (task.observer == nil) {
+            [self.netStreamMessageTasks removeObjectForKey:@(chunk.message.messageStreamID)];
+        }
+    }
 }
 @end

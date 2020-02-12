@@ -25,18 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)deserialize;
 @end
 
-@interface VCRTMPCommandMessageCommandFactory : NSObject
-+ (nullable VCRTMPCommandMessageCommand *)commandWithType:(NSString *)type
-                                                     data:(NSData *)data;
-@end
-
 @class VCRTMPCommandMessageResponse;
 typedef void(^VCRTMPCommandMessageResponseBlock)(VCRTMPCommandMessageResponse * _Nullable response, BOOL isSuccess);
-@interface VCRTMPCommandMessageTask : NSObject
-@property (nonatomic, weak) id observer;
-@property (nonatomic, assign) SEL handler;
-@property (nonatomic, assign) NSUInteger transactionID;
-@end
 
 @class VCRTMPCommandMessageCommand;
 @interface VCRTMPChunk (CommandMessageComand)
@@ -102,6 +92,12 @@ extern NSString * const VCRTMPNetStreamCommandPublishTypeAppend;
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *commandObject;
 @property (nonatomic, copy, nullable) NSString *publishingName;
 @property (nonatomic, copy, nullable) NSString *publishingType;
+@end
+
+extern NSString * const VCRTMPNetStreamCommandOnStatusStart;
+@interface VCRTMPNetStreamCommandOnStatus : VCRTMPCommandMessageResponse
+@property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *properties;
+@property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *information;
 @end
 
 NS_ASSUME_NONNULL_END
