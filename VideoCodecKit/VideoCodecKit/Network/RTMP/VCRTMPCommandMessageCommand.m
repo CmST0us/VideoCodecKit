@@ -35,6 +35,7 @@
 
 NSString * const VCRTMPCommandMessageResponseSuccess = @"_result";
 NSString * const VCRTMPCommandMessageResponseError = @"_error";
+NSString * const VCRTMPCommandMessageResponseLevelStatus = @"status";
 @implementation VCRTMPCommandMessageResponse
 - (NSData *)serialize {
     VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] init];

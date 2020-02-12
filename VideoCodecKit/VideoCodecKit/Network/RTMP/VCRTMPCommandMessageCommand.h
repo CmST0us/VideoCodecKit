@@ -38,6 +38,7 @@ typedef void(^VCRTMPCommandMessageResponseBlock)(VCRTMPCommandMessageResponse * 
 
 extern NSString * const VCRTMPCommandMessageResponseSuccess;
 extern NSString * const VCRTMPCommandMessageResponseError;
+extern NSString * const VCRTMPCommandMessageResponseLevelStatus;
 @interface VCRTMPCommandMessageResponse : VCRTMPCommandMessageCommand
 @property (nonatomic, copy, nullable) NSString *response;
 @property (nonatomic, strong, nullable) NSNumber *transactionID;
@@ -94,7 +95,6 @@ extern NSString * const VCRTMPNetStreamCommandPublishTypeAppend;
 @property (nonatomic, copy, nullable) NSString *publishingType;
 @end
 
-extern NSString * const VCRTMPNetStreamCommandOnStatusStart;
 @interface VCRTMPNetStreamCommandOnStatus : VCRTMPCommandMessageResponse
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *properties;
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *information;

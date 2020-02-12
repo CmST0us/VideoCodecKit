@@ -81,9 +81,9 @@
     VCRTMPNetStreamCommandOnStatus *onStatus = [[VCRTMPNetStreamCommandOnStatus alloc] initWithData:response.chunkData];
     BOOL isSuccess = NO;
     if (onStatus.information) {
-        NSString *codeStr = [onStatus.information objectForKey:@"code"].value;
-        if (codeStr &&
-            [codeStr isEqualToString:VCRTMPNetStreamCommandOnStatusStart]) {
+        NSString *levelStr = [onStatus.information objectForKey:@"level"].value;
+        if (levelStr &&
+            [levelStr isEqualToString:VCRTMPCommandMessageResponseLevelStatus]) {
             isSuccess = YES;
         }
     }
