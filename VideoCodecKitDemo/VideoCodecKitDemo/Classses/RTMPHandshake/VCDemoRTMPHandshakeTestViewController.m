@@ -20,7 +20,7 @@
 @implementation VCDemoRTMPHandshakeTestViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.socket = [[VCTCPSocket alloc] initWithHost:@"127.0.0.1" port:1935];
+    self.socket = [[VCTCPSocket alloc] initWithHost:@"js.live-send.acg.tv" port:1935];
     self.handshake = [VCRTMPHandshake handshakeForSocket:self.socket];
     __weak typeof(self) weakSelf = self;
     
@@ -38,8 +38,8 @@
     __weak typeof(self) weakSelf = self;
     self.netConnection = [self.session makeNetConnection];
     NSDictionary *parm = @{
-        @"app": @"stream".asString,
-        @"tcUrl": @"rtmp://127.0.0.1/stream".asString,
+        @"app": @"live-js".asString,
+        @"tcUrl": @"rtmp://js.live-send.acg.tv/live-js/".asString,
         @"flashVer": @"FMLE/3.0 (compatible; FMSc/1.0)".asString,
         @"swfUrl": NSNull.asNull,
         @"fpad": @(NO).asBool,
@@ -58,13 +58,13 @@
 
 - (void)handleNetConnectionSuccess {
     __weak typeof(self) weakSelf = self;
-    [self.netConnection releaseStream:@"12345"];
-    [self.netConnection createStream:@"12345" completion:^(VCRTMPCommandMessageResponse * _Nullable response, BOOL isSuccess) {
+    [self.netConnection releaseStream:@"?streamname=live_35432748_2964945&key=cb41bd28d62d79653f7d65721b1acb02"];
+    [self.netConnection createStream:@"?streamname=live_35432748_2964945&key=cb41bd28d62d79653f7d65721b1acb02" completion:^(VCRTMPCommandMessageResponse * _Nullable response, BOOL isSuccess) {
         if (isSuccess) {
             NSLog(@"[RTMP][NetConnection][CreateStream] Success");
             [weakSelf.session setChunkSize:4096];
             VCRTMPNetConnectionCommandCreateStreamResult *result = (VCRTMPNetConnectionCommandCreateStreamResult *)response;
-            weakSelf.netStream = [weakSelf.netConnection makeNetStreamWithStreamName:@"12345" streamID:(uint32_t)result.streamID.unsignedIntegerValue];
+            weakSelf.netStream = [weakSelf.netConnection makeNetStreamWithStreamName:@"?streamname=live_35432748_2964945&key=cb41bd28d62d79653f7d65721b1acb02" streamID:(uint32_t)result.streamID.unsignedIntegerValue];
             [weakSelf.netStream publishWithCompletion:^(VCRTMPCommandMessageResponse * _Nullable response, BOOL isSuccess) {
                 [weakSelf.netStream setMetaData:@{
                     @"duration": @(0).asNumber,
