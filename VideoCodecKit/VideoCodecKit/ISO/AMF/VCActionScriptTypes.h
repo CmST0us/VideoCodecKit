@@ -73,8 +73,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 // seealso: 2.10 ECMA Array Type
 @interface VCActionScriptECMAArray: VCActionScriptType
-@property (nonatomic, strong) NSMutableArray<VCActionScriptObject *> *value;
-+ (instancetype)asTypeWithArray:(NSArray<VCActionScriptObject *> *)aArray;
+@property (nonatomic, strong) NSDictionary<NSString *, VCActionScriptType *> *value;
++ (instancetype)asTypeWithDictionary:(NSDictionary<NSString *, VCActionScriptType *> *)aDict;
 @end
 
 // seealso: 2.11 Object End Type

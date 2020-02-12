@@ -52,6 +52,16 @@
     [self.netConnection.session.channel writeFrame:chunk];
 }
 
+#pragma mark - Set Meta Data
+- (void)setMetaData:(NSDictionary<NSString *,VCActionScriptType *> *)param {
+    VCRTMPNetStreamCommandSetDataFrame *command = [VCRTMPNetStreamCommandSetDataFrame command];
+    command.subCommandName = @"onMetaData";
+    command.param = param;
+    
+    VCRTMPChunk *chunk = [self makeNetStreamChunkWithCommand:command];
+    [self.netConnection.session.channel writeFrame:chunk];
+}
+
 #pragma mark - Net Stream Message Handle
 + (NSDictionary<NSString *, NSString *> *)commandMessageHandlerMap {
     static NSDictionary *map = nil;

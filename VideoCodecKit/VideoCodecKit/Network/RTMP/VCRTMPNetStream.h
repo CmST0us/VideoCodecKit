@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
                  forNetConnection:(VCRTMPNetConnection *)netConnection;
 
 - (void)publishWithCompletion:(VCRTMPCommandMessageResponseBlock)block;
+- (void)setMetaData:(NSDictionary<NSString *, VCActionScriptType *> *)param;
 @end
 
 NS_ASSUME_NONNULL_END

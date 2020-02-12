@@ -100,4 +100,9 @@ extern NSString * const VCRTMPNetStreamCommandPublishTypeAppend;
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *information;
 @end
 
+@interface VCRTMPNetStreamCommandSetDataFrame : VCRTMPCommandMessageCommand
+@property (nonatomic, copy, nullable) NSString *commandName;
+@property (nonatomic, copy, nullable) NSString *subCommandName;
+@property (nonatomic, strong, nullable) NSDictionary<NSString *, VCActionScriptType *> *param;
+@end
 NS_ASSUME_NONNULL_END

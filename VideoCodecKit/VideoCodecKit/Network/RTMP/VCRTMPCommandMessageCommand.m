@@ -449,3 +449,40 @@ NSString * const VCRTMPNetStreamCommandOnStatusStart = @"NetStream.Publish.Start
     self.information = [serialization deserialize].value;
 }
 @end
+
+@implementation VCRTMPNetStreamCommandSetDataFrame
++ (instancetype)command {
+    VCRTMPNetStreamCommandSetDataFrame *command = [[VCRTMPNetStreamCommandSetDataFrame alloc] init];
+    command.commandName = @"@setDataFrame";
+    return command;
+}
+- (NSData *)serialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] init];
+    if (self.commandName) {
+        [serialization serialize:self.commandName.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.subCommandName) {
+        [serialization serialize:self.subCommandName.asString];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    if (self.param) {
+        VCActionScriptECMAArray *param = [VCActionScriptECMAArray asTypeWithDictionary:self.param];
+        [serialization serialize:param];
+    } else {
+        [serialization serialize:[NSNull asNull]];
+    }
+    
+    return serialization.serializedData;
+}
+- (void)deserialize {
+    VCAMF0Serialization *serialization = [[VCAMF0Serialization alloc] initWithData:_data];
+    self.commandName = [serialization deserialize].value;
+    self.subCommandName = [serialization deserialize].value;
+    self.param = [serialization deserialize].value;
+}
+@end

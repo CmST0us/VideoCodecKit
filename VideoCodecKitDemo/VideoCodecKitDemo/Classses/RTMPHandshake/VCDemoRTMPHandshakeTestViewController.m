@@ -66,7 +66,28 @@
             VCRTMPNetConnectionCommandCreateStreamResult *result = (VCRTMPNetConnectionCommandCreateStreamResult *)response;
             weakSelf.netStream = [weakSelf.netConnection makeNetStreamWithStreamName:@"12345" streamID:(uint32_t)result.streamID.unsignedIntegerValue];
             [weakSelf.netStream publishWithCompletion:^(VCRTMPCommandMessageResponse * _Nullable response, BOOL isSuccess) {
-                NSLog(@"publish");
+                [weakSelf.netStream setMetaData:@{
+                    @"duration": @(0).asNumber,
+                    @"fileSize": @(0).asNumber,
+                    @"width": @(1280).asNumber,
+                    @"height": @(720).asNumber,
+                    @"videocodecid": @"avc1".asString,
+                    @"videodatarate": @(2500).asNumber,
+                    @"framerate": @(30).asNumber,
+                    @"audiocodecid": @"mp4a".asString,
+                    @"audiodatarate": @(160).asNumber,
+                    @"audiosamplerate": @"44100".asString,
+                    @"audiosamplesize": @(16).asNumber,
+                    @"audiochannels": @(2).asNumber,
+                    @"stereo": @(YES).asBool,
+                    @"2.1": @(NO).asBool,
+                    @"3.1": @(NO).asBool,
+                    @"4.0": @(NO).asBool,
+                    @"4.1": @(NO).asBool,
+                    @"5.1": @(NO).asBool,
+                    @"7.1": @(NO).asBool,
+                    @"encoder": @"iOSVT::VideoCodecKit".asString,
+                }];
             }];
         }
     }];

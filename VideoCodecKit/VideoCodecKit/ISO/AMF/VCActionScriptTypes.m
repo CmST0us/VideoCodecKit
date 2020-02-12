@@ -106,13 +106,19 @@
 }
 
 + (VCActionScriptECMAArray *)deserializeECMAArrayFromByteArray:(VCByteArray *)byteArray {
-    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     uint32_t associativeCount = [byteArray readUInt32];
     for (int i = 0; i < associativeCount; ++i) {
-        VCActionScriptObject *object = [VCActionScriptType deserializeObjectFromByteArray:byteArray];
-        [arr addObject:object];
+        /// 反序列号 ECMA
+        NSString *keyString = [VCActionScriptType deserializeStringFromArray:byteArray isLongString:NO].value;
+        VCActionScriptType *value = [VCActionScriptType deserializeFromByteArray:byteArray];
+        if (keyString == nil ||
+            [keyString length] == 0) {
+            break;
+        }
+        [dict setObject:value forKey:keyString];
     }
-    return [VCActionScriptECMAArray asTypeWithArray:arr];
+    return [VCActionScriptECMAArray asTypeWithDictionary:dict];
 }
 
 + (VCActionScriptObjectEnd *)deserializeObjectEndFromByteArray:(VCByteArray *)byteArray {
@@ -325,11 +331,11 @@
 
 #pragma mark - ECMA Array
 @implementation VCActionScriptECMAArray
-- (NSMutableArray<VCActionScriptObject *> *)value {
+- (NSDictionary<NSString *, VCActionScriptType *> *)value {
     if (_value != nil) {
         return _value;
     }
-    _value = [[NSMutableArray alloc] init];
+    _value = [[NSDictionary alloc] init];
     return _value;
 }
 - (uint8_t)type {
@@ -338,16 +344,25 @@
 
 - (void)serializeToArrayByte:(VCByteArray *)byteArray {
     [byteArray writeUInt32:(uint32_t)self.value.count];
-    for (VCActionScriptObject *obj in self.value) {
-        [obj serializeToArrayByte:byteArray];
+    for (NSString *key in self.value.allKeys) {
+        VCActionScriptType *obj = self.value[key];
+        if (obj != nil) {
+            
+            [key.asString serializeToArrayByte:byteArray];
+            [obj serializeTypeMarkToArrayByte:byteArray];
+            [obj serializeToArrayByte:byteArray];
+        }
     }
+    [[VCActionScriptString emptyString] serializeToArrayByte:byteArray];
+    [[VCActionScriptObjectEnd objectEnd] serializeTypeMarkToArrayByte:byteArray];
 }
 
-+ (instancetype)asTypeWithArray:(NSArray<VCActionScriptObject *> *)aArray {
++ (instancetype)asTypeWithDictionary:(NSDictionary<NSString *,VCActionScriptType *> *)aDict {
     VCActionScriptECMAArray *v = [[VCActionScriptECMAArray alloc] init];
-    v.value = [[NSMutableArray alloc] initWithArray:aArray];
+    v.value = aDict;
     return v;
 }
+
 @end
 
 #pragma mark - Object End
