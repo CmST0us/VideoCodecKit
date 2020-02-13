@@ -53,6 +53,11 @@
     return [array readUInt24];
 }
 
+- (NSData *)payloadDataWithoutExternTimestamp {
+    NSUInteger offset = kVCFLVTagHeaderSize;
+    return [self.tagData subdataWithRange:NSMakeRange(offset, self.tagData.length - offset)];
+}
+
 - (NSData *)payloadData {
     return [self.tagData subdataWithRange:NSMakeRange(kVCFLVTagHeaderSize, self.tagData.length - kVCFLVTagHeaderSize)];
 }

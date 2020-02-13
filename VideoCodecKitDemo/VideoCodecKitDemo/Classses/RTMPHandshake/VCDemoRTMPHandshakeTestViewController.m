@@ -15,13 +15,19 @@
 @property (nonatomic, strong) VCRTMPSession *session;
 @property (nonatomic, strong) VCRTMPNetConnection *netConnection;
 @property (nonatomic, strong) VCRTMPNetStream *netStream;
+@property (nonatomic, strong) VCFLVFile *flvFile;
+@property (nonatomic, strong) dispatch_queue_t publishQueue;
 @end
 
 @implementation VCDemoRTMPHandshakeTestViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.socket = [[VCTCPSocket alloc] initWithHost:@"js.live-send.acg.tv" port:1935];
+//    self.socket = [[VCTCPSocket alloc] initWithHost:@"js.live-send.acg.tv" port:1935];
+    self.socket = [[VCTCPSocket alloc] initWithHost:@"127.0.0.1" port:1935];
     self.handshake = [VCRTMPHandshake handshakeForSocket:self.socket];
+    self.flvFile = [[VCFLVFile alloc] initWithURL:[[NSBundle mainBundle] URLForResource:@"test" withExtension:@"flv"]];
+    self.publishQueue = dispatch_queue_create("Publish Queue", DISPATCH_QUEUE_SERIAL);
+    
     __weak typeof(self) weakSelf = self;
     
     [self.handshake startHandshakeWithBlock:^(VCRTMPHandshake * _Nonnull handshake, VCRTMPSession * _Nullable session, BOOL isSuccess, NSError * _Nullable error) {
@@ -38,7 +44,7 @@
     __weak typeof(self) weakSelf = self;
     self.netConnection = [self.session makeNetConnection];
     NSDictionary *parm = @{
-        @"app": @"live-js".asString,
+        @"app": @"stream".asString,
         @"tcUrl": @"rtmp://js.live-send.acg.tv/live-js/".asString,
         @"flashVer": @"FMLE/3.0 (compatible; FMSc/1.0)".asString,
         @"swfUrl": NSNull.asNull,
@@ -60,36 +66,66 @@
     __weak typeof(self) weakSelf = self;
     [self.netConnection releaseStream:@"?streamname=live_35432748_2964945&key=cb41bd28d62d79653f7d65721b1acb02"];
     [self.netConnection createStream:@"?streamname=live_35432748_2964945&key=cb41bd28d62d79653f7d65721b1acb02" completion:^(VCRTMPCommandMessageResponse * _Nullable response, BOOL isSuccess) {
+//    [self.netConnection createStream:@"12345" completion:^(VCRTMPCommandMessageResponse * _Nullable response, BOOL isSuccess) {
         if (isSuccess) {
             NSLog(@"[RTMP][NetConnection][CreateStream] Success");
             [weakSelf.session setChunkSize:4096];
             VCRTMPNetConnectionCommandCreateStreamResult *result = (VCRTMPNetConnectionCommandCreateStreamResult *)response;
             weakSelf.netStream = [weakSelf.netConnection makeNetStreamWithStreamName:@"?streamname=live_35432748_2964945&key=cb41bd28d62d79653f7d65721b1acb02" streamID:(uint32_t)result.streamID.unsignedIntegerValue];
             [weakSelf.netStream publishWithCompletion:^(VCRTMPCommandMessageResponse * _Nullable response, BOOL isSuccess) {
-                [weakSelf.netStream setMetaData:@{
-                    @"duration": @(0).asNumber,
-                    @"fileSize": @(0).asNumber,
-                    @"width": @(1280).asNumber,
-                    @"height": @(720).asNumber,
-                    @"videocodecid": @"avc1".asString,
-                    @"videodatarate": @(2500).asNumber,
-                    @"framerate": @(30).asNumber,
-                    @"audiocodecid": @"mp4a".asString,
-                    @"audiodatarate": @(160).asNumber,
-                    @"audiosamplerate": @"44100".asString,
-                    @"audiosamplesize": @(16).asNumber,
-                    @"audiochannels": @(2).asNumber,
-                    @"stereo": @(YES).asBool,
-                    @"2.1": @(NO).asBool,
-                    @"3.1": @(NO).asBool,
-                    @"4.0": @(NO).asBool,
-                    @"4.1": @(NO).asBool,
-                    @"5.1": @(NO).asBool,
-                    @"7.1": @(NO).asBool,
-                    @"encoder": @"iOSVT::VideoCodecKit".asString,
-                }];
+//                [weakSelf.netStream setMetaData:@{
+//                    @"duration": @(0).asNumber,
+//                    @"fileSize": @(0).asNumber,
+//                    @"width": @(1280).asNumber,
+//                    @"height": @(720).asNumber,
+//                    @"videocodecid": @"avc1".asString,
+//                    @"videodatarate": @(2500).asNumber,
+//                    @"framerate": @(30).asNumber,
+//                    @"audiocodecid": @"mp4a".asString,
+//                    @"audiodatarate": @(160).asNumber,
+//                    @"audiosamplerate": @"44100".asString,
+//                    @"audiosamplesize": @(16).asNumber,
+//                    @"audiochannels": @(2).asNumber,
+//                    @"stereo": @(YES).asBool,
+//                    @"2.1": @(NO).asBool,
+//                    @"3.1": @(NO).asBool,
+//                    @"4.0": @(NO).asBool,
+//                    @"4.1": @(NO).asBool,
+//                    @"5.1": @(NO).asBool,
+//                    @"7.1": @(NO).asBool,
+//                    @"encoder": @"iOSVT::VideoCodecKit".asString,
+//                }];
+                [weakSelf handleStartPublish];
             }];
         }
     }];
+}
+
+- (void)handleStartPublish {
+    dispatch_async(self.publishQueue, ^{
+        VCFLVTag *tag = [self.flvFile nextTag];
+        do {
+            @autoreleasepool {
+                if (tag.tagType == VCFLVTagTypeAudio) {
+                    VCRTMPChunk *audioChunk = [VCRTMPChunk makeAudioChunk];
+                    audioChunk.chunkData = tag.payloadDataWithoutExternTimestamp;
+                    audioChunk.messageHeaderType = VCRTMPChunkMessageHeaderType0;
+                    audioChunk.message.messageStreamID = self.netStream.streamID;
+                    audioChunk.message.timestamp = tag.timestamp;
+                    [self.netStream writeChunk:audioChunk];
+                } else if (tag.tagType == VCFLVTagTypeVideo) {
+                    VCRTMPChunk *videoChunk = [VCRTMPChunk makeVideoChunk];
+                    videoChunk.chunkData = tag.payloadDataWithoutExternTimestamp;
+                    videoChunk.messageHeaderType = VCRTMPChunkMessageHeaderType0;
+                    videoChunk.message.messageStreamID = self.netStream.streamID;
+                    videoChunk.message.timestamp = tag.timestamp;
+                    [self.netStream writeChunk:videoChunk];
+                }
+                NSLog(@"push tag: %@", tag);
+                tag = [self.flvFile nextTag];
+                [NSThread sleepForTimeInterval:0.01];
+            }
+        } while (tag != nil);
+    });
 }
 @end

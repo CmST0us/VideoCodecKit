@@ -35,6 +35,10 @@ typedef void(^VCRTMPCommandMessageResponseBlock)(VCRTMPCommandMessageResponse * 
 - (NSString *)commandTypeValue;
 - (NSNumber *)transactionIDValue;
 @end
+@interface VCRTMPChunk (CommandMessageVideoAudio)
++ (instancetype)makeVideoChunk;
++ (instancetype)makeAudioChunk;
+@end
 
 extern NSString * const VCRTMPCommandMessageResponseSuccess;
 extern NSString * const VCRTMPCommandMessageResponseError;

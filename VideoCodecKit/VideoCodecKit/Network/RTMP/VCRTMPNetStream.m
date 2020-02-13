@@ -103,4 +103,7 @@
     }
 }
 
+- (void)writeChunk:(VCRTMPChunk *)chunk {
+    [self.netConnection.session.channel writeFrame:chunk];
+}
 @end

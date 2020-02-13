@@ -89,6 +89,22 @@ NSString * const VCRTMPCommandMessageResponseLevelStatus = @"status";
 }
 @end
 
+@implementation VCRTMPChunk (CommandMessageVideoAudio)
++ (instancetype)makeAudioChunk {
+    VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
+    message.messageTypeID = VCRTMPMessageTypeAudio;
+    VCRTMPChunk *chunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType0 chunkStreamID:VCRTMPChunkStreamIDAudio message:message];
+    return chunk;
+}
+
++ (instancetype)makeVideoChunk {
+    VCRTMPMessage *message = [[VCRTMPMessage alloc] init];
+    message.messageTypeID = VCRTMPMessageTypeVideo;
+    VCRTMPChunk *chunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType0 chunkStreamID:VCRTMPChunkStreamIDVideo message:message];
+    return chunk;
+}
+@end
+
 #pragma mark - Net Connection Command Connect
 @implementation VCRTMPNetConnectionCommandConnect
 + (instancetype)command {

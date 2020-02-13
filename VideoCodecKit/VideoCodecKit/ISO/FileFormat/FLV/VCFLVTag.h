@@ -33,6 +33,7 @@ typedef NS_ENUM(uint8_t, VCFLVTagType) {
 @property (nonatomic, readonly) NSData *payloadData;
 
 - (nullable instancetype)initWithData:(NSData *)data;
+- (NSData *)payloadDataWithoutExternTimestamp;
 - (uint32_t)extendedTimeStamp;
 @end
 

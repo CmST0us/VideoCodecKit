@@ -19,6 +19,9 @@
 @property (nonatomic, strong) dispatch_queue_t outputQueue;
 @property (nonatomic, strong) NSRunLoop *runloop;
 @property (nonatomic, strong) NSThread *runloopThread;
+
+@property (nonatomic, strong) NSMutableData *sendBuffer;
+@property (nonatomic, assign) BOOL shouldWriteDirectly;
 @end
 
 @implementation VCTCPSocket
@@ -36,6 +39,8 @@
         _inputBuffer = nil;
         _host = host;
         _port = port;
+        _sendBuffer = [[NSMutableData alloc] init];
+        _shouldWriteDirectly = NO;
     }
     return self;
 }
@@ -148,10 +153,11 @@
 
 - (void)writeData:(NSData *)data {
     dispatch_async(self.outputQueue, ^{
-        if (self.outputStream == nil || !self.connected) {
-            return;
+        if (self.shouldWriteDirectly) {
+            [self.outputStream write:data.bytes maxLength:data.length];
+        } else {
+            [self.sendBuffer appendData:data];
         }
-        [self.outputStream write:data.bytes maxLength:data.length];
     });
 }
 
@@ -195,7 +201,16 @@
             }
         }
             break;
-        case NSStreamEventHasSpaceAvailable:
+        case NSStreamEventHasSpaceAvailable: {
+            dispatch_async(self.outputQueue, ^{
+                if (self.sendBuffer.length > 0) {
+                    [self.outputStream write:self.sendBuffer.bytes maxLength:self.sendBuffer.length];
+                    self.sendBuffer = [[NSMutableData alloc] init];
+                } else {
+                    self.shouldWriteDirectly = YES;
+                }
+            });
+        }
             break;
         case NSStreamEventErrorOccurred: {
             self.connected = NO;
