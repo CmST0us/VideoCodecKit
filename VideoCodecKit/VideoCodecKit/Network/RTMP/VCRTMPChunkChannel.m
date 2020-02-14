@@ -174,15 +174,11 @@
         totalSplitChunkCount += 1;
     }
     
-    /// 1. 参考上一个发送的Chunk
-    [self modifyChunkMessageType:chunk withLastSendChunk:self.lastSendChunk];
-    
-    /// 2. 分割数据
     if (splitChunkCount == 0) {
         return @[chunk];
     }
     
-    /// 3. 第一个拆分包，包含完整messageLength长度
+    /// 1. 第一个拆分包，包含完整messageLength长度
     NSMutableArray<VCRTMPChunk *> *chunks = [[NSMutableArray alloc] init];
     VCByteArray *array = [[VCByteArray alloc] initWithData:chunk.chunkData];
     VCRTMPChunk *firstChunk = [[VCRTMPChunk alloc] initWithType:chunk.messageHeaderType
@@ -196,8 +192,8 @@
         return chunks;
     }
     
-    /// 4. 拆分chunk定长数据包
-    for (NSInteger i = totalSplitChunkCount; i > 1; --i) {
+    /// 2. 拆分chunk定长数据包
+    for (; totalSplitChunkCount > 1; --totalSplitChunkCount) {
         NSData *splitData = [array readBytes:chunkSize];
         VCRTMPChunk *splitChunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType3
                                                       chunkStreamID:chunk.chunkStreamID
@@ -206,7 +202,7 @@
         [chunks addObject:splitChunk];
     }
     
-    /// 5. 补充剩余数据数据包
+    /// 3. 补充剩余数据数据包
     if (totalSplitChunkCount == 1) {
         NSData *splitData = [array readBytes:lastSplitChunkDataSize];
         VCRTMPChunk *splitChunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType3

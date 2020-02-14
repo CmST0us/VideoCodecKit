@@ -153,11 +153,20 @@
 
 - (void)writeData:(NSData *)data {
     dispatch_async(self.outputQueue, ^{
-        if (self.shouldWriteDirectly) {
-            [self.outputStream write:data.bytes maxLength:data.length];
-        } else {
-            [self.sendBuffer appendData:data];
-        }
+//        if (self.shouldWriteDirectly) {
+//            [self.outputStream write:data.bytes maxLength:data.length];
+//        } else {
+//            [self.sendBuffer appendData:data];
+//        }
+        NSData *sendData = data;
+        NSInteger sendLen = 0;
+        do {
+            sendLen = [self.outputStream write:sendData.bytes maxLength:sendData.length];
+            NSLog(@"sendLen: %d", sendLen);
+            if (sendLen > 0) {
+                sendData = [sendData subdataWithRange:NSMakeRange(sendLen, sendData.length - sendLen)];
+            }
+        } while (sendLen > 0 && sendData.length > 0);
     });
 }
 
@@ -202,14 +211,14 @@
         }
             break;
         case NSStreamEventHasSpaceAvailable: {
-            dispatch_async(self.outputQueue, ^{
-                if (self.sendBuffer.length > 0) {
-                    [self.outputStream write:self.sendBuffer.bytes maxLength:self.sendBuffer.length];
-                    self.sendBuffer = [[NSMutableData alloc] init];
-                } else {
-                    self.shouldWriteDirectly = YES;
-                }
-            });
+//            dispatch_async(self.outputQueue, ^{
+//                if (self.sendBuffer.length > 0) {
+//                    NSInteger sendLength = [self.outputStream write:self.sendBuffer.bytes maxLength:self.sendBuffer.length];
+//                    self.sendBuffer = [[NSMutableData alloc] initWithData:[self.sendBuffer subdataWithRange:NSMakeRange(sendLength, self.sendBuffer.length - sendLength)]];
+//                } else {
+//                    self.shouldWriteDirectly = YES;
+//                }
+//            });
         }
             break;
         case NSStreamEventErrorOccurred: {

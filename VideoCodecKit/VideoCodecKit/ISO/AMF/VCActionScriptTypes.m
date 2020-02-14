@@ -83,15 +83,19 @@
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     NSString *keyString = nil;
     do {
-        keyString = [VCActionScriptType deserializeStringFromArray:byteArray isLongString:NO].value;
-        VCActionScriptType *value = [VCActionScriptType deserializeFromByteArray:byteArray];
-        if (keyString == nil ||
-            [keyString length] == 0 ||
-            [value isKindOfClass:[VCActionScriptObjectEnd class]]) {
-            // empty
+        @try {
+            keyString = [VCActionScriptType deserializeStringFromArray:byteArray isLongString:NO].value;
+            VCActionScriptType *value = [VCActionScriptType deserializeFromByteArray:byteArray];
+            if (keyString == nil ||
+                [keyString length] == 0 ||
+                [value isKindOfClass:[VCActionScriptObjectEnd class]]) {
+                // empty
+                break;
+            }
+            [dict setObject:value forKey:keyString];
+        } @catch (NSException *exception) {
             break;
         }
-        [dict setObject:value forKey:keyString];
     } while (keyString != nil &&
              keyString.length > 0);
     return [VCActionScriptObject asTypeWithDictionary:dict];
