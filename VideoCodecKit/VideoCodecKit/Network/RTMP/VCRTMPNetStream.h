@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setMetaData:(NSDictionary<NSString *, VCActionScriptType *> *)param;
 
 - (void)writeChunk:(VCRTMPChunk *)chunk;
+
+- (void)end;
 @end
 
 NS_ASSUME_NONNULL_END

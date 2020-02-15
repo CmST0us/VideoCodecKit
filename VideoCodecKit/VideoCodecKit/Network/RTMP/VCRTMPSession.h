@@ -14,17 +14,24 @@ NS_ASSUME_NONNULL_BEGIN
 @class VCRTMPNetConnection;
 extern NSErrorDomain const VCRTMPSessionErrorDomain;
 typedef NS_ENUM(NSUInteger, VCRTMPSessionErrorCode) {
-    VCRTMPSessionErrorCodeUnknow = -3000,
+    VCRTMPSessionErrorCodeChannelEnd = -3000,
+    VCRTMPSessionErrorCodeChannelError = -3001,
 };
+
+typedef void(^VCRTMPSessionChannelCloseHandle)(NSError *error);
 @interface VCRTMPSession : NSObject
 
 + (instancetype)sessionForSocket:(VCTCPSocket *)socket;
+
+- (void)registerChannelCloseHandle:(VCRTMPSessionChannelCloseHandle)handle;
 
 - (void)setChunkSize:(uint32_t)size;
 - (void)setPeerBandwidth:(uint32_t)bandwidth limitType:(VCRTMPChunkSetPeerBandwidthLimitType)limitType;
 - (void)abortMessage:(uint32_t)chunkStreamID;
 
 - (VCRTMPNetConnection *)makeNetConnection;
+
+- (void)end;
 @end
 
 NS_ASSUME_NONNULL_END

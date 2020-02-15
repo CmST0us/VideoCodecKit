@@ -29,6 +29,8 @@ typedef NS_ENUM(NSUInteger, VCRTMPNetConnectionErrorCode) {
 
 - (VCRTMPNetStream *)makeNetStreamWithStreamName:(NSString *)streamName
                                         streamID:(uint32_t)streamID;
+
+- (void)end;
 @end
 
 NS_ASSUME_NONNULL_END

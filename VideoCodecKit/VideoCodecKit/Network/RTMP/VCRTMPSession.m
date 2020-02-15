@@ -20,6 +20,10 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
 
 @implementation VCRTMPSession
 
+- (void)dealloc {
+    [self end];
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {
@@ -40,6 +44,10 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
 
 - (NSUInteger)nextTransactionID {
     return ++self.transactionIDCounter;
+}
+
+- (void)registerChannelCloseHandle:(VCRTMPSessionChannelCloseHandle)handle {
+    self.channelCloseHandle = handle;
 }
 
 #pragma mark - Net Connection
@@ -71,6 +79,10 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
     [self.channel writeFrame:chunk];
 }
 
+- (void)end {
+    [self.netConnection end];
+    [self.channel end];
+}
 #pragma mark - Handle Protocol Control Message
 + (NSDictionary<NSNumber *, NSString *> *)protocolControlMessageHandlerMap {
     static NSDictionary *map = nil;
@@ -124,10 +136,18 @@ NSErrorDomain const VCRTMPSessionErrorDomain = @"VCRTMPSessionErrorDomain";
 
 - (void)channelConnectionDidEnd {
     NSLog(@"[RTMP][CHANNEL] End");
+    if (self.channelCloseHandle) {
+        self.channelCloseHandle([NSError errorWithDomain:VCRTMPSessionErrorDomain code:VCRTMPSessionErrorCodeChannelEnd userInfo:nil]);
+    }
 }
 
 - (void)channel:(VCRTMPChunkChannel *)channel connectionHasError:(NSError *)error {
-    NSLog(@"[RTMP][CHANNEL] Error: %@", error);
+    NSLog(@"[RTMP][CHANNEL] Error %@", error);
+    if (self.channelCloseHandle) {
+        self.channelCloseHandle([NSError errorWithDomain:VCRTMPSessionErrorDomain code:VCRTMPSessionErrorCodeChannelError userInfo:@{
+            @"error": error
+        }]);
+    }
 }
 
 @end

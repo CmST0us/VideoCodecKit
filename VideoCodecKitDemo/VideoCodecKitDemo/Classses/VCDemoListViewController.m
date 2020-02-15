@@ -13,7 +13,7 @@
 #import "VCDemoFLVAudioPlayTestViewController.h"
 #import "VCDemoAMFTestViewController.h"
 #import "VCDemoTCPSocketTestViewController.h"
-#import "VCDemoRTMPHandshakeTestViewController.h"
+#import "VCDemoRTMPPublishTestViewController.h"
 #import "VCDemoRTMPFormatTestViewController.h"
 
 #import "VCRawH264DemoViewController.h"
@@ -61,12 +61,12 @@
                   @"class": NSStringFromClass([VCDemoTCPSocketTestViewController class]),
                 },
                 @{
-                  @"title": @"RTMP握手",
-                  @"class": NSStringFromClass([VCDemoRTMPHandshakeTestViewController class]),
-                },
-                @{
                   @"title": @"RTMP 数据包",
                   @"class": NSStringFromClass([VCDemoRTMPFormatTestViewController class]),
+                },
+                @{
+                  @"title": @"RTMP推流测试",
+                  @"class": NSStringFromClass([VCDemoRTMPPublishTestViewController class]),
                 },
             ];
     return cases;

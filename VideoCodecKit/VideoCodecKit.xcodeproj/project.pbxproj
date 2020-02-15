@@ -35,6 +35,10 @@
 		4F5088202212A35F008FB553 /* VCActionScriptTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F50881E2212A35F008FB553 /* VCActionScriptTypes.m */; };
 		4F6420492215EE27000FB2EC /* VCSafeBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6420472215EE27000FB2EC /* VCSafeBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F64204A2215EE27000FB2EC /* VCSafeBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6420482215EE27000FB2EC /* VCSafeBuffer.m */; };
+		4F662C9B23F7DECC0002E34D /* VCRTMPPublisher.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F662C9923F7DECC0002E34D /* VCRTMPPublisher.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F662C9C23F7DECC0002E34D /* VCRTMPPublisher.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F662C9A23F7DECC0002E34D /* VCRTMPPublisher.m */; };
+		4F662CA023F7DF140002E34D /* VCRTMPSubscriber.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F662C9E23F7DF140002E34D /* VCRTMPSubscriber.h */; };
+		4F662CA123F7DF140002E34D /* VCRTMPSubscriber.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F662C9F23F7DF140002E34D /* VCRTMPSubscriber.m */; };
 		4F685A9B23EC0988009D5625 /* VCRTMPChunkChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F685A9923EC0988009D5625 /* VCRTMPChunkChannel.h */; };
 		4F685A9C23EC0988009D5625 /* VCRTMPChunkChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F685A9A23EC0988009D5625 /* VCRTMPChunkChannel.m */; };
 		4F685A9F23EC350F009D5625 /* VCRTMPCommandMessageCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F685A9D23EC350F009D5625 /* VCRTMPCommandMessageCommand.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -133,6 +137,10 @@
 		4F50881E2212A35F008FB553 /* VCActionScriptTypes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCActionScriptTypes.m; sourceTree = "<group>"; };
 		4F6420472215EE27000FB2EC /* VCSafeBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VCSafeBuffer.h; sourceTree = "<group>"; };
 		4F6420482215EE27000FB2EC /* VCSafeBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VCSafeBuffer.m; sourceTree = "<group>"; };
+		4F662C9923F7DECC0002E34D /* VCRTMPPublisher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCRTMPPublisher.h; sourceTree = "<group>"; };
+		4F662C9A23F7DECC0002E34D /* VCRTMPPublisher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCRTMPPublisher.m; sourceTree = "<group>"; };
+		4F662C9E23F7DF140002E34D /* VCRTMPSubscriber.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCRTMPSubscriber.h; sourceTree = "<group>"; };
+		4F662C9F23F7DF140002E34D /* VCRTMPSubscriber.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCRTMPSubscriber.m; sourceTree = "<group>"; };
 		4F685A9923EC0988009D5625 /* VCRTMPChunkChannel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCRTMPChunkChannel.h; sourceTree = "<group>"; };
 		4F685A9A23EC0988009D5625 /* VCRTMPChunkChannel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCRTMPChunkChannel.m; sourceTree = "<group>"; };
 		4F685A9D23EC350F009D5625 /* VCRTMPCommandMessageCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCRTMPCommandMessageCommand.h; sourceTree = "<group>"; };
@@ -256,6 +264,8 @@
 		4F23D2E02211C8EA0076DBEF /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				4F662C9D23F7DED10002E34D /* Subscriber */,
+				4F662C9823F7DE950002E34D /* Publisher */,
 				4F23D2FE2211DBC20076DBEF /* Socket */,
 				4F23D2E12211C8FE0076DBEF /* RTMP */,
 			);
@@ -312,6 +322,24 @@
 				4F50881E2212A35F008FB553 /* VCActionScriptTypes.m */,
 			);
 			path = AMF;
+			sourceTree = "<group>";
+		};
+		4F662C9823F7DE950002E34D /* Publisher */ = {
+			isa = PBXGroup;
+			children = (
+				4F662C9923F7DECC0002E34D /* VCRTMPPublisher.h */,
+				4F662C9A23F7DECC0002E34D /* VCRTMPPublisher.m */,
+			);
+			path = Publisher;
+			sourceTree = "<group>";
+		};
+		4F662C9D23F7DED10002E34D /* Subscriber */ = {
+			isa = PBXGroup;
+			children = (
+				4F662C9E23F7DF140002E34D /* VCRTMPSubscriber.h */,
+				4F662C9F23F7DF140002E34D /* VCRTMPSubscriber.m */,
+			);
+			path = Subscriber;
 			sourceTree = "<group>";
 		};
 		4F76FBC4216269FC002E7F0D = {
@@ -580,6 +608,7 @@
 				4F685A9F23EC350F009D5625 /* VCRTMPCommandMessageCommand.h in Headers */,
 				4FBCCE1F21F324F000E7BF3C /* VCH264HardwareDecoder.h in Headers */,
 				4FBCCE1B21F320B700E7BF3C /* VCSampleBuffer.h in Headers */,
+				4F662C9B23F7DECC0002E34D /* VCRTMPPublisher.h in Headers */,
 				4FBCCE3221F325D800E7BF3C /* VCVideoEncoder.h in Headers */,
 				4FBCCE3C21F33E0800E7BF3C /* VCAVCConfigurationRecord.h in Headers */,
 				4FBCCE4121F36DA700E7BF3C /* VCByteArray.h in Headers */,
@@ -605,6 +634,7 @@
 				4F23D3162211DD290076DBEF /* VCAMF3Serialization.h in Headers */,
 				4F76FC4921626DCA002E7F0D /* VCSafeObjectQueue.h in Headers */,
 				4F23D2F42211DB510076DBEF /* VCRTMPChunk.h in Headers */,
+				4F662CA023F7DF140002E34D /* VCRTMPSubscriber.h in Headers */,
 				4F1913A821FED9C800921CAF /* VCAnnexBFormatParser.h in Headers */,
 				4F1913B3220145A300921CAF /* VCFLVReader.h in Headers */,
 				4F9173D923DEDBDC0065D31D /* VCMP4Reader.h in Headers */,
@@ -707,6 +737,7 @@
 				4FBCCE2021F324F000E7BF3C /* VCH264HardwareDecoder.m in Sources */,
 				4F5088202212A35F008FB553 /* VCActionScriptTypes.m in Sources */,
 				4F1913B4220145A300921CAF /* VCFLVReader.m in Sources */,
+				4F662CA123F7DF140002E34D /* VCRTMPSubscriber.m in Sources */,
 				4FBCCE2421F3250000E7BF3C /* VCH264HardwareEncoder.m in Sources */,
 				4F23D2EB2211C90D0076DBEF /* VCRTMPSession.m in Sources */,
 				4F9173E823DF18B00065D31D /* VCRawH265Reader.m in Sources */,
@@ -733,6 +764,7 @@
 				4FBCCE2C21F3252600E7BF3C /* VCH264SoftwareEncoder.m in Sources */,
 				4F685AAA23EC69D3009D5625 /* VCRTMPSession+ProtocolControlMessageHandler.m in Sources */,
 				4F1913BC2201466A00921CAF /* VCFLVTag.m in Sources */,
+				4F662C9C23F7DECC0002E34D /* VCRTMPPublisher.m in Sources */,
 				4F23D2F52211DB510076DBEF /* VCRTMPChunk.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

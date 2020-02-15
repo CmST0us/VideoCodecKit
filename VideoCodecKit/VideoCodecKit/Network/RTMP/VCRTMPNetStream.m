@@ -17,6 +17,7 @@
 @implementation VCRTMPNetStream
 
 - (void)dealloc {
+    [self end];
     [self.netConnection.session removeMessageStreamIDTask:self.streamID];
 }
 
@@ -50,6 +51,10 @@
     
     VCRTMPChunk *chunk = [self makeNetStreamChunkWithCommand:command];
     [self.netConnection.session.channel writeFrame:chunk];
+}
+
+- (void)end {
+    
 }
 
 #pragma mark - Set Meta Data
@@ -89,6 +94,7 @@
 
 - (void)handleOnStatusMessage:(VCRTMPCommandMessageResponse *)response {
     VCRTMPNetStreamCommandOnStatus *onStatus = [[VCRTMPNetStreamCommandOnStatus alloc] initWithData:response.chunkData];
+    [onStatus deserialize];
     BOOL isSuccess = NO;
     if (onStatus.information) {
         NSString *levelStr = [onStatus.information objectForKey:@"level"].value;

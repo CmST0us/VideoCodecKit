@@ -40,6 +40,10 @@
     return self;
 }
 
+- (void)end {
+    [self.socket close];
+}
+
 + (instancetype)channelForSocket:(VCTCPSocket *)socket {
     VCRTMPChunkChannel *channel = [[VCRTMPChunkChannel alloc] init];
     channel.socket = socket;

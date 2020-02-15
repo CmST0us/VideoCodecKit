@@ -24,6 +24,8 @@
 
 @interface VCRTMPSession () <VCRTMPChunkChannelDelegate>
 
+@property (nonatomic, copy) VCRTMPSessionChannelCloseHandle channelCloseHandle;
+
 @property (nonatomic, assign) NSUInteger transactionIDCounter;
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, VCRTMPCommandMessageTask *> *commandMessageTasks;
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, VCRTMPNetStreamMessageTask *> *netStreamMessageTasks;

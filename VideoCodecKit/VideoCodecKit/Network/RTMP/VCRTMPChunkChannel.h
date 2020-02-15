@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)resetSendByteCount;
 - (void)useCurrntAcknowlegmentWindowSizeAsBandwidth;
 
+- (void)end;
 @end
 
 NS_ASSUME_NONNULL_END

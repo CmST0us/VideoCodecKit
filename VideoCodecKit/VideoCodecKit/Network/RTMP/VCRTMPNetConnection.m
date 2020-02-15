@@ -19,6 +19,10 @@ NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorD
 
 @implementation VCRTMPNetConnection
 
+- (void)dealloc {
+    [self end];
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {
@@ -70,6 +74,13 @@ NSErrorDomain const VCRTMPNetConnectionErrorDomain = @"VCRTMPNetConnectionErrorD
                                observer:self
                                 handler:@selector(handleCreateStreamResult:)];
     [self.session.channel writeFrame:createStreamChunk];
+}
+
+- (void)end {
+    for (VCRTMPNetStream *stream in self.netStreams.allValues) {
+        [stream end];
+        [self releaseStream:stream.streamName];
+    }
 }
 
 #pragma mark - Net Stream

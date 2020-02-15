@@ -14,7 +14,7 @@
 		4F0F9524218899E500CB9BAE /* Masonry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0F9522218899E500CB9BAE /* Masonry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */; };
 		4F2853C52215B1820041DAAE /* VCDemoTCPSocketTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2853C42215B1820041DAAE /* VCDemoTCPSocketTestViewController.m */; };
-		4F6420462215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6420452215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m */; };
+		4F6420462215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6420452215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.m */; };
 		4F64204E22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F64204D22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.m */; };
 		4F76FC7521627512002E7F0D /* VideoCodecKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; };
 		4F76FC7621627512002E7F0D /* VideoCodecKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -71,8 +71,8 @@
 		4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoListViewController.m; sourceTree = "<group>"; };
 		4F2853C32215B1820041DAAE /* VCDemoTCPSocketTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoTCPSocketTestViewController.h; sourceTree = "<group>"; };
 		4F2853C42215B1820041DAAE /* VCDemoTCPSocketTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoTCPSocketTestViewController.m; sourceTree = "<group>"; };
-		4F6420442215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoRTMPHandshakeTestViewController.h; sourceTree = "<group>"; };
-		4F6420452215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoRTMPHandshakeTestViewController.m; sourceTree = "<group>"; };
+		4F6420442215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoRTMPPublishTestViewController.h; sourceTree = "<group>"; };
+		4F6420452215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoRTMPPublishTestViewController.m; sourceTree = "<group>"; };
 		4F64204C22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoRTMPFormatTestViewController.h; sourceTree = "<group>"; };
 		4F64204D22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoRTMPFormatTestViewController.m; sourceTree = "<group>"; };
 		4F76FC7421627512002E7F0D /* VideoCodecKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoCodecKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -160,13 +160,13 @@
 			path = TCPSocket;
 			sourceTree = "<group>";
 		};
-		4F6420432215E494000FB2EC /* RTMPHandshake */ = {
+		4F6420432215E494000FB2EC /* RTMPPublish */ = {
 			isa = PBXGroup;
 			children = (
-				4F6420442215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.h */,
-				4F6420452215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m */,
+				4F6420442215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.h */,
+				4F6420452215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.m */,
 			);
-			path = RTMPHandshake;
+			path = RTMPPublish;
 			sourceTree = "<group>";
 		};
 		4F64204B22171EC8000FB2EC /* RTMPFormat */ = {
@@ -235,7 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				4F64204B22171EC8000FB2EC /* RTMPFormat */,
-				4F6420432215E494000FB2EC /* RTMPHandshake */,
+				4F6420432215E494000FB2EC /* RTMPPublish */,
 				4F2853C22215B16E0041DAAE /* TCPSocket */,
 				4FECFBE622142C920003A35C /* AMF */,
 				4F9173FA23E0317D0065D31D /* RawH265 */,
@@ -425,7 +425,7 @@
 				4F0F95212188962C00CB9BAE /* VCDemoBackableViewController.m in Sources */,
 				4FBF022D2144284B00CA0EC8 /* main.m in Sources */,
 				4F64204E22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.m in Sources */,
-				4F6420462215E4AA000FB2EC /* VCDemoRTMPHandshakeTestViewController.m in Sources */,
+				4F6420462215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.m in Sources */,
 				4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */,
 				4F0F951E218894FC00CB9BAE /* VCDemoViewController.m in Sources */,
 			);

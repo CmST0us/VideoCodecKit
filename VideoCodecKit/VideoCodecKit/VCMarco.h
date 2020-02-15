@@ -17,6 +17,8 @@
 #define CONST_STRING(str) NSString * str = @#str
 
 #pragma mark - Value Define
+#define kVCRTMPPort (1935)
+
 #define kVC720P (1280 * 720)
 #define kVC1080P (1920 * 1080)
 #define kVC480P (720 * 480)
