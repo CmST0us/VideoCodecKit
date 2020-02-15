@@ -16,6 +16,15 @@
 
 @implementation VCFLVTag
 
++ (instancetype)tag {
+    VCFLVTag *tag = [[VCFLVTag alloc] init];
+    tag.tagType = VCFLVTagTypeMeta;
+    tag.timestamp = 0;
+    tag.timestampExtended = 0;
+    tag.streamID = 0;
+    return tag;
+}
+
 - (instancetype)initWithData:(NSData *)data {
     self = [super init];
     if (self) {
@@ -72,6 +81,15 @@
 
 #pragma mark - VCFLVVideoTag
 @implementation VCFLVVideoTag
++ (instancetype)tag {
+    VCFLVVideoTag *tag = [[VCFLVVideoTag alloc] init];
+    tag.tagType = VCFLVTagTypeVideo;
+    tag.timestamp = 0;
+    tag.timestampExtended = 0;
+    tag.streamID = 0;
+    return tag;
+}
+
 - (void)setPayloadData:(NSData *)payloadData {
     [super setPayloadData:payloadData];
     self.dataSize = (uint32_t)(payloadData.length + kVCFLVVideoTagExternHeaderSize);
@@ -132,6 +150,16 @@
 #pragma mark - VCFLVAudioTag
 
 @implementation VCFLVAudioTag
+
++ (instancetype)tag {
+    VCFLVAudioTag *tag = [[VCFLVAudioTag alloc] init];
+    tag.tagType = VCFLVTagTypeAudio;
+    tag.timestamp = 0;
+    tag.timestampExtended = 0;
+    tag.streamID = 0;
+    return tag;
+}
+
 - (void)setPayloadData:(NSData *)payloadData {
     [super setPayloadData:payloadData];
     self.dataSize = (uint32_t)(payloadData.length + kVCFLVAudioTagExternHeaderSize);

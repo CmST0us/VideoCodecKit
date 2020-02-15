@@ -29,7 +29,7 @@ typedef NS_ENUM(uint8_t, VCFLVTagType) {
 @property (nonatomic, assign) uint8_t timestampExtended;
 @property (nonatomic, assign) uint32_t streamID;
 @property (nonatomic, strong) NSData *payloadData;
-
++ (instancetype)tag;
 - (nullable instancetype)initWithData:(NSData *)data;
 - (NSData *)payloadDataWithoutExternTimestamp;
 - (uint32_t)extendedTimeStamp;
