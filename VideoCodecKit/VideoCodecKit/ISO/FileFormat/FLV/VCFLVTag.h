@@ -23,18 +23,19 @@ typedef NS_ENUM(uint8_t, VCFLVTagType) {
 };
 
 @interface VCFLVTag : NSObject
-@property (nonatomic, readonly) NSData *tagData;
-
-@property (nonatomic, readonly) VCFLVTagType tagType;
-@property (nonatomic, readonly) uint32_t dataSize;
-@property (nonatomic, readonly) uint32_t timestamp;
-@property (nonatomic, readonly) uint8_t timestampExtended;
-@property (nonatomic, readonly) uint32_t streamID;
-@property (nonatomic, readonly) NSData *payloadData;
+@property (nonatomic, assign) VCFLVTagType tagType;
+@property (nonatomic, assign) uint32_t dataSize;
+@property (nonatomic, assign) uint32_t timestamp;
+@property (nonatomic, assign) uint8_t timestampExtended;
+@property (nonatomic, assign) uint32_t streamID;
+@property (nonatomic, strong) NSData *payloadData;
 
 - (nullable instancetype)initWithData:(NSData *)data;
 - (NSData *)payloadDataWithoutExternTimestamp;
 - (uint32_t)extendedTimeStamp;
+
+- (NSData *)serialize;
+- (void)deserialize;
 @end
 
 typedef NS_ENUM(uint8_t, VCFLVVideoTagFrameType) {
@@ -62,10 +63,10 @@ typedef NS_ENUM(uint8_t, VCFLVVideoTagAVCPacketType) {
 };
 
 @interface VCFLVVideoTag : VCFLVTag
-@property (nonatomic, readonly) VCFLVVideoTagFrameType frameType;
-@property (nonatomic, readonly) VCFLVVideoTagEncodeID encodeID;
-@property (nonatomic, readonly) VCFLVVideoTagAVCPacketType AVCPacketType;
-@property (nonatomic, readonly) uint32_t compositionTime;
+@property (nonatomic, assign) VCFLVVideoTagFrameType frameType;
+@property (nonatomic, assign) VCFLVVideoTagEncodeID encodeID;
+@property (nonatomic, assign) VCFLVVideoTagAVCPacketType AVCPacketType;
+@property (nonatomic, assign) uint32_t compositionTime;
 - (BOOL)isSupportCurrentFrameType;
 - (uint32_t)presentationTimeStamp;
 @end
@@ -110,11 +111,11 @@ typedef NS_ENUM(uint8_t, VCFLVAudioTagAACPacketType) {
 };
 
 @interface VCFLVAudioTag : VCFLVTag
-@property (nonatomic, readonly) VCFLVAudioTagFormatType formatType;
-@property (nonatomic, readonly) VCFLVAudioTagSampleRate sampleRate;
-@property (nonatomic, readonly) VCFLVAudioTagSampleLength sampleLength;
-@property (nonatomic, readonly) VCFLVAudioTagAudioType audioType;
-@property (nonatomic, readonly) VCFLVAudioTagAACPacketType AACPacketType;
+@property (nonatomic, assign) VCFLVAudioTagFormatType formatType;
+@property (nonatomic, assign) VCFLVAudioTagSampleRate sampleRate;
+@property (nonatomic, assign) VCFLVAudioTagSampleLength sampleLength;
+@property (nonatomic, assign) VCFLVAudioTagAudioType audioType;
+@property (nonatomic, assign) VCFLVAudioTagAACPacketType AACPacketType;
 @end
 
 @interface VCFLVMetaTag : VCFLVTag

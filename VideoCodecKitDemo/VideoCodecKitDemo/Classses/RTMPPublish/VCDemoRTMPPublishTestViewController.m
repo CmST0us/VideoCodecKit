@@ -55,6 +55,10 @@
     [self.publisher start];
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [self.publisher stop];
+}
+
 - (void)handleStartPublish {
     dispatch_async(self.publishQueue, ^{
         self.flvFile = [[VCFLVFile alloc] initWithURL:[[NSBundle mainBundle] URLForResource:@"test" withExtension:@"flv"]];

@@ -89,10 +89,13 @@
     
     if (type == VCFLVTagTypeVideo) {
         nextTag = [[VCFLVVideoTag alloc] initWithData:tagData];
+        [nextTag deserialize];
     } else if (type == VCFLVTagTypeAudio) {
         nextTag = [[VCFLVAudioTag alloc] initWithData:tagData];
+        [nextTag deserialize];
     } else if (type == VCFLVTagTypeMeta) {
         nextTag = [[VCFLVMetaTag alloc] initWithData:tagData];
+        [nextTag deserialize];
     } else {
         
     }
