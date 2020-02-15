@@ -140,9 +140,10 @@
     
     /// 判断 Ack Window Size
     if (self.acknowlegmentWindowSize > 0) {
-        /// TODO: 确认带宽
+        
         if (self.totalSendByte > self.bandwidth) {
-            return;
+            /// TODO: 确认带宽
+            /// Pass
         }
         self.totalSendByte += sendData.length;
     }
@@ -167,50 +168,34 @@
 - (NSArray<VCRTMPChunk *> *)splitChunk:(VCRTMPChunk *)chunk {
     NSInteger chunkSize = self.localChunkSize;
     NSInteger chunkDataSize = chunk.message.messageLength;
+    
     NSInteger splitChunkCount = chunkDataSize / chunkSize;
     NSInteger lastSplitChunkDataSize = chunkDataSize % chunkSize;
-    NSInteger totalSplitChunkCount = splitChunkCount;
-    if (lastSplitChunkDataSize > 0) {
-        totalSplitChunkCount += 1;
-    }
     
     if (splitChunkCount == 0) {
         return @[chunk];
     }
     
-    /// 1. 第一个拆分包，包含完整messageLength长度
+    /// 拆分包，第一个包含完整messageLength长度
     NSMutableArray<VCRTMPChunk *> *chunks = [[NSMutableArray alloc] init];
     VCByteArray *array = [[VCByteArray alloc] initWithData:chunk.chunkData];
-    VCRTMPChunk *firstChunk = [[VCRTMPChunk alloc] initWithType:chunk.messageHeaderType
-                                                  chunkStreamID:chunk.chunkStreamID
-                                                        message:[chunk.message copy]];
-    firstChunk.chunkData = [array readBytes:chunkSize];
-    firstChunk.message.messageLength = (uint32_t)chunkDataSize;
-    [chunks addObject:firstChunk];
-    totalSplitChunkCount -= 1;
-    if (totalSplitChunkCount == 0) {
-        return chunks;
-    }
-    
-    /// 2. 拆分chunk定长数据包
-    for (; totalSplitChunkCount > 1; --totalSplitChunkCount) {
-        NSData *splitData = [array readBytes:chunkSize];
-        VCRTMPChunk *splitChunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType3
+    for (NSInteger i = 0; i < splitChunkCount; ++i) {
+        VCRTMPChunk *splitChunk = [[VCRTMPChunk alloc] initWithType:i == 0 ? chunk.messageHeaderType : VCRTMPChunkMessageHeaderType3
                                                       chunkStreamID:chunk.chunkStreamID
                                                             message:[chunk.message copy]];
-        splitChunk.chunkData = splitData;
+        splitChunk.chunkData = [array readBytes:chunkSize];
+        splitChunk.message.messageLength = i == 0 ? (uint32_t)chunkDataSize : (uint32_t)chunkSize;
         [chunks addObject:splitChunk];
     }
     
-    /// 3. 补充剩余数据数据包
-    if (totalSplitChunkCount == 1) {
-        NSData *splitData = [array readBytes:lastSplitChunkDataSize];
+    if (lastSplitChunkDataSize > 0) {
+        /// 如果末尾有数据，补充
         VCRTMPChunk *splitChunk = [[VCRTMPChunk alloc] initWithType:VCRTMPChunkMessageHeaderType3
                                                       chunkStreamID:chunk.chunkStreamID
                                                             message:[chunk.message copy]];
-        splitChunk.chunkData = splitData;
+        splitChunk.chunkData = [array readBytes:lastSplitChunkDataSize];
+        splitChunk.message.messageLength = (uint32_t)lastSplitChunkDataSize;
         [chunks addObject:splitChunk];
-        totalSplitChunkCount -= 1;
     }
     
     return chunks;
