@@ -156,7 +156,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
     
     VCAudioSpecificConfig *config = [[VCAudioSpecificConfig alloc] init];
     config.channels = outputDesc->mChannelsPerFrame;
-    config.frameLengthFlag = 0;
+    config.frameLengthFlag = NO;
     config.objectType = outputDesc->mFormatFlags;
     config.sampleRate = outputDesc->mSampleRate;
     config.isDependOnCoreCoder = NO;

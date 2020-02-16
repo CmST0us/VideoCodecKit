@@ -33,6 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (OSStatus)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer;
 - (OSStatus)convertAudioBufferList:(AudioBufferList *)audioBufferList
              presentationTimeStamp:(CMTime)pts;
+- (OSStatus)convertAudioBufferList:(AudioBufferList *)audioBufferList
+             presentationTimeStamp:(CMTime)pts
+                          copyData:(BOOL)shouldCopyData;
 - (void)reset;
 
 + (AVAudioFormat *)formatWithCMAudioFormatDescription:(CMAudioFormatDescriptionRef)audioFormatDescription;

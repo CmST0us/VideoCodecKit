@@ -28,7 +28,7 @@ typedef NS_ENUM(uint8_t, VCAudioSpecificConfigObjectTypeSampleRateIndex) {
 @property (nonatomic, assign) AudioFormatFlags objectType;
 @property (nonatomic, assign) NSInteger sampleRate;
 @property (nonatomic, assign) uint8_t channels;
-@property (nonatomic, assign) uint8_t frameLengthFlag;
+@property (nonatomic, assign) BOOL frameLengthFlag; // 0 -> 960, 1 -> 1024
 @property (nonatomic, assign) BOOL isDependOnCoreCoder;
 @property (nonatomic, assign) BOOL isExtension;
 
@@ -38,7 +38,7 @@ typedef NS_ENUM(uint8_t, VCAudioSpecificConfigObjectTypeSampleRateIndex) {
 - (NSData *)serialize;
 - (void)deserialize;
 
-+ (NSData *)adtsDataForPacketLength:(NSUInteger)packetLength;
+- (NSData *)adtsDataForPacketLength:(NSUInteger)packetLength;
 @end
 
 NS_ASSUME_NONNULL_END

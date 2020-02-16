@@ -33,7 +33,7 @@
     basicDescription.mSampleRate = self.sampleRate;
     basicDescription.mFormatFlags = self.objectType;
     basicDescription.mBytesPerFrame = 0;
-    basicDescription.mFramesPerPacket = 1024;
+    basicDescription.mFramesPerPacket = self.frameLengthFlag ? 960 : 1024;
     basicDescription.mBytesPerPacket = 0;
     basicDescription.mChannelsPerFrame = self.channels;
     basicDescription.mBitsPerChannel = 0;
@@ -131,14 +131,14 @@
     self.isExtension = ((v >> 0) & 0x01);
 }
 
-+ (NSData *)adtsDataForPacketLength:(NSUInteger)packetLength {
+- (NSData *)adtsDataForPacketLength:(NSUInteger)packetLength {
     int adtsLength = 7;
     uint8_t *packet = (uint8_t *)malloc(sizeof(uint8_t) * adtsLength);
     // Variables Recycled by addADTStoPacket
-    int profile = 2;  //AAC LC
+    int profile = self.objectType;  //AAC LC
     //39=MediaCodecInfo.CodecProfileLevel.AACObjectELD;
-    int freqIdx = 8;  //16KHz
-    int chanCfg = 1;  //MPEG-4 Audio Channel Configuration. 1 Channel front-center
+    int freqIdx = self.sampleRateIndex;  //16KHz
+    int chanCfg = self.channels;  //MPEG-4 Audio Channel Configuration. 1 Channel front-center
     NSUInteger fullLength = adtsLength + packetLength;
     // fill in ADTS data
     packet[0] = 0xFF; // 11111111     = syncword
