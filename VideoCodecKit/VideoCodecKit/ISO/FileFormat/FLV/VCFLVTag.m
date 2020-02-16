@@ -10,7 +10,10 @@
 #import "VCByteArray.h"
 
 #pragma mark - VCFLVTag
-@interface VCFLVTag ()
+@interface VCFLVTag () {
+@protected
+    NSData *_tagData;
+}
 @property (nonatomic, readonly) NSData *tagData;
 @end
 
@@ -60,7 +63,8 @@
         .writeUInt24(self.streamID)
         .writeBytes(self.payloadData);
     }];
-    return array.data;
+    _tagData = array.data;
+    return _tagData;
 }
 
 - (void)deserialize {
@@ -81,6 +85,21 @@
 
 #pragma mark - VCFLVVideoTag
 @implementation VCFLVVideoTag
++ (instancetype)sequenceHeaderTagForAVC {
+    VCFLVVideoTag *tag = [VCFLVVideoTag tag];
+    tag.frameType = VCFLVVideoTagFrameTypeKeyFrame;
+    tag.encodeID = VCFLVVideoTagEncodeIDAVC;
+    tag.AVCPacketType = VCFLVVideoTagAVCPacketTypeSequenceHeader;
+    return tag;
+}
+
++ (instancetype)tagForAVC {
+    VCFLVVideoTag *tag = [VCFLVVideoTag tag];
+    tag.encodeID = VCFLVVideoTagEncodeIDAVC;
+    tag.AVCPacketType = VCFLVVideoTagAVCPacketTypeNALU;
+    return tag;
+}
+
 + (instancetype)tag {
     VCFLVVideoTag *tag = [[VCFLVVideoTag alloc] init];
     tag.tagType = VCFLVTagTypeVideo;
@@ -126,7 +145,8 @@
         .writeUInt24(self.compositionTime)
         .writeBytes(self.payloadData);
     }];
-    return array.data;
+    _tagData = array.data;
+    return _tagData;
 }
 
 - (void)deserialize {
@@ -150,6 +170,26 @@
 #pragma mark - VCFLVAudioTag
 
 @implementation VCFLVAudioTag
+
++ (instancetype)sequenceHeaderTagForAAC {
+    VCFLVAudioTag *tag= [VCFLVAudioTag tag];
+    tag.formatType = VCFLVAudioTagFormatTypeAAC;
+    tag.sampleRate = VCFLVAudioTagSampleRate44kHz;
+    tag.sampleLength = VCFLVAudioTagSampleLength16Bit;
+    tag.audioType = VCFLVAudioTagAudioTypeStereo;
+    tag.AACPacketType = VCFLVAudioTagAACPacketTypeSequenceHeader;
+    return tag;
+}
+
++ (instancetype)tagForAAC {
+    VCFLVAudioTag *tag= [VCFLVAudioTag tag];
+    tag.formatType = VCFLVAudioTagFormatTypeAAC;
+    tag.sampleRate = VCFLVAudioTagSampleRate44kHz;
+    tag.sampleLength = VCFLVAudioTagSampleLength16Bit;
+    tag.audioType = VCFLVAudioTagAudioTypeStereo;
+    tag.AACPacketType = VCFLVAudioTagAACPacketTypeRaw;
+    return tag;
+}
 
 + (instancetype)tag {
     VCFLVAudioTag *tag = [[VCFLVAudioTag alloc] init];
@@ -182,7 +222,8 @@
         .writeUInt8(self.AACPacketType)
         .writeBytes(self.payloadData);
     }];
-    return array.data;
+    _tagData = array.data;
+    return _tagData;
 }
 
 - (void)deserialize {

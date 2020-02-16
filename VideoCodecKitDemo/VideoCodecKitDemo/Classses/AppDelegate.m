@@ -20,6 +20,7 @@
     // Override point for customization after application launch.    
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:@"http://www.baidu.com"]] resume];
     return YES;
 }
 

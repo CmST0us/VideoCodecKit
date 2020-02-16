@@ -18,11 +18,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)converter:(VCAudioConverter *)converter didOutputAudioBuffer:(AVAudioBuffer *)audioBuffer presentationTimeStamp:(CMTime)pts;
 @end
 
+@class VCAudioSpecificConfig;
 @interface VCAudioConverter : NSObject
 @property (nonatomic, weak) id<VCAudioConverterDelegate> delegate;
 
 @property (nonatomic, strong) AVAudioFormat *outputFormat;
 @property (nonatomic, strong) AVAudioFormat *sourceFormat;
+
+@property (nonatomic, readonly) VCAudioSpecificConfig *audioSpecificConfig;
 
 - (instancetype)initWithOutputFormat:(AVAudioFormat *)outputFormat
                         sourceFormat:(AVAudioFormat *)sourceFormat;

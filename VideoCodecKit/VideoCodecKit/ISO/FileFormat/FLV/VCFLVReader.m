@@ -188,6 +188,7 @@
                 if (audioTag.AACPacketType == VCFLVAudioTagAACPacketTypeSequenceHeader) {
                     // seq
                     VCAudioSpecificConfig *config = [[VCAudioSpecificConfig alloc] initWithData:audioTag.payloadData];
+                    [config deserialize];
                     CMAudioFormatDescriptionRef audioFormatDesc = nil;
                     OSStatus ret = [config createAudioFormatDescription:&audioFormatDesc];
                     if (ret != noErr) {

@@ -17,6 +17,23 @@
 
 @implementation VCAVCConfigurationRecord
 
+- (instancetype)initWithFormatDescription:(CMFormatDescriptionRef)formatDescription {
+    NSDictionary *extension = (__bridge NSDictionary *)CMFormatDescriptionGetExtensions(formatDescription);
+    if (extension == nil) {
+        return nil;
+    }
+    NSDictionary *atoms = extension[(__bridge NSString *)kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms];
+    if (atoms == nil) {
+        return nil;
+    }
+    NSData *avc = atoms[@"avcC"];
+    if (avc == nil) {
+        return nil;
+    }
+    
+    return [self initWithData:avc];
+}
+
 - (instancetype)initWithData:(NSData *)data {
     self = [super init];
     if (self) {

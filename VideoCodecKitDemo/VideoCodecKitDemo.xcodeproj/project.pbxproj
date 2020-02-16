@@ -42,6 +42,7 @@
 		4FDF7F362209381A0019833C /* VCDemoEncoderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F352209381A0019833C /* VCDemoEncoderTestViewController.m */; };
 		4FDF7F47220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F46220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m */; };
 		4FECFBE922142CAC0003A35C /* VCDemoAMFTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FECFBE822142CAC0003A35C /* VCDemoAMFTestViewController.m */; };
+		4FFE6ECC23F91E450003F77E /* VCDemoCameraPublishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE6ECB23F91E450003F77E /* VCDemoCameraPublishViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -117,6 +118,8 @@
 		4FDF7F46220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoMicRecorderTestViewController.m; sourceTree = "<group>"; };
 		4FECFBE722142CAC0003A35C /* VCDemoAMFTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoAMFTestViewController.h; sourceTree = "<group>"; };
 		4FECFBE822142CAC0003A35C /* VCDemoAMFTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoAMFTestViewController.m; sourceTree = "<group>"; };
+		4FFE6ECA23F91E450003F77E /* VCDemoCameraPublishViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoCameraPublishViewController.h; sourceTree = "<group>"; };
+		4FFE6ECB23F91E450003F77E /* VCDemoCameraPublishViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoCameraPublishViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +237,7 @@
 		4F9279A821442F0800F17F9A /* Classses */ = {
 			isa = PBXGroup;
 			children = (
+				4FFE6EC923F91E270003F77E /* CameraPublish */,
 				4F64204B22171EC8000FB2EC /* RTMPFormat */,
 				4F6420432215E494000FB2EC /* RTMPPublish */,
 				4F2853C22215B16E0041DAAE /* TCPSocket */,
@@ -329,6 +333,15 @@
 			path = AMF;
 			sourceTree = "<group>";
 		};
+		4FFE6EC923F91E270003F77E /* CameraPublish */ = {
+			isa = PBXGroup;
+			children = (
+				4FFE6ECA23F91E450003F77E /* VCDemoCameraPublishViewController.h */,
+				4FFE6ECB23F91E450003F77E /* VCDemoCameraPublishViewController.m */,
+			);
+			path = CameraPublish;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -419,6 +432,7 @@
 				4F9173FD23E031A30065D31D /* VCRawH265DemoViewController.m in Sources */,
 				4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */,
 				4FD32AAF220DD54A00C391E8 /* VCDemoFLVAudioPlayTestViewController.m in Sources */,
+				4FFE6ECC23F91E450003F77E /* VCDemoCameraPublishViewController.m in Sources */,
 				4FECFBE922142CAC0003A35C /* VCDemoAMFTestViewController.m in Sources */,
 				4FDF7F362209381A0019833C /* VCDemoEncoderTestViewController.m in Sources */,
 				4F2853C52215B1820041DAAE /* VCDemoTCPSocketTestViewController.m in Sources */,

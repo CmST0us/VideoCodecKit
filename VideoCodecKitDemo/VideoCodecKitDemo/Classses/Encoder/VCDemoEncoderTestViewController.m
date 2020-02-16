@@ -36,7 +36,7 @@
 }
 
 - (void)converter:(VCAudioConverter *)converter didOutputAudioBuffer:(AVAudioBuffer *)audioBuffer presentationTimeStamp:(CMTime)pts {
-    NSLog(@"audioBuffer %@", audioBuffer);
+
 }
 @end
 

@@ -18,6 +18,8 @@
 
 #import "VCRawH264DemoViewController.h"
 #import "VCRawH265DemoViewController.h"
+
+#import "VCDemoCameraPublishViewController.h"
 @interface VCDemoListViewController ()
 
 @end
@@ -68,6 +70,10 @@
                   @"title": @"RTMP推流测试",
                   @"class": NSStringFromClass([VCDemoRTMPPublishTestViewController class]),
                 },
+                @{
+                  @"title": @"RTMP 相机推流",
+                  @"class": NSStringFromClass([VCDemoCameraPublishViewController class]),
+                }
             ];
     return cases;
 }

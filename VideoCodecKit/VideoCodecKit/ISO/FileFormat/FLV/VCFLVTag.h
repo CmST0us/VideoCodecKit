@@ -67,6 +67,10 @@ typedef NS_ENUM(uint8_t, VCFLVVideoTagAVCPacketType) {
 @property (nonatomic, assign) VCFLVVideoTagEncodeID encodeID;
 @property (nonatomic, assign) VCFLVVideoTagAVCPacketType AVCPacketType;
 @property (nonatomic, assign) uint32_t compositionTime;
+
++ (instancetype)sequenceHeaderTagForAVC;
++ (instancetype)tagForAVC;
+
 - (BOOL)isSupportCurrentFrameType;
 - (uint32_t)presentationTimeStamp;
 @end
@@ -116,6 +120,9 @@ typedef NS_ENUM(uint8_t, VCFLVAudioTagAACPacketType) {
 @property (nonatomic, assign) VCFLVAudioTagSampleLength sampleLength;
 @property (nonatomic, assign) VCFLVAudioTagAudioType audioType;
 @property (nonatomic, assign) VCFLVAudioTagAACPacketType AACPacketType;
+
++ (instancetype)sequenceHeaderTagForAAC;
++ (instancetype)tagForAAC;
 @end
 
 @interface VCFLVMetaTag : VCFLVTag

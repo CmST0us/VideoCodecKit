@@ -25,17 +25,20 @@ typedef NS_ENUM(uint8_t, VCAudioSpecificConfigObjectTypeSampleRateIndex) {
 
 @interface VCAudioSpecificConfig : NSObject
 
-@property (nonatomic, readonly) AudioFormatFlags objectType;
-@property (nonatomic, readonly) VCAudioSpecificConfigObjectTypeSampleRateIndex sampleRateIndex;
-@property (nonatomic, readonly) NSInteger sampleRate;
-@property (nonatomic, readonly) uint8_t channels;
-@property (nonatomic, readonly) uint8_t frameLengthFlag;
-@property (nonatomic, readonly) BOOL isDependOnCoreCoder;
-@property (nonatomic, readonly) BOOL isExtension;
+@property (nonatomic, assign) AudioFormatFlags objectType;
+@property (nonatomic, assign) NSInteger sampleRate;
+@property (nonatomic, assign) uint8_t channels;
+@property (nonatomic, assign) uint8_t frameLengthFlag;
+@property (nonatomic, assign) BOOL isDependOnCoreCoder;
+@property (nonatomic, assign) BOOL isExtension;
 
 - (instancetype)initWithData:(NSData *)data;
 - (OSStatus)createAudioFormatDescription:(CMFormatDescriptionRef _Nullable * _Nullable)outputDescription;
 
+- (NSData *)serialize;
+- (void)deserialize;
+
++ (NSData *)adtsDataForPacketLength:(NSUInteger)packetLength;
 @end
 
 NS_ASSUME_NONNULL_END

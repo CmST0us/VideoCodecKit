@@ -7,6 +7,7 @@
 //
 
 #import "VCAudioConverter.h"
+#import "VCAudioSpecificConfig.h"
 
 @interface VCAudioConverter ()
 @property (nonatomic, assign) AudioConverterRef converter;
@@ -150,6 +151,19 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
     _converter = nil;
 }
 
+- (VCAudioSpecificConfig *)audioSpecificConfig {
+    const AudioStreamBasicDescription *outputDesc = self.outputFormat.streamDescription;
+    
+    VCAudioSpecificConfig *config = [[VCAudioSpecificConfig alloc] init];
+    config.channels = outputDesc->mChannelsPerFrame;
+    config.frameLengthFlag = 0;
+    config.objectType = outputDesc->mFormatFlags;
+    config.sampleRate = outputDesc->mSampleRate;
+    config.isDependOnCoreCoder = NO;
+    config.isExtension = NO;
+    return config;
+}
+
 - (NSUInteger)outputAudioBufferCount {
     if (self.outputFormat.streamDescription->mFormatID == kAudioFormatLinearPCM) {
         // Decoder
@@ -285,12 +299,14 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
         return ret;
     }
     
+    ret = [self convertAudioBufferList:_currentBufferList presentationTimeStamp:sampleBuffer.presentationTimeStamp copyData:NO];
+    
     if (_currentAudioBlockBuffer != NULL) {
         CFRelease(_currentAudioBlockBuffer);
         _currentAudioBlockBuffer = NULL;
     }
     
-    return [self convertAudioBufferList:_currentBufferList presentationTimeStamp:sampleBuffer.presentationTimeStamp copyData:NO];
+    return ret;
 }
 
 - (void)reset {

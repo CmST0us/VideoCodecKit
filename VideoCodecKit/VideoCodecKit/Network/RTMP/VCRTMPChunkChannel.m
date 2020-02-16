@@ -135,25 +135,27 @@
 }
 
 - (void)writeFrame:(VCRTMPChunk *)chunk {
-    NSMutableData *sendData = [[NSMutableData alloc] init];
-    __block VCRTMPChunk *lastChunk = chunk;
-    [[self splitChunk:chunk] enumerateObjectsUsingBlock:^(VCRTMPChunk * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [sendData appendData:[obj makeChunk]];
-        lastChunk = obj;
-    }];
-    
-    /// 判断 Ack Window Size
-    if (self.acknowlegmentWindowSize > 0) {
+    @synchronized (self) {
+        NSMutableData *sendData = [[NSMutableData alloc] init];
+        __block VCRTMPChunk *lastChunk = chunk;
+        [[self splitChunk:chunk] enumerateObjectsUsingBlock:^(VCRTMPChunk * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [sendData appendData:[obj makeChunk]];
+            lastChunk = obj;
+        }];
         
-        if (self.totalSendByte > self.bandwidth) {
-            /// TODO: 确认带宽
-            /// Pass
+        /// 判断 Ack Window Size
+        if (self.acknowlegmentWindowSize > 0) {
+            
+            if (self.totalSendByte > self.bandwidth) {
+                /// TODO: 确认带宽
+                /// Pass
+            }
+            self.totalSendByte += sendData.length;
         }
-        self.totalSendByte += sendData.length;
+        
+        [self.socket writeData:sendData];
+        self.lastSendChunk = chunk;
     }
-    
-    [self.socket writeData:sendData];
-    self.lastSendChunk = chunk;
 }
 
 - (void)resetRecvByteCount {

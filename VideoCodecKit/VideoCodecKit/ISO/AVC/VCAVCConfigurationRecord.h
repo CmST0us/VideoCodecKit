@@ -24,6 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) uint8_t bitDepthChromaMinus8;
 @property (nonatomic, readonly) uint8_t numOfSequenceParameterSetExt;
 
+@property (nonatomic, readonly) NSData *data;
+
+- (nullable instancetype)initWithFormatDescription:(CMFormatDescriptionRef)formatDescription;
 - (nullable instancetype)initWithData:(NSData *)data;
 
 - (NSInteger)naluLength;
