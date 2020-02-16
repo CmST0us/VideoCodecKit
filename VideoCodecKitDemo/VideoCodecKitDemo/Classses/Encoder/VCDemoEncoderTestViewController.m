@@ -14,6 +14,9 @@
 @property (nonatomic, strong) VCAudioSpecificConfig *config;
 @property (nonatomic, strong) VCMicRecorder *recorder;
 @property (nonatomic, strong) NSFileHandle *file;
+
+@property (nonatomic, strong) dispatch_queue_t fileQueue;
+@property (nonatomic, assign) BOOL canWrite;
 @end
 
 @implementation VCDemoEncoderTestViewController
@@ -24,13 +27,16 @@
     __weak typeof(self) weakSelf = self;
     self.recorder = [[VCMicRecorder alloc] init];
     AVAudioFormat *sourceFormat = self.recorder.outputFormat;
-    self.converter = [[VCAudioConverter alloc] initWithOutputFormat:[VCAudioConverter AACFormatWithSampleRate:sourceFormat.sampleRate formatFlags:kMPEG4Object_AAC_LC channels:sourceFormat.channelCount] sourceFormat:sourceFormat];
+    self.converter = [[VCAudioConverter alloc] initWithOutputFormat:[VCAudioConverter AACFormatWithSampleRate:sourceFormat.sampleRate channels:1] sourceFormat:sourceFormat];
     self.converter.delegate = self;
+    self.converter.bitrate = 32 * 1024;
     self.config = self.converter.audioSpecificConfig;
     
+    self.fileQueue = dispatch_queue_create("FILEQUEUE", DISPATCH_QUEUE_SERIAL);
     NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     NSString *filePath = [path stringByAppendingPathComponent:@"test.aac"];
     NSLog(@"file: %@", filePath);
+    self.canWrite = YES;
     [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
     self.file = [NSFileHandle fileHandleForWritingAtPath:filePath];
     [self.recorder startRecoderWithBlock:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
@@ -46,9 +52,21 @@
 - (void)converter:(VCAudioConverter *)converter didOutputAudioBuffer:(AVAudioBuffer *)audioBuffer presentationTimeStamp:(CMTime)pts {
     AVAudioCompressedBuffer *buffer = (AVAudioCompressedBuffer *)audioBuffer;
     NSData *data = [self.config adtsDataForPacketLength:buffer.byteLength];
-    VCByteArray *array = [[VCByteArray alloc] initWithData:data];
+    VCByteArray *array = [[VCByteArray alloc] init];
+    [array writeBytes:data];
     [array writeBytes:[NSData dataWithBytes:buffer.data length:buffer.byteLength]];
-    [self.file writeData:array.data]; 
+    dispatch_async(self.fileQueue, ^{
+        if (self.canWrite) {
+            [self.file writeData:array.data];
+        }
+    });
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    dispatch_async(self.fileQueue, ^{
+        [self.file closeFile];
+        self.canWrite = NO;
+    });
 }
 @end
 

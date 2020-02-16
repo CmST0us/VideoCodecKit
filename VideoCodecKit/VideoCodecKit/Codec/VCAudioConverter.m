@@ -151,6 +151,23 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
     _converter = nil;
 }
 
+- (void)setBitrate:(UInt32)bitrate {
+    UInt32 data = bitrate;
+    AudioConverterSetProperty(self.converter,
+                              kAudioConverterEncodeBitRate,
+                              sizeof(data),
+                              &data);
+}
+
+- (UInt32)bitrate {
+    UInt32 size = sizeof(UInt32);
+    UInt32 data = 0;
+    AudioConverterGetProperty(self.converter,
+                              kAudioConverterEncodeBitRate,
+                              &size, &data);
+    return data;
+}
+
 - (VCAudioSpecificConfig *)audioSpecificConfig {
     const AudioStreamBasicDescription *outputDesc = self.outputFormat.streamDescription;
     
@@ -177,7 +194,11 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
     if (self.outputFormat.streamDescription->mFormatID == kAudioFormatLinearPCM) {
         return 1024 * self.outputFormat.streamDescription->mBytesPerFrame;
     } else {
-        return self.currentBufferList->mBuffers[0].mDataByteSize;
+        NSUInteger size = 0;
+        for (int i = 0; i < self.currentBufferList->mNumberBuffers; ++i) {
+            size += self.currentBufferList->mBuffers[i].mDataByteSize;
+        }
+        return size;
     }
 }
 - (NSUInteger)outputNumberChannels {
@@ -213,27 +234,28 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
         return pcmBuffer;
     }
     
-    AVAudioCompressedBuffer *compressedBuffer = [[AVAudioCompressedBuffer alloc] initWithFormat:self.outputFormat packetCapacity:1 maximumPacketSize:self.outputMaxBufferSize];
-    // [BUGFIX]: 这是iOS10 AVAudioCompressedBuffer 的bug，需要手动设置
-    AudioBufferList *buffer = (AudioBufferList *)compressedBuffer.audioBufferList;
-    buffer->mNumberBuffers = audioBufferList->mNumberBuffers;
+    NSUInteger audioBufferListSize = 0;
     for (int i = 0; i < audioBufferList->mNumberBuffers; ++i) {
-        buffer->mBuffers[i].mDataByteSize = audioBufferList->mBuffers[i].mDataByteSize;
-        buffer->mBuffers[i].mNumberChannels = audioBufferList->mBuffers[i].mNumberChannels;
-        memcpy(buffer->mBuffers[i].mData, audioBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mDataByteSize);
+        audioBufferListSize += audioBufferList->mBuffers[i].mDataByteSize;
     }
-    compressedBuffer.packetCount = (AVAudioPacketCount)dataPacketSize;
+    AVAudioCompressedBuffer *compressedBuffer = [[AVAudioCompressedBuffer alloc] initWithFormat:self.outputFormat packetCapacity:audioBufferList->mNumberBuffers maximumPacketSize:audioBufferListSize];
+    // [BUGFIX]: 这是iOS10 AVAudioCompressedBuffer 的bug，需要手动设置
+    for (int i = 0; i < compressedBuffer.audioBufferList->mNumberBuffers; ++i) {
+        memcpy(compressedBuffer.audioBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mDataByteSize);
+    }
+    compressedBuffer.packetCount = (AVAudioPacketCount)compressedBuffer.audioBufferList->mNumberBuffers;
+    compressedBuffer.byteLength = (UInt32)audioBufferListSize;
     return compressedBuffer;
 }
 
 - (OSStatus)convertAudioBufferList:(AudioBufferList *)audioBufferList
              presentationTimeStamp:(CMTime)pts
                           copyData:(BOOL)shouldCopyData {
-    memcpy(_currentBufferList, audioBufferList, [self audioBufferListSizeWithBufferCount:audioBufferList->mNumberBuffers]);
     UInt32 outputMaxBufferSize = (UInt32)self.outputMaxBufferSize;
     UInt32 ioOutputDataPacketSize = (UInt32)self.ioOutputDataPacketSize;
     
     if (shouldCopyData) {
+        _currentBufferList->mNumberBuffers = audioBufferList->mNumberBuffers;
         for (int i = 0; i < audioBufferList->mNumberBuffers; ++i) {
             _currentBufferList->mBuffers[i].mData = malloc(audioBufferList->mBuffers[i].mDataByteSize);
             memcpy(_currentBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mDataByteSize);
@@ -280,7 +302,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
 
 - (OSStatus)convertAudioBufferList:(AudioBufferList *)audioBufferList
              presentationTimeStamp:(CMTime)pts {
-    OSStatus ret = [self convertAudioBufferList:audioBufferList presentationTimeStamp:pts copyData:NO];
+    OSStatus ret = [self convertAudioBufferList:audioBufferList presentationTimeStamp:pts copyData:YES];
     return ret;
 }
 
@@ -299,7 +321,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
         return ret;
     }
     
-    ret = [self convertAudioBufferList:_currentBufferList presentationTimeStamp:sampleBuffer.presentationTimeStamp copyData:NO];
+    ret = [self convertAudioBufferList:_currentBufferList presentationTimeStamp:sampleBuffer.presentationTimeStamp copyData:YES];
     
     if (_currentAudioBlockBuffer != NULL) {
         CFRelease(_currentAudioBlockBuffer);
@@ -311,6 +333,12 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
 
 - (void)reset {
     AudioConverterReset(self.converter);
+}
+
++ (AVAudioFormat *)AACFormatWithSampleRate:(Float64)sampleRate channels:(UInt32)channels {
+    return [VCAudioConverter AACFormatWithSampleRate:sampleRate
+                                         formatFlags:kAudioFormatFlagIsBigEndian
+                                            channels:channels];
 }
 
 + (AVAudioFormat *)AACFormatWithSampleRate:(Float64)sampleRate
@@ -370,7 +398,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
 }
 
 + (AVAudioFormat *)defaultAACFormat {
-    return [VCAudioConverter AACFormatWithSampleRate:44100 formatFlags:kMPEG4Object_AAC_LC channels:2];
+    return [VCAudioConverter AACFormatWithSampleRate:44100 channels:2];
 }
 
 @end

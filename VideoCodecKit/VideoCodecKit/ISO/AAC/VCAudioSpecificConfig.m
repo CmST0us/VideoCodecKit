@@ -135,9 +135,9 @@
     int adtsLength = 7;
     uint8_t *packet = (uint8_t *)malloc(sizeof(uint8_t) * adtsLength);
     // Variables Recycled by addADTStoPacket
-    int profile = self.objectType;  //AAC LC
+    int profile = self.objectType;
     //39=MediaCodecInfo.CodecProfileLevel.AACObjectELD;
-    int freqIdx = self.sampleRateIndex;  //16KHz
+    int freqIdx = self.sampleRateIndex;
     int chanCfg = self.channels;  //MPEG-4 Audio Channel Configuration. 1 Channel front-center
     NSUInteger fullLength = adtsLength + packetLength;
     // fill in ADTS data

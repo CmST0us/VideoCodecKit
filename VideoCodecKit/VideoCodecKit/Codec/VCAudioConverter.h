@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) AVAudioFormat *outputFormat;
 @property (nonatomic, strong) AVAudioFormat *sourceFormat;
 
+@property (nonatomic, assign) UInt32 bitrate;
+
 @property (nonatomic, readonly) VCAudioSpecificConfig *audioSpecificConfig;
 
 - (instancetype)initWithOutputFormat:(AVAudioFormat *)outputFormat
@@ -39,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)reset;
 
 + (AVAudioFormat *)formatWithCMAudioFormatDescription:(CMAudioFormatDescriptionRef)audioFormatDescription;
++ (AVAudioFormat *)AACFormatWithSampleRate:(Float64)sampleRate channels:(UInt32)channels;
 + (AVAudioFormat *)AACFormatWithSampleRate:(Float64)sampleRate
                                formatFlags:(AudioFormatFlags)flags
                                   channels:(UInt32)channels;

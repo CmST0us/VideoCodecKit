@@ -60,7 +60,7 @@
 - (VCAudioConverter *)audioConverter {
     if (_audioConverter == nil) {
         AVAudioFormat *inputFormat = [VCAudioConverter formatWithCMAudioFormatDescription:self.outputAudioFormat];
-        AVAudioFormat *outputFormat = [VCAudioConverter AACFormatWithSampleRate:inputFormat.sampleRate formatFlags:kMPEG4Object_AAC_LC channels:inputFormat.channelCount];
+        AVAudioFormat *outputFormat = [VCAudioConverter AACFormatWithSampleRate:inputFormat.sampleRate channels:inputFormat.channelCount];
         _audioConverter = [[VCAudioConverter alloc] initWithOutputFormat:outputFormat sourceFormat:inputFormat];
         _audioConverter.delegate = self;
         _audioSpecificConfig = _audioConverter.audioSpecificConfig;
