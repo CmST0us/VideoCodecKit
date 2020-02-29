@@ -123,8 +123,7 @@
 - (void)setupPublisher {
     self.publishQueue = dispatch_queue_create("PublishQueue", DISPATCH_QUEUE_SERIAL);
     
-//    self.publisher = [[VCRTMPPublisher alloc] initWithURL:[NSURL URLWithString:@"rtmp://192.168.43.17/stream"] publishKey:@"12345"];
-    self.publisher = [[VCRTMPPublisher alloc] initWithURL:[NSURL URLWithString:@"rtmp://js.live-send.acg.tv/live-js/"] publishKey:@"?streamname=live_35432748_2964945&key=cb41bd28d62d79653f7d65721b1acb02"];
+    self.publisher = [[VCRTMPPublisher alloc] initWithURL:[NSURL URLWithString:@"rtmp://192.168.43.17/stream"] publishKey:@"12345"];
     self.publisher.delegate = self;
     self.publisher.connectionParameter = @{
         @"flashVer": @"FMLE/3.0 (compatible; FMSc/1.0)".asString,
