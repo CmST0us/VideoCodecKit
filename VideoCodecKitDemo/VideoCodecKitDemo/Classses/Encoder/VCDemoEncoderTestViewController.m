@@ -26,11 +26,14 @@
     
     __weak typeof(self) weakSelf = self;
     self.recorder = [[VCMicRecorder alloc] init];
+    self.recorder.sampleRate = 48000;
+    self.recorder.channelCount = 1;
     AVAudioFormat *sourceFormat = self.recorder.outputFormat;
-    self.converter = [[VCAudioConverter alloc] initWithOutputFormat:[VCAudioConverter AACFormatWithSampleRate:sourceFormat.sampleRate channels:1] sourceFormat:sourceFormat];
+    self.converter = [[VCAudioConverter alloc] initWithOutputFormat:[VCAudioConverter AACFormatWithSampleRate:sourceFormat.sampleRate channels:1] sourceFormat:sourceFormat delegateQueue:dispatch_get_global_queue(0, 0)];
     self.converter.delegate = self;
-    self.converter.bitrate = 32 * 1024;
-    self.config = self.converter.audioSpecificConfig;
+    self.converter.bitrate = 192000;
+    self.converter.audioConverterQuality = kAudioConverterQuality_High;
+    self.config = self.converter.outputAudioSpecificConfig;
     
     self.fileQueue = dispatch_queue_create("FILEQUEUE", DISPATCH_QUEUE_SERIAL);
     NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
@@ -39,7 +42,8 @@
     self.canWrite = YES;
     [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
     self.file = [NSFileHandle fileHandleForWritingAtPath:filePath];
-    [self.recorder startRecoderWithBlock:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
+    [self.recorder startRecoderWithFormat:self.recorder.outputFormat
+                                    block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
         [weakSelf.converter convertAudioBufferList:buffer.mutableAudioBufferList presentationTimeStamp:CMTimeMake(when.sampleTime, when.sampleRate)];
     }];
 }

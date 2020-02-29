@@ -25,19 +25,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) AVAudioFormat *outputFormat;
 @property (nonatomic, strong) AVAudioFormat *sourceFormat;
 
-@property (nonatomic, assign) UInt32 bitrate;
+@property (nonatomic) UInt32 bitrate;
+@property (nonatomic) UInt32 audioConverterQuality;
 
-@property (nonatomic, readonly) VCAudioSpecificConfig *audioSpecificConfig;
+@property (nonatomic, readonly) VCAudioSpecificConfig *outputAudioSpecificConfig;
 
 - (instancetype)initWithOutputFormat:(AVAudioFormat *)outputFormat
-                        sourceFormat:(AVAudioFormat *)sourceFormat;
+                        sourceFormat:(AVAudioFormat *)sourceFormat
+                       delegateQueue:(dispatch_queue_t)queue;
 
 - (OSStatus)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer;
 - (OSStatus)convertAudioBufferList:(AudioBufferList *)audioBufferList
              presentationTimeStamp:(CMTime)pts;
-- (OSStatus)convertAudioBufferList:(AudioBufferList *)audioBufferList
-             presentationTimeStamp:(CMTime)pts
-                          copyData:(BOOL)shouldCopyData;
 - (void)reset;
 
 + (AVAudioFormat *)formatWithCMAudioFormatDescription:(CMAudioFormatDescriptionRef)audioFormatDescription;

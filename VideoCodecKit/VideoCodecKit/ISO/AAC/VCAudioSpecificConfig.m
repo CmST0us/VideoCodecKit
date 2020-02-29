@@ -96,7 +96,7 @@
             self.sampleRateIndex = VCAudioSpecificConfigObjectTypeSampleRateIndex96000;
             break;
         default:
-            self.sampleRateIndex = 44100;
+            self.sampleRateIndex = VCAudioSpecificConfigObjectTypeSampleRateIndex44100;
             break;
     }
 }

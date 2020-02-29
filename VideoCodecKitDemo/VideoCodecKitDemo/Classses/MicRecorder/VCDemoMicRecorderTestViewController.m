@@ -19,13 +19,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.recorder = [[VCMicRecorder alloc] init];
-    self.render = [[VCAudioPCMRender alloc] initWithPCMFormat:self.recorder.outputFormat];
+    self.render = [[VCAudioPCMRender alloc] initWithPCMFormat:self.recorder.nodeFormat];
     [self.render play];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     __weak typeof(self) weakSelf = self;
-    [self.recorder startRecoderWithBlock:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
+    [self.recorder startRecoderWithFormat:self.recorder.nodeFormat
+                                    block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
         [weakSelf.render renderPCMBuffer:buffer withPresentationTimeStamp:kCMTimeZero completionHandler:nil];
     }];
 }

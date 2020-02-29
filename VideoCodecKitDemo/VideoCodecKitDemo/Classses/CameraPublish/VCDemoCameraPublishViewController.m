@@ -34,6 +34,9 @@
 
 @property (nonatomic, strong) VCH264HardwareEncoder *encoder;
 @property (nonatomic, strong) VCFLVVideoTag *currentAVCTag;
+
+@property (nonatomic, strong) dispatch_queue_t fileQueue;
+@property (nonatomic, strong) NSFileHandle *file;
 @end
 
 @implementation VCDemoCameraPublishViewController
@@ -61,9 +64,9 @@
     if (_audioConverter == nil) {
         AVAudioFormat *inputFormat = [VCAudioConverter formatWithCMAudioFormatDescription:self.outputAudioFormat];
         AVAudioFormat *outputFormat = [VCAudioConverter AACFormatWithSampleRate:inputFormat.sampleRate channels:inputFormat.channelCount];
-        _audioConverter = [[VCAudioConverter alloc] initWithOutputFormat:outputFormat sourceFormat:inputFormat];
+        _audioConverter = [[VCAudioConverter alloc] initWithOutputFormat:outputFormat sourceFormat:inputFormat delegateQueue:dispatch_get_global_queue(0, 0)];
         _audioConverter.delegate = self;
-        _audioSpecificConfig = _audioConverter.audioSpecificConfig;
+        _audioSpecificConfig = _audioConverter.outputAudioSpecificConfig;
     }
     return _audioConverter;
 }
@@ -102,6 +105,13 @@
     
     _previewLayer = [[AVCaptureVideoPreviewLayer alloc] init];
     _previewLayer.session = self.captureSession;
+    
+    self.fileQueue = dispatch_queue_create("FILEQUEUE", DISPATCH_QUEUE_SERIAL);
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    NSString *filePath = [path stringByAppendingPathComponent:@"test.aac"];
+    [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
+    self.file = [NSFileHandle fileHandleForWritingAtPath:filePath];
+    
     [self.view.layer addSublayer:self.previewLayer];
     // Do any additional setup after loading the view.
 }
@@ -113,7 +123,8 @@
 - (void)setupPublisher {
     self.publishQueue = dispatch_queue_create("PublishQueue", DISPATCH_QUEUE_SERIAL);
     
-    self.publisher = [[VCRTMPPublisher alloc] initWithURL:[NSURL URLWithString:@"rtmp://172.20.10.6/stream"] publishKey:@"12345"];
+//    self.publisher = [[VCRTMPPublisher alloc] initWithURL:[NSURL URLWithString:@"rtmp://192.168.43.17/stream"] publishKey:@"12345"];
+    self.publisher = [[VCRTMPPublisher alloc] initWithURL:[NSURL URLWithString:@"rtmp://js.live-send.acg.tv/live-js/"] publishKey:@"?streamname=live_35432748_2964945&key=cb41bd28d62d79653f7d65721b1acb02"];
     self.publisher.delegate = self;
     self.publisher.connectionParameter = @{
         @"flashVer": @"FMLE/3.0 (compatible; FMSc/1.0)".asString,
@@ -123,28 +134,28 @@
         @"videoCodecs": @(0x0080).asNumber,
         @"objectEncodeing": @(0).asNumber,
     };
-    self.publisher.streamMetaData = @{
-        @"duration": @(0).asNumber,
-        @"fileSize": @(0).asNumber,
-        @"width": @(1280).asNumber,
-        @"height": @(720).asNumber,
-        @"videocodecid": @"avc1".asString,
-        @"videodatarate": @(2500).asNumber,
-        @"framerate": @(30).asNumber,
-        @"audiocodecid": @"mp4a".asString,
-        @"audiodatarate": @(160).asNumber,
-        @"audiosamplerate": @"44100".asString,
-        @"audiosamplesize": @(16).asNumber,
-        @"audiochannels": @(1).asNumber,
-        @"stereo": @(YES).asBool,
-        @"2.1": @(NO).asBool,
-        @"3.1": @(NO).asBool,
-        @"4.0": @(NO).asBool,
-        @"4.1": @(NO).asBool,
-        @"5.1": @(NO).asBool,
-        @"7.1": @(NO).asBool,
-        @"encoder": @"iOSVT::VideoCodecKit".asString,
-    };
+//    self.publisher.streamMetaData = @{
+//        @"duration": @(0).asNumber,
+//        @"fileSize": @(0).asNumber,
+//        @"width": @(1280).asNumber,
+//        @"height": @(720).asNumber,
+//        @"videocodecid": @"avc1".asString,
+//        @"videodatarate": @(2500).asNumber,
+//        @"framerate": @(30).asNumber,
+//        @"audiocodecid": @"mp4a".asString,
+//        @"audiodatarate": @(160).asNumber,
+//        @"audiosamplerate": @"44100".asString,
+//        @"audiosamplesize": @(16).asNumber,
+//        @"audiochannels": @(1).asNumber,
+//        @"stereo": @(YES).asBool,
+//        @"2.1": @(NO).asBool,
+//        @"3.1": @(NO).asBool,
+//        @"4.0": @(NO).asBool,
+//        @"4.1": @(NO).asBool,
+//        @"5.1": @(NO).asBool,
+//        @"7.1": @(NO).asBool,
+//        @"encoder": @"iOSVT::VideoCodecKit".asString,
+//    };
 }
 
 - (void)setupQueue {
@@ -211,6 +222,8 @@
             self.outputAudioFormat = CMSampleBufferGetFormatDescription(sampleBuffer);
             VCSampleBuffer *audioSampleBuffer = [[VCSampleBuffer alloc] initWithSampleBuffer:sampleBuffer freeWhenDone:NO];
             [self.audioConverter convertSampleBuffer:audioSampleBuffer];
+//            self.audioConverter.bitrate = 160 * 1024;
+//            self.audioConverter.audioConverterQuality = kAudioConverterQuality_Max;
         }
     } else if (output == self.videoDataOutput) {
         if (self.canPublish) {
@@ -231,19 +244,24 @@ static uint32_t audioStartTimestamp = 0;
         audioStartTimestamp = CMTimeGetSeconds(pts) * 1000;
         
         VCFLVAudioTag *tag = [VCFLVAudioTag sequenceHeaderTagForAAC];
-        tag.payloadData = [self.audioConverter.audioSpecificConfig serialize];
+        tag.payloadData = [self.audioConverter.outputAudioSpecificConfig serialize];
         [self.publisher writeTag:tag];
     }
     VCFLVAudioTag *tag = [VCFLVAudioTag tagForAAC];
     AVAudioCompressedBuffer *buf = (AVAudioCompressedBuffer *)audioBuffer;
     tag.timestamp = CMTimeGetSeconds(pts) * 1000 - audioStartTimestamp;
-    NSLog(@"a: %d", tag.timestamp);
+    
     NSData *aacData = [[NSData alloc] initWithBytes:buf.data length:buf.byteLength];
-//    NSData *adts = [VCAudioSpecificConfig adtsDataForPacketLength:aacData.length];
+    NSData *adts = [self.audioSpecificConfig adtsDataForPacketLength:aacData.length];
     NSMutableData *aac = [[NSMutableData alloc] init];
-//    [aac appendData:adts];
+    [aac appendData:adts];
     [aac appendData:aacData];
-    tag.payloadData = aac;
+    
+    dispatch_async(self.fileQueue, ^{
+        [self.file writeData:aac];
+    });
+    
+    tag.payloadData = aacData;
     [tag serialize];
     [self.publisher writeTag:tag];
 }
@@ -255,7 +273,6 @@ static uint32_t audioStartTimestamp = 0;
         startTimestamp = CMTimeGetSeconds(sampleBuffer.presentationTimeStamp) * 1000;
     }
     uint32_t timestamp = CMTimeGetSeconds(sampleBuffer.presentationTimeStamp) * 1000 - startTimestamp;
-    NSLog(@"v: %d", timestamp);
     if (isKeyFrame) {
         VCAVCConfigurationRecord *recorder = [[VCAVCConfigurationRecord alloc] initWithFormatDescription:sampleBuffer.formatDescription];
         VCFLVVideoTag *avcTag = [VCFLVVideoTag sequenceHeaderTagForAVC];

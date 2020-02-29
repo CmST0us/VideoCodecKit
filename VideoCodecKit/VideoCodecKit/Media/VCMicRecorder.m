@@ -21,19 +21,27 @@
     if (self) {
         _engine = [[AVAudioEngine alloc] init];
         _recording = NO;
+        _sampleRate = 48000;
+        _channelCount = 2;
     }
     return self;
 }
 
 - (AVAudioFormat *)outputFormat {
+    AVAudioFormat *pcmFormat = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatInt16 sampleRate:self.sampleRate channels:self.channelCount interleaved:NO];
+    return pcmFormat;
+}
+
+- (AVAudioFormat *)nodeFormat {
     return [self.engine.inputNode outputFormatForBus:0];
 }
 
-- (BOOL)startRecoderWithBlock:(AVAudioNodeTapBlock)block {
+- (BOOL)startRecoderWithFormat:(AVAudioFormat *)format
+                         block:(AVAudioNodeTapBlock)block {
     if (_recording) return NO;
     
     AVAudioInputNode *input = [self.engine inputNode];
-    [input installTapOnBus:0 bufferSize:8192 format:self.outputFormat block:block];
+    [input installTapOnBus:0 bufferSize:4096 format:format block:block];
     NSError *err = nil;
     [self.engine startAndReturnError:&err];
     if (err == nil) {
