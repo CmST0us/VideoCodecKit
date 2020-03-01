@@ -207,7 +207,12 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
 }
 
 - (NSUInteger)outputMaxBufferSize {
-    return 1024 * self.sourceFormat.streamDescription->mBytesPerFrame;
+    if (self.outputFormat.streamDescription->mFormatID == kAudioFormatMPEG4AAC) {
+        return 1024 * self.sourceFormat.streamDescription->mBytesPerFrame;
+    } else {
+        return 1024 * self.outputFormat.streamDescription->mBytesPerFrame;
+    }
+    
 }
 - (NSUInteger)outputNumberChannels {
     if (self.outputFormat.streamDescription->mFormatID == kAudioFormatLinearPCM) {
@@ -374,7 +379,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
     UInt32 ioOutputDataPacketSize = (UInt32)self.ioOutputDataPacketSize;
     
     /// splitCount 为循环次数
-    _currentBufferList->mNumberBuffers = self.feedBufferList->mNumberBuffers;
+    _currentBufferList->mNumberBuffers = audioBufferList->mNumberBuffers;
     for (int i = 0; i < audioBufferList->mNumberBuffers; ++i) {
         _currentBufferList->mBuffers[i].mData = malloc(ioOutputDataPacketSize);
         memcpy(_currentBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mDataByteSize);
