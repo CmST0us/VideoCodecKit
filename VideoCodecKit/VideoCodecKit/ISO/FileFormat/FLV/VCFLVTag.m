@@ -41,11 +41,18 @@
     return [self.tagData subdataWithRange:NSMakeRange(offset, self.tagData.length - offset)];
 }
 
-- (uint32_t)extendedTimeStamp {
+- (uint32_t)extendedTimestamp {
     int32_t timestampExt = (int32_t)self.timestampExtended;
     int32_t timestamp = (int32_t)self.timestamp;
     timestamp = timestamp | (timestampExt << 24);
     return timestamp;
+}
+
+- (void)setExtendedTimestamp:(uint32_t)extendedTimestamp {
+    uint8_t timestampExt = (extendedTimestamp >> 24) & 0xFF;
+    uint32_t timestamp = extendedTimestamp & 0x00FFFFFF;
+    self.timestamp = timestamp;
+    self.timestampExtended = timestampExt;
 }
 
 - (void)setPayloadData:(NSData *)payloadData {
@@ -125,7 +132,7 @@
 
 - (uint32_t)presentationTimeStamp {
     int32_t compositionTime = (int32_t)self.compositionTime;
-    return self.extendedTimeStamp + compositionTime;
+    return self.extendedTimestamp + compositionTime;
 }
 
 - (NSString *)description {

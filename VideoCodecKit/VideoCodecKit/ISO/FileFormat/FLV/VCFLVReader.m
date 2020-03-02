@@ -60,7 +60,7 @@
         nextTag = [_file nextTag];
         if (nextTag == nil) break;
         
-        CMTime currentTime = CMTimeMake([nextTag extendedTimeStamp], 1000);
+        CMTime currentTime = CMTimeMake([nextTag extendedTimestamp], 1000);
         if (CMTimeCompare(currentTime, maxTime) == 1) {
             maxTime = currentTime;
         }
@@ -161,7 +161,7 @@
                     CMBlockBufferRef blockBuffer = [self createBlockBufferWithData:videoTag.payloadData];
                     if (blockBuffer == nil) continue;
                     // Create Time
-                    CMTime dts = CMTimeMake([videoTag extendedTimeStamp], 1000);
+                    CMTime dts = CMTimeMake([videoTag extendedTimestamp], 1000);
                     CMTime pts = CMTimeMake([videoTag presentationTimeStamp], 1000);
                     
                     CMSampleTimingInfo timingInfo;

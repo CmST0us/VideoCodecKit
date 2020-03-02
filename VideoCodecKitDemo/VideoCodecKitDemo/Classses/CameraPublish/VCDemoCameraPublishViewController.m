@@ -8,6 +8,7 @@
 
 @import VideoCodecKit;
 #import <AVFoundation/AVFoundation.h>
+#import <VideoToolbox/VideoToolbox.h>
 #import "VCDemoCameraPublishViewController.h"
 
 @interface VCDemoCameraPublishViewController () <AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, VCAudioConverterDelegate, VCRTMPPublisherDelegate, VCVideoEncoderDelegate>
@@ -37,6 +38,11 @@
 
 @property (nonatomic, strong) dispatch_queue_t fileQueue;
 @property (nonatomic, strong) NSFileHandle *file;
+
+@property (nonatomic, assign) NSUInteger videoFrameCount;
+@property (nonatomic, assign) NSUInteger audioFrameCount;
+@property (nonatomic, assign) BOOL isOutputAACConfig;
+@property (nonatomic, assign) BOOL isOutputAVCConfig;
 @end
 
 @implementation VCDemoCameraPublishViewController
@@ -133,28 +139,28 @@
         @"videoCodecs": @(0x0080).asNumber,
         @"objectEncodeing": @(0).asNumber,
     };
-//    self.publisher.streamMetaData = @{
-//        @"duration": @(0).asNumber,
-//        @"fileSize": @(0).asNumber,
-//        @"width": @(1280).asNumber,
-//        @"height": @(720).asNumber,
-//        @"videocodecid": @"avc1".asString,
-//        @"videodatarate": @(2500).asNumber,
-//        @"framerate": @(30).asNumber,
-//        @"audiocodecid": @"mp4a".asString,
-//        @"audiodatarate": @(160).asNumber,
-//        @"audiosamplerate": @"44100".asString,
-//        @"audiosamplesize": @(16).asNumber,
-//        @"audiochannels": @(1).asNumber,
-//        @"stereo": @(YES).asBool,
-//        @"2.1": @(NO).asBool,
-//        @"3.1": @(NO).asBool,
-//        @"4.0": @(NO).asBool,
-//        @"4.1": @(NO).asBool,
-//        @"5.1": @(NO).asBool,
-//        @"7.1": @(NO).asBool,
-//        @"encoder": @"iOSVT::VideoCodecKit".asString,
-//    };
+    self.publisher.streamMetaData = @{
+        @"duration": @(0).asNumber,
+        @"fileSize": @(0).asNumber,
+        @"width": @(1920).asNumber,
+        @"height": @(1080).asNumber,
+        @"videocodecid": @"avc1".asString,
+        @"videodatarate": @(2500).asNumber,
+        @"framerate": @(30).asNumber,
+        @"audiocodecid": @"mp4a".asString,
+        @"audiodatarate": @(160).asNumber,
+        @"audiosamplerate": @"44100".asString,
+        @"audiosamplesize": @(16).asNumber,
+        @"audiochannels": @(1).asNumber,
+        @"stereo": @(YES).asBool,
+        @"2.1": @(NO).asBool,
+        @"3.1": @(NO).asBool,
+        @"4.0": @(NO).asBool,
+        @"4.1": @(NO).asBool,
+        @"5.1": @(NO).asBool,
+        @"7.1": @(NO).asBool,
+        @"encoder": @"iOSVT::VideoCodecKit".asString,
+    };
 }
 
 - (void)setupQueue {
@@ -232,23 +238,17 @@
     }
 }
 
-static uint32_t startTimestamp = 0;
-static BOOL isSetBaseTimestamp = NO;
-static BOOL isSetAudioTimestamp = NO;
-static uint32_t audioStartTimestamp = 0;
-
 - (void)converter:(VCAudioConverter *)converter didOutputAudioBuffer:(AVAudioBuffer *)audioBuffer presentationTimeStamp:(CMTime)pts {
-    if (!isSetAudioTimestamp) {
-        isSetAudioTimestamp = YES;
-        audioStartTimestamp = CMTimeGetSeconds(pts) * 1000;
-        
+    if (!self.isOutputAACConfig) {
+        self.isOutputAACConfig = YES;
         VCFLVAudioTag *tag = [VCFLVAudioTag sequenceHeaderTagForAAC];
         tag.payloadData = [self.audioConverter.outputAudioSpecificConfig serialize];
         [self.publisher writeTag:tag];
     }
     VCFLVAudioTag *tag = [VCFLVAudioTag tagForAAC];
+    tag.audioType = VCFLVAudioTagAudioTypeStereo;
     AVAudioCompressedBuffer *buf = (AVAudioCompressedBuffer *)audioBuffer;
-    tag.timestamp = CMTimeGetSeconds(pts) * 1000 - audioStartTimestamp;
+    [tag setExtendedTimestamp:self.audioFrameCount++ * (1024.0 * 1000.0 / self.audioConverter.outputAudioSpecificConfig.sampleRate)];
     
     NSData *aacData = [[NSData alloc] initWithBytes:buf.data length:buf.byteLength];
     NSData *adts = [self.audioSpecificConfig adtsDataForPacketLength:aacData.length];
@@ -267,49 +267,51 @@ static uint32_t audioStartTimestamp = 0;
 
 - (void)videoEncoder:(id<VCVideoEncoder>)encoder didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
     BOOL isKeyFrame = sampleBuffer.keyFrame;
-    if (!isSetBaseTimestamp) {
-        isSetBaseTimestamp = YES;
-        startTimestamp = CMTimeGetSeconds(sampleBuffer.presentationTimeStamp) * 1000;
-    }
-    uint32_t timestamp = CMTimeGetSeconds(sampleBuffer.presentationTimeStamp) * 1000 - startTimestamp;
+    uint32_t timestamp = self.videoFrameCount++ * (1000.0 / 30.0);
     if (isKeyFrame) {
-        VCAVCConfigurationRecord *recorder = [[VCAVCConfigurationRecord alloc] initWithFormatDescription:sampleBuffer.formatDescription];
-        VCFLVVideoTag *avcTag = [VCFLVVideoTag sequenceHeaderTagForAVC];
-        avcTag.payloadData = recorder.data;
-        avcTag.timestamp = timestamp;
-        [avcTag serialize];
-        [self.publisher writeTag:avcTag];
-        
         NSData *data = sampleBuffer.dataBufferData;
         VCAVCFormatStream *stream = [[VCAVCFormatStream alloc] initWithData:data startCodeLength:4];
         stream.naluClass = [VCH264NALU class];
         [stream.nalus enumerateObjectsUsingBlock:^(VCH264NALU *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            VCFLVVideoTag *videoTag = [VCFLVVideoTag tagForAVC];
-            videoTag.frameType = VCFLVVideoTagFrameTypeKeyFrame;
-            videoTag.AVCPacketType = VCFLVVideoTagAVCPacketTypeNALU;
-            videoTag.timestamp = timestamp;
-            videoTag.payloadData = [obj warpAVCStartCode];
-            [videoTag serialize];
-            [self.publisher writeTag:videoTag];
+            if (obj.type == VCH264NALUTypeSliceIDR) {
+                VCFLVVideoTag *videoTag = [VCFLVVideoTag tagForAVC];
+                videoTag.frameType = VCFLVVideoTagFrameTypeKeyFrame;
+                videoTag.AVCPacketType = VCFLVVideoTagAVCPacketTypeNALU;
+                [videoTag setExtendedTimestamp:timestamp];
+                videoTag.payloadData = [obj warpAVCStartCode];
+                [videoTag serialize];
+                [self.publisher writeTag:videoTag];
+            }
         }];
     } else {
         NSData *data = sampleBuffer.dataBufferData;
         VCAVCFormatStream *stream = [[VCAVCFormatStream alloc] initWithData:data startCodeLength:4];
         stream.naluClass = [VCH264NALU class];
         [stream.nalus enumerateObjectsUsingBlock:^(VCH264NALU *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            VCFLVVideoTag *videoTag = [VCFLVVideoTag tagForAVC];
-            videoTag.frameType = VCFLVVideoTagFrameTypeInterFrame;
-            videoTag.AVCPacketType = VCFLVVideoTagAVCPacketTypeNALU;
-            videoTag.timestamp = timestamp;
-            videoTag.payloadData = [obj warpAVCStartCode];
-            [videoTag serialize];
-            [self.publisher writeTag:videoTag];
+            if (obj.type == VCH264NALUTypeSliceData) {
+                VCFLVVideoTag *videoTag = [VCFLVVideoTag tagForAVC];
+                videoTag.frameType = VCFLVVideoTagFrameTypeInterFrame;
+                videoTag.AVCPacketType = VCFLVVideoTagAVCPacketTypeNALU;
+                [videoTag setExtendedTimestamp:timestamp];
+                videoTag.payloadData = [obj warpAVCStartCode];
+                [videoTag serialize];
+                [self.publisher writeTag:videoTag];
+            }
         }];
     }
 }
 
 - (void)videoEncoder:(id<VCVideoEncoder>)encoder didOutputFormatDescription:(CMFormatDescriptionRef)description {
     NSLog(@"description: %@", description);
+    if (!self.isOutputAVCConfig) {
+        self.isOutputAVCConfig = YES;
+        VCAVCConfigurationRecord *recorder = [[VCAVCConfigurationRecord alloc] initWithFormatDescription:description];
+        VCFLVVideoTag *avcTag = [VCFLVVideoTag sequenceHeaderTagForAVC];
+        avcTag.payloadData = recorder.data;
+        [avcTag setExtendedTimestamp:0];
+        [avcTag serialize];
+        [self.publisher writeTag:avcTag];
+    }
 }
 
 - (void)publisher:(VCRTMPPublisher *)publisher didChangeState:(VCRTMPPublisherState)state error:(NSError *)error {
@@ -324,6 +326,10 @@ static uint32_t audioStartTimestamp = 0;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    self.audioFrameCount = 0;
+    self.videoFrameCount = 0;
+    self.isOutputAACConfig = NO;
+    self.isOutputAVCConfig = NO;
     [self.publisher start];
 }
 @end

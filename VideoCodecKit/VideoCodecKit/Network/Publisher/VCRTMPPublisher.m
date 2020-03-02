@@ -132,8 +132,8 @@ NSErrorDomain const VCRTMPPublisherErrorDomain = @"VCRTMPPublisherErrorDomain";
         audioChunk.chunkData = tag.payloadDataWithoutExternTimestamp;
         audioChunk.messageHeaderType = self.hasPublishAudio ? VCRTMPChunkMessageHeaderType1 : VCRTMPChunkMessageHeaderType0;
         audioChunk.message.messageStreamID = self.stream.streamID;
-        audioChunk.message.timestamp = (uint32_t)(tag.timestamp - self.lastAudioTimestamp);
-        self.lastAudioTimestamp = tag.timestamp;
+        audioChunk.message.timestamp = (uint32_t)(tag.extendedTimestamp - self.lastAudioTimestamp);
+        self.lastAudioTimestamp = tag.extendedTimestamp;
         [self.stream writeChunk:audioChunk];
         if (!self.hasPublishAudio) {
             self.hasPublishAudio = YES;
@@ -143,9 +143,9 @@ NSErrorDomain const VCRTMPPublisherErrorDomain = @"VCRTMPPublisherErrorDomain";
         videoChunk.chunkData = tag.payloadDataWithoutExternTimestamp;
         videoChunk.messageHeaderType = self.hasPublishVideo ? VCRTMPChunkMessageHeaderType1 : VCRTMPChunkMessageHeaderType0;
         videoChunk.message.messageStreamID = self.stream.streamID;
-        videoChunk.message.timestamp = (uint32_t)(tag.timestamp - self.lastVideoTimestamp);
+        videoChunk.message.timestamp = (uint32_t)(tag.extendedTimestamp - self.lastVideoTimestamp);
         [self.stream writeChunk:videoChunk];
-        self.lastVideoTimestamp = tag.timestamp;
+        self.lastVideoTimestamp = tag.extendedTimestamp;
         if (!self.hasPublishVideo) {
             self.hasPublishVideo = YES;
         }

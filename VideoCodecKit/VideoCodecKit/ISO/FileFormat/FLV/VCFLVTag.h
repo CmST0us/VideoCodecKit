@@ -32,7 +32,8 @@ typedef NS_ENUM(uint8_t, VCFLVTagType) {
 + (instancetype)tag;
 - (nullable instancetype)initWithData:(NSData *)data;
 - (NSData *)payloadDataWithoutExternTimestamp;
-- (uint32_t)extendedTimeStamp;
+- (uint32_t)extendedTimestamp;
+- (void)setExtendedTimestamp:(uint32_t)extendedTimestamp;
 
 - (NSData *)serialize;
 - (void)deserialize;
