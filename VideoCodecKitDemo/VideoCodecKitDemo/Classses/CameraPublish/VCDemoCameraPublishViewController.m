@@ -242,13 +242,15 @@
     if (!self.isOutputAACConfig) {
         self.isOutputAACConfig = YES;
         VCFLVAudioTag *tag = [VCFLVAudioTag sequenceHeaderTagForAAC];
+        tag.audioType = VCFLVAudioTagAudioTypeStereo;
         tag.payloadData = [self.audioConverter.outputAudioSpecificConfig serialize];
+        [tag serialize];
         [self.publisher writeTag:tag];
     }
     VCFLVAudioTag *tag = [VCFLVAudioTag tagForAAC];
     tag.audioType = VCFLVAudioTagAudioTypeStereo;
     AVAudioCompressedBuffer *buf = (AVAudioCompressedBuffer *)audioBuffer;
-    [tag setExtendedTimestamp:self.audioFrameCount++ * (1024.0 * 1000.0 / self.audioConverter.outputAudioSpecificConfig.sampleRate)];
+    [tag setExtendedTimestamp:self.audioFrameCount++ * (1024 * 1000.0 / self.audioConverter.outputAudioSpecificConfig.sampleRate)];
     
     NSData *aacData = [[NSData alloc] initWithBytes:buf.data length:buf.byteLength];
     NSData *adts = [self.audioSpecificConfig adtsDataForPacketLength:aacData.length];
