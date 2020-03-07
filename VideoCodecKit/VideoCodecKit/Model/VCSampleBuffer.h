@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VCSampleBuffer : NSObject
 @property (nonatomic, assign) CMSampleBufferRef sampleBuffer;
-
+@property (nonatomic, readonly) CMMediaType mediaType;
 @property (nonatomic) CMBlockBufferRef dataBuffer;
 @property (nonatomic, readonly) CVImageBufferRef imageBuffer;
 @property (nonatomic, readonly) CMItemCount numberOfSamples;

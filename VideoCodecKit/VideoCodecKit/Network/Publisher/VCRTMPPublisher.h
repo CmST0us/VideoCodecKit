@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VCSampleBuffer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -49,7 +50,8 @@ typedef NS_ENUM(NSUInteger, VCRTMPPublisherState) {
 - (void)start;
 - (void)stop;
 
-- (void)writeTag:(VCFLVTag *)tag;
+- (void)publishSampleBuffer:(VCSampleBuffer *)sampleBuffer;
+- (void)publishFormatDescription:(CMFormatDescriptionRef)formatDescription;
 
 @end
 

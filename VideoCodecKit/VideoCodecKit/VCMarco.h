@@ -9,9 +9,6 @@
 #ifndef VCMarco_h
 #define VCMarco_h
 
-#pragma mark - State Machine Tools
-#define kVCAllowState(allow, current) [allow containsObject:current]
-
 #pragma mark - String Tools
 #define DECLARE_CONST_STRING(str) extern NSString const * str
 #define CONST_STRING(str) NSString * str = @#str

@@ -17,6 +17,10 @@
 #import "VCRTMPChunk.h"
 #import "VCFLVTag.h"
 #import "VCRTMPMessage.h"
+#import "VCAVCFormatStream.h"
+#import "VCH264NALU.h"
+#import "VCAVCConfigurationRecord.h"
+#import "VCAudioSpecificConfig.h"
 
 #define VCRTMPPublisherChunkSize (4096)
 
@@ -27,6 +31,7 @@ NSErrorDomain const VCRTMPPublisherErrorDomain = @"VCRTMPPublisherErrorDomain";
 @interface VCRTMPPublisher ()
 @property (nonatomic, assign) VCRTMPPublisherState state;
 
+@property (nonatomic, strong) dispatch_queue_t publishQueue;
 @property (nonatomic, strong) NSURL *url;
 @property (nonatomic, copy) NSString *publishKey;
 @property (nonatomic, readonly) NSString *host;
@@ -43,9 +48,26 @@ NSErrorDomain const VCRTMPPublisherErrorDomain = @"VCRTMPPublisherErrorDomain";
 @property (nonatomic, assign) uint32_t lastVideoTimestamp;
 @property (nonatomic, assign) BOOL hasPublishVideo;
 @property (nonatomic, assign) BOOL hasPublishAudio;
+
+@property (nonatomic, assign) CMTime firstVideoFramePresentationTimestamp;
+@property (nonatomic, assign) CMTime firstAudioFramePresentationTimestamp;
+@property (nonatomic, assign) CMFormatDescriptionRef currentVideoFormatDescription;
+@property (nonatomic, assign) CMFormatDescriptionRef currentAudioFormatDescription;
 @end
 
 @implementation VCRTMPPublisher
+
+- (void)dealloc {
+    if (_currentVideoFormatDescription != NULL) {
+        CFRelease(_currentVideoFormatDescription);
+        _currentVideoFormatDescription = NULL;
+    }
+    
+    if (_currentAudioFormatDescription != NULL) {
+        CFRelease(_currentAudioFormatDescription);
+        _currentAudioFormatDescription = NULL;
+    }
+}
 
 - (instancetype)initWithURL:(NSURL *)url publishKey:(NSString *)publishKey {
     self = [super init];
@@ -53,80 +75,203 @@ NSErrorDomain const VCRTMPPublisherErrorDomain = @"VCRTMPPublisherErrorDomain";
         _url = url;
         _publishKey = publishKey;
         _state = VCRTMPPublisherStateInit;
+        _publishQueue = dispatch_queue_create("VideoCodecKit::VCRTMPPublisher::PublishQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
 
 - (void)start {
-    kVCAllowState(@[@(VCRTMPPublisherStateInit)], @(self.state));
-    
-    NSError *error = nil;
-    self.hasPublishAudio = NO;
-    self.hasPublishVideo = NO;
-    self.lastAudioTimestamp = 0;
-    self.lastVideoTimestamp = 0;
-    
-    do {
-        if (![[self.url.scheme lowercaseString] isEqualToString:VCRTMPPublishURLProtocolRTMP]) {
-            error = [NSError errorWithDomain:VCRTMPPublisherErrorDomain
-                                        code:VCRTMPPublisherErrorCodeProtocolUnsupport
-                                    userInfo:nil];
-            break;
+    dispatch_async(self.publishQueue, ^{
+        if (self.state != VCRTMPPublisherStateInit &&
+            self.state != VCRTMPPublisherStateEnd) {
+            return;
         }
         
-        NSString *host = self.host;
-        NSString *port = self.port;
-        NSString *appName = self.appName;
-        if (host == nil||
-            port == nil ||
-            appName == nil ||
-            host.length == 0 ||
-            port.length == 0 ||
-            appName.length == 0) {
-            error = [NSError errorWithDomain:VCRTMPPublisherErrorDomain
-                                        code:VCRTMPPublisherErrorCodeBadURL
-                                    userInfo:nil];
-            break;
+        NSError *error = nil;
+        self.hasPublishAudio = NO;
+        self.hasPublishVideo = NO;
+        self.lastAudioTimestamp = 0;
+        self.lastVideoTimestamp = 0;
+        
+        self.firstAudioFramePresentationTimestamp = kCMTimeInvalid;
+        self.firstVideoFramePresentationTimestamp = kCMTimeInvalid;
+        
+        if (self.currentVideoFormatDescription != NULL) {
+            CFRelease(self.currentVideoFormatDescription);
+            self.currentVideoFormatDescription = NULL;
         }
         
-        [self createSocketWithHost:host port:port];
-        [self createHandeshake];
-    } while (0);
-    if (error) {
-        self.state = VCRTMPPublisherStateError;
-        if (self.delegate &&
-            [self.delegate respondsToSelector:@selector(publisher:didChangeState:error:)]) {
-            [self.delegate publisher:self didChangeState:VCRTMPPublisherStateError error:error];
+        if (self.currentAudioFormatDescription != NULL) {
+            CFRelease(self.currentAudioFormatDescription);
+            self.currentAudioFormatDescription = NULL;
         }
-    }
-    
-    // Do Handshake
-    __weak typeof(self) weakSelf = self;
-    [self.handshake startHandshakeWithBlock:^(VCRTMPHandshake * _Nonnull handshake, VCRTMPSession * _Nullable session, BOOL isSuccess, NSError * _Nullable error) {
-        if (isSuccess) {
-            weakSelf.session= session;
-            [weakSelf.session registerChannelCloseHandle:^(NSError * _Nonnull error) {
-                [weakSelf handlePublishErrorWithCode:VCRTMPPublisherErrorCodeConnectionFailed];
-            }];
-            [weakSelf handleHandshakeSuccess];
-        } else {
-            [weakSelf handlePublishErrorWithCode:VCRTMPPublisherErrorCodeHandshakeFailed];
+        
+        do {
+            if (![[self.url.scheme lowercaseString] isEqualToString:VCRTMPPublishURLProtocolRTMP]) {
+                error = [NSError errorWithDomain:VCRTMPPublisherErrorDomain
+                                            code:VCRTMPPublisherErrorCodeProtocolUnsupport
+                                        userInfo:nil];
+                break;
+            }
+            
+            NSString *host = self.host;
+            NSString *port = self.port;
+            NSString *appName = self.appName;
+            if (host == nil||
+                port == nil ||
+                appName == nil ||
+                host.length == 0 ||
+                port.length == 0 ||
+                appName.length == 0) {
+                error = [NSError errorWithDomain:VCRTMPPublisherErrorDomain
+                                            code:VCRTMPPublisherErrorCodeBadURL
+                                        userInfo:nil];
+                break;
+            }
+            
+            [self createSocketWithHost:host port:port];
+            [self createHandeshake];
+        } while (0);
+        if (error) {
+            self.state = VCRTMPPublisherStateError;
+            if (self.delegate &&
+                [self.delegate respondsToSelector:@selector(publisher:didChangeState:error:)]) {
+                [self.delegate publisher:self didChangeState:VCRTMPPublisherStateError error:error];
+            }
         }
-    }];
+        
+        // Do Handshake
+        __weak typeof(self) weakSelf = self;
+        [self.handshake startHandshakeWithBlock:^(VCRTMPHandshake * _Nonnull handshake, VCRTMPSession * _Nullable session, BOOL isSuccess, NSError * _Nullable error) {
+            if (isSuccess) {
+                weakSelf.session= session;
+                [weakSelf.session registerChannelCloseHandle:^(NSError * _Nonnull error) {
+                    [weakSelf handlePublishErrorWithCode:VCRTMPPublisherErrorCodeConnectionFailed];
+                }];
+                [weakSelf handleHandshakeSuccess];
+            } else {
+                [weakSelf handlePublishErrorWithCode:VCRTMPPublisherErrorCodeHandshakeFailed];
+            }
+        }];
+    });
 }
 
 - (void)stop {
-    [self.session end];
-    self.state = VCRTMPPublisherStateEnd;
-    if (self.delegate &&
-        [self.delegate respondsToSelector:@selector(publisher:didChangeState:error:)]) {
-        [self.delegate publisher:self didChangeState:VCRTMPPublisherStateEnd error:nil];
+    dispatch_async(self.publishQueue, ^{
+        [self.session end];
+        self.state = VCRTMPPublisherStateEnd;
+        if (self.delegate &&
+            [self.delegate respondsToSelector:@selector(publisher:didChangeState:error:)]) {
+            [self.delegate publisher:self didChangeState:VCRTMPPublisherStateEnd error:nil];
+        }
+    });
+}
+
+- (void)publishSampleBuffer:(VCSampleBuffer *)sampleBuffer {
+    dispatch_async(self.publishQueue, ^{
+        if (self.state != VCRTMPPublisherStateReadyToPublish) {
+            return;
+        }
+        
+        CMMediaType mediaType = sampleBuffer.mediaType;
+        if (mediaType == kCMMediaType_Audio) {
+            [self publishAudioSampleBuffer:sampleBuffer];
+        } else if (mediaType == kCMMediaType_Video) {
+            [self publishVideoSampleBuffer:sampleBuffer];
+        }
+    });
+}
+
+- (void)publishVideoSampleBuffer:(VCSampleBuffer *)sampleBuffer {
+    if (CMTIME_IS_INVALID(self.firstVideoFramePresentationTimestamp)) {
+        self.firstVideoFramePresentationTimestamp = sampleBuffer.presentationTimeStamp;
     }
+    
+    BOOL isKeyFrame = sampleBuffer.keyFrame;
+    CMTime pts = CMTimeSubtract(sampleBuffer.presentationTimeStamp, self.firstVideoFramePresentationTimestamp);
+    uint32_t timestamp = CMTimeGetSeconds(pts) * 1000;
+    NSData *data = sampleBuffer.dataBufferData;
+    VCAVCFormatStream *stream = [[VCAVCFormatStream alloc] initWithData:data startCodeLength:4];
+    stream.naluClass = [VCH264NALU class];
+    [stream.nalus enumerateObjectsUsingBlock:^(VCH264NALU *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.type != VCH264NALUTypeSliceData &&
+            obj.type != VCH264NALUTypeSliceIDR) {
+            return;
+        }
+        VCFLVVideoTag *videoTag = [VCFLVVideoTag tagForAVC];
+        videoTag.frameType = isKeyFrame ? VCFLVVideoTagFrameTypeKeyFrame : VCFLVVideoTagFrameTypeInterFrame;
+        videoTag.AVCPacketType = VCFLVVideoTagAVCPacketTypeNALU;
+        [videoTag setExtendedTimestamp:timestamp];
+        videoTag.payloadData = [obj warpAVCStartCode];
+        [videoTag serialize];
+        [self writeTag:videoTag];
+    }];
+}
+
+- (void)publishAudioSampleBuffer:(VCSampleBuffer *)sampleBuffer {
+    if (CMTIME_IS_INVALID(self.firstAudioFramePresentationTimestamp)) {
+        self.firstAudioFramePresentationTimestamp = sampleBuffer.presentationTimeStamp;
+    }
+    VCFLVAudioTag *tag = [VCFLVAudioTag tagForAAC];
+    const AudioStreamBasicDescription *asbd = CMAudioFormatDescriptionGetStreamBasicDescription(self.currentAudioFormatDescription);
+    
+    tag.audioType = asbd->mChannelsPerFrame == 1 ? VCFLVAudioTagAudioTypeMono : VCFLVAudioTagAudioTypeStereo;
+    AVAudioCompressedBuffer *buf = (AVAudioCompressedBuffer *)sampleBuffer.audioBuffer;
+    CMTime pts = CMTimeSubtract(sampleBuffer.presentationTimeStamp, self.firstAudioFramePresentationTimestamp);
+    uint32_t timestamp = CMTimeGetSeconds(pts) * 1000;
+    [tag setExtendedTimestamp:timestamp];
+    
+    NSData *aacData = [[NSData alloc] initWithBytes:buf.data length:buf.byteLength];
+    
+    tag.payloadData = aacData;
+    [tag serialize];
+    [self writeTag:tag];
+}
+
+- (void)publishFormatDescription:(CMFormatDescriptionRef)formatDescription {
+    CFRetain(formatDescription);
+    dispatch_async(self.publishQueue, ^{
+        if (self.state != VCRTMPPublisherStateReadyToPublish) {
+            CFRelease(formatDescription);
+            return;
+        }
+        
+        CMMediaType mediaType = CMFormatDescriptionGetMediaType(formatDescription);
+        if (mediaType == kCMMediaType_Video) {
+            if (!CMFormatDescriptionEqual(formatDescription, self.currentVideoFormatDescription)) {
+                if (self.currentVideoFormatDescription != NULL) {
+                    CFRelease(self.currentVideoFormatDescription);
+                    self.currentVideoFormatDescription = NULL;
+                }
+                self.currentVideoFormatDescription = CFRetain(formatDescription);
+                VCAVCConfigurationRecord *recorder = [[VCAVCConfigurationRecord alloc] initWithFormatDescription:formatDescription];
+                VCFLVVideoTag *avcTag = [VCFLVVideoTag sequenceHeaderTagForAVC];
+                avcTag.payloadData = recorder.data;
+                [avcTag setExtendedTimestamp:0];
+                [avcTag serialize];
+                [self writeTag:avcTag];
+            }
+        } else if (mediaType == kCMMediaType_Audio) {
+            if (!CMFormatDescriptionEqual(formatDescription, self.currentAudioFormatDescription)) {
+                if (self.currentAudioFormatDescription != NULL) {
+                    CFRelease(self.currentAudioFormatDescription);
+                    self.currentAudioFormatDescription = NULL;
+                }
+                self.currentAudioFormatDescription = CFRetain(formatDescription);
+                const AudioStreamBasicDescription *asbd = CMAudioFormatDescriptionGetStreamBasicDescription(self.currentAudioFormatDescription);
+                VCFLVAudioTag *tag = [VCFLVAudioTag sequenceHeaderTagForAAC];
+                tag.audioType = asbd->mChannelsPerFrame == 1 ? VCFLVAudioTagAudioTypeMono : VCFLVAudioTagAudioTypeStereo;
+                tag.payloadData = [[[AVAudioFormat alloc] initWithCMAudioFormatDescription:self.currentAudioFormatDescription].audioSpecificConfig serialize];
+                [tag serialize];
+                [self writeTag:tag];
+            }
+        }
+        
+        CFRelease(formatDescription);
+    });
 }
 
 - (void)writeTag:(VCFLVTag *)tag {
-    kVCAllowState(@[@(VCRTMPPublisherStateReadyToPublish)], @(self.state));
-    
     if (tag.tagType == VCFLVTagTypeAudio) {
         VCRTMPChunk *audioChunk = [VCRTMPChunk makeAudioChunk];
         audioChunk.chunkData = tag.payloadDataWithoutExternTimestamp;

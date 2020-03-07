@@ -153,7 +153,7 @@ NSErrorDomain const VCRTMPHandshakeErrorDomain = @"VCRTMPHandshakeErrorDomain";
 }
 
 - (void)handleSendC0C1 {
-    if (!kVCAllowState(@[@(VCRTMPHandshakeStateUninitialized)], @(self.state))) {
+    if (self.state != VCRTMPHandshakeStateUninitialized) {
         [self handleHandshakeErrorWithCode:VCRTMPHandshakeErrorCodeUnknow];
         return;
     }
@@ -162,7 +162,7 @@ NSErrorDomain const VCRTMPHandshakeErrorDomain = @"VCRTMPHandshakeErrorDomain";
 }
 
 - (void)handleContinueSendAckWithS0S1:(NSData *)s0s1 {
-    if (!kVCAllowState(@[@(VCRTMPHandshakeStateVersionSent)], @(self.state))) {
+    if (self.state != VCRTMPHandshakeStateVersionSent) {
         [self handleHandshakeErrorWithCode:VCRTMPHandshakeErrorCodeUnknow];
         return;
     }
@@ -171,7 +171,7 @@ NSErrorDomain const VCRTMPHandshakeErrorDomain = @"VCRTMPHandshakeErrorDomain";
 }
 
 - (void)handleHandshakeDone {
-    if (!kVCAllowState(@[@(VCRTMPHandshakeStateAckSent)], @(self.state))) {
+    if (self.state != VCRTMPHandshakeStateAckSent) {
         [self handleHandshakeErrorWithCode:VCRTMPHandshakeErrorCodeUnknow];
         return;
     }
@@ -240,12 +240,9 @@ NSErrorDomain const VCRTMPHandshakeErrorDomain = @"VCRTMPHandshakeErrorDomain";
 }
 
 - (void)tcpSocketHasByteAvailable:(VCTCPSocket *)socket {
-    NSArray * const allow = @[
-        @(VCRTMPHandshakeStateUninitialized),
-        @(VCRTMPHandshakeStateVersionSent),
-        @(VCRTMPHandshakeStateAckSent)
-    ];
-    if (!kVCAllowState(allow, @(self.state))) {
+    if (self.state != VCRTMPHandshakeStateUninitialized &&
+        self.state != VCRTMPHandshakeStateVersionSent &&
+        self.state != VCRTMPHandshakeStateAckSent) {
         return;
     }
     

@@ -27,6 +27,10 @@
     return self;
 }
 
+- (CMMediaType)mediaType {
+    return CMFormatDescriptionGetMediaType(self.formatDescription);
+}
+
 - (CMBlockBufferRef)dataBuffer {
     return CMSampleBufferGetDataBuffer(_sampleBuffer);
 }
