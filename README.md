@@ -1,8 +1,10 @@
 # VideoDecoderKit
 
-`Version: 0.9.4`
+`Version: 0.9.5`
 
 -------------
+
+`0.9.5`: 修复推流音频问题。重构了一堆接口。封装了推流器VCRTMPPublish,可以方便推流RTMP了。优化了H264编码器，加入参数修改接口，便于推流时修改参数。简化删除了不同的Demo，去掉了Masonry依赖。同时提供静态Framework和动态Framework两种连接方式（考虑到苹果在iOS 13.3.1 中关闭了免费正式对动态库的签名，Demo使用静态连接）。
 
 `0.9.4`: 实现RTMP，可以推流FLVTag了
 
@@ -31,12 +33,13 @@
 - [ ] TS 文件解析
 - [ ] FLV 文件写入
 - [x] 麦克风接口封装，数据获取
-- [ ] 摄像头接口封装，数据获取
 ## Publish
 - [x] RTMP协议
+- [x] RTMP推流器
 ## Player
 - [x] 音视频同步
 - [ ] 缓存队列
 ## Build
 - [x] macOS 支持
 - [x] 动态库
+- [x] 静态库

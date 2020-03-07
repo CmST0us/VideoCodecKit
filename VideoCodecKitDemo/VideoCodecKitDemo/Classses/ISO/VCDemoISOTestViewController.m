@@ -7,7 +7,6 @@
 //
 
 #import <VideoCodecKit/VideoCodecKit.h>
-#import <Masonry/Masonry.h>
 #import "VCDemoISOTestViewController.h"
 
 @interface VCDemoISOTestViewController () <VCAssetReaderDelegate, VCVideoDecoderDelegate, VCAudioConverterDelegate> {
@@ -53,10 +52,11 @@
     // UI
     self.timeSeekSlider = [[UISlider alloc] init];
     [self.view addSubview:self.timeSeekSlider];
-    [self.timeSeekSlider mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.view);
-        make.bottom.equalTo(self.view).offset(-44);
-    }];
+    self.timeSeekSlider.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.timeSeekSlider.leftAnchor constraintEqualToAnchor:self.view.leftAnchor constant:0].active = YES;
+    [self.timeSeekSlider.rightAnchor constraintEqualToAnchor:self.view.rightAnchor constant:0].active = YES;
+    [self.timeSeekSlider.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:-44].active = YES;
+    
     [self.timeSeekSlider addTarget:self action:@selector(timeSeekSliderValueDidChange) forControlEvents:UIControlEventValueChanged];
     [self.timeSeekSlider addTarget:self action:@selector(timeSeekSliderDidStartSeek) forControlEvents:UIControlEventTouchDown];
     [self.timeSeekSlider addTarget:self action:@selector(timeSeekSliderDidStopSeek) forControlEvents:UIControlEventTouchUpInside];

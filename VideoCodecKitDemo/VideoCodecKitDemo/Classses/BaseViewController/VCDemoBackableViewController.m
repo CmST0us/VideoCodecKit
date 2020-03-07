@@ -36,11 +36,10 @@
 }
 
 - (void)createBackButtonConstraints {
-    [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.view.mas_leftMargin).offset(4);
-        make.top.mas_equalTo(self.view.mas_topMargin).offset(8);
-        make.height.mas_equalTo(20);
-    }];
+    self.backButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.backButton.leftAnchor constraintEqualToAnchor:self.view.leftAnchor constant:4].active = YES;
+    [self.backButton.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor constant:8].active = YES;
+    [self.backButton.heightAnchor constraintEqualToConstant:20].active = YES;
 }
 
 #pragma mark - Life Cycle
