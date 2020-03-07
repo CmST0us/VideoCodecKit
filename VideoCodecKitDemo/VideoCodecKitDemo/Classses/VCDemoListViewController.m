@@ -8,18 +8,8 @@
 
 #import "VCDemoListViewController.h"
 #import "VCDemoISOTestViewController.h"
-#import "VCDemoEncoderTestViewController.h"
-#import "VCDemoMicRecorderTestViewController.h"
-#import "VCDemoFLVAudioPlayTestViewController.h"
-#import "VCDemoAMFTestViewController.h"
-#import "VCDemoTCPSocketTestViewController.h"
-#import "VCDemoRTMPPublishTestViewController.h"
-#import "VCDemoRTMPFormatTestViewController.h"
-
-#import "VCRawH264DemoViewController.h"
-#import "VCRawH265DemoViewController.h"
-
 #import "VCDemoCameraPublishViewController.h"
+
 @interface VCDemoListViewController ()
 
 @end
@@ -33,42 +23,6 @@
                 @{
                   @"title": @"FLV播放",
                   @"class": NSStringFromClass([VCDemoISOTestViewController class]),
-                },
-                @{
-                  @"title": @"录制为FLV",
-                  @"class": NSStringFromClass([VCDemoEncoderTestViewController class]),
-                  },
-                @{
-                  @"title": @"麦克风录音",
-                  @"class": NSStringFromClass([VCDemoMicRecorderTestViewController class]),
-                },
-                @{
-                  @"title": @"FLV音频播放，立体声测试",
-                  @"class": NSStringFromClass([VCDemoFLVAudioPlayTestViewController class]),
-                },
-                @{
-                  @"title":@"H264 裸流",
-                  @"class":NSStringFromClass([VCRawH264DemoViewController class]),
-                },
-                @{
-                  @"title":@"H265 裸流",
-                  @"class":NSStringFromClass([VCRawH265DemoViewController class]),
-                },
-                @{
-                  @"title": @"AMF测试",
-                  @"class": NSStringFromClass([VCDemoAMFTestViewController class]),
-                },
-                @{
-                  @"title": @"TCPSocket 测试",
-                  @"class": NSStringFromClass([VCDemoTCPSocketTestViewController class]),
-                },
-                @{
-                  @"title": @"RTMP 数据包",
-                  @"class": NSStringFromClass([VCDemoRTMPFormatTestViewController class]),
-                },
-                @{
-                  @"title": @"RTMP推流测试",
-                  @"class": NSStringFromClass([VCDemoRTMPPublishTestViewController class]),
                 },
                 @{
                   @"title": @"RTMP 相机推流",

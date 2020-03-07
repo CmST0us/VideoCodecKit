@@ -15,7 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class VCAudioConverter;
 @protocol VCAudioConverterDelegate <NSObject>
-- (void)converter:(VCAudioConverter *)converter didOutputAudioBuffer:(AVAudioBuffer *)audioBuffer presentationTimeStamp:(CMTime)pts;
+- (void)converter:(VCAudioConverter *)converter didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer;
+- (void)converter:(VCAudioConverter *)converter didOutputFormatDescriptor:(CMFormatDescriptionRef)formatDescription;
 @end
 
 @class VCAudioSpecificConfig;
@@ -28,24 +29,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) UInt32 bitrate;
 @property (nonatomic) UInt32 audioConverterQuality;
 
-@property (nonatomic, readonly) VCAudioSpecificConfig *outputAudioSpecificConfig;
-
+- (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithOutputFormat:(AVAudioFormat *)outputFormat
                         sourceFormat:(AVAudioFormat *)sourceFormat
+                            delegate:(id<VCAudioConverterDelegate>)delegate
                        delegateQueue:(dispatch_queue_t)queue;
 
 - (OSStatus)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer;
-- (OSStatus)convertAudioBufferList:(AudioBufferList *)audioBufferList
+- (OSStatus)convertAudioBufferList:(const AudioBufferList *)audioBufferList
              presentationTimeStamp:(CMTime)pts;
 - (void)reset;
 
-+ (AVAudioFormat *)formatWithCMAudioFormatDescription:(CMAudioFormatDescriptionRef)audioFormatDescription;
-+ (AVAudioFormat *)AACFormatWithSampleRate:(Float64)sampleRate channels:(UInt32)channels;
-+ (AVAudioFormat *)AACFormatWithSampleRate:(Float64)sampleRate
-                               formatFlags:(AudioFormatFlags)flags
-                                  channels:(UInt32)channels;
-+ (AVAudioFormat *)PCMFormatWithSampleRate:(Float64)sampleRate
-                                  channels:(UInt32)channels;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -13,13 +13,8 @@
 		4F0F9523218899E500CB9BAE /* Masonry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0F9522218899E500CB9BAE /* Masonry.framework */; };
 		4F0F9524218899E500CB9BAE /* Masonry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0F9522218899E500CB9BAE /* Masonry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */; };
-		4F2853C52215B1820041DAAE /* VCDemoTCPSocketTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2853C42215B1820041DAAE /* VCDemoTCPSocketTestViewController.m */; };
-		4F6420462215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6420452215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.m */; };
-		4F64204E22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F64204D22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.m */; };
 		4F76FC7521627512002E7F0D /* VideoCodecKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; };
 		4F76FC7621627512002E7F0D /* VideoCodecKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F76FC7421627512002E7F0D /* VideoCodecKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4F9173F123DF21D20065D31D /* VCRawH264DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173F023DF21D20065D31D /* VCRawH264DemoViewController.m */; };
-		4F9173FD23E031A30065D31D /* VCRawH265DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9173FC23E031A30065D31D /* VCRawH265DemoViewController.m */; };
 		4F91740123E0349E0065D31D /* test.h265 in Resources */ = {isa = PBXBuildFile; fileRef = 4F91740023E0349D0065D31D /* test.h265 */; };
 		4F9279D72145180800F17F9A /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9279D62145180700F17F9A /* libiconv.tbd */; };
 		4F9279EA21451A7600F17F9A /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9279E921451A7500F17F9A /* VideoToolbox.framework */; };
@@ -36,12 +31,8 @@
 		4FBF02272144284B00CA0EC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02262144284B00CA0EC8 /* Assets.xcassets */; };
 		4FBF022A2144284B00CA0EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FBF02282144284B00CA0EC8 /* LaunchScreen.storyboard */; };
 		4FBF022D2144284B00CA0EC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF022C2144284B00CA0EC8 /* main.m */; };
-		4FD32AAF220DD54A00C391E8 /* VCDemoFLVAudioPlayTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD32AAE220DD54A00C391E8 /* VCDemoFLVAudioPlayTestViewController.m */; };
 		4FD32AB1220DD61000C391E8 /* test_flv_audio.flv in Resources */ = {isa = PBXBuildFile; fileRef = 4FD32AB0220DD61000C391E8 /* test_flv_audio.flv */; };
 		4FDF7F1E2205240A0019833C /* test.flv in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF7F1D2205240A0019833C /* test.flv */; };
-		4FDF7F362209381A0019833C /* VCDemoEncoderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F352209381A0019833C /* VCDemoEncoderTestViewController.m */; };
-		4FDF7F47220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF7F46220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m */; };
-		4FECFBE922142CAC0003A35C /* VCDemoAMFTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FECFBE822142CAC0003A35C /* VCDemoAMFTestViewController.m */; };
 		4FFE6ECC23F91E450003F77E /* VCDemoCameraPublishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE6ECB23F91E450003F77E /* VCDemoCameraPublishViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -70,17 +61,7 @@
 		4F0F9522218899E500CB9BAE /* Masonry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Masonry.framework; path = VideoCodecKitDemo/Masonry.framework; sourceTree = "<group>"; };
 		4F0F95362188BCB100CB9BAE /* VCDemoListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoListViewController.h; sourceTree = "<group>"; };
 		4F0F95372188BCB100CB9BAE /* VCDemoListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoListViewController.m; sourceTree = "<group>"; };
-		4F2853C32215B1820041DAAE /* VCDemoTCPSocketTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoTCPSocketTestViewController.h; sourceTree = "<group>"; };
-		4F2853C42215B1820041DAAE /* VCDemoTCPSocketTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoTCPSocketTestViewController.m; sourceTree = "<group>"; };
-		4F6420442215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoRTMPPublishTestViewController.h; sourceTree = "<group>"; };
-		4F6420452215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoRTMPPublishTestViewController.m; sourceTree = "<group>"; };
-		4F64204C22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoRTMPFormatTestViewController.h; sourceTree = "<group>"; };
-		4F64204D22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoRTMPFormatTestViewController.m; sourceTree = "<group>"; };
 		4F76FC7421627512002E7F0D /* VideoCodecKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoCodecKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F9173EF23DF21D20065D31D /* VCRawH264DemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCRawH264DemoViewController.h; sourceTree = "<group>"; };
-		4F9173F023DF21D20065D31D /* VCRawH264DemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCRawH264DemoViewController.m; sourceTree = "<group>"; };
-		4F9173FB23E031A30065D31D /* VCRawH265DemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VCRawH265DemoViewController.h; sourceTree = "<group>"; };
-		4F9173FC23E031A30065D31D /* VCRawH265DemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VCRawH265DemoViewController.m; sourceTree = "<group>"; };
 		4F91740023E0349D0065D31D /* test.h265 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.h265; sourceTree = "<group>"; };
 		4F92799921442E1700F17F9A /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libavdevice.a; sourceTree = "<group>"; };
 		4F92799A21442E1700F17F9A /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = VideoCodecKitDemo/VideoCodecKit/Vendor/binary/ffmpeg/lib/libswscale.a; sourceTree = "<group>"; };
@@ -108,16 +89,8 @@
 		4FBF02292144284B00CA0EC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4FBF022B2144284B00CA0EC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FBF022C2144284B00CA0EC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		4FD32AAD220DD54A00C391E8 /* VCDemoFLVAudioPlayTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoFLVAudioPlayTestViewController.h; sourceTree = "<group>"; };
-		4FD32AAE220DD54A00C391E8 /* VCDemoFLVAudioPlayTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoFLVAudioPlayTestViewController.m; sourceTree = "<group>"; };
 		4FD32AB0220DD61000C391E8 /* test_flv_audio.flv */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_flv_audio.flv; sourceTree = "<group>"; };
 		4FDF7F1D2205240A0019833C /* test.flv */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.flv; sourceTree = "<group>"; };
-		4FDF7F342209381A0019833C /* VCDemoEncoderTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoEncoderTestViewController.h; sourceTree = "<group>"; };
-		4FDF7F352209381A0019833C /* VCDemoEncoderTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoEncoderTestViewController.m; sourceTree = "<group>"; };
-		4FDF7F45220BEF4B0019833C /* VCDemoMicRecorderTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoMicRecorderTestViewController.h; sourceTree = "<group>"; };
-		4FDF7F46220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoMicRecorderTestViewController.m; sourceTree = "<group>"; };
-		4FECFBE722142CAC0003A35C /* VCDemoAMFTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoAMFTestViewController.h; sourceTree = "<group>"; };
-		4FECFBE822142CAC0003A35C /* VCDemoAMFTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoAMFTestViewController.m; sourceTree = "<group>"; };
 		4FFE6ECA23F91E450003F77E /* VCDemoCameraPublishViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCDemoCameraPublishViewController.h; sourceTree = "<group>"; };
 		4FFE6ECB23F91E450003F77E /* VCDemoCameraPublishViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCDemoCameraPublishViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,51 +125,6 @@
 				4F0F95202188962C00CB9BAE /* VCDemoBackableViewController.m */,
 			);
 			path = BaseViewController;
-			sourceTree = "<group>";
-		};
-		4F2853C22215B16E0041DAAE /* TCPSocket */ = {
-			isa = PBXGroup;
-			children = (
-				4F2853C32215B1820041DAAE /* VCDemoTCPSocketTestViewController.h */,
-				4F2853C42215B1820041DAAE /* VCDemoTCPSocketTestViewController.m */,
-			);
-			path = TCPSocket;
-			sourceTree = "<group>";
-		};
-		4F6420432215E494000FB2EC /* RTMPPublish */ = {
-			isa = PBXGroup;
-			children = (
-				4F6420442215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.h */,
-				4F6420452215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.m */,
-			);
-			path = RTMPPublish;
-			sourceTree = "<group>";
-		};
-		4F64204B22171EC8000FB2EC /* RTMPFormat */ = {
-			isa = PBXGroup;
-			children = (
-				4F64204C22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.h */,
-				4F64204D22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.m */,
-			);
-			path = RTMPFormat;
-			sourceTree = "<group>";
-		};
-		4F9173EE23DF21BE0065D31D /* RawH264 */ = {
-			isa = PBXGroup;
-			children = (
-				4F9173EF23DF21D20065D31D /* VCRawH264DemoViewController.h */,
-				4F9173F023DF21D20065D31D /* VCRawH264DemoViewController.m */,
-			);
-			path = RawH264;
-			sourceTree = "<group>";
-		};
-		4F9173FA23E0317D0065D31D /* RawH265 */ = {
-			isa = PBXGroup;
-			children = (
-				4F9173FB23E031A30065D31D /* VCRawH265DemoViewController.h */,
-				4F9173FC23E031A30065D31D /* VCRawH265DemoViewController.m */,
-			);
-			path = RawH265;
 			sourceTree = "<group>";
 		};
 		4F92799821442E1700F17F9A /* Frameworks */ = {
@@ -238,15 +166,6 @@
 			isa = PBXGroup;
 			children = (
 				4FFE6EC923F91E270003F77E /* CameraPublish */,
-				4F64204B22171EC8000FB2EC /* RTMPFormat */,
-				4F6420432215E494000FB2EC /* RTMPPublish */,
-				4F2853C22215B16E0041DAAE /* TCPSocket */,
-				4FECFBE622142C920003A35C /* AMF */,
-				4F9173FA23E0317D0065D31D /* RawH265 */,
-				4F9173EE23DF21BE0065D31D /* RawH264 */,
-				4FD32AAC220DD51F00C391E8 /* FLVAudioPlay */,
-				4FDF7F41220BEEFA0019833C /* MicRecorder */,
-				4FDF7F33220937E00019833C /* Encoder */,
 				4FBCCE6721FCD03900E7BF3C /* ISO */,
 				4F0F9513218891E600CB9BAE /* BaseViewController */,
 				4FBF021D2144284A00CA0EC8 /* AppDelegate.h */,
@@ -295,42 +214,6 @@
 				4FBF022B2144284B00CA0EC8 /* Info.plist */,
 			);
 			path = VideoCodecKitDemo;
-			sourceTree = "<group>";
-		};
-		4FD32AAC220DD51F00C391E8 /* FLVAudioPlay */ = {
-			isa = PBXGroup;
-			children = (
-				4FD32AAD220DD54A00C391E8 /* VCDemoFLVAudioPlayTestViewController.h */,
-				4FD32AAE220DD54A00C391E8 /* VCDemoFLVAudioPlayTestViewController.m */,
-			);
-			path = FLVAudioPlay;
-			sourceTree = "<group>";
-		};
-		4FDF7F33220937E00019833C /* Encoder */ = {
-			isa = PBXGroup;
-			children = (
-				4FDF7F342209381A0019833C /* VCDemoEncoderTestViewController.h */,
-				4FDF7F352209381A0019833C /* VCDemoEncoderTestViewController.m */,
-			);
-			path = Encoder;
-			sourceTree = "<group>";
-		};
-		4FDF7F41220BEEFA0019833C /* MicRecorder */ = {
-			isa = PBXGroup;
-			children = (
-				4FDF7F45220BEF4B0019833C /* VCDemoMicRecorderTestViewController.h */,
-				4FDF7F46220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m */,
-			);
-			path = MicRecorder;
-			sourceTree = "<group>";
-		};
-		4FECFBE622142C920003A35C /* AMF */ = {
-			isa = PBXGroup;
-			children = (
-				4FECFBE722142CAC0003A35C /* VCDemoAMFTestViewController.h */,
-				4FECFBE822142CAC0003A35C /* VCDemoAMFTestViewController.m */,
-			);
-			path = AMF;
 			sourceTree = "<group>";
 		};
 		4FFE6EC923F91E270003F77E /* CameraPublish */ = {
@@ -426,20 +309,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F0F951B2188941F00CB9BAE /* VCDemoNavigationController.m in Sources */,
-				4F9173F123DF21D20065D31D /* VCRawH264DemoViewController.m in Sources */,
 				4FBCCE6A21FCD08B00E7BF3C /* VCDemoISOTestViewController.m in Sources */,
-				4FDF7F47220BEF4B0019833C /* VCDemoMicRecorderTestViewController.m in Sources */,
-				4F9173FD23E031A30065D31D /* VCRawH265DemoViewController.m in Sources */,
 				4F0F95382188BCB100CB9BAE /* VCDemoListViewController.m in Sources */,
-				4FD32AAF220DD54A00C391E8 /* VCDemoFLVAudioPlayTestViewController.m in Sources */,
 				4FFE6ECC23F91E450003F77E /* VCDemoCameraPublishViewController.m in Sources */,
-				4FECFBE922142CAC0003A35C /* VCDemoAMFTestViewController.m in Sources */,
-				4FDF7F362209381A0019833C /* VCDemoEncoderTestViewController.m in Sources */,
-				4F2853C52215B1820041DAAE /* VCDemoTCPSocketTestViewController.m in Sources */,
 				4F0F95212188962C00CB9BAE /* VCDemoBackableViewController.m in Sources */,
 				4FBF022D2144284B00CA0EC8 /* main.m in Sources */,
-				4F64204E22171EED000FB2EC /* VCDemoRTMPFormatTestViewController.m in Sources */,
-				4F6420462215E4AA000FB2EC /* VCDemoRTMPPublishTestViewController.m in Sources */,
 				4FBF021F2144284A00CA0EC8 /* AppDelegate.m in Sources */,
 				4F0F951E218894FC00CB9BAE /* VCDemoViewController.m in Sources */,
 			);

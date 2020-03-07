@@ -19,6 +19,7 @@ FOUNDATION_EXPORT const unsigned char VideoCodecKitVersionString[];
 #import <VideoCodecKit/VCByteArray.h>
 #import <VideoCodecKit/VCSafeObjectQueue.h>
 #import <VideoCodecKit/VCSafeBuffer.h>
+#import <VideoCodecKit/AVAudioFormat+Utils.h>
 
 #pragma mark - Format
 #pragma mark NALU

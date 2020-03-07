@@ -9,6 +9,21 @@
 #import "VCAudioSpecificConfig.h"
 #import "VCByteArray.h"
 
+@implementation AVAudioFormat (AudioSpecificConfig)
+- (VCAudioSpecificConfig *)audioSpecificConfig {
+    const AudioStreamBasicDescription *outputDesc = self.streamDescription;
+    
+    VCAudioSpecificConfig *config = [[VCAudioSpecificConfig alloc] init];
+    config.channels = outputDesc->mChannelsPerFrame;
+    config.frameLengthFlag = NO;
+    config.objectType = outputDesc->mFormatFlags;
+    config.sampleRate = outputDesc->mSampleRate;
+    config.isDependOnCoreCoder = NO;
+    config.isExtension = NO;
+    return config;
+}
+@end
+
 @interface VCAudioSpecificConfig ()
 @property (nonatomic, strong) NSData *data;
 @property (nonatomic, assign) VCAudioSpecificConfigObjectTypeSampleRateIndex sampleRateIndex;

@@ -105,6 +105,68 @@
     return data;
 }
 
+- (AVAudioFormat *)audioFormat {
+    return [[AVAudioFormat alloc] initWithCMAudioFormatDescription:self.formatDescription];
+}
+
+- (AVAudioBuffer *)audioBuffer {
+    size_t size = sizeof(AudioBufferList) + (self.audioFormat.channelCount - 1) * sizeof(AudioBuffer);
+    if (self.audioFormat.streamDescription->mFormatID == kAudioFormatMPEG4AAC) {
+        size = sizeof(AudioBufferList);
+    }
+    AudioBufferList *bufferList = malloc(size);
+    memset(bufferList, 0, size);
+    CMBlockBufferRef blockBuffer = NULL;
+    OSStatus ret = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(_sampleBuffer,
+                                                                           NULL,
+                                                                           bufferList,
+                                                                           size,
+                                                                           kCFAllocatorDefault,
+                                                                           kCFAllocatorDefault,
+                                                                           0,
+                                                                           &blockBuffer);
+    
+    if (ret != noErr) {
+        free(bufferList);
+        return NULL;
+    }
+    
+    AVAudioBuffer *outputBuffer = nil;
+    if (self.audioFormat.streamDescription->mFormatID == kAudioFormatLinearPCM) {
+        AVAudioPCMBuffer *pcmBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:self.audioFormat frameCapacity:(AVAudioFrameCount)1024 * self.audioFormat.streamDescription->mBytesPerFrame];
+        for (int i = 0; i < bufferList->mNumberBuffers; ++i) {
+            memcpy(pcmBuffer.audioBufferList->mBuffers[i].mData, bufferList->mBuffers[i].mData, bufferList->mBuffers[i].mDataByteSize);
+        }
+        // frameLength 为有效PCM数据
+        pcmBuffer.frameLength = (AVAudioFrameCount)CMSampleBufferGetNumSamples(_sampleBuffer);
+        outputBuffer = pcmBuffer;
+    } else if (self.audioFormat.streamDescription->mFormatID == kAudioFormatMPEG4AAC) {
+        NSUInteger audioBufferListSize = 0;
+        for (int i = 0; i < bufferList->mNumberBuffers; ++i) {
+            audioBufferListSize += bufferList->mBuffers[i].mDataByteSize;
+        }
+        AVAudioCompressedBuffer *compressedBuffer = [[AVAudioCompressedBuffer alloc] initWithFormat:self.audioFormat packetCapacity:bufferList->mNumberBuffers maximumPacketSize:audioBufferListSize];
+        for (int i = 0; i < compressedBuffer.audioBufferList->mNumberBuffers; ++i) {
+            memcpy(compressedBuffer.audioBufferList->mBuffers[i].mData, bufferList->mBuffers[i].mData, bufferList->mBuffers[i].mDataByteSize);
+        }
+        compressedBuffer.packetCount = (AVAudioPacketCount)compressedBuffer.audioBufferList->mNumberBuffers;
+        compressedBuffer.byteLength = (UInt32)audioBufferListSize;
+        outputBuffer = compressedBuffer;
+    }
+    
+    if (blockBuffer != NULL) {
+        CFRelease(blockBuffer);
+        blockBuffer = NULL;
+    }
+    
+    if (bufferList != NULL) {
+        free(bufferList);
+        bufferList = NULL;
+    }
+    
+    return outputBuffer;
+}
+
 - (void)dealloc {
     if (_sampleBuffer &&
         _shouldFreeWhenDone) {

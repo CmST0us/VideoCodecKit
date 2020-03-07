@@ -6,6 +6,7 @@
 //  Copyright © 2019 eric3u. All rights reserved.
 //
 
+#import <AVFoundation/AVFoundation.h>
 #import "VCAudioPCMRender.h"
 
 @interface VCAudioPCMRender ()
@@ -68,9 +69,14 @@
 }
 
 - (void)renderPCMBuffer:(AVAudioPCMBuffer *)pcmBuffer withPresentationTimeStamp:(CMTime)presentationTimeStamp completionHandler:(AVAudioNodeCompletionHandler)handler {
-    [_playerNode scheduleBuffer:pcmBuffer completionHandler:handler];
+    if (pcmBuffer != NULL) {
+        [_playerNode scheduleBuffer:pcmBuffer completionHandler:handler];
+    }
 }
 
+- (void)renderSampleBuffer:(VCSampleBuffer *)sampleBuffer completionHandler:(AVAudioNodeCompletionHandler)handler {
+    [self renderPCMBuffer:(AVAudioPCMBuffer *)sampleBuffer.audioBuffer withPresentationTimeStamp:sampleBuffer.presentationTimeStamp completionHandler:handler];
+}
 - (void)dealloc {
     [self.audioEngine stop];
     [[NSNotificationCenter defaultCenter] removeObserver:self];

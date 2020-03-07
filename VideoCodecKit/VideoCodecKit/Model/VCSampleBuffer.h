@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreMedia/CoreMedia.h>
+#import <AVFoundation/AVFoundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSData *)h264ParameterSetData;
 - (nullable NSData *)dataBufferData;
 
+- (AVAudioBuffer *)audioBuffer;
+- (AVAudioFormat *)audioFormat;
 @end
 
 NS_ASSUME_NONNULL_END

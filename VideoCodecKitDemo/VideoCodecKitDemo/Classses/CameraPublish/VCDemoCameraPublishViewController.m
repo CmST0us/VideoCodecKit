@@ -68,11 +68,11 @@
 
 - (VCAudioConverter *)audioConverter {
     if (_audioConverter == nil) {
-        AVAudioFormat *inputFormat = [VCAudioConverter formatWithCMAudioFormatDescription:self.outputAudioFormat];
-        AVAudioFormat *outputFormat = [VCAudioConverter AACFormatWithSampleRate:inputFormat.sampleRate channels:inputFormat.channelCount];
-        _audioConverter = [[VCAudioConverter alloc] initWithOutputFormat:outputFormat sourceFormat:inputFormat delegateQueue:dispatch_get_global_queue(0, 0)];
+        AVAudioFormat *inputFormat = [[AVAudioFormat alloc] initWithCMAudioFormatDescription:self.outputAudioFormat];
+        AVAudioFormat *outputFormat = [AVAudioFormat AACFormatWithSampleRate:inputFormat.sampleRate channels:inputFormat.channelCount];
+        _audioConverter = [[VCAudioConverter alloc] initWithOutputFormat:outputFormat sourceFormat:inputFormat delegate:self delegateQueue:dispatch_get_global_queue(0, 0)];
         _audioConverter.delegate = self;
-        _audioSpecificConfig = _audioConverter.outputAudioSpecificConfig;
+        _audioSpecificConfig = outputFormat.audioSpecificConfig;
     }
     return _audioConverter;
 }
@@ -129,7 +129,7 @@
 - (void)setupPublisher {
     self.publishQueue = dispatch_queue_create("PublishQueue", DISPATCH_QUEUE_SERIAL);
     
-    self.publisher = [[VCRTMPPublisher alloc] initWithURL:[NSURL URLWithString:@"rtmp://192.168.43.17/stream"] publishKey:@"12345"];
+    self.publisher = [[VCRTMPPublisher alloc] initWithURL:[NSURL URLWithString:@"rtmp://js.live-send.acg.tv/live-js/"] publishKey:@"?streamname=live_35432748_2964945&key=cb41bd28d62d79653f7d65721b1acb02"];
     self.publisher.delegate = self;
     self.publisher.connectionParameter = @{
         @"flashVer": @"FMLE/3.0 (compatible; FMSc/1.0)".asString,
@@ -238,19 +238,19 @@
     }
 }
 
-- (void)converter:(VCAudioConverter *)converter didOutputAudioBuffer:(AVAudioBuffer *)audioBuffer presentationTimeStamp:(CMTime)pts {
+- (void)converter:(VCAudioConverter *)converter didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
     if (!self.isOutputAACConfig) {
         self.isOutputAACConfig = YES;
         VCFLVAudioTag *tag = [VCFLVAudioTag sequenceHeaderTagForAAC];
         tag.audioType = VCFLVAudioTagAudioTypeStereo;
-        tag.payloadData = [self.audioConverter.outputAudioSpecificConfig serialize];
+        tag.payloadData = [self.audioConverter.outputFormat.audioSpecificConfig serialize];
         [tag serialize];
         [self.publisher writeTag:tag];
     }
     VCFLVAudioTag *tag = [VCFLVAudioTag tagForAAC];
     tag.audioType = VCFLVAudioTagAudioTypeStereo;
-    AVAudioCompressedBuffer *buf = (AVAudioCompressedBuffer *)audioBuffer;
-    [tag setExtendedTimestamp:self.audioFrameCount++ * (1024 * 1000.0 / self.audioConverter.outputAudioSpecificConfig.sampleRate)];
+    AVAudioCompressedBuffer *buf = (AVAudioCompressedBuffer *)sampleBuffer.audioBuffer;
+    [tag setExtendedTimestamp:self.audioFrameCount++ * (1024 * 1000.0 / self.audioConverter.outputFormat.audioSpecificConfig.sampleRate)];
     
     NSData *aacData = [[NSData alloc] initWithBytes:buf.data length:buf.byteLength];
     NSData *adts = [self.audioSpecificConfig adtsDataForPacketLength:aacData.length];

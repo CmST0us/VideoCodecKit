@@ -57,14 +57,16 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
 
 - (instancetype)initWithOutputFormat:(AVAudioFormat *)outputFormat
                         sourceFormat:(AVAudioFormat *)sourceFormat
-                       delegateQueue:(nonnull dispatch_queue_t)queue{
+                            delegate:(nonnull id<VCAudioConverterDelegate>)delegate
+                       delegateQueue:(nonnull dispatch_queue_t)queue {
     self = [super init];
     if (self) {
         _outputFormat = outputFormat;
         _sourceFormat = sourceFormat;
         _delegateQueue = queue;
-        
+        _delegate = delegate;
         _converter = nil;
+        
         NSUInteger bufferListSize = [self audioBufferListSizeWithBufferCount:6];
         _currentBufferList = malloc(bufferListSize);
         _feedBufferList = malloc(bufferListSize);
@@ -73,10 +75,6 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
         bzero(_feedBufferList, bufferListSize);
     }
     return self;
-}
-
-- (instancetype)init {
-    return [self initWithOutputFormat:[VCAudioConverter defaultAACFormat] sourceFormat:[VCAudioConverter defaultPCMFormat] delegateQueue:dispatch_get_global_queue(0, 0)];
 }
 
 - (void)dealloc {
@@ -110,6 +108,11 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
 #endif
     if (ret != noErr) {
         return nil;
+    }
+    
+    if (self.delegate &&
+        [self.delegate respondsToSelector:@selector(converter:didOutputFormatDescriptor:)]) {
+        [self.delegate converter:self didOutputFormatDescriptor:self.outputFormat.formatDescription];
     }
     return _converter;
 }
@@ -184,19 +187,6 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
     return data;
 }
 
-- (VCAudioSpecificConfig *)outputAudioSpecificConfig {
-    const AudioStreamBasicDescription *outputDesc = self.outputFormat.streamDescription;
-    
-    VCAudioSpecificConfig *config = [[VCAudioSpecificConfig alloc] init];
-    config.channels = outputDesc->mChannelsPerFrame;
-    config.frameLengthFlag = NO;
-    config.objectType = outputDesc->mFormatFlags;
-    config.sampleRate = outputDesc->mSampleRate;
-    config.isDependOnCoreCoder = NO;
-    config.isExtension = NO;
-    return config;
-}
-
 - (NSUInteger)outputAudioBufferCount {
     if (self.outputFormat.streamDescription->mFormatID == kAudioFormatLinearPCM) {
         // Decoder
@@ -233,34 +223,31 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
     return sizeof(AudioBufferList) + (bufferCount - 1) * sizeof(AudioBuffer);
 }
 
-- (AVAudioBuffer *)createOutputAudioBufferWithAudioBufferList:(AudioBufferList *)audioBufferList
-                                               dataPacketSize:(NSUInteger)dataPacketSize {
-    if (self.outputFormat.streamDescription->mFormatID == kAudioFormatLinearPCM) {
-        AVAudioPCMBuffer *pcmBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:self.outputFormat frameCapacity:(AVAudioFrameCount)self.outputMaxBufferSize];
-        for (int i = 0; i < audioBufferList->mNumberBuffers; ++i) {
-            // 注意这个ioOutoutDataPacketSize 是转换后实际有效PCM音频大小
-            // 可以将outputBufferList每个buffer大小修改为1024，可以发现转换后的ioOutputDataPacketSize变了；
-            memcpy(pcmBuffer.floatChannelData[i], audioBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mDataByteSize);
-        }
-        // frameLength 为有效PCM数据
-        pcmBuffer.frameLength = (AVAudioFrameCount)dataPacketSize;
-        return pcmBuffer;
-    }
-    
-    NSUInteger audioBufferListSize = 0;
-    for (int i = 0; i < audioBufferList->mNumberBuffers; ++i) {
-        audioBufferListSize += audioBufferList->mBuffers[i].mDataByteSize;
-    }
-    AVAudioCompressedBuffer *compressedBuffer = [[AVAudioCompressedBuffer alloc] initWithFormat:self.outputFormat packetCapacity:audioBufferList->mNumberBuffers maximumPacketSize:audioBufferListSize];
-    for (int i = 0; i < compressedBuffer.audioBufferList->mNumberBuffers; ++i) {
-        memcpy(compressedBuffer.audioBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mDataByteSize);
-    }
-    compressedBuffer.packetCount = (AVAudioPacketCount)compressedBuffer.audioBufferList->mNumberBuffers;
-    compressedBuffer.byteLength = (UInt32)audioBufferListSize;
-    return compressedBuffer;
+- (VCSampleBuffer *)createOutputSampleBufferWithAudioBufferList:(AudioBufferList *)audioBufferList
+                                                 dataPacketSize:(NSUInteger)dataPacketSize
+                                                            pts:(CMTime)pts {
+    CMSampleBufferRef sampleBuffer;
+    CMAudioSampleBufferCreateWithPacketDescriptions(kCFAllocatorDefault,
+                                                    NULL,
+                                                    NO,
+                                                    NULL,
+                                                    NULL,
+                                                    self.outputFormat.formatDescription,
+                                                    dataPacketSize,
+                                                    pts,
+                                                    _currentBufferList == NULL ? NULL : &_currentAudioStreamPacketDescription,
+                                                    &sampleBuffer);
+    CMSampleBufferSetDataBufferFromAudioBufferList(sampleBuffer,
+                                                   kCFAllocatorDefault,
+                                                   kCFAllocatorDefault,
+                                                   0,
+                                                   audioBufferList);
+    return [[VCSampleBuffer alloc] initWithSampleBuffer:sampleBuffer freeWhenDone:YES];
 }
 
-- (OSStatus)convertAudioBufferList:(AudioBufferList *)audioBufferList
+#pragma mark - Convert Method
+
+- (OSStatus)convertAudioBufferList:(const AudioBufferList *)audioBufferList
              presentationTimeStamp:(CMTime)pts {
     /// 先判断是解码还是编码
     if (self.outputFormat.streamDescription->mFormatID == kAudioFormatLinearPCM) {
@@ -274,7 +261,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
     return -1;
 }
 
-- (OSStatus)encodeAudioBufferList:(AudioBufferList *)audioBufferList
+- (OSStatus)encodeAudioBufferList:(const AudioBufferList *)audioBufferList
             presentationTimeStamp:(CMTime)pts {
     /// 1. 判断输入的Buffer是否大于一个包的大小，如果大于，需要分包，如果小于，直接送Encoder
     self.feedBufferList->mNumberBuffers = audioBufferList->mNumberBuffers;
@@ -343,11 +330,11 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
         }
 
         
-        AVAudioBuffer *audioBuffer = [self createOutputAudioBufferWithAudioBufferList:outputBufferList dataPacketSize:ioOutputDataPacketSize];
+        VCSampleBuffer *audioBuffer = [self createOutputSampleBufferWithAudioBufferList:outputBufferList dataPacketSize:ioOutputDataPacketSize pts:pts];
         if (self.delegate &&
-            [self.delegate respondsToSelector:@selector(converter:didOutputAudioBuffer:presentationTimeStamp:)]) {
+            [self.delegate respondsToSelector:@selector(converter:didOutputSampleBuffer:)]) {
             dispatch_async(self.delegateQueue, ^{
-                [self.delegate converter:self didOutputAudioBuffer:audioBuffer presentationTimeStamp:pts];
+                [self.delegate converter:self didOutputSampleBuffer:audioBuffer];
             });
         }
     
@@ -372,7 +359,7 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
     return noErr;
 }
 
-- (OSStatus)decodeAudioBufferList:(AudioBufferList *)audioBufferList
+- (OSStatus)decodeAudioBufferList:(const AudioBufferList *)audioBufferList
             presentationTimeStamp:(CMTime)pts {
     /// 2. 分包调用
     UInt32 outputMaxBufferSize = (UInt32)self.outputMaxBufferSize;
@@ -409,11 +396,11 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
         return ret;
     }
     
-    AVAudioBuffer *audioBuffer = [self createOutputAudioBufferWithAudioBufferList:outputBufferList dataPacketSize:ioOutputDataPacketSize];
+    VCSampleBuffer *audioBuffer = [self createOutputSampleBufferWithAudioBufferList:outputBufferList dataPacketSize:ioOutputDataPacketSize pts:pts];
     if (self.delegate &&
-        [self.delegate respondsToSelector:@selector(converter:didOutputAudioBuffer:presentationTimeStamp:)]) {
+        [self.delegate respondsToSelector:@selector(converter:didOutputSampleBuffer:)]) {
         dispatch_async(self.delegateQueue, ^{
-            [self.delegate converter:self didOutputAudioBuffer:audioBuffer presentationTimeStamp:pts];
+            [self.delegate converter:self didOutputSampleBuffer:audioBuffer];
         });
     }
     
@@ -426,103 +413,12 @@ static OSStatus audioConverterInputDataProc(AudioConverterRef inAudioConverter,
 
 - (OSStatus)convertSampleBuffer:(VCSampleBuffer *)sampleBuffer {
     if (self.converter == nil) return -1;
-    size_t size = [self audioBufferListSizeWithBufferCount:self.sourceFormat.channelCount];
-    AudioBufferList *bufferList = malloc(size);
-    memset(bufferList, 0, size);
-    CMBlockBufferRef blockBuffer = NULL;
-    OSStatus ret = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(sampleBuffer.sampleBuffer,
-                                                                           NULL,
-                                                                           bufferList,
-                                                                           sizeof(AudioBufferList),
-                                                                           kCFAllocatorDefault,
-                                                                           kCFAllocatorDefault,
-                                                                           0,
-                                                                           &blockBuffer);
-    
-    if (ret != noErr) {
-        return ret;
-    }
-    
-    ret = [self convertAudioBufferList:bufferList presentationTimeStamp:sampleBuffer.presentationTimeStamp];
-    
-    if (blockBuffer != NULL) {
-        CFRelease(blockBuffer);
-        blockBuffer = NULL;
-    }
-    
-    free(bufferList);
-    
+    OSStatus ret = [self convertAudioBufferList:sampleBuffer.audioBuffer.audioBufferList presentationTimeStamp:sampleBuffer.presentationTimeStamp];
     return ret;
 }
 
 - (void)reset {
     AudioConverterReset(self.converter);
-}
-
-+ (AVAudioFormat *)AACFormatWithSampleRate:(Float64)sampleRate channels:(UInt32)channels {
-    return [VCAudioConverter AACFormatWithSampleRate:sampleRate
-                                         formatFlags:kMPEG4Object_AAC_LC
-                                            channels:channels];
-}
-
-+ (AVAudioFormat *)AACFormatWithSampleRate:(Float64)sampleRate
-                               formatFlags:(AudioFormatFlags)flags
-                                  channels:(UInt32)channels {
-    AudioStreamBasicDescription basicDescription;
-    basicDescription.mFormatID = kAudioFormatMPEG4AAC;
-    basicDescription.mSampleRate = sampleRate;
-    basicDescription.mFormatFlags = flags;
-    basicDescription.mBytesPerFrame = 0;
-    basicDescription.mFramesPerPacket = 1024;
-    basicDescription.mBytesPerPacket = 0;
-    basicDescription.mChannelsPerFrame = channels;
-    basicDescription.mBitsPerChannel = 0;
-    basicDescription.mReserved = 0;
-    
-    CMAudioFormatDescriptionRef outputDescription = nil;
-    OSStatus ret = CMAudioFormatDescriptionCreate(kCFAllocatorDefault, &basicDescription, 0, NULL, 0, NULL, NULL, &outputDescription);
-    if (ret != noErr) {
-        return nil;
-    }
-    
-    AVAudioFormat *format = [[AVAudioFormat alloc] initWithCMAudioFormatDescription:outputDescription];
-    CFRelease(outputDescription);
-    
-    return format;
-}
-
-+ (AVAudioFormat *)formatWithCMAudioFormatDescription:(CMAudioFormatDescriptionRef)audioFormatDescription {
-    AVAudioFormat *format = [[AVAudioFormat alloc] initWithCMAudioFormatDescription:audioFormatDescription];
-    return format;
-}
-
-+ (AVAudioFormat *)PCMFormatWithSampleRate:(Float64)sampleRate
-                                  channels:(UInt32)channels {
-    AudioChannelLayoutTag channelLayoutTag = kAudioChannelLayoutTag_Stereo;
-    if (channels == 1) {
-        channelLayoutTag = kAudioChannelLayoutTag_Mono;
-    } else if (channels == 2) {
-        channelLayoutTag = kAudioChannelLayoutTag_Stereo;
-    } else if (channels == 3) {
-        channelLayoutTag = kAudioChannelLayoutTag_AAC_3_0;
-    } else if (channels == 4) {
-        channelLayoutTag = kAudioChannelLayoutTag_AAC_4_0;
-    } else if (channels == 5) {
-        channelLayoutTag = kAudioChannelLayoutTag_AAC_5_0;
-    } else if (channels == 6) {
-        channelLayoutTag = kAudioChannelLayoutTag_AAC_5_1;
-    }
-    AVAudioChannelLayout *layout = [[AVAudioChannelLayout alloc] initWithLayoutTag:channelLayoutTag];
-    AVAudioFormat *format = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatFloat32 sampleRate:sampleRate interleaved:NO channelLayout:layout];
-    return format;
-}
-
-+ (AVAudioFormat *)defaultPCMFormat {
-    return [VCAudioConverter PCMFormatWithSampleRate:44100 channels:2];
-}
-
-+ (AVAudioFormat *)defaultAACFormat {
-    return [VCAudioConverter AACFormatWithSampleRate:44100 channels:2];
 }
 
 @end

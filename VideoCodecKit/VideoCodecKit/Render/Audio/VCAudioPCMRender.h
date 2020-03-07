@@ -8,12 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
+#import "VCSampleBuffer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface VCAudioPCMRender : NSObject
 - (instancetype)initWithPCMFormat:(AVAudioFormat *)format;
 - (void)renderPCMBuffer:(AVAudioPCMBuffer *)pcmBuffer withPresentationTimeStamp:(CMTime)presentationTimeStamp completionHandler:(AVAudioNodeCompletionHandler __nullable)handler;
+- (void)renderSampleBuffer:(VCSampleBuffer *)sampleBuffer completionHandler:(AVAudioNodeCompletionHandler _Nullable)handler;
 
 - (void)play;
 - (void)pause;

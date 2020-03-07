@@ -10,7 +10,6 @@
 #import <Masonry/Masonry.h>
 #import "VCDemoISOTestViewController.h"
 
-
 @interface VCDemoISOTestViewController () <VCAssetReaderDelegate, VCVideoDecoderDelegate, VCAudioConverterDelegate> {
 }
 @property (nonatomic, assign) BOOL playing;
@@ -70,8 +69,6 @@
     self.decoder.delegate = self;
     self.displayLayer = [[AVSampleBufferDisplayLayer alloc] init];
     
-    self.converter = [[VCAudioConverter alloc] init];
-    self.converter.delegate = self;
     CMTimebaseRef timeBase = nil;
     CMTimebaseCreateWithMasterClock(kCFAllocatorDefault, CMClockGetHostTimeClock(), &timeBase);
     
@@ -140,9 +137,13 @@
 }
 
 - (void)reader:(VCFLVReader *)reader didGetAudioFormatDescription:(CMFormatDescriptionRef)formatDescription {
-    self.converter.sourceFormat = [VCAudioConverter formatWithCMAudioFormatDescription:formatDescription];
-    self.converter.outputFormat = [VCAudioConverter PCMFormatWithSampleRate:self.converter.sourceFormat.sampleRate channels:self.converter.sourceFormat.channelCount];
-    self.render = [[VCAudioPCMRender alloc] initWithPCMFormat:[self.converter outputFormat]];
+    AVAudioFormat *sourceFormat = [[AVAudioFormat alloc] initWithCMAudioFormatDescription:formatDescription];
+    AVAudioFormat *outputFormat = [AVAudioFormat PCMFormatWithSampleRate:sourceFormat.sampleRate channels:sourceFormat.channelCount];
+    self.converter = [[VCAudioConverter alloc] initWithOutputFormat:outputFormat
+                                                       sourceFormat:sourceFormat
+                                                           delegate:self
+                                                      delegateQueue:dispatch_get_main_queue()];
+    self.render = [[VCAudioPCMRender alloc] initWithPCMFormat:outputFormat];
 }
 
 - (void)readerDidReachEOF:(VCFLVReader *)reader {
@@ -150,21 +151,20 @@
 }
 
 #pragma mark - Converter Delegate (Caller Thread) (Reader Thread)
-- (void)converter:(VCAudioConverter *)converter didOutputAudioBuffer:(AVAudioBuffer *)audioBuffer presentationTimeStamp:(CMTime)pts {
-    if (![audioBuffer isKindOfClass:[AVAudioPCMBuffer class]]) return;
+- (void)converter:(VCAudioConverter *)converter didOutputSampleBuffer:(VCSampleBuffer *)sampleBuffer {
     __weak typeof(self) weakSelf = self;
-    [self.render renderPCMBuffer:(AVAudioPCMBuffer *)audioBuffer withPresentationTimeStamp:pts completionHandler:^{
+    [self.render renderSampleBuffer:sampleBuffer completionHandler:^{
         if (!weakSelf.seeking) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                weakSelf.timeSeekSlider.value = pts.value;
+                weakSelf.timeSeekSlider.value = sampleBuffer.presentationTimeStamp.value;
             });
         }
         if (weakSelf.playing) {
-            weakSelf.audioTime = pts;
+            weakSelf.audioTime = sampleBuffer.presentationTimeStamp;
         } else {
             weakSelf.audioTime = CMTimeMake(0, 0);
         }
-        CMTimebaseSetTime(weakSelf.displayLayer.controlTimebase, pts);
+        CMTimebaseSetTime(weakSelf.displayLayer.controlTimebase, sampleBuffer.presentationTimeStamp);
     }];
 }
 

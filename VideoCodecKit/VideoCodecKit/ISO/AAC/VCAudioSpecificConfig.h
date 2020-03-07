@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreMedia/CoreMedia.h>
+#import <AVFoundation/AVFoundation.h>
 NS_ASSUME_NONNULL_BEGIN
 
 // seealso: https://wiki.multimedia.cx/index.php?title=MPEG-4_Audio
@@ -22,6 +23,11 @@ typedef NS_ENUM(uint8_t, VCAudioSpecificConfigObjectTypeSampleRateIndex) {
     VCAudioSpecificConfigObjectTypeSampleRateIndex22050 = 7,
     VCAudioSpecificConfigObjectTypeSampleRateIndex16000 = 8,
 };
+
+@class VCAudioSpecificConfig;
+@interface AVAudioFormat (AudioSpecificConfig)
+- (VCAudioSpecificConfig *)audioSpecificConfig;
+@end
 
 @interface VCAudioSpecificConfig : NSObject
 
