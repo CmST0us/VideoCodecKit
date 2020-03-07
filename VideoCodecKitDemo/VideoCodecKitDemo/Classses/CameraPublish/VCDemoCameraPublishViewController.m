@@ -72,9 +72,14 @@
 - (VCH264HardwareEncoder *)encoder {
     if (_encoder == nil) {
         _encoder = [[VCH264HardwareEncoder alloc] init];
-        _encoder.width = 1920;
-        _encoder.height = 1080;
+        VCH264HardwareEncoderParameter *parameter = [_encoder beginConfiguration];
         _encoder.delegate = self;
+        parameter.width = @(1920);
+        parameter.height = @(1080);
+        parameter.bitrate = @(8192 * 1024);
+        parameter.profileLevel = (id)kVTProfileLevel_H264_Main_AutoLevel;
+        [_encoder commitConfiguration];
+        
     }
     return _encoder;
 }
@@ -130,7 +135,7 @@
 - (void)setupPublisher {
     self.publishQueue = dispatch_queue_create("PublishQueue", DISPATCH_QUEUE_SERIAL);
     
-    self.publisher = [[VCRTMPPublisher alloc] initWithURL:[NSURL URLWithString:@"rtmp://192.168.43.17/stream/"] publishKey:@"12345"];
+    self.publisher = [[VCRTMPPublisher alloc] initWithURL:[NSURL URLWithString:@"rtmp://127.0.0.1/stream/"] publishKey:@"12345"];
     self.publisher.delegate = self;
     self.publisher.connectionParameter = @{
         @"flashVer": @"FMLE/3.0 (compatible; FMSc/1.0)".asString,

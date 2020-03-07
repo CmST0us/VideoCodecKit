@@ -10,29 +10,32 @@
 #import "VCVideoEncoder.h"
 NS_ASSUME_NONNULL_BEGIN
 
+@interface VCH264HardwareEncoderParameter : NSObject<NSCopying>
+@property (nonatomic, copy) NSNumber *width;
+@property (nonatomic, copy) NSNumber *height;
+@property (nonatomic, copy) NSNumber *bitrate;
+@property (nonatomic, copy) NSNumber *frameRate;
+@property (nonatomic, copy) NSString *profileLevel;
+@property (nonatomic, copy) NSNumber *maxKeyFrameInterval;
+@property (nonatomic, copy) NSNumber *maxKeyFrameIntervalDuration;
+@property (nonatomic, copy) NSNumber *allowFrameReordering;
+@property (nonatomic, copy) NSNumber *realTime;
+@end
+
 @interface VCH264HardwareEncoder : NSObject<VCVideoEncoder>
 
 @property (nonatomic, weak) id<VCVideoEncoderDelegate> delegate;
 @property (nonatomic, strong) NSDictionary *imageBufferAttributes; //defaultAttributes
-@property (nonatomic, strong) NSDictionary *properties; //defaultAttributes
-
 // Encoder Configuration
-@property (nonatomic, assign) NSInteger width;
-@property (nonatomic, assign) NSInteger height;
-@property (nonatomic, assign) NSInteger bitrate;
-@property (nonatomic, assign) double frameRate;
-@property (nonatomic, copy) NSString *profileLevel; //kVTCompressionPropertyKey_ProfileLevel
-@property (nonatomic, assign) NSInteger maxKeyFrameInterval;
-@property (nonatomic, assign) double maxKeyFrameIntervalDuration;
-@property (nonatomic, assign) BOOL realTime;
+@property (nonatomic, readonly) VCH264HardwareEncoderParameter *parameter;
 
-+ (NSDictionary *)defaultProperties;
-+ (NSArray *)supportProperties;
-
-+ (NSDictionary *)defaultImageBufferAttributes;
+- (VCH264HardwareEncoderParameter *)beginConfiguration;
+- (void)commitConfiguration;
 
 - (OSStatus)encodeSampleBuffer:(VCSampleBuffer *)sampleBuffer;
 
++ (NSArray *)supportProperties;
++ (NSDictionary *)defaultImageBufferAttributes;
 @end
 
 NS_ASSUME_NONNULL_END
